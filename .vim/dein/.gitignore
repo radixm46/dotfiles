@@ -2,4 +2,5 @@
 **/*~
 .DS_Store
 cache_Vim
+state_Vim.vim
 .cache/*
