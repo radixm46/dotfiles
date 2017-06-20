@@ -7,14 +7,15 @@
 #    ln -s $HOME/dotfiles/$file $HOME/$file
 #done
 
- DOT_FILES=(.tmux.conf .zshrc .zshenv .tmux)
+ DOT_FILES=(.tmux.conf .zshrc .zshenv)
 
 for file in ${DOT_FILES[@]}
 do
     ln -s $HOME/dotfiles/$file $HOME/$file
 done
+    ln -s $HOME/dotfiles/.tmux $HOME
     #setup for nvim
-    ln -s $HOME/dotfiles/nvim $HOME/.config/nvim
+    ln -s $HOME/dotfiles/nvim $HOME/.config
     #setup for legacy vim
     ln -s $HOME/dotfiles/nvim $HOME/.vim
     ln -s $HOME/dotfiles/nvim/init.vim $HOME/.vimrc
