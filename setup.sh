@@ -14,7 +14,7 @@ if [ -e ~/.vim/dein/repos/github.com/Shougo/dein.vim ]; then
 else
     echo "dein not installed!!"
     #gitクローンでdeinインストールを行う
-    mkdir -p ~/.vim/dein/repos/github.com/Shougo/dein.vim \
+    mkdir -p ~/.vim/dein/repos/github.com/Shougo/dein.vim
     git clone https://github.com/Shougo/dein.vim.git \
             ~/.vim/dein/respos/github.com/Shougo/dein.vim
 fi
