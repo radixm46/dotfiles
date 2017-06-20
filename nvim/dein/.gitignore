@@ -1,0 +1,12 @@
+*~
+**/*~
+.DS_Store
+cache_Vim
+cache_vim
+cache_nvim
+cache*
+state*
+state_Vim.vim
+state_nvim.vim
+repos/github.com/*
+.cache/*
