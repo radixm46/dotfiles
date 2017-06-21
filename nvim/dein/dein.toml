@@ -1,0 +1,53 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+#quickrun.vim 本体
+
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+hook_add = '''
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline_theme = 'solarized'
+    let g:airline_solarized_bg = 'dark'
+    '''
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+depends = 'vim-airline'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo = 'Shougo/vimproc'
+hook_post_update = '''
+  if dein#util#_is_windows()
+      let cmd = 'tools\\update-dll-mingw'
+  elseif dein#util#_is_cygwin()
+      let cmd = 'make -f make_cygwin.mak'
+  elseif executable('gmake')
+      let cmd = 'gmake'
+  else
+      let cmd = 'make'
+  endif
+  let g:dein#plugin.build = cmd
+'''
+##非同期処理をするために必要
+##要ビルド
+
+[[plugins]]
+repo = 'osyo-manga/shabadou.vim'
+#quickrun-hook 集
+
+[[plugins]]
+repo = 'osyo-manga/vim-watchdogs'
+#syntaxcheck
+
+[[plugins]]
+repo = 'jceb/vim-hier'
+##ハイライトするやつ

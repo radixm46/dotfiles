@@ -5,7 +5,7 @@
 ########################################
 # 環境変数
 export LANG=ja_JP.UTF-8
-
+export XDG_CONFIG_HOME=~/.config
 
 # 色を使用出来るようにする
 autoload -Uz colors
