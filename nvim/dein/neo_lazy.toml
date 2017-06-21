@@ -1,8 +1,0 @@
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-hook_add = 'let g:deoplete#enable_at_startup = 1'
-#neo用tomlを個別に作って移動させたい
-
-[[plugins]]
-repo = 'zchee/deoplete-jedi'
-#requires jedi (install by 'pip install jedi')
