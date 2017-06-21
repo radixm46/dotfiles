@@ -1,8 +1,7 @@
 syntax on
 set background=dark
 colorscheme solarized
-"###有効かわからないためコメントアウト###
-"set t_Co=256
+set t_Co=256
 set number
 set list
 set listchars=tab:>>,trail:-,nbsp:%,eol:↲
@@ -63,7 +62,6 @@ filetype plugin indent on
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "プラグイン関連
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-"let g:deoplete#enable_at_startup = 1  "deoplete用
 "let g:syntastic_python_checkers = ["flake8"] "syntastic
 
 "autocmd FileType python setlocal omnifunc=jedi#completions
