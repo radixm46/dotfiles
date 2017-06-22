@@ -15,9 +15,6 @@ hook_add = '''
 repo = 'scrooloose/nerdtree'
 
 [[plugins]]
-repo = 'Shougo/denite.nvim'
-
-[[plugins]]
 repo = 'Shougo/vimproc'
 hook_post_update = '''
   if dein#util#_is_windows()
@@ -35,5 +32,17 @@ hook_post_update = '''
 ##要ビルド
 
 [[plugins]]
-repo = 'jceb/vim-hier'
+repo = 'Shougo/deoplete.nvim'
+hook_add = '''
+    let g:deoplete#enable_at_startup = 1
+    '''
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+hook_add = '''
+'''
+
+#[[plugins]]
+#repo = 'jceb/vim-hier'
 ##ハイライトするやつ
+#watchdogsから参照されていないため無効

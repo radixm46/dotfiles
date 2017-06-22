@@ -1,3 +1,43 @@
+"#####dein.vimの設定#####
+if &compatible
+  set nocompatible
+endif
+
+let s:dein_dir = expand('~/.config/nvim/dein')
+let s:dein_repo_dir = s:dein_dir .'/repos/github.com/Shougo/dein.vim'
+
+if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+endif
+
+execute 'set runtimepath^=' . s:dein_repo_dir
+
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
+
+" プラグインリストを収めたTOMLファイル
+  let s:toml = s:dein_dir . '/dein.toml'
+  let s:lazy_toml = s:dein_dir . '/dein_lazy.toml'
+  let s:neo_toml = s:dein_dir . '/dein_neo.toml'
+
+" TOMLファイルにpluginを記述
+  call dein#load_toml(s:toml, {'lazy': 0})
+  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+"  if has('nvim')
+"      call dein#load_toml(s:neo_toml,{'lazy':1})
+"  endif
+
+
+  call dein#end()
+  call dein#save_state()
+endif
+
+" 未インストールを確認
+if dein#check_install()
+  call dein#install()
+endif
+
+"vim settings
 set background=dark
 colorscheme solarized
 set t_Co=256
@@ -33,46 +73,6 @@ inoremap { {}<LEFT>
 inoremap ( ()<LEFT>
 inoremap [ []<LEFT>
 
-"#####dein.vimの設定#####
-if &compatible
-  set nocompatible
-endif
-
-let s:dein_dir = expand('~/.config/nvim/dein')
-let s:dein_repo_dir = s:dein_dir .'/repos/github.com/Shougo/dein.vim'
-
-if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-endif
-
-execute 'set runtimepath^=' . s:dein_repo_dir
-
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-
-" プラグインリストを収めたTOMLファイル
-  let s:toml = s:dein_dir . '/dein.toml'
-  let s:neo_toml = s:dein_dir . '/dein_neo.toml'
-  let s:lazy_toml = s:dein_dir . '/dein_lazy.toml'
-  let s:neo_lazy_toml = s:dein_dir . '/dein_lazy_neo.toml'
-
-" TOMLファイルにpluginを記述
-  call dein#load_toml(s:toml, {'lazy': 0})
-    if has('nvim')
-        call dein#load_toml(s:neo_toml, {'lazy': 0})
-        call dein#load_toml(s:neo_lazy_toml, {'lazy': 1})
-    else
-        call dein#load_toml(s:lazy_toml, {'lazy': 1})
-    endif
-
-  call dein#end()
-  call dein#save_state()
-endif
-
-" 未インストールを確認
-if dein#check_install()
-  call dein#install()
-endif
 
 
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

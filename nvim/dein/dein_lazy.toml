@@ -1,6 +1,16 @@
 [[plugins]]
-repo = 'davidhalter/jedi-vim'
+repo = 'zchee/deoplete-jedi'
 on_ft = 'python'
+#requires jedi (install by 'pip install jedi')
+#jedi, Neovim, neovim-python client
+##ここから有無をチェックしてインストールまでやりたい
+
+
+[[plugins]] # toml syntax
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
 
 #[[plugins]]
-#pyflakes
+#repo = 'davidhalter/jedi-vim'
+#on_ft = 'python'
+#hook_add = 'let g:jedi#force_py_version = 3' 
