@@ -1,12 +1,13 @@
 [[plugins]]
+repo = 'hdima/python-syntax'
+on_ft = 'python'
+hook_add = 'let python_highlight_all = 1'
+
+[[plugins]]
 repo = 'zchee/deoplete-jedi'
 #requires jedi (install by 'pip install jedi')
 
 [[plugins]]
 repo = 'davidhalter/jedi-vim'
 on_ft = 'python'
-
-[[plugins]]
-repo = 'hdima/python-syntax'
-on_ft = 'python'
-hook_add = 'let python_highlight_all = 1'
+hook_add = 'let g:jedi#force_py_version = 3' 

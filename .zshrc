@@ -14,6 +14,9 @@ colors
 # vim 風キーバインドにする
 bindkey -v
 
+# 10ms for key sequences
+KEYTIMEOUT=1
+
 # ヒストリの設定
 HISTFILE=~/.zsh_history
 HISTSIZE=1000000
