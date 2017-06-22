@@ -1,7 +1,7 @@
-syntax on
 set background=dark
 colorscheme solarized
 set t_Co=256
+syntax on
 set number
 set list
 set listchars=tab:>>,trail:-,nbsp:%,eol:↲
@@ -10,6 +10,8 @@ set autoindent
 set shiftwidth=4
 filetype on            " enables filetype detection
 filetype plugin on     " enables filetype specific plugins
+filetype plugin indent on
+let python_highlight_all = 1
 
 " fix delay on escape
 " When you’re pressing Escape to leave insert mode in the terminal, it will by
@@ -72,7 +74,6 @@ if dein#check_install()
   call dein#install()
 endif
 
-filetype plugin indent on
 
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "プラグイン関連

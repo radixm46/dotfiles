@@ -35,13 +35,5 @@ hook_post_update = '''
 ##要ビルド
 
 [[plugins]]
-repo = 'osyo-manga/shabadou.vim'
-#quickrun-hook 集
-
-[[plugins]]
-repo = 'osyo-manga/vim-watchdogs'
-#syntaxcheck
-
-[[plugins]]
 repo = 'jceb/vim-hier'
 ##ハイライトするやつ
