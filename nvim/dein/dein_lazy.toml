@@ -5,6 +5,9 @@ on_ft = 'python'
 #jedi, Neovim, neovim-python client
 ##ここから有無をチェックしてインストールまでやりたい
 
+[[plugins]]
+repo = 'kevinw/pyflakes-vim'
+on_ft = 'python'
 
 [[plugins]] # toml syntax
 repo = 'cespare/vim-toml'
