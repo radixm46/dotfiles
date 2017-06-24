@@ -73,7 +73,8 @@ inoremap { {}<LEFT>
 inoremap ( ()<LEFT>
 inoremap [ []<LEFT>
 
-
+" auto launch NERDTree
+autocmd vimenter * NERDTree
 
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "プラグイン関連
