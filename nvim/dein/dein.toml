@@ -2,10 +2,6 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
-repo = 'thinca/vim-quickrun'
-#quickrun.vim 本体
-
-[[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
     let g:lightline = {'colorscheme': 'solarized' }
