@@ -1,6 +1,5 @@
 [[plugins]]
 repo = 'Shougo/denite.nvim'
-if = 'has("nvim")')
 
 [[plugins]]
 repo = 'osyo-manga/shabadou.vim'

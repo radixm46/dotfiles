@@ -35,10 +35,15 @@ hook_add = '''
     '''
 
 [[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+
+[[plugins]]
 repo = 'Shougo/denite.nvim'
 if = 'has("nvim")')
 hook_add = '''
+let g:python3_host_prog = expand('/usr/loca/bin/python3')
 '''
+#which python3の返り値格納させたさ
 
 #[[plugins]]
 #repo = 'jceb/vim-hier'
