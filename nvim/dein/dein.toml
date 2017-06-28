@@ -27,24 +27,6 @@ hook_post_update = '''
 ##非同期処理をするために必要
 ##要ビルド
 
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-if = 'has("nvim")')
-hook_add = '''
-    let g:deoplete#enable_at_startup = 1
-    '''
-
-[[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'
-
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-if = 'has("nvim")')
-hook_add = '''
-let g:python3_host_prog = expand('/usr/loca/bin/python3')
-'''
-#which python3の返り値格納させたさ
-
 #[[plugins]]
 #repo = 'jceb/vim-hier'
 ##ハイライトするやつ
