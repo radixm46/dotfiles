@@ -29,14 +29,6 @@ let g:quickrun_config = {
 \   },
 \}
 '''
-#quickrun.vim 本体
-# runner/vimproc/updatetime で出力バッファの更新間隔をミリ秒で設定できます
-# updatetime が一時的に書き換えられてしまうので注意して下さい
-#  "outputter/buffer/close_on_empty" : 
-#エラーがない場合勝手に閉じる、quickrun側での設定
-#denite or unite
-#unite -> denite互換性あれば。
-#quickrunのpython環境設定
 
 [[plugins]]
 repo = 'osyo-manga/shabadou.vim'

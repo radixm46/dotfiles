@@ -11,6 +11,12 @@ hook_add = '''
 repo = 'scrooloose/nerdtree'
 
 [[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+hook_add = '''
+let g:indent_guides_auto_colors = 1
+'''
+
+[[plugins]]
 repo = 'Shougo/vimproc'
 hook_post_update = '''
   if dein#util#_is_windows()
