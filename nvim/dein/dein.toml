@@ -16,6 +16,8 @@ hook_add = '''
 " vim-indent-guides
 " Vim 起動時 vim-indent-guides を自動起動
 let g:indent_guides_enable_on_vim_startup=1
+" Disable on help anda NerdTree
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 " ガイドをスタートするインデントの量
 let g:indent_guides_start_level=2
 " 自動カラー無効
