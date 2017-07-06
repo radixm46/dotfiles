@@ -1,4 +1,6 @@
-"#####dein.vimの設定#####
+"##########################
+"##    dein.vimの設定   ###
+"##########################
 if &compatible
   set nocompatible
 endif
@@ -37,7 +39,9 @@ if dein#check_install()
   call dein#install()
 endif
 
-"vim settings
+"##########################
+"###    vim settings    ###
+"##########################
 set background=dark
 colorscheme solarized
 set t_Co=256
@@ -48,6 +52,8 @@ set listchars=tab:>>,trail:-,nbsp:%,eol:↲
 set expandtab
 set autoindent
 set shiftwidth=4
+set colorcolumn=80    "set line on 80 chars
+hi ColorColumn guibg=#444444 "set line color
 filetype on            " enables filetype detection
 filetype plugin on     " enables filetype specific plugins
 filetype plugin indent on
