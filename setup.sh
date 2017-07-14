@@ -15,7 +15,7 @@ do
 done
     ln -s $HOME/dotfiles/.tmux $HOME
     #setup for nvim
-    ln -s $HOME/dotfiles/nvim $HOME/.config
+    ln -s $HOME/dotfiles/nvim $HOME/.config/nvim
     #setup for vim
     ln -s $HOME/dotfiles/nvim $HOME/.vim
     ln -s $HOME/dotfiles/nvim/init.vim $HOME/.vimrc
