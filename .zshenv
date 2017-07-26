@@ -3,14 +3,18 @@ setopt no_global_rcs #disable path helper on osx
 case "$(uname)" in
 
     Darwin) # OSがMacならば
+        export PATH="/usr/sbin:/sbin:/usr/local/bin:$PATH" #add path for homebrew
+
         if [[ -d /Applications/MacVim.app ]]; then # MacVimが存在するならば
             alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
             alias vi=vim
-            export PATH="/usr/sbin:/sbin:/usr/local/bin:$PATH" #add path for homebrew
-            export PATH="/Users/MotohiroIto/anaconda/bin:$PATH"
             #export PATH="$PYENV_ROOT/bin:$PATH"
             #export PYENV_ROOT="$HOME/.pyenv"
             #eval "$(pyenv init -)" #pyenvもdotfilesで管理、setupで自動で環境つくれるようにとか？
+        fi
+
+        if [[ -d {$HOME}/anaconda/bin ]]; then
+            export PATH="$HOME/anaconda/bin:$PATH"
         fi
         ;;
         
