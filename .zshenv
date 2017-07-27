@@ -1,8 +1,8 @@
 setopt no_global_rcs #disable path helper on osx
 
-        if [[ -d $HOME/anaconda/bin ]]; then
-            export PATH="$HOME/anaconda/bin:$PATH"
-        fi #add anaconda path if installed
+if [[ -d $HOME/anaconda/bin ]]; then
+    export PATH="$HOME/anaconda/bin:$PATH"
+fi #add anaconda path if installed
 
 case "$(uname)" in
 
