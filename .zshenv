@@ -1,5 +1,9 @@
 setopt no_global_rcs #disable path helper on osx
 
+        if [[ -d $HOME/anaconda/bin ]]; then
+            export PATH="$HOME/anaconda/bin:$PATH"
+        fi #add anaconda path if installed
+
 case "$(uname)" in
 
     Darwin) # OSがMacならば
@@ -10,9 +14,6 @@ case "$(uname)" in
             alias vi=vim
         fi
 
-        if [[ -d $HOME/anaconda/bin ]]; then
-            export PATH="$HOME/anaconda/bin:$PATH"
-        fi
         ;;
         
     *) ;; # OSがMac以外ならば何もしない
