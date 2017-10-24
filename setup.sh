@@ -13,7 +13,7 @@ for file in ${DOT_FILES[@]}
 do
     ln -s $HOME/dotfiles/$file $HOME/$file
 done
-    ln -s $HOME/dotfiles/.tmux $HOME
+    ln -s $HOME/dotfiles/.tmux/ $HOME/.tmux/
     #setup for nvim
     ln -s $HOME/dotfiles/nvim $HOME/.config/nvim
     #setup for vim
