@@ -53,6 +53,10 @@ set expandtab
 set autoindent
 set shiftwidth=4
 set colorcolumn=80    "set line on 80 chars
+
+set cursorline
+set cursorcolumn
+
 hi ColorColumn guibg=#444444 "set line color
 filetype on            " enables filetype detection
 filetype plugin on     " enables filetype specific plugins
