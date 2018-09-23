@@ -4,13 +4,14 @@ repo = 'Shougo/dein.vim'
 [[plugins]]
 repo = 'w0rp/ale'
 hook_add = '''
-    let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+    let g:ale_statusline_format = ['✗ %d', '⚠ %d', '✓ ok']
     let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
     let g:ale_sign_column_always = 1
-"    let g:ale_set_loclist = 0
-"    let g:ale_set_quickfix = 1
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 1
     '''
 
+# patch for colorscheme
 [[plugins]]
 repo = 'delphinus/lightline-delphinus'
 
@@ -19,9 +20,6 @@ repo = 'itchyny/lightline.vim'
 hook_add = '''
     let g:lightline = {'colorscheme': 'solarized'}
      '''
-
-#[[plugins]]
-#repo = 'ryanoasis/vim-devicons'
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -46,6 +44,8 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#586e75 ctermbg=8
 "let g:indent_guides_guide_size = 4
 '''
 
+##非同期処理をするために必要
+##要ビルド
 [[plugins]]
 repo = 'Shougo/vimproc'
 hook_post_update = '''
@@ -60,5 +60,3 @@ hook_post_update = '''
   endif
   let g:dein#plugin.build = cmd
 '''
-##非同期処理をするために必要
-##要ビルド
