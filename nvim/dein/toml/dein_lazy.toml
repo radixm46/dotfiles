@@ -1,6 +1,0 @@
-[[plugins]]
-repo = 'davidhalter/jedi-vim'
-on_ft = 'python'
-
-#[[plugins]]
-#pyflakes
