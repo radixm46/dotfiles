@@ -1,8 +1,5 @@
 setopt no_global_rcs #disable path helper on osx
 
-if [[ -d $HOME/miniconda3/bin ]]; then
-    export PATH="$HOME/miniconda3/bin:$PATH"
-fi #add anaconda path if installed
 
 case "$(uname)" in
 
@@ -19,8 +16,11 @@ case "$(uname)" in
     *) ;; # OSがMac以外ならば何もしない
 esac
 
-export LANGUAGE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
-export LANG=en_US.UTF-8
+# if [[ -d $HOME/miniconda3/bin ]]; then
+#     export PATH="$HOME/miniconda3/bin:$PATH"
+# fi #add anaconda path if installed
+# export LANGUAGE=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
+# export LC_CTYPE=en_US.UTF-8
+# export LANG=en_US.UTF-8
 #added by Anaconda 4.4.0 installer
