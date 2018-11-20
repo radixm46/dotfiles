@@ -48,6 +48,7 @@ colorscheme solarized
 set t_Co=256
 syntax on
 set number
+set relativenumber
 set list
 set listchars=tab:>>,trail:-,nbsp:%,eol:↲
 set expandtab
