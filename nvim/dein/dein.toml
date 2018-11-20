@@ -58,6 +58,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#586e75 ctermbg=8
 ##要ビルド
 [[plugins]]
 repo = 'Shougo/vimproc'
+build = 'make'
 hook_post_update = '''
   if dein#util#_is_windows()
       let cmd = 'tools\\update-dll-mingw'

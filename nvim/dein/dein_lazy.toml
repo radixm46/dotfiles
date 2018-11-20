@@ -1,7 +1,7 @@
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 if = "has('nvim')"
-on_i = 1
+on_event = 'InsertEnter'
 hook_source = '''
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#autocomplete_delay = 50
@@ -21,23 +21,25 @@ hook_add = '''
 
 [[plugins]]
 repo = 'thinca/vim-quickrun'
-on_hook = '''
+hook_post_source = '''
 let g:quickrun_config = {
-\   "_" : {
-\       "runner" : "vimproc",
-\       "runner/vimproc/updatetime" : 60,
-\       "outputter" : "error",
-\       "outputter/buffer/close_on_empty" : 1,
-\       "outputter/buffer/split" : ":botright 8sp"
+\   '_' : {
+\       'runner' : 'vimproc',
+\       'runner/vimproc/updatetime' : 40,
+\       'outputter' : 'error',
+\       'outputter/error/success' : 'buffer',
+\       'outputter/error/error' : 'quickfix',
+\       'outputter/buffer/split' : ':botright 8sp',
 \   },
 \}
 '''
+# \       "outputter/buffer/close_on_empty" : 1,
 
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
 if = "has('nvim')"
 depends = ['deoplete.nvim']
-on_i = 1
+on_event = 'InsertEnter'
 on_ft = 'python'
 #requires jedi (install by 'pip install jedi')
 #jedi, Neovim, neovim-python client
@@ -67,3 +69,7 @@ on_ft = 'toml'
 #repo = 'jmcantrell/vim-virtualenv'
 #on_ft = ['python']
 #どちらか、有効化？
+
+[[plugins]]
+repo = 'zchee/deoplete-zsh'
+on_ft = ['zsh', 'sh']
