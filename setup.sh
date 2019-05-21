@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #RED = '\033[0;31m'
 #NC = '\033[0m'
 # DOT_FILES=(.vimrc .vim .tmux.conf .zshrc .zshenv .tmux)
