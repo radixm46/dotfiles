@@ -42,11 +42,9 @@ endif
 "##########################
 "###    vim settings    ###
 "##########################
-set background=dark
-" colorscheme solarized
+" set background=dark
 " colorscheme molokai
-colorscheme gruvbox
-" colorscheme monokai
+
 set t_Co=256
 syntax on
 set number
