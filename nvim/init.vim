@@ -45,8 +45,8 @@ endif
 set background=dark
 " colorscheme solarized
 " colorscheme molokai
-" colorscheme gruvbox
-colorscheme monokai
+colorscheme gruvbox
+" colorscheme monokai
 set t_Co=256
 syntax on
 set number
