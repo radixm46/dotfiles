@@ -43,8 +43,10 @@ endif
 "###    vim settings    ###
 "##########################
 set background=dark
-colorscheme solarized
-"colorscheme molokai
+" colorscheme solarized
+" colorscheme molokai
+" colorscheme gruvbox
+colorscheme monokai
 set t_Co=256
 syntax on
 set number
@@ -63,7 +65,8 @@ hi ColorColumn guibg=#444444 "set line color
 filetype on            " enables filetype detection
 filetype plugin on     " enables filetype specific plugins
 filetype plugin indent on
-let python_highlight_all = 1
+" let python_highlight_all = 1
+" configured on plugins
 
 set fileencoding=utf-8 " 保存時の文字コード
 set fileencodings=ucs-boms,utf-8,euc-jp,cp932 " 読み込み時の文字コードの自動判別. 左側が優先される
@@ -86,9 +89,9 @@ endif
 
 
 "###括弧の自動補完の設定を入れてみる###
-inoremap { {}<LEFT>
-inoremap ( ()<LEFT>
-inoremap [ []<LEFT>
+" inoremap { {}<LEFT>
+" inoremap ( ()<LEFT>
+" inoremap [ []<LEFT>
 
 " launch NERDTree
 autocmd vimenter * NERDTree

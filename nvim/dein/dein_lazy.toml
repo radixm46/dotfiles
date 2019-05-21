@@ -45,6 +45,48 @@ on_ft = 'python'
 #jedi, Neovim, neovim-python client
 ##ここから有無をチェックしてインストールまでやりたい
 
+[[plugins]]
+repo = "vim-python/python-syntax"
+on_ft = 'python'
+hook_add = '''
+    "g:python_version_2  "Python 2 mode:0
+    "b:python_version_2  "Python 2 mode (buffer local):0
+    " let g:python_highlight_builtins = 0
+    " Highlight builtin functions and objects 0
+    " let g:python_highlight_builtin_objs = 0
+    " Highlight builtin objects only 0
+    " let g:python_highlight_builtin_types = 0
+    " Highlight builtin types only 0
+    " let g:python_highlight_builtin_funcs = 0
+    " Highlight builtin functions only 0
+    " let g:python_highlight_builtin_funcs_kwarg = 0
+    " Highlight builtin functions when used as kwarg 1
+    " let g:python_highlight_exceptions = 0
+    " Highlight standard exceptions 0
+    " let g:python_highlight_string_formatting = 0
+    " Highlight % string formatting 0
+    " let g:python_highlight_string_format = 0
+    " Highlight syntax of str.format syntax 0
+    " let g:python_highlight_string_templates = 0
+    " Highlight syntax of string.Template 0
+    " let g:python_highlight_indent_errors = 0
+    " Highlight indentation errors 0
+    " let g:python_highlight_space_errors = 0
+    " Highlight trailing spaces 0
+    " let g:python_highlight_doctests = 0
+    " Highlight doc-tests 0
+    " let g:python_highlight_class_vars = 0
+    " Highlight class variables self and cls 0
+    " let g:python_highlight_operators = 0
+    " Highlight all operators 0
+
+    let g:python_highlight_all = 1
+    " Enable all highlight options above, except for previously set. 0
+    let g:python_highlight_file_headers_as_comments = 1
+    " Highlight shebang and coding headers as comments 0
+    let g:python_slow_sync = 0
+    " Disable for slow machines 1
+'''
 #[[plugins]]
 #repo = 'kevinw/pyflakes-vim'
 #on_ft = 'python'
