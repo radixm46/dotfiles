@@ -49,8 +49,8 @@ on_ft = 'python'
 repo = "vim-python/python-syntax"
 on_ft = 'python'
 hook_add = '''
-    "g:python_version_2  "Python 2 mode:0
-    "b:python_version_2  "Python 2 mode (buffer local):0
+    " let g:python_version_2  "Python 2 mode:0
+    " let b:python_version_2  "Python 2 mode (buffer local):0
     " let g:python_highlight_builtins = 0
     " Highlight builtin functions and objects 0
     " let g:python_highlight_builtin_objs = 0

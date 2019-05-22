@@ -28,8 +28,33 @@ hook_add = '''
  [[plugins]]
  repo = 'itchyny/lightline.vim'
  hook_add = '''
-     let g:lightline = {'colorscheme': 'powerline'}
-      '''
+    let g:lightline = {
+     \   'colorscheme': 'powerline',
+     \   'mode_map': {'c': 'NORMAL'},
+     \   'active': {
+     \       'left': [ [ 'mode', 'paste' ], [ 'readonly', 'fugitive', 'filename'] ]
+     \   },
+     \}
+     '''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+# hook_add = '''
+#     let g:lightline[ 'component' ] = {
+#     \        'fugitive': 'LightlineFugitive'
+#     \}
+# 
+#     function! LightlineFugitive()
+#         if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+#             return fugitive#head()
+#         else
+#             return ''
+#         endif
+#     endfunction
+#     '''
+
+# [[plugins]]
+# repo = 'airblade/vim-gitgutter'
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -39,7 +64,10 @@ repo = 'morhetz/gruvbox'
 hook_post_source = '''
     syntax enable
     set background=dark
+    '''
+hook_add = '''
     colorscheme gruvbox
+    let g:lightline[ 'colorscheme' ] = 'gruvbox'
     '''
 
 # [[plugins]]
@@ -48,7 +76,7 @@ hook_post_source = '''
 #     syntax enable
 #     set background=dark
 #     colorscheme solarized
-#     let g:lightline = { 'colorscheme': 'solarized' }
+#     let g:lightline[ 'colorscheme' ] = 'solarized'
 #     '''
 
 # [[plugins]]
