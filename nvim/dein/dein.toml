@@ -40,6 +40,10 @@ hook_add = '''
     let g:lightline.component_function = {
     \        'fugitive': 'LightlineFugitive'
     \ }
+    let g:lightline[ 'colorscheme' ] = 'oceanicnext'
+    "  let g:lightline[ 'colorscheme' ] = 'gruvbox'
+    " let g:lightline[ 'colorscheme' ] = 'solarized'
+
     function! LightlineFugitive()
         if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
             return fugitive#head()
@@ -58,16 +62,15 @@ repo = 'tpope/vim-fugitive'
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 
-[[plugins]]
-repo = 'morhetz/gruvbox'
-hook_post_source = '''
-    syntax enable
-    set background=dark
-    '''
-hook_add = '''
-    colorscheme gruvbox
-    let g:lightline[ 'colorscheme' ] = 'gruvbox'
-    '''
+# [[plugins]]
+# repo = 'morhetz/gruvbox'
+# hook_post_source = '''
+#     syntax enable
+#     set background=dark
+#     '''
+# hook_add = '''
+#     colorscheme gruvbox
+#     '''
 
 # [[plugins]]
 # repo = 'altercation/vim-colors-solarized'
@@ -75,7 +78,6 @@ hook_add = '''
 #     syntax enable
 #     set background=dark
 #     colorscheme solarized
-#     let g:lightline[ 'colorscheme' ] = 'solarized'
 #     '''
 
 # [[plugins]]
@@ -83,6 +85,19 @@ hook_add = '''
 # hook_post_source = '''
 #     colorscheme monokai
 #     '''
+
+[[plugins]]
+repo = 'mhartington/oceanic-next'
+hook_post_source = '''
+    syntax enable
+    set background=dark
+    if (has("termguicolors"))
+        set termguicolors
+    endif
+'''
+hook_add = '''
+    colorscheme OceanicNext
+'''
 
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
