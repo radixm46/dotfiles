@@ -31,7 +31,8 @@ hook_add = '''
     let g:lightline = {
      \   'colorscheme': 'powerline',
      \   'mode_map': {'c': 'NORMAL'},
-     \   'subseparator': { 'left': '>', 'right': '<' },
+     \   'separator': { 'left': '▛▗', 'right': '▘▞▋' },
+     \   'subseparator': { 'left': '❯❯', 'right': '❮❮' },
      \}
     let g:lightline.active = {
     \       'left': [ [ 'mode', 'paste' ],
@@ -41,7 +42,7 @@ hook_add = '''
     \        'fugitive': 'LightlineFugitive'
     \ }
     let g:lightline[ 'colorscheme' ] = 'oceanicnext'
-    "  let g:lightline[ 'colorscheme' ] = 'gruvbox'
+    " let g:lightline[ 'colorscheme' ] = 'gruvbox'
     " let g:lightline[ 'colorscheme' ] = 'solarized'
 
     function! LightlineFugitive()
