@@ -12,7 +12,7 @@ repo = 'Shougo/dein.vim'
      \   'colorscheme': 'powerline',
      \   'mode_map': {'c': 'NORMAL'},
      \   'separator': { 'left': '▛▚', 'right': '▚ ▜' },
-     \   'subseparator': { 'left': '▝▚▖', 'right': '❮❮' },
+     \   'subseparator': { 'left': '▝▚▖', 'right': '▙▜' },
      \}
     let g:lightline.active = {
     \       'left': [ [ 'mode', 'paste' ],
