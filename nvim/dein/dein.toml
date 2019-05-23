@@ -12,7 +12,7 @@ repo = 'Shougo/dein.vim'
      \   'colorscheme': 'powerline',
      \   'mode_map': {'c': 'NORMAL'},
      \   'separator': { 'left': '▛▚', 'right': '▚ ▜' },
-     \   'subseparator': { 'left': '❯❯', 'right': '❮❮' },
+     \   'subseparator': { 'left': '▝▚▖', 'right': '❮❮' },
      \}
     let g:lightline.active = {
     \       'left': [ [ 'mode', 'paste' ],
@@ -35,7 +35,7 @@ repo = 'Shougo/dein.vim'
     \     'linter_ok': 'left',
     \ }
 
-    let g:lightline[ 'colorscheme' ] = 'oceanicnext'
+      let g:lightline[ 'colorscheme' ] = 'oceanicnext'
     " let g:lightline[ 'colorscheme' ] = 'gruvbox'
     " let g:lightline[ 'colorscheme' ] = 'solarized'
 
