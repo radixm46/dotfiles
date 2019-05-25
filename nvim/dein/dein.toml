@@ -11,7 +11,7 @@ repo = 'Shougo/dein.vim'
     let g:lightline = {
      \   'colorscheme': 'powerline',
      \   'mode_map': {'c': 'NORMAL'},
-     \   'separator': { 'left': '▛▚', 'right': '▚ ▜' },
+     \   'separator': { 'left': '▙▞▚▖', 'right': '▝▘▗▞▜' },
      \   'subseparator': { 'left': '▝▚▖', 'right': '▙▜' },
      \}
     let g:lightline.active = {
