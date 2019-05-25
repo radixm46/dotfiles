@@ -80,6 +80,9 @@ hook_add = '''
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
+hook_add = '''
+        nmap <F9> :Gstatus<CR>
+'''
 
 # [[plugins]]
 # repo = 'airblade/vim-gitgutter'
