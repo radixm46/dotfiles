@@ -172,7 +172,6 @@ hook_post_update = '''
   let g:dein#plugin.build = cmd
 '''
 
-
 [[plugins]]
 repo = 'bronson/vim-trailing-whitespace'
 
@@ -185,3 +184,7 @@ hook_add = '''
     let g:AutoPairsFlyMode = 0
     let g:AutoPairsShortcutBackInsert = '<M-b>'
     '''
+
+[[plugins]]
+if = "has('nvim')"
+repo = 'Shougo/neosnippet-snippets'
