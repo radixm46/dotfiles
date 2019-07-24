@@ -1,5 +1,6 @@
 snippet cmd
-abbr        basic command line interface
+abbr        class Shell()cmd.Cmd: ...
+options     head
 	import cmd
 	class ${1:#:Shell}(cmd.Cmd):
 		intro = '${2:welcome message}'
@@ -18,6 +19,7 @@ abbr        basic command line interface
 
 snippet shellcolor
 abbr        color set for print on shell
+options     head
 	class colors:
 		bold = '\033[1m'
 		underlined = '\033[4m'
@@ -47,9 +49,3 @@ abbr        color set for print on shell
 	
 	
 	${1}
-
-snippet for_enumerate
-abbr        for ... in enumerate(): ...
-options     head
-	for ${1:i}, ${2:j} in enumerate(${3:#:list}):
-		${4:pass}
