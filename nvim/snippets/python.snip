@@ -1,15 +1,19 @@
 snippet cmd
 abbr        basic command line interface
 	import cmd
-	class shell(cmd.Cmd):
-		intro = '${0:#:welcome message}'
-		prompt = '(shell)'
+	class ${1:#:Shell}(cmd.Cmd):
+		intro = '${2:welcome message}'
+		prompt = '${3:(shell)}'
 
 		def __init__(self):
-			cmd.Cmd.__init__(self):
+			cmd.Cmd.__init__(self)
 
-		def do_${1:#:function}(self, arg):
-			pass
+		def do_${4:#:function}(self, arg):
+			${5:pass}
+
+		def do_EOF(self):
+			# quit if detached
+			return True
 
 
 snippet shellcolor
@@ -40,10 +44,12 @@ abbr        color set for print on shell
 		background_magenta = '\033[45m'
 		background_cyan = '\033[46m'
 		reset = '\033[0m'
-
+	
+	
+	${1}
 
 snippet for_enumerate
 abbr        for ... in enumerate(): ...
 options     head
-	for ${1:#:count}, ${2:#:value} in enumerate(${2:#:list}):
-		${0:pass}
+	for ${1:i}, ${2:j} in enumerate(${3:#:list}):
+		${4:pass}
