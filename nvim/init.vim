@@ -50,7 +50,7 @@ syntax on
 set number
 set relativenumber
 set list
-set listchars=tab:>>,trail:-,nbsp:%,eol:↲
+set listchars=tab:»-,trail:-,nbsp:%,eol:↲
 set expandtab
 set autoindent
 set shiftwidth=4
@@ -68,7 +68,7 @@ filetype plugin indent on
 augroup fileTypeIndent
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4
-    autocmd BufNewFile,BufRead *.go setlocal tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab
+    autocmd BufNewFile,BufRead *.go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
 augroup END
 
 
