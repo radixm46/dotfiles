@@ -63,6 +63,15 @@ hi ColorColumn guibg=#444444 "set line color
 filetype on            " enables filetype detection
 filetype plugin on     " enables filetype specific plugins
 filetype plugin indent on
+
+
+augroup fileTypeIndent
+    autocmd!
+    autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4
+    autocmd BufNewFile,BufRead *.go setlocal tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+
+
 " let python_highlight_all = 1
 " configured on plugins
 
