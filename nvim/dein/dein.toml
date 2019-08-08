@@ -89,6 +89,9 @@ hook_add = '''
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
+hook_add = '''
+    nmap <F7> :NERDTreeToggle<CR>
+'''
 
 # [[plugins]]
 # repo = 'morhetz/gruvbox'
