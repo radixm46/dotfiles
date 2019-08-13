@@ -98,6 +98,7 @@ setopt auto_cd
 
 # cd したら自動的にpushdする
 setopt auto_pushd
+
 # 重複したディレクトリを追加しない
 setopt pushd_ignore_dups
 
@@ -154,10 +155,8 @@ elif which putclip >/dev/null 2>&1 ; then
     alias -g C='| putclip'
 fi
 
-get_weather() {
-    curl "wttr.in/$1"
-}
-alias wttr='get_weather'
+get_weather() { curl "wttr.in/$1"; }
+alias -g wttr='get_weather'
 
 
 ########################################
@@ -174,30 +173,6 @@ case ${OSTYPE} in
         ;;
 esac
 
-# vim:set ft=zsh:
-
-#default
-#export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-#http://qiita.com/ssh0/items/a9956a74bff8254a606a
-#tmux自動起動の設定
-#if [[ ! -n $TMUX && $- == *l* ]]; then
-#  # get the IDs
-#  ID="`tmux list-sessions`"
-#  if [[ -z "$ID" ]]; then
-#    tmux new-session
-#  fi
-#  create_new_session="Create New Session"
-#  ID="$ID\n${create_new_session}:"
-#  ID="`echo $ID | $PERCOL | cut -d: -f1`"
-#  if [[ "$ID" = "${create_new_session}" ]]; then
-#    tmux new-session
-#  elif [[ -n "$ID" ]]; then
-#    tmux attach-session -t "$ID"
-#  else
-#    :  # Start terminal normally
-#  fi
-#fi
 
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
