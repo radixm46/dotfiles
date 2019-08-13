@@ -155,7 +155,28 @@ elif which putclip >/dev/null 2>&1 ; then
     alias -g C='| putclip'
 fi
 
-get_weather() { curl "wttr.in/$1"; }
+get_weather() {
+    local format=""
+    while getopts d:l:sf: option
+    do
+        case ${option} in
+            d) local days="${OPTARG}"  # TODO: chack value(0-3)
+                ;;
+            l) local lang_='&lang='"${OPTARG}"
+                ;;
+            s) local format='&format=%l:+%c++%t++%w++%p++%P'
+                ;;
+            f) local format='&format='"${OPTARG}"
+                ;;
+        esac
+    done
+
+    shift $((OPTIND - 1))
+    local target_loc="$1"
+
+    curl 'wttr.in/'"${target_loc}"\?"${days:=1}"'qA'"${lang_}""${format:=}"
+}
+
 alias -g wttr='get_weather'
 
 
