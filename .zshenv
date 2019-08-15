@@ -12,10 +12,12 @@ case "$(uname)" in
         fi
 
         ;;
-        
-    *) ;; # OSがMac以外ならば何もしない
+
 esac
 
+if [[ -e $HOME/.profile ]]; then
+    source $HOME/.profile  # load .profile if exists
+#
 # if [[ -d $HOME/miniconda3/bin ]]; then
 #     export PATH="$HOME/miniconda3/bin:$PATH"
 # fi #add anaconda path if installed
