@@ -106,13 +106,7 @@ autocmd vimenter * NERDTree
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "プラグイン関連
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-"let g:syntastic_python_checkers = ["flake8"] "syntastic
-
-"autocmd FileType python setlocal omnifunc=jedi#completions
-
-"jedi-vimとneocompleteの食合せの調整
-"http://kozo2.hatenablog.com/entry/2014/01/22/050714
-"let g:jedi#popup_select_first=0
-"let g:jedi#completions_enabled = 0
-"let g:jedi#auto_vim_configuration = 0
-"let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'])    "イコール以降に問題
+" always show signcolumns
+set signcolumn=yes
+highlight SignColumn ctermbg=0
+"guibg=#444444
