@@ -46,8 +46,8 @@ options     head
 		background_magenta = '\033[45m'
 		background_cyan = '\033[46m'
 		reset = '\033[0m'
-	
-	
+
+
 	${1}
 
 
@@ -55,3 +55,18 @@ snippet lambda
 abbr        lambda x: function
 	lambda ${1:x}: ${2:#:function}
 	${3}
+
+
+snippet     head
+abbr        shebang and coding
+options     head
+	#!/usr/bin/env python3
+	# -*- coding: utf-8 -*-
+
+	${1}
+
+
+snippet     forGenerator
+abbr        i for ... in ...
+	${1:i} for ${2:i} in range(${3:#:number})
+	${4}
