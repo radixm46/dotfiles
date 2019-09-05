@@ -70,3 +70,10 @@ snippet     forGenerator
 abbr        i for ... in ...
 	${1:i} for ${2:i} in range(${3:#:number})
 	${4}
+
+
+snippet     cont_input
+abbr        map multiple input
+options     head
+	${1:a}, ${2:b}, ${3:c} = map(${4:int}, input().split())
+	${5}
