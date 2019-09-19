@@ -68,16 +68,35 @@ hook_add = '''
     let g:ale_set_quickfix = 1
     let g:ale_sign_error = '✗'
     "let g:ale_sign_warning = '⚠'
+    let g:ale_fix_on_save = 1
     let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \   'python': ['black', 'autopep8'],
     \}
     let g:ale_linters = {
-    \   'python': ['flake8'],
+    \   'python': ['flake8', 'mypy'],
     \   'rust': ['rls'],
     \}
+    " let g:ale_python_flake8_executable = g:python3_host_prog
+    " let g:ale_python_flake8_options = '-m flake8'
+    " let g:ale_python_autopep8_executable = g:python3_host_prog
+    " let g:ale_python_autopep8_options = '-m autopep8'
+    " let g:ale_python_isort_executable = g:python3_host_prog
+    " let g:ale_python_isort_options = '-m isort'
+    " let g:ale_python_black_executable = g:python3_host_prog
+    " let g:ale_python_black_options = '-m black'
+    let g:ale_python_black_options = '--ignore-missing-imports'
+
     nmap <silent> <C-j> <Plug>(ale_previous_wrap)
     nmap <silent> <C-k> <Plug>(ale_next_wrap)
     '''
+
+[[plugins]]
+repo = 'plytophogy/vim-virtualenv'
+on_ft = 'python'
+hook_add = '''
+    let g:virtualenv_directory = '$HOME/venv_py'
+'''
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
