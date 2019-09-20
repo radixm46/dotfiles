@@ -148,11 +148,6 @@ on_ft = 'toml'
 # repo = 'lambdalisue/vim-pyenv'
 # on_ft = ['python']
 
-#[[plugins]]
-#repo = 'jmcantrell/vim-virtualenv'
-#on_ft = ['python']
-#どちらか、有効化？
-
 [[plugins]]
 repo = 'zchee/deoplete-zsh'
 on_ft = ['zsh', 'sh']
