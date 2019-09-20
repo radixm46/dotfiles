@@ -86,7 +86,7 @@ hook_add = '''
     " let g:ale_python_black_executable = g:python3_host_prog
     " let g:ale_python_black_options = '-m black'
     let g:ale_python_flake8_options = '--max-line-length=99 --ignore=E203,W503,W504'
-    let g:ale_python_autopep8_options = '--aggresssive --max-line-length 99'
+    let g:ale_python_autopep8_options = '--aggressive --max-line-length 99'
     let g:ale_python_black_options = '--ignore-missing-imports'
 
     nmap <silent> <C-j> <Plug>(ale_previous_wrap)
