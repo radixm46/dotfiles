@@ -16,11 +16,13 @@ repo = 'Shougo/dein.vim'
      \}
     let g:lightline.active = {
     \       'left': [ [ 'mode', 'paste' ],
-    \                 [ 'readonly', 'fugitive', 'filename', 'modified'] ],
-    \       'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'], ['lineinfo'], ['percent'], ['fileformat', 'fileencoding', 'filetype']]
+    \                 [ 'readonly', 'fugitive', 'venv', 'filename', 'modified'] ],
+    \       'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'],
+    \                 ['lineinfo'], ['percent'], ['fileformat', 'fileencoding', 'filetype']]
     \ }
     let g:lightline.component_function = {
-    \        'fugitive': 'LightlineFugitive'
+    \        'fugitive': 'LightlineFugitive',
+    \        'venv': 'virtualenv#statusline',
     \ }
     let g:lightline.component_expand = {
     \    'linter_checking': 'lightline#ale#checking',
@@ -101,6 +103,8 @@ repo = 'plytophogy/vim-virtualenv'
 on_ft = 'python'
 hook_add = '''
     let g:virtualenv_directory = '$HOME/venv_py'
+    let g:virtualenv_auto_activate = 1
+    let g:virtualenv_stl_format = 'env: %n'
 '''
 
 [[plugins]]
