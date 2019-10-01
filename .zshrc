@@ -118,6 +118,33 @@ setopt hist_reduce_blanks
 setopt extended_glob
 
 ########################################
+# zplug
+#
+if [[ ! -d ~/.zplug ]]; then
+    curl -sL --proto-redir -all, \
+        https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh| zsh
+fi
+
+source ~/.zplug/init.zsh
+zplug "zplug/zplug", hook-build:'zplug --self-manage'
+
+# plugins
+zplug "zsh-users/zsh-syntax-highlighting"
+
+
+
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# load plugins
+zplug load –verbose
+
+
+########################################
 # キーバインド
 
 # ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
