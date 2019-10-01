@@ -118,31 +118,25 @@ setopt hist_reduce_blanks
 setopt extended_glob
 
 ########################################
-# zplug
-#
-if [[ ! -d ~/.zplug ]]; then
-    curl -sL --proto-redir -all, \
-        https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh| zsh
+# zplugin
+########################################
+
+if [ ! -d $HOME/.zplugin ]; then
+    echo 'Installing zplugin...'
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 fi
 
-source ~/.zplug/init.zsh
-zplug "zplug/zplug", hook-build:'zplug --self-manage'
+source $HOME/.zplugin/bin/zplugin.zsh
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
 
-# plugins
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplugin light zsh-users/zsh-autosuggestions
+zplugin light zsh-users/zsh-completions
+zplugin light zdharma/fast-syntax-highlighting
+# zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure
 
-
-
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# load plugins
-zplug load --verbose
+autoload -U compinit
+compinit
 
 
 ########################################
