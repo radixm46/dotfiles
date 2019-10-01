@@ -133,10 +133,9 @@ autoload -Uz _zplugin
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light zsh-users/zsh-completions
 zplugin light zdharma/fast-syntax-highlighting
-# zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure
 
 autoload -U compinit
-compinit
+(compinit -u &)
 
 
 ########################################
