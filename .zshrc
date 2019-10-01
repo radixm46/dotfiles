@@ -118,6 +118,27 @@ setopt hist_reduce_blanks
 setopt extended_glob
 
 ########################################
+# zplugin
+########################################
+
+if [ ! -d $HOME/.zplugin ]; then
+    echo 'Installing zplugin...'
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
+fi
+
+source $HOME/.zplugin/bin/zplugin.zsh
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
+
+zplugin light zsh-users/zsh-autosuggestions
+zplugin light zsh-users/zsh-completions
+zplugin light zdharma/fast-syntax-highlighting
+
+autoload -U compinit
+(compinit -u &)
+
+
+########################################
 # キーバインド
 
 # ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
