@@ -129,7 +129,8 @@ source ~/.zplug/init.zsh
 zplug "zplug/zplug", hook-build:'zplug --self-manage'
 
 # plugins
-zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 
 
@@ -141,7 +142,7 @@ if ! zplug check --verbose; then
 fi
 
 # load plugins
-zplug load –verbose
+zplug load --verbose
 
 
 ########################################
