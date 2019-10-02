@@ -25,8 +25,9 @@ SAVEHIST=1000000
 # プロンプト
 # 1行表示
 # PROMPT="%~ %# "
-# 2行表示
-PROMPT="%{${fg[green]}%}[%n@%m]%{${reset_color}%} %~
+PROMPT="${bg[black]}%{${fg[green]}%}[%n@%m]%{${reset_color}%}\
+%{${bg[green]}%}%{${fg[black]}%}▙▞▚▖ %{${fg[black]}%}%~ %{${reset_color}%}\
+%{${fg[green]}%}▙▞▚▖▝%{${reset_color}%}
 %# "
 
 # 単語の区切り文字を指定する
@@ -42,10 +43,10 @@ zstyle ':zle:*' word-style unspecified
 # 補完機能を有効にする
 
 #for zsh-completions
-fpath=(/usr/local/share/zsh-completions $fpath)
+#fpath=(/usr/local/share/zsh-completions $fpath)
 
-autoload -Uz compinit
-compinit -u
+# autoload -Uz compinit
+# compinit -u
 
 # 補完で小文字でも大文字にマッチさせる
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
