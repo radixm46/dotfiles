@@ -25,7 +25,9 @@ SAVEHIST=1000000
 # プロンプト
 # 1行表示
 # PROMPT="%~ %# "
-PROMPT="${bg[green]}%{${fg[black]}%}[%n@%m]%{${reset_color}%}%{${bg[blue]}%}%{${fg[green]}%}▙▞▚▖ %{${fg[black]}%}%~ %{${reset_color}%}%{${fg[blue]}%}▝▚▖%{${reset_color}%}
+PROMPT="${bg[black]}%{${fg[green]}%}[%n@%m]%{${reset_color}%}\
+%{${bg[green]}%}%{${fg[black]}%}▙▞▚▖ %{${fg[black]}%}%~ %{${reset_color}%}\
+%{${fg[green]}%}▙▞▚▖▝%{${reset_color}%}
 %# "
 
 # 単語の区切り文字を指定する
