@@ -91,7 +91,11 @@ zstyle ':vcs_info:*' formats \
 %K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
 #%K{magenta} %F{white}${P_GITBRANCH} %F{black}%b %f%k"
-zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
+#zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
+zstyle ':vcs_info:*' actionformats \
+"%F{black}${P_BEGINR} \
+%K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
+%{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
 
 function _update_vcs_info_msg() {
     LANG=en_US.UTF-8 vcs_info
