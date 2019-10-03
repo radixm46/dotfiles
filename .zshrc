@@ -36,16 +36,18 @@ P_COMPUTER=$'\U1F5B5 '
 P_DIR=$'\U1F5C2' #$'\U1F5BF'
 P_PROM='' #$'\U259B\U259F'
 P_GITBRANCH=$'\UE0A0'
+P_VCSICO=$'\U1F5D8'
 PROMPT="\
-%{${bg[blue]}%}%{${fg_bold[red]}%} ${P_LOGIN}%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg[black]}%} %n%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg_bold[red]}%} ${P_COMPUTER}%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg[black]}%} %m %{${reset_color}%}\
-%{${bg[yellow]}%}%{${fg[blue]}%}${P_BEGIN} \
-%{${fg_bold[red]}%} ${P_DIR} %{${fg_bold[red]}%}%{${reset_color}%}\
-%{${bg[yellow]}%}%{${fg[black]}%} %~  %{${reset_color}%}\
-%{${fg[yellow]}%}${P_END}%{${reset_color}%}
-%{${fg[magenta]}%}${P_PROM}%{${reset_color}%}%# "
+%{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
+%{${bg[green]}%}%{${fg_bold[black]}%} %n%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[green]}%}${P_BEGIN}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[red]}%} ${P_COMPUTER}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg_bold[black]}%} %m %{${reset_color}%}\
+%{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN} \
+%{${fg[green]}%} ${P_DIR} %{${reset_color}%}\
+%{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
+%{${fg[black]}%}${P_END}%{${reset_color}%}
+%{${fg[black]}%}${P_PROM}%{${reset_color}%}%# "
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -85,9 +87,10 @@ autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
 
 zstyle ':vcs_info:*' formats \
-"%F{yellow}${P_BEGINR} \
-%K{yellow}%F{black}  %s %F{magenta}${P_ENDR} \
-%K{magenta} %F{black}${P_GITBRANCH} %F{black}%b %f%k"
+"%F{black}${P_BEGINR} \
+%K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
+%{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg_bold[black]}%} %b %f%k%{${reset_color}%}"
+#%K{magenta} %F{white}${P_GITBRANCH} %F{black}%b %f%k"
 zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
 
 function _update_vcs_info_msg() {
