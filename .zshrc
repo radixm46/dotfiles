@@ -25,10 +25,27 @@ SAVEHIST=1000000
 # プロンプト
 # 1行表示
 # PROMPT="%~ %# "
-PROMPT="${bg[black]}%{${fg[green]}%}[%n@%m]%{${reset_color}%}\
-%{${bg[green]}%}%{${fg[black]}%}▙▞▚▖ %{${fg[black]}%}%~ %{${reset_color}%}\
-%{${fg[green]}%}▙▞▚▖▝%{${reset_color}%}
-%# "
+#P_BEGIN=$'\U2599\U259E\U259A\U2596\U259D\U2598'
+P_BEGIN=$'\U1F67E  \U2596'
+P_BEGINR=$'\U2596  \U1F67E'
+#P_END=$'\U2599\U259E\U259A\U2596\U259D\U2598'
+P_END=$'\U1F67F \U259D'
+P_ENDR=$'\U2598\U2597 \U1F67F'
+P_LOGIN=$'\U23FB'
+P_COMPUTER=$'\U1F5B5 '
+P_DIR=$'\U1F5C2' #$'\U1F5BF'
+P_PROM='' #$'\U259B\U259F'
+P_GITBRANCH=$'\UE0A0'
+PROMPT="\
+%{${bg[blue]}%}%{${fg_bold[red]}%} ${P_LOGIN}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[black]}%} %n%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg_bold[red]}%} ${P_COMPUTER}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[black]}%} %m %{${reset_color}%}\
+%{${bg[yellow]}%}%{${fg[blue]}%}${P_BEGIN} \
+%{${fg_bold[red]}%} ${P_DIR} %{${fg_bold[red]}%}%{${reset_color}%}\
+%{${bg[yellow]}%}%{${fg[black]}%} %~  %{${reset_color}%}\
+%{${fg[yellow]}%}${P_END}%{${reset_color}%}
+%{${fg[magenta]}%}${P_PROM}%{${reset_color}%}%# "
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -43,10 +60,10 @@ zstyle ':zle:*' word-style unspecified
 # 補完機能を有効にする
 
 #for zsh-completions
-#fpath=(/usr/local/share/zsh-completions $fpath)
+fpath=(/usr/local/share/zsh-completions $fpath)
 
-# autoload -Uz compinit
-# compinit -u
+autoload -Uz compinit
+compinit -u
 
 # 補完で小文字でも大文字にマッチさせる
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -67,7 +84,10 @@ zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
 
-zstyle ':vcs_info:*' formats '%F{green}(%s)-[%b]%f'
+zstyle ':vcs_info:*' formats \
+"%F{yellow}${P_BEGINR} \
+%K{yellow}%F{black}  %s %F{magenta}${P_ENDR} \
+%K{magenta} %F{black}${P_GITBRANCH} %F{black}%b %f%k"
 zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
 
 function _update_vcs_info_msg() {
@@ -132,11 +152,11 @@ autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 
 zplugin light zsh-users/zsh-autosuggestions
-zplugin light zsh-users/zsh-completions
+#zplugin light zsh-users/zsh-completions
 zplugin light zdharma/fast-syntax-highlighting
 
-autoload -U compinit
-(compinit -u &)
+# autoload -U compinit
+# (compinit -u &)
 
 
 ########################################
