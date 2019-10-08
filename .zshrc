@@ -28,6 +28,8 @@ SAVEHIST=1000000
 #P_BEGIN=$'\U2599\U259E\U259A\U2596\U259D\U2598'
 P_BEGIN=$'\U1F67E  \U2596'
 P_BEGINR=$'\U2596  \U1F67E'
+P_MIDTEX=$'\U2593\U2592\U2591'
+P_MIDTEXR=$'\U2591\U2592\U2593'
 #P_END=$'\U2599\U259E\U259A\U2596\U259D\U2598'
 P_END=$'\U1F67F \U259D'
 P_ENDR=$'\U2598\U2597 \U1F67F'
@@ -40,13 +42,14 @@ P_VCSICO=$'\U1F5D8'
 PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg[green]}%}${P_BEGIN}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[red]}%} ${P_COMPUTER}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg_bold[black]}%} %m %{${reset_color}%}\
-%{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN} \
-%{${fg[green]}%} ${P_DIR} %{${reset_color}%}\
+%{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN}%{${reset_color}%}\
+%{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
+%{${bg[black]}%}%{${fg[green]}%} ${P_DIR}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
-%{${fg[black]}%}${P_END}%{${reset_color}%}
+%{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}%# "
 
 # 単語の区切り文字を指定する
@@ -65,7 +68,7 @@ zstyle ':zle:*' word-style unspecified
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 autoload -Uz compinit
-compinit -u
+(compinit -u &)
 
 # 補完で小文字でも大文字にマッチさせる
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -87,13 +90,13 @@ autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
 
 zstyle ':vcs_info:*' formats \
-"%F{black}${P_BEGINR} \
+"%F{black}${P_MIDTEXR}\
 %K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
 #%K{magenta} %F{white}${P_GITBRANCH} %F{black}%b %f%k"
 #zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
 zstyle ':vcs_info:*' actionformats \
-"%F{black}${P_BEGINR} \
+"%F{black}${P_MIDTEXR}\
 %K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
 
