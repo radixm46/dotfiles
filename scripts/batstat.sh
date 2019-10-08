@@ -1,11 +1,15 @@
 #!/bin/bash -e
+
 case ${OSTYPE} in
     darwin*)
-        battery_capacity='unsupported '
-        battery_charging=" "
+        pmset -g batt |\
+        awk 'NR==2{print($3, $4)}' |\
+        sed -E \
+        -e 's/(\;| )//g' \
+        -e 's/(charged|charging)/'⚡'/'\
+        -e 's/discharging/'🔋'/'
         ;;
     linux*)
-        battery_capacity=$(cat /sys/class/power_supply/BAT0/capacity)
         if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
         then
             battery_charging="\U26A1"
@@ -13,8 +17,6 @@ case ${OSTYPE} in
         else
             battery_charging="\U1F50B"
         fi
+        echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%'${battery_charging}
         ;;
 esac
-
-
-echo -e ${battery_capacity}'%'${battery_charging}
