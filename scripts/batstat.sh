@@ -5,10 +5,10 @@ case ${OSTYPE} in
         pmset -g batt |\
         awk 'NR==2{print($3, $4)}' |\
         sed -E \
-        -e 's/(\;| )//g' \
-        -e 's/charging/'⚡'/'\
+        -e 's/(\;| )//g'\
+        -e 's/discharging/'🔋'/g'\
+        -e 's/charging/'⚡'/g'\
         -e 's/charged/'✔'/'\
-        -e 's/discharging/'🔋'/'
         ;;
     linux*)
         if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
