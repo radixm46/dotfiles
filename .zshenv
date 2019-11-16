@@ -18,12 +18,24 @@ esac
 if [[ -e $HOME/.profile ]]; then
     source $HOME/.profile  # load .profile if exists
 fi
-#
-# if [[ -d $HOME/miniconda3/bin ]]; then
-#     export PATH="$HOME/miniconda3/bin:$PATH"
-# fi #add anaconda path if installed
+
+# check stack installed and add path
+if hash stack 2>/dev/null; then
+    STACK_PATH=$(stack path --local-bin)
+    if [[ -e $STACK_PATH ]]; then
+        export PATH="$STACK_PATH:$PATH"
+    fi
+fi
+
+# check rust environment
+if hash cargo 2>/dev/null; then
+    CARGO_PATH="$HOME/.cargo/bin"
+    if [[ -e $STACK_PATH ]]; then
+        export PATH="$CARGO_PATH:$PATH"
+    fi
+fi
+
 # export LANGUAGE=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
 # export LC_CTYPE=en_US.UTF-8
 # export LANG=en_US.UTF-8
-#added by Anaconda 4.4.0 installer
