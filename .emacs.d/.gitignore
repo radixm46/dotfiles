@@ -1,0 +1,5 @@
+#ignorefiles
+.DS_STORE
+.Spotlight-V100
+auto-save-list
+elpa
