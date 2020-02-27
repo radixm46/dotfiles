@@ -151,13 +151,14 @@ setopt extended_glob
 ########################################
 # zplugin
 ########################################
-
-if [ ! -d $HOME/.zplugin ]; then
+ZINITDIR=$HOME/.zinit
+if [ ! -d $ZINITDIR ]; then
     echo 'Installing zplugin...'
+    echo "target dir: $ZINITDIR"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 fi
 
-source $HOME/.zplugin/bin/zplugin.zsh
+source $HOME/.zinit/bin/zplugin.zsh
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 
