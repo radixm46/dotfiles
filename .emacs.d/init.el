@@ -17,7 +17,7 @@
 ;; Initial frame settings for GUI
 (setq default-frame-alist
   (append (list
-    '(font . "HackGen-16"))
+    '(font . "HackGen Console for Powerline-16"))
   default-frame-alist))
 
 
