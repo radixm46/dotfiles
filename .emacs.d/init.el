@@ -14,6 +14,13 @@
 (setq ring-bell-function 'ignore)
 
 
+;; Initial frame settings for GUI
+(setq default-frame-alist
+  (append (list
+    '(font . "HackGen-16"))
+  default-frame-alist))
+
+
 ;; log
 (setq message-log-maxa 10000)
 (setq history-length 1000)
@@ -111,15 +118,42 @@
   :ensure t
   :config
   (doom-modeline-mode 1)
+  ;; How tall the mode-line should be. It's only respected in GUI.
+  ;; If the actual char height is larger, it respects the actual height.
+  (setq doom-modeline-height 25)
+
+  ;; How wide the mode-line bar should be. It's only respected in GUI.
+  (setq doom-modeline-bar-width 3)
+
+  ;; The limit of the window width.
+  ;; If `window-width' is smaller than the limit, some information won't be displayed.
+  (setq doom-modeline-window-width-limit fill-column)
+
+  ;; How to detect the project root.
+  ;; The default priority of detection is `ffip' > `projectile' > `project'.
+  ;; nil means to use `default-directory'.
+  ;; The project management packages have some issues on detecting project root.
+  ;; e.g. `projectile' doesn't handle symlink folders well, while `project' is unable
+  ;; to hanle sub-projects.
+  ;; You can specify one if you encounter the issue.
+  (setq doom-modeline-project-detection 'project)
+
   (setq doom-modeline-buffer-file-name-style 'auto)
+
+  ;; Whether display icons in the mode-line. Respects `all-the-icons-color-icons'.
+  ;; While using the server mode in GUI, should set the value explicitly.
+  (setq doom-modeline-icon (display-graphic-p))
+
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-major-mode-color-icon t)
   (setq doom-modeline-buffer-state-icon t)
   (setq doom-modeline-buffer-modification-icon t)
+
   (setq doom-modeline-unicode-fallback nil)
   (setq doom-modeline-minor-modes nil)
   (setq doom-modeline-enable-word-count nil)
-  ;; (setq doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
+
+  (setq doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
 
   (setq doom-modeline-buffer-encoding t)
 
@@ -199,10 +233,10 @@
         doom-themes-enable-italic t)
 
   ;(load-theme 'doom-one t)
-  ;(load-theme 'doom-solarized-dark t)
+  (load-theme 'doom-solarized-dark t)
 
   ;(load-theme 'doom-nord t)
-  (load-theme 'doom-tomorrow-night t)
+  ;(load-theme 'doom-tomorrow-night t)
   ;(set-face-attribute 'hl-line nil :inherit nil :background "brightblack")
 
   ;(global-hl-line-mode t)
@@ -213,26 +247,28 @@
 
 ;(use-package col-highlight
 ;  :ensure t
-;)  
-
-;(use-package highlight-indent-guides
-;  :ensure t
-;  :init
-;  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-;  (setq highlight-indent-guides-method 'column)
-;  (setq highlight-indent-guides-auto-odd-face-perc 5)
-;  (setq highlight-indent-guides-auto-even-face-perc 5)
-;  (setq highlight-indent-guides-auto-character-face-perc 20)
-;  :config
-;  (setq highlight-indent-guides-auto-enabled nil)
-;  (setq highlight-indent-guides-responsive 'top)
-;  (setq highlight-indent-guides-delay 0)
 ;)
+
+(use-package highlight-indent-guides
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'column)
+  (setq highlight-indent-guides-auto-odd-face-perc 10)
+  (setq highlight-indent-guides-auto-even-face-perc 10)
+  ;(setq highlight-indent-guides-auto-character-face-perc 20)
+  (setq highlight-indent-guides-auto-enabled t)
+  (setq highlight-indent-guides-responsive 'top)
+  (setq highlight-indent-guides-delay 0)
+)
 
 (use-package neotree
   :ensure t
   :config
-  (global-set-key [f7] 'neotree-toggle))
+  (global-set-key [f7] 'neotree-toggle)
+  (setq neo-window-fixed-size nil)
+)
 
 
 (use-package magit
