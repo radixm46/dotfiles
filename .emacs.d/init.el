@@ -29,7 +29,7 @@
 (setq default-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (setq default-coding-systems 'utf-8)
-(setq coding-system-for-read 'utf-8)
+;; (setq coding-system-for-read 'utf-8) ;; conflicts ddskk
 (setq coding-system-for-write 'utf-8)
 
 (setq-default tab-width 4 indent-tabs-mode nil)
@@ -44,10 +44,15 @@
 ;; init package
 (require 'package)
 
+;; use custom.el for package-selected-packages
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+    (load custom-file))
+
 (setq package-archives (append
    '(
-     ("melpa-stable" . "https://stable.melpa.org/packages/")
      ("melpa" . "https://melpa.org/packages/")
+     ("melpa-stable" . "https://stable.melpa.org/packages/")
      ;; ("marmalade" . "http://marmalade-repo.org/packages/")
      ("org" . "http://orgmode.org/elpa/")
      )
@@ -61,46 +66,58 @@
 
 (setq load-prefer-newer t)
 
-(defvar required-packages
-  '(
-    ddskk
-    evil linum-relative
-    doom-modeline
-    neotree
 
-    ;; git
-    magit git-gutter
-    ))
-
-
-(dolist (pkg required-packages)
-  (unless (package-installed-p pkg)  ;; can't notify upgradable package
-    ;; (package-install pkg)
-    ;; (package-initialize)
-))
-
-;; skk config
-(when (require 'skk nil t)
-  (setq default-input-method "japanese-skk")
-  (require 'skk-study)
+;; auto load use-package package
+(unless (package-installed-p 'use-package)  ;; can't notify upgradable package
+    (package-install 'use-package)
+    (require 'use-package)
 )
 
+;; skk config(use default package.el)
+(unless (package-installed-p 'ddskk)
+  (package-install 'ddskk)
+)
+(package-initialize)
+(setq default-input-method "japanese-skk")
+(require 'skk-study)
+
+
+;; -------- package config under use-package --------
+
+
 ;; enable evil
-(when (require 'evil nil t)
-  (evil-mode 1)
+(use-package evil
+  :ensure t
+  :config (evil-mode 1)
 )
 
 
 ;; enable relative line number
-(when (require 'linum-relative nil t)
- (linum-relative-global-mode)
- )
+(use-package linum-relative
+  :ensure t
+  :config (linum-relative-global-mode)
+)
 
 
 ;; enable doom-modeline
-(when (require 'doom-modeline nil t)
-  (doom-modeline-mode 1)
+(use-package doom-modeline
+  :ensure t
+  :config (doom-modeline-mode 1)
 )
+
+
+(use-package neotree
+  :ensure t
+  :config
+  (global-set-key [f7] 'neotree-toggle))
+
+
+(use-package magit
+  :ensure t)
+
+
+(use-package git-gutter
+  :ensure t)
 
 
 ;; org-mode config
@@ -109,19 +126,3 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
-
-
-
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (ddskk))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
