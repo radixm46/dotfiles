@@ -10,7 +10,6 @@
 (global-display-line-numbers-mode)
 (column-number-mode t)
 (ido-mode t)
-(global-hl-line-mode t)
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
 
@@ -88,7 +87,15 @@
 ;; enable evil
 (use-package evil
   :ensure t
-  :config (evil-mode 1)
+  :config
+  (evil-mode 1)
+  (define-key evil-normal-state-map (kbd "C-u") 'scroll-down-command)
+  ;; enable emacs cursor movement in insert mode
+  (define-key evil-insert-state-map (kbd "C-h") 'delete-backward-char)
+  (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+  (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
+  ;(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  ;(define-key evil-insert-state-map (kbd "C-n") 'next-line)
 )
 
 
@@ -145,7 +152,7 @@
   (setq doom-modeline-modal-icon t)
 
   ;; Whether display the mu4e notifications. It requires `mu4e-alert' package.
-  (setq doom-modeline-mu4e nil)
+  ;(setq doom-modeline-mu4e nil)
 
   ;; Whether display the gnus notifications.
   (setq doom-modeline-gnus t)
@@ -154,10 +161,10 @@
   (setq doom-modeline-gnus-timer 2)
 
   ;; Whether display the IRC notifications. It requires `circe' or `erc' package.
-  (setq doom-modeline-irc t)
+  ;(setq doom-modeline-irc t)
 
   ;; Function to stylize the irc buffer names.
-  (setq doom-modeline-irc-stylize 'identity)
+  ;(setq doom-modeline-irc-stylize 'identity)
 
   ;; Whether display the environment version.
   (setq doom-modeline-env-version t)
@@ -190,12 +197,37 @@
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
+
   ;(load-theme 'doom-one t)
-  (load-theme 'doom-solarized-dark t)
+  ;(load-theme 'doom-solarized-dark t)
+
+  ;(load-theme 'doom-nord t)
+  (load-theme 'doom-tomorrow-night t)
+  ;(set-face-attribute 'hl-line nil :inherit nil :background "brightblack")
+
+  ;(global-hl-line-mode t)
   (doom-themes-visual-bell-config)
   (doom-themes-neotree-config)
   (doom-themes-org-config)
 )
+
+;(use-package col-highlight
+;  :ensure t
+;)  
+
+;(use-package highlight-indent-guides
+;  :ensure t
+;  :init
+;  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;  (setq highlight-indent-guides-method 'column)
+;  (setq highlight-indent-guides-auto-odd-face-perc 5)
+;  (setq highlight-indent-guides-auto-even-face-perc 5)
+;  (setq highlight-indent-guides-auto-character-face-perc 20)
+;  :config
+;  (setq highlight-indent-guides-auto-enabled nil)
+;  (setq highlight-indent-guides-responsive 'top)
+;  (setq highlight-indent-guides-delay 0)
+;)
 
 (use-package neotree
   :ensure t
