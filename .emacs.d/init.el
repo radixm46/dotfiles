@@ -142,7 +142,8 @@
 
   ;; Whether display icons in the mode-line. Respects `all-the-icons-color-icons'.
   ;; While using the server mode in GUI, should set the value explicitly.
-  (setq doom-modeline-icon (display-graphic-p))
+  ;(setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-icon t)
 
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-major-mode-color-icon t)
@@ -285,3 +286,12 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+;; markdown-mode
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
