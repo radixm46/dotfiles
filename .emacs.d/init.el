@@ -55,17 +55,17 @@
 ;; use custom.el for package-selected-packages
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
-    (load custom-file))
+  (load custom-file))
 
 (setq package-archives (append
-   '(
-     ("melpa" . "https://melpa.org/packages/")
-     ("melpa-stable" . "https://stable.melpa.org/packages/")
-     ;; ("marmalade" . "http://marmalade-repo.org/packages/")
-     ("org" . "http://orgmode.org/elpa/")
-     )
+  '(
+    ("melpa" . "https://melpa.org/packages/")
+    ("melpa-stable" . "https://stable.melpa.org/packages/")
+    ;; ("marmalade" . "http://marmalade-repo.org/packages/")
+    ("org" . "http://orgmode.org/elpa/")
+   )
    package-archives
-   ))
+))
 
 (package-initialize)
 (unless package-archive-contents
@@ -77,8 +77,8 @@
 
 ;; auto load use-package package
 (unless (package-installed-p 'use-package)  ;; can't notify upgradable package
-    (package-install 'use-package)
-    (require 'use-package)
+  (package-install 'use-package)
+  (require 'use-package)
 )
 
 ;; skk config(use default package.el)
@@ -116,7 +116,7 @@
 
 (use-package all-the-icons
   :ensure t
-) ; need installation by all-the-icons-color-install-fonts
+) ;; need installation by all-the-icons-color-install-fonts
 
 ;; enable doom-modeline
 (use-package doom-modeline
@@ -236,8 +236,8 @@
 (use-package doom-themes
   :ensure t
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
+    (setq doom-themes-enable-bold t
+          doom-themes-enable-italic t)
 
   ;(load-theme 'doom-one t)
   (load-theme 'doom-solarized-dark t)
@@ -260,31 +260,31 @@
 (use-package highlight-indent-guides
   :ensure t
   :init
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   :config
-  (setq highlight-indent-guides-method 'column)
-  (setq highlight-indent-guides-auto-odd-face-perc 10)
-  (setq highlight-indent-guides-auto-even-face-perc 10)
-  ;(setq highlight-indent-guides-auto-character-face-perc 20)
-  (setq highlight-indent-guides-auto-enabled t)
-  (setq highlight-indent-guides-responsive 'top)
-  (setq highlight-indent-guides-delay 0)
+    (setq highlight-indent-guides-method 'column)
+    (setq highlight-indent-guides-auto-odd-face-perc 10)
+    (setq highlight-indent-guides-auto-even-face-perc 10)
+    ;(setq highlight-indent-guides-auto-character-face-perc 20)
+    (setq highlight-indent-guides-auto-enabled t)
+    (setq highlight-indent-guides-responsive 'top)
+    (setq highlight-indent-guides-delay 0)
 )
 
 (use-package neotree
   :ensure t
   :config
-  (global-set-key [f7] 'neotree-toggle)
-  (setq neo-window-fixed-size nil)
-  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
-  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
-  (evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
-  (evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
-  (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
-  (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
+    (global-set-key [f7] 'neotree-toggle)
+    (setq neo-window-fixed-size nil)
+    (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+    (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+    (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+    (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+    (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+    (evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
+    (evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
+    (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
+    (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 )
 
 
@@ -293,7 +293,14 @@
 
 
 (use-package git-gutter
-  :ensure t)
+  :ensure t
+  :custom
+    (git-gutter:modified-sign "~")
+    (git-gutter:added-sign    "+")
+    (git-gutter:deleted-sign  "-")
+  :config
+    (global-git-gutter-mode +1)
+  )
 
 
 (use-package flycheck
@@ -306,78 +313,81 @@
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
   ; :init (setq lsp-keymap-prefix "C-c C-l")
   :custom
-  (lsp-document-sync-method 'incremental) ;; always send incremental document
-  (lsp-response-timeout 5)
-  (lsp-prefer-flymake 'flymake)
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         ;(XXX-mode . lsp)
-         ; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration)
-        )
+    (lsp-document-sync-method 'incremental) ;; always send incremental document
+    (lsp-response-timeout 5)
+    (lsp-prefer-flymake 'flymake)
+    :hook (
+      ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+      ;(XXX-mode . lsp)
+      ; if you want which-key integration
+      (lsp-mode . lsp-enable-which-key-integration)
+     )
   :commands lsp
-  :bind (:map lsp-mode-map
-        ("C-c r"   . lsp-rename))
-  :config
-  (require 'lsp-clients)
-  ;; LSP UI tools
-  (use-package lsp-ui
-    :ensure t
-    :custom
-    ;; lsp-ui-doc
-    (lsp-ui-doc-enable t)
-    (lsp-ui-doc-header t)
-    (lsp-ui-doc-include-signature t)
-    (lsp-ui-doc-position 'top) ;; top, bottom, or at-point
-    (lsp-ui-doc-max-width 150)
-    (lsp-ui-doc-max-height 30)
-    (lsp-ui-doc-use-childframe t)
-    (lsp-ui-doc-use-webkit t)
-    ;; lsp-ui-flycheck
-    (lsp-ui-flycheck-enable nil)
-    ;; lsp-ui-sideline
-    (lsp-ui-sideline-enable nil)
-    (lsp-ui-sideline-ignore-duplicate t)
-    (lsp-ui-sideline-show-symbol t)
-    (lsp-ui-sideline-show-hover t)
-    (lsp-ui-sideline-show-diagnostics t) ;nil
-    (lsp-ui-sideline-show-code-actions t) ;nil
-    ;; lsp-ui-imenu
-    (lsp-ui-imenu-enable nil)
-    (lsp-ui-imenu-kind-position 'top)
-    ;; lsp-ui-peek
-    (lsp-ui-peek-enable t)
-    (lsp-ui-peek-peek-height 20)
-    (lsp-ui-peek-list-width 50)
-    (lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
-    :preface
-    (defun ladicle/toggle-lsp-ui-doc ()
-      (interactive)
-      (if lsp-ui-doc-mode
-        (progn
-          (lsp-ui-doc-mode -1)
-          (lsp-ui-doc--hide-frame))
-         (lsp-ui-doc-mode 1)))
-    :bind
+  :bind
     (:map lsp-mode-map
-    ("C-c C-r" . lsp-ui-peek-find-references)
-    ("C-c C-j" . lsp-ui-peek-find-definitions)
-    ("C-c i"   . lsp-ui-peek-find-implementation)
-    ("C-c m"   . lsp-ui-imenu)
-    ("C-c s"   . lsp-ui-sideline-mode)
-    ("C-c d"   . ladicle/toggle-lsp-ui-doc))
-    :hook
-    (lsp-mode . lsp-ui-mode))
+    ("C-c r"   . lsp-rename))
+  :config
+    (require 'lsp-clients)
+    ;; LSP UI tools
+    (use-package lsp-ui
+      :ensure t
+      :custom
+        ;; lsp-ui-doc
+        (lsp-ui-doc-enable t)
+        (lsp-ui-doc-header t)
+        (lsp-ui-doc-include-signature t)
+        (lsp-ui-doc-position 'top) ;; top, bottom, or at-point
+        (lsp-ui-doc-max-width 150)
+        (lsp-ui-doc-max-height 30)
+        (lsp-ui-doc-use-childframe t)
+        (lsp-ui-doc-use-webkit t)
+        ;; lsp-ui-flycheck
+        (lsp-ui-flycheck-enable nil)
+        ;; lsp-ui-sideline
+        (lsp-ui-sideline-enable nil)
+        (lsp-ui-sideline-ignore-duplicate t)
+        (lsp-ui-sideline-show-symbol t)
+        (lsp-ui-sideline-show-hover t)
+        (lsp-ui-sideline-show-diagnostics t) ;nil
+        (lsp-ui-sideline-show-code-actions t) ;nil
+        ;; lsp-ui-imenu
+        (lsp-ui-imenu-enable nil)
+        (lsp-ui-imenu-kind-position 'top)
+        ;; lsp-ui-peek
+        (lsp-ui-peek-enable t)
+        (lsp-ui-peek-peek-height 20)
+        (lsp-ui-peek-list-width 50)
+        (lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
+      :preface
+        (defun ladicle/toggle-lsp-ui-doc ()
+        (interactive)
+        (if lsp-ui-doc-mode
+          (progn
+            (lsp-ui-doc-mode -1)
+            (lsp-ui-doc--hide-frame))
+          (lsp-ui-doc-mode 1)))
+      :bind
+        (:map lsp-mode-map
+        ("C-c C-r" . lsp-ui-peek-find-references)
+        ("C-c C-j" . lsp-ui-peek-find-definitions)
+        ("C-c i"   . lsp-ui-peek-find-implementation)
+        ("C-c m"   . lsp-ui-imenu)
+        ("C-c s"   . lsp-ui-sideline-mode)
+        ("C-c d"   . ladicle/toggle-lsp-ui-doc))
+      :hook
+        (lsp-mode . lsp-ui-mode))
   ;; Lsp completion
-  (use-package company-lsp
-    :custom
-    (company-lsp-cache-candidates t) ;; always using cache
-    (company-lsp-async t)
-    (company-lsp-enable-recompletion nil))
+    (use-package company-lsp
+      :custom
+        (company-lsp-cache-candidates t) ;; always using cache
+        (company-lsp-async t)
+        (company-lsp-enable-recompletion nil)
+      :commands company-lsp
+    )
  )
 
 ;; optionally
 (use-package company :ensure t) ; completion
-(use-package company-lsp :ensure t :commands company-lsp)
 ;; if you are helm user
 ;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 ;; if you are ivy user
@@ -389,9 +399,9 @@
 
 ;; optional if you want which-key integration
 (use-package which-key
-             :ensure t
-             :config
-             (which-key-mode))
+  :ensure t
+  :config
+    (which-key-mode))
 
 
 ; -------- lauguage specific package --------
@@ -417,7 +427,6 @@
  ;:defer t
  ;:ensure t)
 )
-
 
 
 ;; org-mode config
