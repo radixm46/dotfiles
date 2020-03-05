@@ -313,9 +313,9 @@
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
   ; :init (setq lsp-keymap-prefix "C-c C-l")
   :custom
-    (lsp-document-sync-method 'incremental) ;; always send incremental document
+    (lsp-document-sync-method nil) ;; always send incremental document
     (lsp-response-timeout 5)
-    (lsp-prefer-flymake 'flymake)
+    (lsp-prefer-flymake nil) ;'flymake
     :hook (
       ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
       ;(XXX-mode . lsp)
@@ -342,7 +342,7 @@
         (lsp-ui-doc-use-childframe t)
         (lsp-ui-doc-use-webkit t)
         ;; lsp-ui-flycheck
-        (lsp-ui-flycheck-enable nil)
+        (lsp-ui-flycheck-enable t) ;nil
         ;; lsp-ui-sideline
         (lsp-ui-sideline-enable nil)
         (lsp-ui-sideline-ignore-duplicate t)
@@ -378,6 +378,9 @@
         (lsp-mode . lsp-ui-mode))
   ;; Lsp completion
     (use-package company-lsp
+      :ensure t
+      :config
+        (use-package company :ensure t) ; completion
       :custom
         (company-lsp-cache-candidates t) ;; always using cache
         (company-lsp-async t)
@@ -387,7 +390,6 @@
  )
 
 ;; optionally
-(use-package company :ensure t) ; completion
 ;; if you are helm user
 ;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 ;; if you are ivy user
@@ -403,29 +405,34 @@
   :config
     (which-key-mode))
 
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+)
 
 ; -------- lauguage specific package --------
 (use-package rustic
   :ensure t
   :defer t
- ;:init
- ;(add-hook ‘rustic-mode-hook
- ;‘(lambda ()
- ;  (racer-mode t)
- ;  (dumb-jump-mode t)
- ;  (highlight-symbol-mode t)
- ;  (rainbow-delimiters-mode t)
- ;  (smartparens-mode t)))
- ;:mode (“\\.rs$” . rustic-mode)
- ;:commands (rustic-mode)
+  ;:init
+  ;(add-hook ‘rustic-mode-hook
+  ;  ‘(lambda ()
+  ;    (racer-mode t)
+  ;    (dumb-jump-mode t)
+  ;    (highlight-symbol-mode t)
+  ;    (rainbow-delimiters-mode t)
+  ;    ))
+  ;:mode (“\\.rs$” . rustic-mode)
+  :commands (rustic-mode)
 
  ;:config
- ;(use-package quickrun
- ;:defer t
- ;:ensure t)
- ;(use-package racer
- ;:defer t
- ;:ensure t)
+    ;(use-package quickrun
+    ;:defer t
+    ;:ensure t)
+    ;(use-package racer
+    ;:defer t
+    ;:ensure t)
 )
 
 
