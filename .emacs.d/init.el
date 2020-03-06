@@ -17,7 +17,7 @@
 ;; Initial frame settings for GUI
 (setq default-frame-alist
   (append (list
-    '(font . "HackGen Console for Powerline-16"))
+    '(font . "HackGen Console for Powerline-15"))
   default-frame-alist))
 
 (tool-bar-mode -1)
@@ -319,6 +319,7 @@
     :hook (
       ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
       ;(XXX-mode . lsp)
+      (python-mode . lsp)
       ; if you want which-key integration
       (lsp-mode . lsp-enable-which-key-integration)
      )
@@ -380,7 +381,12 @@
     (use-package company-lsp
       :ensure t
       :config
-        (use-package company :ensure t) ; completion
+        (use-package company
+          :ensure t
+          :config
+          (global-company-mode)
+          (push 'company-lsp company-backends)
+        ) ; completion
       :custom
         (company-lsp-cache-candidates t) ;; always using cache
         (company-lsp-async t)
@@ -409,24 +415,25 @@
   :ensure t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  ;; enable when programming mode
 )
 
 ; -------- lauguage specific package --------
 (use-package rustic
   :ensure t
   :defer t
-  ;:init
-  ;(add-hook ‘rustic-mode-hook
-  ;  ‘(lambda ()
-  ;    (racer-mode t)
+  :init
+  (add-hook ‘rustic-mode-hook
+    ‘(lambda ()
+      (racer-mode t)
   ;    (dumb-jump-mode t)
   ;    (highlight-symbol-mode t)
   ;    (rainbow-delimiters-mode t)
-  ;    ))
-  ;:mode (“\\.rs$” . rustic-mode)
+      ))
+  :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
 
- ;:config
+ :config
     ;(use-package quickrun
     ;:defer t
     ;:ensure t)
@@ -435,6 +442,13 @@
     ;:ensure t)
 )
 
+
+(use-package python-mode
+  :config
+  (add-hook 'python-mode-hook #'lsp)
+  :mode
+  ("\\.py\\'" . python-mode)
+  )
 
 ;; org-mode config
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
