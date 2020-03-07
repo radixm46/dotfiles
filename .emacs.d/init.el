@@ -17,7 +17,7 @@
 ;; Initial frame settings for GUI
 (setq default-frame-alist
   (append (list
-    '(font . "HackGen Console for Powerline-15"))
+    '(font . "HackGen Console for Powerline-12"))
   default-frame-alist))
 
 (tool-bar-mode -1)
@@ -423,8 +423,8 @@
   :ensure t
   :defer t
   :init
-  (add-hook ‘rustic-mode-hook
-    ‘(lambda ()
+  (add-hook 'rustic-mode-hook
+    '(lambda ()
       (racer-mode t)
   ;    (dumb-jump-mode t)
   ;    (highlight-symbol-mode t)
