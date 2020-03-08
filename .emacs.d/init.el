@@ -13,6 +13,7 @@
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
 
+(add-hook 'prog-mode-hook #'electric-pair-mode)
 
 ;; Initial frame settings for GUI
 (setq default-frame-alist
