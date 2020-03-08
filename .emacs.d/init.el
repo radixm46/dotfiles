@@ -17,7 +17,7 @@
 ;; Initial frame settings for GUI
 (setq default-frame-alist
   (append (list
-    '(font . "HackGen Console for Powerline-12"))
+    '(font . "HackGen Console for Powerline-16"))
   default-frame-alist))
 
 (tool-bar-mode -1)
@@ -385,7 +385,9 @@
           :ensure t
           :config
           (global-company-mode)
-          (push 'company-lsp company-backends)
+          (setq company-idle-delay 0)
+          (setq company-selection-wrap-around t)
+          (setq completion-ignore-case t)
         ) ; completion
       :custom
         (company-lsp-cache-candidates t) ;; always using cache
