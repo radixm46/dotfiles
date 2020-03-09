@@ -24,11 +24,11 @@
 (setq whitespace-style
   '(face  ; enable
     trailing
-    newline
     tabs
     space-mark
     tab-mark
-    newline-mark
+    ;newline
+    ;newline-mark
     ;empty  ; empty line
     ;lines-tail
     ;spaces
@@ -36,7 +36,7 @@
 (setq whitespace-display-mappings
   '(
      (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-     (newline-mark ?\n [?\x21B2 ?\n])
+     ;(newline-mark ?\n [?\x21B2 ?\n])
    )
 )
 (set-face-attribute 'whitespace-trailing nil
@@ -44,13 +44,13 @@
   :foreground "DeepPink"
   :underline t)
 (set-face-attribute 'whitespace-tab nil
-  :foreground "LightSkyBlue"
-  :background "black2"
-  :underline t)
-(set-face-attribute 'whitespace-newline nil
   :foreground "SlateGray"
   :background nil
-  :underline nil)
+  :underline t)
+;(set-face-attribute 'whitespace-newline nil
+;  :foreground "SlateGray"
+;  :background nil
+;  :underline nil)
 ;(set-face-attribute 'whitespace-space nil
 ;  :background my/bg-color
 ;  :foreground "GreenYellow"
