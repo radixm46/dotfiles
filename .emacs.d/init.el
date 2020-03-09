@@ -157,7 +157,9 @@
 ;; enable relative line number
 (use-package linum-relative
   :ensure t
-  :config (linum-relative-global-mode)
+  :config
+  (setq linum-relative-backend 'display-line-numbers-mode)
+  (linum-relative-global-mode)
 )
 
 (use-package all-the-icons
@@ -333,6 +335,17 @@
     (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 )
 
+
+;(use-package imenu-list
+;  :ensure t
+;  :bind
+;  ("<f8>" . imenu-list-smart-toggle)
+;  ;:custom-face
+;  ;(imenu-list-entry-face-1 ((t (:foreground "white"))))
+;  :custom
+;  (imenu-list-focus-after-activation t)
+;  (imenu-list-auto-resize nil)
+;)
 
 (use-package magit
   :ensure t)
