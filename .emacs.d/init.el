@@ -4,6 +4,7 @@
 ;; You may delete these explanatory comments.
 
 ;; emacs minimal configuration by radixM491VA
+(setq inhibit-splash-screen t)
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 (set-default 'buffer-file-coding-system 'utf-8)
@@ -14,6 +15,49 @@
 (setq ring-bell-function 'ignore)
 
 (add-hook 'prog-mode-hook #'electric-pair-mode)
+
+;; configure whitespace
+(global-whitespace-mode t)
+(setq whitespace-global-modes
+  '(not dired-mode tar-mode neotree))
+(setq whitespace-line-column 80)
+(setq whitespace-style
+  '(face  ; enable
+    trailing
+    newline
+    tabs
+    space-mark
+    tab-mark
+    newline-mark
+    ;empty  ; empty line
+    ;lines-tail
+    ;spaces
+))
+(setq whitespace-display-mappings
+  '(
+     (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+     (newline-mark ?\n [?\x21B2 ?\n])
+   )
+)
+(set-face-attribute 'whitespace-trailing nil
+  :background nil
+  :foreground "DeepPink"
+  :underline t)
+(set-face-attribute 'whitespace-tab nil
+  :foreground "LightSkyBlue"
+  :background "black2"
+  :underline t)
+(set-face-attribute 'whitespace-newline nil
+  :foreground "SlateGray"
+  :background nil
+  :underline nil)
+;(set-face-attribute 'whitespace-space nil
+;  :background my/bg-color
+;  :foreground "GreenYellow"
+;  :weight 'bold)
+;(set-face-attribute 'whitespace-empty nil
+;  :background my/bg-color)
+
 
 ;; Initial frame settings for GUI
 (setq default-frame-alist
@@ -41,6 +85,7 @@
 ;; (setq coding-system-for-read 'utf-8) ;; conflicts ddskk
 (setq coding-system-for-write 'utf-8)
 
+;; configure tab
 (setq-default tab-width 4 indent-tabs-mode nil)
 
 (setq eol-mnemonic-dos "(CRLF)")
