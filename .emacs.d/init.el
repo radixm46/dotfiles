@@ -378,7 +378,6 @@
     :hook (
       ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
       ;(XXX-mode . lsp)
-      (python-mode . lsp)
       ; if you want which-key integration
       (lsp-mode . lsp-enable-which-key-integration)
      )
@@ -484,17 +483,18 @@
   :ensure t
   :defer t
   :init
-  (add-hook 'rustic-mode-hook
-    '(lambda ()
-      (racer-mode t)
+  (add-hook 'rustic-mode-hook #'lsp)
+  ;(add-hook 'rustic-mode-hook
+  ;  '(lambda ()
+  ;    (racer-mode t)
   ;    (dumb-jump-mode t)
   ;    (highlight-symbol-mode t)
-  ;    (rainbow-delimiters-mode t)
-      ))
+  ;    ))
+  :hook (rustic-mode . lsp)
   :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
 
- :config
+  :config
     ;(use-package quickrun
     ;:defer t
     ;:ensure t)
@@ -505,11 +505,17 @@
 
 
 (use-package python-mode
-  :config
-  (add-hook 'python-mode-hook #'lsp)
-  :mode
-  ("\\.py\\'" . python-mode)
-  )
+  :ensure t
+  :hook (python-mode . lsp)
+  :mode ("\\.py\\'" . python-mode)
+)
+
+
+(use-package go-mode
+  :ensure t
+  :hook (go-mode . lsp)
+  :mode ("\\.go\\'" . go-mode)
+)
 
 ;; org-mode config
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
