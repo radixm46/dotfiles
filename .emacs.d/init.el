@@ -325,12 +325,12 @@
      )
   )
   ;; fix color
-  (set-face-attribute 'whitespace-trailing nil
-    :background nil
+  (set-face-attribute whitespace-trailing nil
     :foreground "DeepPink"
+    :background nil
     :underline t)
-  (set-face-attribute 'whitespace-tab nil
-    :foreground "SlateGray"
+  (set-face-attribute whitespace-tab nil
+    :foreground "gray22"
     :background nil
     :underline t)
   ;(set-face-attribute 'whitespace-newline nil
@@ -523,11 +523,17 @@
   )
 
 ;; org-mode config
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+(use-package org-mode
+  :mode
+  ("\\.org\\'" . org-mode)
+  :init
+  (setq truncate-lines nil)  ; TODO: fix line truncation
+  :config  ; change to 'bind'
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-cc" 'org-capture)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+)
 
 ;; markdown-mode
 (use-package markdown-mode
@@ -536,4 +542,6 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init (setq markdown-command "multimarkdown")
+  :config (setq truncate-lines nil)
+)
