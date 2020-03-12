@@ -13,50 +13,13 @@
 (ido-mode t)
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
+(setq-default truncate-lines nil)
 
-(add-hook 'prog-mode-hook #'electric-pair-mode)
-
-;; configure whitespace
-(global-whitespace-mode t)
-(setq whitespace-global-modes
-  '(not dired-mode tar-mode neotree))
-(setq whitespace-line-column 80)
-(setq whitespace-style
-  '(face  ; enable
-    trailing
-    tabs
-    space-mark
-    tab-mark
-    ;newline
-    ;newline-mark
-    ;empty  ; empty line
-    ;lines-tail
-    ;spaces
+(add-hook 'prog-mode-hook '(
+  lambda ()
+    (setq truncate-lines t)
+    (electric-pair-mode t)
 ))
-(setq whitespace-display-mappings
-  '(
-     (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-     ;(newline-mark ?\n [?\x21B2 ?\n])
-   )
-)
-(set-face-attribute 'whitespace-trailing nil
-  :background nil
-  :foreground "DeepPink"
-  :underline t)
-(set-face-attribute 'whitespace-tab nil
-  :foreground "SlateGray"
-  :background nil
-  :underline t)
-;(set-face-attribute 'whitespace-newline nil
-;  :foreground "SlateGray"
-;  :background nil
-;  :underline nil)
-;(set-face-attribute 'whitespace-space nil
-;  :background my/bg-color
-;  :foreground "GreenYellow"
-;  :weight 'bold)
-;(set-face-attribute 'whitespace-empty nil
-;  :background my/bg-color)
 
 
 ;; Initial frame settings for GUI
@@ -64,8 +27,8 @@
   (append (list
     '(font . "HackGen Console for Powerline-16"))
   default-frame-alist))
-
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 
 ;; log
@@ -336,6 +299,53 @@
 )
 
 
+;; configure whitespace
+(use-package whitespace
+  :config
+  (global-whitespace-mode t)
+  (setq whitespace-global-modes
+    '(not dired-mode tar-mode neotree))
+  (setq whitespace-line-column 80)
+  (setq whitespace-style
+    '(face  ; enable
+      trailing
+      tabs
+      space-mark
+      tab-mark
+      ;newline
+      ;newline-mark
+      ;empty  ; empty line
+      ;lines-tail
+      ;spaces
+  ))
+  (setq whitespace-display-mappings
+    '(
+       (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+       (newline-mark ?\n [?\x21B2 ?\n])
+     )
+  )
+  ;; fix color
+  (set-face-attribute 'whitespace-trailing nil
+    :background nil
+    :foreground "DeepPink"
+    :underline t)
+  (set-face-attribute 'whitespace-tab nil
+    :foreground "SlateGray"
+    :background nil
+    :underline t)
+  ;(set-face-attribute 'whitespace-newline nil
+  ;  :foreground "SlateGray"
+  ;  :background nil
+  ;  :underline nil)
+  ;(set-face-attribute 'whitespace-space nil
+  ;  :background my/bg-color
+  ;  :foreground "GreenYellow"
+  ;  :weight 'bold)
+  ;(set-face-attribute 'whitespace-empty nil
+  ;  :background my/bg-color)
+)
+
+
 ;(use-package imenu-list
 ;  :ensure t
 ;  :bind
@@ -346,6 +356,7 @@
 ;  (imenu-list-focus-after-activation t)
 ;  (imenu-list-auto-resize nil)
 ;)
+
 
 (use-package magit
   :ensure t)
