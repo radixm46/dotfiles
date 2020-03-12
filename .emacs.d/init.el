@@ -13,50 +13,15 @@
 (ido-mode t)
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
+(setq-default truncate-lines t)
+; (global-visual-line-mode nil)
+; (setq line-move-visual t)
+; (setq word-wrap t)
 
-(add-hook 'prog-mode-hook #'electric-pair-mode)
-
-;; configure whitespace
-(global-whitespace-mode t)
-(setq whitespace-global-modes
-  '(not dired-mode tar-mode neotree))
-(setq whitespace-line-column 80)
-(setq whitespace-style
-  '(face  ; enable
-    trailing
-    tabs
-    space-mark
-    tab-mark
-    ;newline
-    ;newline-mark
-    ;empty  ; empty line
-    ;lines-tail
-    ;spaces
+(add-hook 'prog-mode-hook '(
+  lambda ()
+    (electric-pair-mode t)
 ))
-(setq whitespace-display-mappings
-  '(
-     (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-     ;(newline-mark ?\n [?\x21B2 ?\n])
-   )
-)
-(set-face-attribute 'whitespace-trailing nil
-  :background nil
-  :foreground "DeepPink"
-  :underline t)
-(set-face-attribute 'whitespace-tab nil
-  :foreground "SlateGray"
-  :background nil
-  :underline t)
-;(set-face-attribute 'whitespace-newline nil
-;  :foreground "SlateGray"
-;  :background nil
-;  :underline nil)
-;(set-face-attribute 'whitespace-space nil
-;  :background my/bg-color
-;  :foreground "GreenYellow"
-;  :weight 'bold)
-;(set-face-attribute 'whitespace-empty nil
-;  :background my/bg-color)
 
 
 ;; Initial frame settings for GUI
@@ -64,8 +29,9 @@
   (append (list
     '(font . "HackGen Console for Powerline-16"))
   default-frame-alist))
-
 (tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
 
 
 ;; log
@@ -336,6 +302,53 @@
 )
 
 
+;; configure whitespace
+(use-package whitespace
+  :config
+  (global-whitespace-mode t)
+  (setq whitespace-global-modes
+    '(not dired-mode tar-mode neotree))
+  (setq whitespace-line-column 80)
+  (setq whitespace-style
+    '(face  ; enable
+      trailing
+      tabs
+      space-mark
+      tab-mark
+      ;newline
+      ;newline-mark
+      ;empty  ; empty line
+      ;lines-tail
+      ;spaces
+  ))
+  (setq whitespace-display-mappings
+    '(
+       (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+       (newline-mark ?\n [?\x21B2 ?\n])  ; display when in some mejor mode
+     )
+  )
+  ;; fix color
+  (set-face-attribute whitespace-trailing nil
+    :foreground "DeepPink"
+    :background nil  ; TODO: fix bg color
+    :underline t)
+  (set-face-attribute whitespace-tab nil
+    :foreground "gray22"
+    :background nil
+    :underline t)
+  ;(set-face-attribute 'whitespace-newline nil
+  ;  :foreground "SlateGray"
+  ;  :background nil
+  ;  :underline nil)
+  ;(set-face-attribute 'whitespace-space nil
+  ;  :background my/bg-color
+  ;  :foreground "GreenYellow"
+  ;  :weight 'bold)
+  ;(set-face-attribute 'whitespace-empty nil
+  ;  :background my/bg-color)
+)
+
+
 ;(use-package imenu-list
 ;  :ensure t
 ;  :bind
@@ -346,6 +359,7 @@
 ;  (imenu-list-focus-after-activation t)
 ;  (imenu-list-auto-resize nil)
 ;)
+
 
 (use-package magit
   :ensure t)
@@ -363,7 +377,7 @@
 
 
 (use-package flycheck
-             :ensure t)
+ :ensure t)
 
 ;; -------- package for lsp --------
 
@@ -517,18 +531,30 @@
   :mode ("\\.go\\'" . go-mode)
 )
 
+
 ;; org-mode config
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+(use-package org
+  :ensure t
+  :hook
+  (org-mode . visual-line-mode)
+  :mode
+  ("\\.org\\'" . org-mode)
+  :config  ; change to 'bind'
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-cc" 'org-capture)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+)
 
 ;; markdown-mode
 (use-package markdown-mode
   :ensure t
+  :hook
+  (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init
+  (setq markdown-command "multimarkdown")
+)
