@@ -13,11 +13,13 @@
 (ido-mode t)
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
-(setq-default truncate-lines nil)
+(setq-default truncate-lines t)
+; (global-visual-line-mode nil)
+; (setq line-move-visual t)
+; (setq word-wrap t)
 
 (add-hook 'prog-mode-hook '(
   lambda ()
-    (setq truncate-lines t)
     (electric-pair-mode t)
 ))
 
@@ -28,6 +30,7 @@
     '(font . "HackGen Console for Powerline-16"))
   default-frame-alist))
 (tool-bar-mode -1)
+(menu-bar-mode -1)
 (scroll-bar-mode -1)
 
 
@@ -321,13 +324,13 @@
   (setq whitespace-display-mappings
     '(
        (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-       (newline-mark ?\n [?\x21B2 ?\n])
+       (newline-mark ?\n [?\x21B2 ?\n])  ; display when in some mejor mode
      )
   )
   ;; fix color
   (set-face-attribute whitespace-trailing nil
     :foreground "DeepPink"
-    :background nil
+    :background nil  ; TODO: fix bg color
     :underline t)
   (set-face-attribute whitespace-tab nil
     :foreground "gray22"
@@ -374,7 +377,7 @@
 
 
 (use-package flycheck
-             :ensure t)
+ :ensure t)
 
 ;; -------- package for lsp --------
 
@@ -516,18 +519,17 @@
 
 
 (use-package python-mode
-  :config
-  (add-hook 'python-mode-hook #'lsp)
   :mode
   ("\\.py\\'" . python-mode)
   )
 
 ;; org-mode config
-(use-package org-mode
+(use-package org
+  :ensure t
+  :hook
+  (org-mode . visual-line-mode)
   :mode
   ("\\.org\\'" . org-mode)
-  :init
-  (setq truncate-lines nil)  ; TODO: fix line truncation
   :config  ; change to 'bind'
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-cc" 'org-capture)
@@ -538,10 +540,12 @@
 ;; markdown-mode
 (use-package markdown-mode
   :ensure t
+  :hook
+  (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown")
-  :config (setq truncate-lines nil)
+  :init
+  (setq markdown-command "multimarkdown")
 )
