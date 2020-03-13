@@ -273,8 +273,8 @@
 
 (use-package highlight-indent-guides
   :ensure t
-  :init
-    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  :hook
+    (prog-mode . highlight-indent-guides-mode)
   :config
     (setq highlight-indent-guides-method 'column)
     (setq highlight-indent-guides-auto-odd-face-perc 10)
@@ -312,7 +312,7 @@
   (setq whitespace-style
     '(face  ; enable
       trailing
-      tabs
+      tabs  ; conflicts highlight indent mode
       space-mark
       tab-mark
       ;newline
@@ -330,7 +330,7 @@
   ;; fix color
   (set-face-attribute whitespace-trailing nil
     :foreground "DeepPink"
-    :background nil  ; TODO: fix bg color
+    :background (face-attribute 'default :background)
     :underline t)
   (set-face-attribute whitespace-tab nil
     :foreground "gray22"
@@ -487,9 +487,8 @@
 
 (use-package rainbow-delimiters
   :ensure t
-  :init
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  ;; enable when programming mode
+  :hook
+    (prog-mode . rainbow-delimiters-mode)
 )
 
 ; -------- lauguage specific package --------
