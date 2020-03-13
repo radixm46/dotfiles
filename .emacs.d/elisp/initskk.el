@@ -13,7 +13,7 @@
 (setq skk-japanese-message-and-error t)
 (setq skk-show-japanese-menu t)
 
-(setq skk-delete-implies-kakutei t)
+(setq skk-delete-implies-kakutei nil)
 (setq skk-use-look t)
 (setq skk-henkan-strict-okuri-precedence t)
 
