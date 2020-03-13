@@ -29,7 +29,7 @@
   (append (list
     '(font . "HackGen Console for Powerline-16"))
   default-frame-alist))
-(blink-cursor-mode nil)
+(blink-cursor-mode 0)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
