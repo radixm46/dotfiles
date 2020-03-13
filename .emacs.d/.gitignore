@@ -3,4 +3,6 @@
 .Spotlight-V100
 auto-save-list
 elpa*
+eshell
 custom.el
+local.el
