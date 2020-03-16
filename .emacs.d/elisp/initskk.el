@@ -17,8 +17,6 @@
 (setq skk-use-look t)
 (setq skk-henkan-strict-okuri-precedence t)
 
-;; dictionary downloaded to dir below
-(setq skk-get-jisyo-directory "~/.emacs.d/skk/dict")
 
 (setq skk-large-jisyo "~/.emacs.d/skk/dict/SKK-JISYO.L")
 ;(setq skk-cdb-large-jisyo "~/.emacs.d/skkdict/SKK-JISYO.L.cdb")
