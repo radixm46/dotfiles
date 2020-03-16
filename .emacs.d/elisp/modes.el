@@ -22,15 +22,17 @@
 (use-package rustic
   :ensure t
   :defer t
-  :init
-  (add-hook 'rustic-mode-hook #'lsp)
+  ;:init
+  ;(add-hook 'rustic-mode-hook #'lsp)
   ;(add-hook 'rustic-mode-hook
   ;  '(lambda ()
   ;    (racer-mode t)
   ;    (dumb-jump-mode t)
   ;    (highlight-symbol-mode t)
   ;    ))
-  :hook (rustic-mode . lsp)
+  :hook (
+    (rustic-mode . lsp)
+    (rustic-mode . rucer))
   :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
 
@@ -38,9 +40,11 @@
     ;(use-package quickrun
     ;:defer t
     ;:ensure t)
-    ;(use-package racer
-    ;:defer t
-    ;:ensure t)
+    (use-package racer
+    :defer t
+    :ensure t
+    :commands racer
+    )
 )
 
 

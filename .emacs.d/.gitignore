@@ -4,5 +4,6 @@
 auto-save-list
 elpa*
 eshell
+skk
 custom.el
 local.el
