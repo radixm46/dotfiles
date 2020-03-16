@@ -74,6 +74,9 @@
   (global-set-key "\C-cc" 'org-capture)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
+  (setq org-directory "~/orgfiles")
+  (setq org-default-notes-file
+    (concat org-directory "/.notes"))
 )
 
 ;; markdown-mode
