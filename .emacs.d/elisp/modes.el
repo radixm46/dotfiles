@@ -77,6 +77,8 @@
   (setq org-directory "~/orgfiles")
   (setq org-default-notes-file
     (concat org-directory "/.notes"))
+  (setq org-agenda-file
+    '(concat org-directory "/.notes"))
 )
 
 ;; markdown-mode

@@ -17,23 +17,32 @@
 ; (global-visual-line-mode nil)
 ; (setq line-move-visual t)
 ; (setq word-wrap t)
+(setq create-lockfiles nil)
+(setq make-backup-files nil)
+(setq delete-auto-save-files t)
+(setq auto-save-default nil)
 
 (add-hook 'prog-mode-hook '(
   lambda ()
     (electric-pair-mode t)
 ))
 
-
-;; Initial frame settings for GUI
-(setq default-frame-alist
-  (append (list
-    '(font . "HackGen Console for Powerline-16"))
-  default-frame-alist))
-(blink-cursor-mode 0)
-(tool-bar-mode -1)
 (menu-bar-mode -1)
-(scroll-bar-mode -1)
+;; Initial frame settings for GUI
+(if window-system (progn
+  (setq default-frame-alist
+    (append (list
+      '(font . "HackGen Console for Powerline-16"))
+    default-frame-alist))
+  (blink-cursor-mode 0)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (display-time)
+))
 
+; works if emacs runs on CUI
+;(if (not window-system) (progn
+;))
 
 ;; log
 (setq message-log-maxa 10000)
@@ -203,4 +212,4 @@
 (load "~/.emacs.d/elisp/modes.el")
 
 ; ------------ loading local.el  ------------
-;(load "~/.emacs.d/local.el")
+(load "~/.emacs.d/elisp/local.el")
