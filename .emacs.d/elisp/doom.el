@@ -4,19 +4,28 @@
   :config
   (doom-modeline-mode 1)
 
-  (if window-system (progn
-    ;; How tall the mode-line should be. It's only respected in GUI.
-    ;; If the actual char height is larger, it respects the actual height.
-    (setq doom-modeline-height 25)
+  ;; How tall the mode-line should be. It's only respected in GUI.
+  ;; If the actual char height is larger, it respects the actual height.
+  (setq doom-modeline-height 25)
 
-    ;; How wide the mode-line bar should be. It's only respected in GUI.
-    (setq doom-modeline-bar-width 3)
+  ;; How wide the mode-line bar should be. It's only respected in GUI.
+  (setq doom-modeline-bar-width 3)
 
-    ;; Whether display icons in the mode-line. Respects `all-the-icons-color-icons'.
-    ;; While using the server mode in GUI, should set the value explicitly.
-    ;(setq doom-modeline-icon (display-graphic-p))
-    (setq doom-modeline-icon t)
-  ))
+  ;; Whether display icons in the mode-line. Respects `all-the-icons-color-icons'.
+  ;; While using the server mode in GUI, should set the value explicitly.
+  ;(setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-icon t)
+
+  ;(defun doom-frame-init-func (&optional frame)
+  ;  "frame init on doom-modeline"
+  ;  ;(if window-system (progn
+  ;  ;))
+  ;  (if (not window-system) (progn
+  ;    (setq doom-modeline-icon nil)
+  ;  ))
+  ;)
+
+  ;(add-hook 'after-make-frame-functions 'doom-frame-init-func)
 
   ;; The limit of the window width.
   ;; If `window-width' is smaller than the limit, some information won't be displayed.

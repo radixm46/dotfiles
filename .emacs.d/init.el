@@ -27,22 +27,16 @@
     (electric-pair-mode t)
 ))
 
+(setq default-frame-alist
+  (append (list
+  '(font . "HackGen35 Console for Powerline-16"))
+  default-frame-alist))
 (menu-bar-mode -1)
-;; Initial frame settings for GUI
-(if window-system (progn
-  (setq default-frame-alist
-    (append (list
-      '(font . "HackGen Console for Powerline-16"))
-    default-frame-alist))
-  (blink-cursor-mode 0)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (display-time)
-))
+(tool-bar-mode -1)
+(blink-cursor-mode 0)
+(scroll-bar-mode -1)
+(display-time)
 
-; works if emacs runs on CUI
-;(if (not window-system) (progn
-;))
 
 ;; log
 (setq message-log-maxa 10000)
