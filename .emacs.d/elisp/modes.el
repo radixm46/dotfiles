@@ -18,6 +18,13 @@
     (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 )
 
+;; required for racer
+(use-package rust-mode
+  :ensure t
+  :config
+  (setq auto-mode-alist
+    (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
+  )
 
 (use-package rustic
   :ensure t
@@ -44,6 +51,7 @@
     :defer t
     :ensure t
     :commands racer
+    :config
     )
 )
 

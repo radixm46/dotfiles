@@ -206,4 +206,8 @@
 (load "~/.emacs.d/elisp/modes.el")
 
 ; ------------ loading local.el  ------------
-(load "~/.emacs.d/elisp/local.el")
+(if (file-exists-p "~/.emacs.d/elisp/local.el")
+  (load "~/.emacs.d/elisp/local.el")
+  ; create elisp/local.el if not exists
+  (with-temp-file "~/.emacs.d/elisp/local.el" nil)
+)

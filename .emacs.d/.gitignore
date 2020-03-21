@@ -7,3 +7,4 @@ eshell
 skk
 custom.el
 local.el
+*.elc
