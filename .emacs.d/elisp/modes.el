@@ -103,7 +103,7 @@
   (setq org-capture-templates
         '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
            "** TODO %?\n  %U\n  %a") ; %u->%t
-          ("n" "Note" entry (file+headline "" "note")
+          ("n" "Note" entry (file+headline "" "Inbox")
            "** %?\nEntered on %U\n %i\n %a"))
       )
   (setq org-log-done 'time)
