@@ -36,9 +36,10 @@
 )
 (package-initialize)
 (setq default-input-method "japanese-skk")
-(require 'skk-study) ; need skk-get after install
 
 ;; skk dict, setting files
 (setq skk-user-directory "~/.emacs.d/skk")
 (setq skk-get-jisyo-directory "~/.emacs.d/skk/dict")
 (setq skk-init-file "~/.emacs.d/elisp/initskk.el")
+
+(require 'skk-study) ; need skk-get after install
