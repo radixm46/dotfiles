@@ -37,22 +37,22 @@
   ;    (dumb-jump-mode t)
   ;    (highlight-symbol-mode t)
   ;    ))
-  :hook (
-    (rustic-mode . lsp)
-    (rustic-mode . rucer))
+  :hook
+  ((rustic-mode . lsp)
+   (rustic-mode . rucer))
   :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
 
   :config
-    ;(use-package quickrun
-    ;:defer t
-    ;:ensure t)
-    (use-package racer
+  ;(use-package quickrun
+  ;:defer t
+  ;:ensure t)
+  (use-package racer
     :defer t
     :ensure t
     :commands racer
     :config
-    )
+  )
 )
 
 
@@ -73,31 +73,52 @@
 ;; org-mode config
 (use-package org
   :ensure t
-  :hook
-  (org-mode . visual-line-mode)
-  :mode
-  ("\\.org\\'" . org-mode)
-  :config  ; change to 'bind'
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
-  (setq org-directory "~/orgfiles")
+  :hook (org-mode . visual-line-mode)
+  :mode ("\\.org\\'" . org-mode)
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-c c" . org-capture)
+   ("C-c a" . org-agenda)
+   ("C-c b" . org-iswitchb)
+   ("C-c C-0" . my-org-goto-dir))
+  :config  ;
+  ;(setq system-time-locale "C") ; dates written in eng
+  (setq org-startup-truncated t)
+  (setq org-startup-folded nil)
+  (setq org-directory "~/org/orgfiles")
   (setq org-default-notes-file
-    (concat org-directory "/.notes"))
-  (setq org-agenda-file
-    '(concat org-directory "/.notes"))
+        (concat org-directory "/notes.org"))
+  (setq org-todofile
+        (concat org-directory "/todo.org"))
+  (setq org-agenda-files
+        (list org-directory))
+  (setq org-refile-targets
+        '((org-agenda-files :maxlevel . 3)))
+  (defun my-org-goto-dir ()
+    (interactive)
+    (find-file "~/org"))
+  (setq org-todo-keywords
+        '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
+                    "DONE(d)" "CANCELLED(c)")))
+  (setq org-capture-templates
+        '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
+           "** TODO %?\n  %U\n  %a") ; %u->%t
+          ("n" "Note" entry (file+headline "" "note")
+           "** %?\nEntered on %U\n %i\n %a"))
+      )
+  (setq org-log-done 'time)
+  (setq org-clock-clocked-in-display 'frame-title)
 )
 
 ;; markdown-mode
 (use-package markdown-mode
   :ensure t
-  :hook
-  (markdown-mode . visual-line-mode)
+  :hook (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+  :mode
+  (("README\\.md\\'" . gfm-mode)
+   ("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
   :init
   (setq markdown-command "multimarkdown")
 )
