@@ -18,5 +18,8 @@
 (setq skk-henkan-strict-okuri-precedence t)
 
 
+(if (file-directory-p skk-get-jisyo-directory)
+    (ignore) (skk-get skk-get-jisyo-directory)
+)
 (setq skk-large-jisyo "~/.emacs.d/skk/dict/SKK-JISYO.L")
 ;(setq skk-cdb-large-jisyo "~/.emacs.d/skkdict/SKK-JISYO.L.cdb")
