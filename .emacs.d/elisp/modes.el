@@ -99,6 +99,9 @@
   (setq org-todo-keywords
         '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
                     "DONE(d)" "CANCELLED(c)")))
+  (setq org-highest-priority ?1)
+  (setq org-lowest-priority ?4)
+  (setq org-default-priority ?3)
   (setq org-capture-templates
         '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
            "** TODO %?\n  %U\n  %a") ; %u->%t
