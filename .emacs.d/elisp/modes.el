@@ -4,18 +4,18 @@
 (use-package neotree
   :ensure t
   :config
-    (global-set-key [f7] 'neotree-toggle)
-    (setq neo-window-fixed-size nil)
-    ;; keymap for using with evil mode
-    (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-    (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
-    (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-    (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-    (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
-    (evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
-    (evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
-    (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
-    (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
+  (global-set-key [f7] 'neotree-toggle)
+  (setq neo-window-fixed-size nil)
+  ;; keymap for using with evil mode
+  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+  (evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
+  (evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
+  (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
+  (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 )
 
 ;; required for racer
@@ -51,7 +51,6 @@
     :defer t
     :ensure t
     :commands racer
-    :config
   )
 )
 
@@ -104,8 +103,7 @@
         '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
            "** TODO %?\n  %U\n  %a") ; %u->%t
           ("n" "Note to Inbox" entry (file+headline "" "Inbox")
-           "** %?\nEntered on %U\n %i\n %a"))
-      )
+           "** %?\nEntered on %U\n %i\n %a")))
   (setq org-log-done 'time)
   (setq org-clock-clocked-in-display 'frame-title)
 )

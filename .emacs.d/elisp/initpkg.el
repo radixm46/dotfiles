@@ -27,13 +27,11 @@
 ;; auto load use-package package
 (unless (package-installed-p 'use-package)  ;; can't notify upgradable package
   (package-install 'use-package)
-  (require 'use-package)
-)
+  (require 'use-package))
 
 ;; skk config(use default package.el)
 (unless (package-installed-p 'ddskk)
-  (package-install 'ddskk)
-)
+  (package-install 'ddskk))
 (package-initialize)
 (setq default-input-method "japanese-skk")
 
