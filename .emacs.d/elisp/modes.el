@@ -18,6 +18,25 @@
   (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 )
 
+
+(use-package nyan-mode
+  :ensure t
+  :init (nyan-mode)
+  :config
+  (defun nyan-try ()
+    (nyan-stop-animation)
+    (setq nyan-wavy-trail nil)
+    )
+  (defun nyan-xit ()
+    (nyan-start-animation)
+    (setq nyan-wavy-trail t)
+    )
+  :hook
+  ((evil-normal-state-entry . nyan-try)
+   (evil-normal-state-exit . nyan-xit)
+  )
+)
+
 ;; required for racer
 (use-package rust-mode
   :ensure t
@@ -39,7 +58,7 @@
   ;    ))
   :hook
   ((rustic-mode . lsp)
-   (rustic-mode . rucer))
+   (rustic-mode . racer))
   :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
 
@@ -109,6 +128,20 @@
            "** %?\nEntered on %U\n %i\n %a")))
   (setq org-log-done 'time)
   (setq org-clock-clocked-in-display 'frame-title)
+  (setq org-format-latex-options
+        (plist-put org-format-latex-options :scale 1.5))
+  (setq org-image-actual-width nil)
+
+  ;configure bibtex
+  (defun org-mode-reftex-setup ()
+    (load-library "reftex")
+    (and (buffer-file-name)
+         (file-exists-p (buffer-file-name))
+         (reftex-parse-all))
+    (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+    )
+  (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+  (use-package ox-bibtex)
 )
 
 ;; markdown-mode
