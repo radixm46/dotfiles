@@ -25,23 +25,36 @@ SAVEHIST=1000000
 # プロンプト
 # 1行表示
 # PROMPT="%~ %# "
+# P_LOGIN=$'\U23FB'
+# P_COMPUTER=$'\U1F5B5 '
 #P_BEGIN=$'\U2599\U259E\U259A\U2596\U259D\U2598'
-P_BEGIN=$'\U1F67E  \U2596'
-P_BEGINR=$'\U2596  \U1F67E'
-P_MIDTEX=$'\U2593\U2592\U2591'
-P_MIDTEXR=$'\U2591\U2592\U2593'
+# P_BEGIN=$'\U1F67E  \U2596'
+# P_BEGINR=$'\U2596  \U1F67E'
+# P_MIDTEX=$'\U2593\U2592\U2591'
+# P_MIDTEXR=$'\U2591\U2592\U2593'
+# P_DIR=$'\U1F5BF' #$'\U1F5BF'
 #P_END=$'\U2599\U259E\U259A\U2596\U259D\U2598'
-P_END=$'\U1F67F \U259D'
-P_ENDR=$'\U2598\U2597 \U1F67F'
-P_LOGIN=$'\U23FB'
-P_COMPUTER=$'\U1F5B5 '
-P_DIR=$'\U1F5BF' #$'\U1F5BF'
+# P_END=$'\U1F67F \U259D'
+# P_ENDR=$'\U2598\U2597 \U1F67F'
 P_PROM='' #$'\U259B\U259F'
-P_GITBRANCH=$'\UE0A0'
-P_VCSICO=$'\U1F5D8'
+# P_GITBRANCH=$'\UE0A0'
+# P_VCSICO=$'\U1F5D8'
+
+# with nerd fonts
+P_LOGIN=$'\UF2C0'
+P_COMPUTER=$'\UF841'
+P_BEGINR=$'\UE0C7'
+P_BEGIN=$'\UE0C6'
+P_MIDTEX=$'\UE0C4'
+P_MIDTEXR=$'\UE0C5'
+P_END=$'\UE0C6'
+P_ENDR=$'\UE0C7'
+P_DIR=$'\UF07C'
+P_GITBRANCH=$'\UF418'
+P_VCSICO=$'\UF7A1'
 PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
-%{${bg[green]}%}%{${fg_bold[black]}%} %n%{${reset_color}%}\
+%{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[red]}%} ${P_COMPUTER}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg_bold[black]}%} %m %{${reset_color}%}\
@@ -91,13 +104,13 @@ autoload -Uz add-zsh-hook
 
 zstyle ':vcs_info:*' formats \
 "%F{black}${P_MIDTEXR}\
-%K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
+%K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
 #%K{magenta} %F{white}${P_GITBRANCH} %F{black}%b %f%k"
 #zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
 zstyle ':vcs_info:*' actionformats \
 "%F{black}${P_MIDTEXR}\
-%K{black}%F{green}  ${P_VCSICO}  %F{brblack}%s %F{magenta}${P_ENDR} \
+%K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
 
 function _update_vcs_info_msg() {

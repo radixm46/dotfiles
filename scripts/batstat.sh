@@ -13,10 +13,11 @@ case ${OSTYPE} in
     linux*)
         if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
         then
-            battery_charging="\U26A1"
+            battery_charging="\UF587"
         else
-            battery_charging="\U1F50B"
+            battery_charging="\UF57D"
         fi
-        echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%'${battery_charging}
+        echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%' ${battery_charging}
         ;;
 esac
+# if not battery, display fba3
