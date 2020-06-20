@@ -1,0 +1,184 @@
+# swaylock config file
+
+# debug
+# Enable debugging output.
+
+ignore-empty-password
+# When an empty password is provided, do not validate it.
+
+# show-failed-attempts
+# Show current count of failed authentication attempts.
+
+# daemonize
+# Detach from the controlling terminal after locking.
+# Note: this is the default behavior of i3lock.
+
+# -------------------------------------------------------------------
+# APPEARANCE
+# no-unlock-indicator
+# Disable the unlock indicator.
+
+image=${HOME}/dotfiles/img/bglock
+# configure symlink to path above
+# image [[<output>]:]<path>
+# Display the given image, optionally only on the given output. Use
+# -c to set a background color. If the path potentially contains a
+# ':', prefix it with another
+
+scaling=fit
+# scaling
+# Image scaling mode: stretch, fill, fit, center, tile, solid_color.
+# Use solid_color to display only the background color, even if a
+# background image is specified.
+
+# tiling
+# Same as --scaling=tile.
+
+# color <rrggbb[aa]>
+# Turn the screen into the given color instead of white. If -i is
+# used, this sets the background of the image to the given color. De‐
+# faults to white (FFFFFF).
+
+# show-keyboard-layout
+# Display the current xkb layout while typing.
+
+# font <font>
+# Sets the font of the text.
+
+# font-size <size>
+# Sets a fixed font size for the indicator text.
+
+# hide-keyboard-layout
+# Force hiding the current xkb layout while typing, even if more than
+# one layout is configured or the show-keyboard-layout option is set.
+
+# disable-caps-lock-text
+# Disable the Caps Lock text.
+
+indicator-caps-lock
+# Show the current Caps Lock state also on the indicator.
+
+# -----------------------------------------------------------------
+
+# indicator-idle-visible
+# Sets the indicator to show even if idle.
+
+indicator-radius=150
+indicator-thickness=15
+inside-color=002b3638
+# indicator-radius <radius>
+# Sets the indicator radius. The default value is 50.
+# indicator-thickness <thickness>
+# Sets the indicator thickness. The default value is 10.
+# inside-color <rrggbb[aa]>
+# Sets the color of the inside of the indicator.
+
+key-hl-color=268bd2
+bs-hl-color=586e75
+# bs-hl-color <rrggbb[aa]>
+# Sets the color of backspace highlight segments.
+# key-hl-color <rrggbb[aa]>
+# Sets the color of the key press highlight segments.
+
+text-color=073642
+# text-color <rrggbb[aa]>
+# Sets the color of the text.
+
+# layout-bg-color <rrggbb[aa]>
+# Sets the background color of the box containing the layout text.
+
+# layout-border-color <rrggbb[aa]>
+# Sets the color of the border of the box containing the layout text.
+
+# layout-text-color <rrggbb[aa]>
+# Sets the color of the layout text.
+
+line-color=073642
+ring-color=2aa198
+# line-color <rrggbb[aa]>
+# Sets the color of the line between the inside and ring.
+# ring-color <rrggbb[aa]>
+# Sets the color of the ring of the indicator when typing or idle.
+
+
+# line-uses-inside
+# Use the inside color for the line between the inside and ring.
+# line-uses-ring
+# Use the ring color for the line between the inside and ring.
+
+separator-color=002b368e
+# separator-color <rrggbb[aa]>
+# Sets the color of the lines that separate highlight segments.
+
+# -----------------------------------------------------------------
+
+line-clear-color=002b36
+ring-clear-color=b58900
+inside-clear-color=b58900a2
+text-clear-color=073642
+# CLEAR
+# line-clear-color <rrggbb[aa]>
+# Sets the color of the line between the inside and ring when
+# cleared.
+# ring-clear-color <rrggbb[aa]>
+# Sets the color of the ring of the indicator when cleared.
+# inside-clear-color <rrggbb[aa]>
+# Sets the color of the inside of the indicator when cleared.
+# text-clear-color <rrggbb[aa]>
+# Sets the color of the text when cleared.
+
+line-caps-lock-color=002b36
+inside-caps-lock-color=00000000
+ring-caps-lock-color=d33682
+text-caps-lock-color=d33682
+caps-lock-bs-hl-color=586e75
+caps-lock-key-hl-color=268bd2
+# CAPS
+# line-caps-lock-color <rrggbb[aa]>
+# Sets the color of the line between the inside and ring when Caps
+# Lock is active.
+# ring-caps-lock-color <rrggbb[aa]>
+# Sets the color of the ring of the indicator when Caps Lock is ac‐
+# tive.
+# inside-caps-lock-color <rrggbb[aa]>
+# Sets the color of the inside of the indicator when Caps Lock is active.
+# text-caps-lock-color <rrggbb[aa]>
+# Sets the color of the text when Caps Lock is active.
+
+# caps-lock-bs-hl-color <rrggbb[aa]>
+# Sets the color of backspace highlight segments when Caps Lock is
+# active.
+# caps-lock-key-hl-color <rrggbb[aa]>
+# Sets the color of the key press highlight segments when Caps Lock
+# is active.
+
+
+line-ver-color=002b36
+inside-ver-color=268bd2a2
+ring-ver-color=268bd2
+text-ver-color=073642
+# VERIFY
+# line-ver-color <rrggbb[aa]>
+# Sets the color of the line between the inside and ring when verify‐
+# ing.
+# ring-ver-color <rrggbb[aa]>
+# Sets the color of the ring of the indicator when verifying.
+# inside-ver-color <rrggbb[aa]>
+# Sets the color of the inside of the indicator when verifying.
+# text-ver-color <rrggbb[aa]>
+# Sets the color of the text when verifying.
+
+line-wrong-color=002b36
+inside-wrong-color=dc322fa2
+ring-wrong-color=dc322f
+text-wrong-color=073642
+# WRONG
+# line-wrong-color <rrggbb[aa]>
+# Sets the color of the line between the inside and ring when in‐
+# valid.
+# ring-wrong-color <rrggbb[aa]>
+# Sets the color of the ring of the indicator when invalid.
+# inside-wrong-color <rrggbb[aa]>
+# Sets the color of the inside of the indicator when invalid.
+# text-wrong-color <rrggbb[aa]>
+# Sets the color of the text when invalid.

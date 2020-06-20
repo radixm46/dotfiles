@@ -1,0 +1,6 @@
+# output config for sway
+output * scale 1
+# output eDP-1 scale 2
+# output HDMI-1 scale 2
+
+# output * bg path/to/bg/pic fill
