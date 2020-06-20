@@ -22,14 +22,12 @@
 (setq delete-auto-save-files t)
 (setq auto-save-default nil)
 
-(add-hook 'prog-mode-hook '(
-  lambda ()
-    (electric-pair-mode t)
-))
+(add-hook 'prog-mode-hook
+          '(lambda () (electric-pair-mode t)))
 
 (setq default-frame-alist
-  (append (list
-  '(font . "HackGen35 Console for Powerline-16"))
+      (append (list
+               '(font . "HackGenNerd Console-16"))
   default-frame-alist))
 (menu-bar-mode -1)
 (tool-bar-mode -1)
