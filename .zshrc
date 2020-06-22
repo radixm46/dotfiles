@@ -42,7 +42,17 @@ P_PROM='' #$'\U259B\U259F'
 
 # with nerd fonts
 P_LOGIN=$'\UF2C0'
-P_COMPUTER=$'\UF841'
+case $(uname) in
+    Darwin)
+        P_COMPUTER=$'\UF179'
+        ;;
+    Linux*)
+        P_COMPUTER=$'\UF17C'
+        ;;
+    *)
+        P_COMPUTER=$'\UF841'
+        ;;
+esac
 P_BEGINR=$'\UE0C7'
 P_BEGIN=$'\UE0C6'
 P_MIDTEX=$'\UE0C4'
