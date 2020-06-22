@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
 
 case $(uname) in
     Darwin)
@@ -14,13 +14,13 @@ case $(uname) in
         # check if battery is available
         if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
         then
-            battery_charging="\UF587"
+            battery_stat="\UF587"
         else
-            battery_charging="\UF57D"
+            battery_stat="\UF57D"
         fi
-        echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%' ${battery_charging}
+        echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%' ${battery_stat}
         ;;
     *)
-        printf "unavailable"
+        printf "\UF00D"
 esac
 # if not battery, display fba3
