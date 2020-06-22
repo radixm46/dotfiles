@@ -47,7 +47,7 @@ case $(uname) in
         P_COMPUTER=$'\UF179'
         ;;
     Linux*)
-        P_COMPUTER=$'\UF17C'
+        P_COMPUTER=$'\UF83C'
         ;;
     *)
         P_COMPUTER=$'\UF841'
