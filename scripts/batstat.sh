@@ -6,9 +6,9 @@ case $(uname) in
         awk 'NR==2{print($3, $4)}' |\
         sed -E \
         -e 's/(\;| )//g'\
-        -e 's/discharging/'$(printf '\uF57C')'/g'\
-        -e 's/charging/'$(printf '\uF587')'/g'\
-        -e 's/charged/'$(printf '\uF583')'/'\
+        -e 's/discharging/'\ $(printf '\uF57C')'/g'\
+        -e 's/charging/'\ $(printf '\uF587')'/g'\
+        -e 's/charged/'\ $(printf '\uF583')'/'\
         ;;
     Linux*)
         # check if battery is available
