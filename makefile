@@ -18,6 +18,8 @@ CFG_TARGET:=$(shell if [ ! -z ${XDG_CONFIG} ]; \
 
 BACKUP_TARGET=${HOME}/dotfiles_backup
 
+CHK_TARGET:=$(PWD)/bin/make_chkfile.sh
+
 .PHONY: install
 install:
 	@echo 'execute "make link-all" or "make link-core" instead install'
@@ -41,95 +43,71 @@ check: check-env check-vim check-neovim check-swayenv check-emacs \
 
 # vim config ------------------------------------------------------------------
 check-vim:
-	@bin/make_chkavailable.sh  "${HOME}/.vimrc"
-	@bin/make_chkavailable.sh  "${HOME}/.vim"
+	@$(CHK_TARGET) "${HOME}/.vimrc"
+	@$(CHK_TARGET) "${HOME}/.vim"
 
-backup-vim:
-	@bin/make_backup.sh "target"
-
-link-vim: #to vim check target before execute
-	@ln -fsv "${PWD}/config/${NVIM}/init.vim" "${HOME}/.vimrc"
-	@ln -nfsv "${PWD}/config/${NVIM}" "${HOME}/.vim"
+link-vim:
+	@ln -sv "${PWD}/config/${NVIM}/init.vim" "${HOME}/.vimrc"
+	@ln -nsv "${PWD}/config/${NVIM}" "${HOME}/.vim"
 
 # neovim config ----------------------------------------------------------------
 check-neovim:
-	@bin/make_chkavailable.sh $(CFG_TARGET)/$(NVIM)
+	@for cfgfile in $(NVIM); \
+	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
+	done
 
-link-neovim:
-	@ln -nfsv "${PWD}/config/$(NVIM)" "$(CFG_TARGET)/$(NVIM)"
+link-neovim: $(addprefix $(CFG_TARGET)/,$(NVIM))
 	@# launch nvim backgound and setup nvim -es -v init.vim?
 
 # swayenv config ---------------------------------------------------------------
 check-swayenv:
 	@for cfgfile in $(SWAYENV); \
-	do \
-	    bin/make_chkavailable.sh "$(CFG_TARGET)/$${cfgfile}"; \
+	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
 
-link-swayenv:
-	@for cfgfile in $(SWAYENV); \
-	do \
-	    ln -nfsv "${PWD}/config/$${cfgfile}" "$(CFG_TARGET)/$${cfgfile}"; \
-	done
+link-swayenv: $(addprefix $(CFG_TARGET)/,$(SWAYENV))
 
 # emacs config ----------------------------------------------------------------
 check-emacs:
-	@bin/make_chkavailable.sh "${HOME}/.emacs.d"
+	@for cfgfile in $(EMACS); \
+	do $(CHK_TARGET) "$(HOME)/$${cfgfile}"; \
+	done
 
-link-emacs:
-	@ln -nfsv "${PWD}/${EMACS}" "${HOME}/.emacs.d"
+link-emacs: $(addprefix $(HOME)/,$(EMACS))
 
 # shellenv config --------------------------------------------------------------
 check-shellenv:
 	@for cfgfile in $(SHELLENV); \
-	do \
-	    bin/make_chkavailable.sh  "${HOME}/$${cfgfile}"; \
+	do $(CHK_TARGET) "$(HOME)/$${cfgfile}"; \
 	done
 
-link-shellenv:
-	@for cfgfile in $(SHELLENV); \
-	do \
-	    ln -svf "${PWD}/$${cfgfile}" "${HOME}/$${cfgfile}"; \
-	done
+link-shellenv: $(addprefix $(HOME)/,$(SHELLENV))
 
 # terminals config -------------------------------------------------------------
 check-terminals:
 	@for cfgfile in $(TERMINALS); \
-	do \
-	    bin/make_chkavailable.sh "$(CFG_TARGET)/$${cfgfile}"; \
+	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
 
-link-terminals:
-	@for cfgfile in $(TERMINALS); \
-	do \
-	    ln -nfsv "${PWD}/config/$${cfgfile}" "$(CFG_TARGET)/$${cfgfile}"; \
-	done
+link-terminals: $(addprefix $(CFG_TARGET)/,$(TERMINALS))
 
 # misc config -----------------------------------------------------------------
 check-misc:
 	@for cfgfile in $(MISC); \
-	do \
-	    bin/make_chkavailable.sh "$(CFG_TARGET)/$${cfgfile}"; \
+	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
 
-link-misc:
-	@for cfgfile in $(MISC); \
-	do \
-	    ln -nsvf "${PWD}/config/$${cfgfile}" "$(CFG_TARGET)/$${cfgfile}"; \
-	done
+link-misc: $(addprefix $(CFG_TARGET)/,$(MISC))
 
 
-# not finished
-TEST:=test
-test-hoge: $(addprefix $(HOME)/,$(SWAYENV))
-test-hoge2: $(addprefix $(CFG_TARGET)/,$(SHELLENV))
-
-$(CFG_TARGET)/%: $%
-	@echo "ln -nsv $(PWD)/config/$(@F) $@"
+# rules -----------------------------------------------------------------
+# link to CFG_TARGET
+$(CFG_TARGET)/%:
+	@ln -nsv $(PWD)/config/$(@F) $@
 
 $(BACKUP_TARGET)/%: %
 	@echo "backup"
 
+# link to HOME
 $(HOME)/%:
-	@echo "ln -nsv $(PWD)/$(@F)  $@"
-	@#ln -sv "${PWD}/config/${NVIM}/Init.vim" "${HOME}/.vimrc"
+	@ln -nsv $(PWD)/$(@F) $@
