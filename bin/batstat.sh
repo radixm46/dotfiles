@@ -36,7 +36,7 @@ case $(uname) in
 
             printf ${battery_stat}\ $(< ${batpath}/capacity)'%%'
         else
-            printf "\UF590"\ "\UFBA3"
+            printf "\UFBA3"\ "\UF590"
         fi
 
         ;;
