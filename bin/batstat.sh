@@ -3,12 +3,13 @@
 case $(uname) in
     Darwin)
         pmset -g batt |\
-        awk 'NR==2{print($3, $4)}' |\
+        awk 'NR==2{print($4, $3)}' |\
         sed -E \
         -e 's/(\;| )//g'\
-        -e 's/discharging/'\ $(printf '\uF57C')'/g'\
-        -e 's/charging/'\ $(printf '\uF587')'/g'\
-        -e 's/charged/'\ $(printf '\uF583')'/'\
+        -e 's/discharging/'$(printf '\uF57C')\ '/g'\
+        -e 's/charging/'$(printf '\uF587')\ '/g'\
+        -e 's/charged/'$(printf '\uF583')\ '/g'\
+        -e 's/AC/'$(printf '\uFBA3')\ '/g'\
         ;;
     Linux*)
         # check if battery is available
