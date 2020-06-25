@@ -12,15 +12,28 @@ case $(uname) in
         ;;
     Linux*)
         # check if battery is available
-        if [ -d "/sys/class/power_supply/BAT0" ]
+        batpath="/sys/class/power_supply/BAT0"
+        if [ -d ${batpath} ]
         then
-            if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
-            then
-                battery_stat="\UF587"
-            else
-                battery_stat="\UF57D"
-            fi
-            echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%' ${battery_stat}
+            case $(<${batpath}/status) in
+                Charging)
+                    battery_stat="\UF587"
+                ;;
+                Discharging)
+                    battery_stat="\UF57D"
+                    ;;
+                Full)
+                    battery_stat="\UF578"
+                    ;;
+                "Not charging")
+                    battery_stat="\UF57D"
+                    ;;
+                *)
+                    battery_stat="\UF590"
+                    ;;
+            esac
+
+            printf ${battery_stat}\ $(< ${batpath}/capacity)'%%'
         else
             printf "\UF590"\ "\UFBA3"
         fi
