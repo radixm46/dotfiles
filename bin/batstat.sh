@@ -12,13 +12,19 @@ case $(uname) in
         ;;
     Linux*)
         # check if battery is available
-        if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
+        if [ -d "/sys/class/power_supply/BAT0" ]
         then
-            battery_stat="\UF587"
+            if [ $(</sys/class/power_supply/BAT0/status) = 'Charging' ]
+            then
+                battery_stat="\UF587"
+            else
+                battery_stat="\UF57D"
+            fi
+            echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%' ${battery_stat}
         else
-            battery_stat="\UF57D"
+            printf "\UF590"\ "\UFBA3"
         fi
-        echo -e $(cat /sys/class/power_supply/BAT0/capacity)'%' ${battery_stat}
+
         ;;
     *)
         printf "\UF00D"
