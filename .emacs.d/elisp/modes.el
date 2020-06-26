@@ -78,11 +78,6 @@
   :ensure t
   :hook (python-mode . lsp)
   :mode ("\\.py\\'" . python-mode)
-  :config
-  (use-package python-black
-    :ensure t
-    :demand t
-    :after python)
 )
 
 
