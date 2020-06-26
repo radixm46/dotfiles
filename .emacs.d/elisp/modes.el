@@ -78,6 +78,11 @@
   :ensure t
   :hook (python-mode . lsp)
   :mode ("\\.py\\'" . python-mode)
+  :config
+  (use-package python-black
+    :ensure t
+    :demand t
+    :after python)
 )
 
 
@@ -141,7 +146,7 @@
     (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
     )
   (add-hook 'org-mode-hook 'org-mode-reftex-setup)
-  (use-package ox-bibtex)
+  ; (use-package ox-bibtex)
 )
 
 ;; markdown-mode
