@@ -35,6 +35,16 @@ if hash cargo 2>/dev/null; then
     fi
 fi
 
+# configure pyenv
+if hash pyenv 2>/dev/null; then
+    export PYENV_ROOT="${HOME}/.pyenv"
+    if [[ -d "${PYENV_ROOT}" ]]; then
+        export PATH="${PYENV_ROOT}/bin:$PATH"
+        eval "$(pyenv init -)"
+        # eval "$(pyenv virtualenv-init -)"
+    fi
+fi
+
 # export LANGUAGE=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
 # export LC_CTYPE=en_US.UTF-8
