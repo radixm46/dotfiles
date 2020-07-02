@@ -131,11 +131,14 @@
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
 
-  ;(load-theme 'doom-one t)
-  (load-theme 'doom-solarized-dark t)
+  (if (display-graphic-p)
+    (load-theme 'doom-solarized-dark t)
+    (load-theme 'doom-material t)
+    ;(enable-theme 'wheatgrass)
+    ;(load-theme 'doom-nord t)
+    ;(load-theme 'doom-one t)
+    ) ; loads different theme on terminal(temporary)
 
-  ;(load-theme 'doom-nord t)
-  ;(load-theme 'doom-tomorrow-night t)
   ;(set-face-attribute 'hl-line nil :inherit nil :background "brightblack")
 
   ;(global-hl-line-mode t)
