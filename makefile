@@ -27,10 +27,24 @@ CHK_TARGET:=$(PWD)/bin/make_chkfile.sh
 install:
 	@echo 'execute "make link-all" or "make link-core" instead install'
 
-link-all: check-env link-vim link-neovim link-swayenv link-emacs link-shellenv \
-    link-terminals link-misc
+link-all: \
+    check-env \
+    link-vim \
+    link-neovim \
+    link-swayenv \
+    link-emacs \
+    link-shellenv \
+    link-shelltools \
+    link-terminals \
+    link-misc
 
-link-all-core: check-env link-vim link-neovim link-emacs link-shellenv
+link-all-core: \
+    check-env \
+    link-vim \
+    link-neovim \
+    link-emacs \
+    link-shellenv \
+    link-shelltools
 
 check-env:
 	@printf 'Current config target directory:\n\t$(CFG_TARGET)\n'
@@ -39,8 +53,15 @@ check-env:
 	    mkdir -p $(CFG_TARGET); \
 	    fi # should read from user
 
-check: check-env check-vim check-neovim check-swayenv check-pamenv \
-       check-emacs check-shellenv check-terminals check-misc
+check: check-env \
+    check-vim \
+    check-neovim \
+    check-swayenv \
+    check-emacs \
+    check-shellenv \
+    check-shelltools \
+    check-terminals \
+    check-misc
 
 #backup-all: # backup
 
