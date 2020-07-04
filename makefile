@@ -67,6 +67,7 @@ check: check-env \
 
 # vim config ------------------------------------------------------------------
 check-vim:
+	@printf '+ vim:\n'
 	@$(CHK_TARGET) "${HOME}/.vimrc"
 	@$(CHK_TARGET) "${HOME}/.vim"
 
@@ -76,6 +77,7 @@ link-vim:
 
 # neovim config ----------------------------------------------------------------
 check-neovim:
+	@printf '+ neovim:\n'
 	@for cfgfile in $(NVIM); \
 	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
@@ -85,6 +87,7 @@ link-neovim: $(addprefix $(CFG_TARGET)/,$(NVIM))
 
 # swayenv config ---------------------------------------------------------------
 check-swayenv: check-pamenv
+	@printf '+ swayenv:\n'
 	@for cfgfile in $(SWAYENV); \
 	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
@@ -92,6 +95,7 @@ check-swayenv: check-pamenv
 link-swayenv: link-pamenv $(addprefix $(CFG_TARGET)/,$(SWAYENV))
 
 check-pamenv:
+	@printf '+ pamenv:\n'
 	@for cfgfile in $(PAMENV); \
 	do $(CHK_TARGET) "$(HOME)/$${cfgfile}"; \
 	done
@@ -100,6 +104,7 @@ link-pamenv: $(addprefix $(HOME)/,$(PAMENV))
 
 # emacs config ----------------------------------------------------------------
 check-emacs:
+	@printf '+ emacs:\n'
 	@for cfgfile in $(EMACS); \
 	do $(CHK_TARGET) "$(HOME)/$${cfgfile}"; \
 	done
@@ -108,6 +113,7 @@ link-emacs: $(addprefix $(HOME)/,$(EMACS))
 
 # shellenv config --------------------------------------------------------------
 check-shellenv:
+	@printf '+ shellenv:\n'
 	@for cfgfile in $(SHELLENV); \
 	do $(CHK_TARGET) "$(HOME)/$${cfgfile}"; \
 	done
@@ -117,6 +123,7 @@ link-shellenv: $(addprefix $(HOME)/,$(SHELLENV))
 # shelltools config ------------------------------------------------------------
 
 check-shelltools:
+	@printf '+ shelltools:\n'
 	@for cfgfile in $(SHELLTOOLS); \
 	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
@@ -125,6 +132,7 @@ link-shelltools: $(addprefix $(CFG_TARGET)/,$(SHELLTOOLS))
 
 # terminals config -------------------------------------------------------------
 check-terminals:
+	@printf '+ terminals:\n'
 	@for cfgfile in $(TERMINALS); \
 	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
@@ -133,6 +141,7 @@ link-terminals: $(addprefix $(CFG_TARGET)/,$(TERMINALS))
 
 # misc config -----------------------------------------------------------------
 check-misc:
+	@printf '+ misc:\n'
 	@for cfgfile in $(MISC); \
 	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
