@@ -1,0 +1,9 @@
+# set im
+XMODIFIERS       DEFAULT="@im=fcitx"
+XMODIFIER        DEFAULT="@im=fcitx"
+GTK_IM_MODULE    DEFAULT="fcitx"
+QT_IM_MODULE     DEFAULT="fcitx"
+DefaultIMModule  DEFAULT="fcitx"
+
+# use wayland
+MOZ_ENABLE_WAYLAND DEFAULT=1

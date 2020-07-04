@@ -3,7 +3,8 @@ SHELLENV:=.zshrc .zshenv .tmux.conf
 EMACS:=.emacs.d
 
 SWAYENV:=mako sway waybar swaylock
-# switch waybar config mobile or desktop
+
+PAMENV:=.pam_environment
 
 NVIM:=nvim
 
@@ -36,8 +37,8 @@ check-env:
 	    mkdir -p $(CFG_TARGET); \
 	    fi # should read from user
 
-check: check-env check-vim check-neovim check-swayenv check-emacs \
-    check-shellenv check-terminals check-misc
+check: check-env check-vim check-neovim check-swayenv check-pamenv \
+       check-emacs check-shellenv check-terminals check-misc
 
 #backup-all: # backup
 
@@ -60,12 +61,19 @@ link-neovim: $(addprefix $(CFG_TARGET)/,$(NVIM))
 	@# launch nvim backgound and setup nvim -es -v init.vim?
 
 # swayenv config ---------------------------------------------------------------
-check-swayenv:
+check-swayenv: check-pamenv
 	@for cfgfile in $(SWAYENV); \
 	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
 	done
 
-link-swayenv: $(addprefix $(CFG_TARGET)/,$(SWAYENV))
+link-swayenv: link-pamenv $(addprefix $(CFG_TARGET)/,$(SWAYENV))
+
+check-pamenv:
+	@for cfgfile in $(PAMENV); \
+	do $(CHK_TARGET) "$(HOME)/$${cfgfile}"; \
+	done
+
+link-pamenv: $(addprefix $(HOME)/,$(PAMENV))
 
 # emacs config ----------------------------------------------------------------
 check-emacs:
@@ -100,7 +108,7 @@ check-misc:
 link-misc: $(addprefix $(CFG_TARGET)/,$(MISC))
 
 
-# rules -----------------------------------------------------------------
+# rules ----------------------------------------------------------------------
 # link to CFG_TARGET
 $(CFG_TARGET)/%:
 	@ln -nsv $(PWD)/config/$(@F) $@
