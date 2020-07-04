@@ -1,0 +1,9 @@
+# tig config
+#set main-view-date = custom
+set main-view-date-display = relative
+set main-view-date-format = "%Y/%m/%d %H:%M"
+set refs-view-date = custom
+set refs-view-date-format = "%Y/%m/%d %H:%M"
+
+set line-graphics = utf-8
+set commit-order = default

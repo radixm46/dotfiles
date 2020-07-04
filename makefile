@@ -1,5 +1,7 @@
 SHELLENV:=.zshrc .zshenv .tmux.conf
 
+SHELLTOOLS:=tig
+
 EMACS:=.emacs.d
 
 SWAYENV:=mako sway waybar swaylock
@@ -90,6 +92,15 @@ check-shellenv:
 	done
 
 link-shellenv: $(addprefix $(HOME)/,$(SHELLENV))
+
+# shelltools config ------------------------------------------------------------
+
+check-shelltools:
+	@for cfgfile in $(SHELLTOOLS); \
+	do $(CHK_TARGET) "$(CFG_TARGET)/$${cfgfile}"; \
+	done
+
+link-shelltools: $(addprefix $(CFG_TARGET)/,$(SHELLTOOLS))
 
 # terminals config -------------------------------------------------------------
 check-terminals:
