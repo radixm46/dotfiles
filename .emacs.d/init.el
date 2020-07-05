@@ -107,20 +107,27 @@
   :hook
     (prog-mode . highlight-indent-guides-mode)
   :config
-    (setq highlight-indent-guides-method 'column)
-    (setq highlight-indent-guides-auto-odd-face-perc 10)
-    (setq highlight-indent-guides-auto-even-face-perc 10)
-    ;(setq highlight-indent-guides-auto-character-face-perc 20)
-    (setq highlight-indent-guides-auto-enabled t)
-    (setq highlight-indent-guides-responsive 'top)
-    (setq highlight-indent-guides-delay 0)
+  (if (not (display-graphic-p))
+      (progn
+        (setq highlight-indent-guides-auto-enabled nil)
+        (set-face-background 'highlight-indent-guides-odd-face "black")
+        (set-face-background 'highlight-indent-guides-top-odd-face "green")
+        (set-face-background 'highlight-indent-guides-even-face "black")
+        (set-face-background 'highlight-indent-guides-top-even-face "green"))
+      (setq highlight-indent-guides-auto-enabled t)
+    )
+  (setq highlight-indent-guides-method 'column)
+  (setq highlight-indent-guides-auto-odd-face-perc 10)
+  (setq highlight-indent-guides-auto-even-face-perc 10)
+  ;(setq highlight-indent-guides-auto-character-face-perc 20)
+  (setq highlight-indent-guides-responsive 'top)
+  (setq highlight-indent-guides-delay 0)
 )
 
 
 (use-package rainbow-delimiters
   :ensure t
-  :hook
-    (prog-mode . rainbow-delimiters-mode)
+  :hook (prog-mode . rainbow-delimiters-mode)
 )
 
 

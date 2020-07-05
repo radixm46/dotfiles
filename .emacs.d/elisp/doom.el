@@ -133,9 +133,16 @@
 
   (if (display-graphic-p)
     (load-theme 'doom-solarized-dark t)
-    (load-theme 'doom-material t)
-    ;(enable-theme 'wheatgrass)
+    (load-theme 'doom-spacegrey t)
+    ;(load-theme 'doom-tomorrow-night t)
+    ;(load-theme 'doom-molokai t)
+    ;(load-theme 'doom-dark+ t)
+    ;(load-theme 'doom-dracula t)
+    ;(load-theme 'doom-gruvbox t)
+    ;(load-theme 'doom-monokai-pro t)
+    ;(load-theme 'doom-material t)
     ;(load-theme 'doom-nord t)
+    ;(load-theme 'wheatgrass t)
     ;(load-theme 'doom-one t)
     ) ; loads different theme on terminal(temporary)
 
