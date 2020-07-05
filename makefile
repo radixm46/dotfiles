@@ -4,7 +4,7 @@ SHELLTOOLS:=tig
 
 EMACS:=.emacs.d
 
-SWAYENV:=mako sway waybar swaylock
+SWAYENV:=mako sway waybar swaylock gtk-3.0
 
 PAMENV:=.pam_environment
 
