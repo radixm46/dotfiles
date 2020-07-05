@@ -1,11 +1,11 @@
 #!/bin/sh
-printf 'Checking: '${1}; \
+printf '> Checking... '${1}'\n'; \
 if [ ! -e ${1}  ]; then \
-    printf '\t\t NOT EXIST\n'; \
+    printf '==> NOT EXIST\n'; \
 elif file -b ${1} | grep -q 'symbolic link'; then \
-    printf "\t $(file -b ${1})\n"; \
+    printf "==> $(file -b ${1})\n"; \
 elif file -b ${1} | grep -q 'directory\|file'; then \
-    printf '\t\t FILE or DIRECTORY\n'; \
+    printf '==> FILE or DIRECTORY\n'; \
 else
-    printf '\t\t NOT VALID\n'; \
+    printf '==> NOT VALID\n'; \
 fi
