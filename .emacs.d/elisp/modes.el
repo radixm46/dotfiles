@@ -86,21 +86,27 @@
         ("C-x t t"   . treemacs)
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
+        ("C-x t M-t" . treemacs-find-tag))
 
-(use-package treemacs-evil
-  :after treemacs evil
-  :ensure t)
-
-(use-package treemacs-magit
-  :after treemacs magit
-  :ensure t)
-
-(use-package lsp-treemacs
-  :after treemacs lsp-mode
-  :ensure t
   :config
-  (lsp-treemacs-sync-mode 1))
+  (use-package treemacs-evil
+    :ensure t
+    :after (treemacs evil)
+    :config
+    (define-key evil-treemacs-state-map (kbd "TAB") #'treemacs-TAB-action)
+    ;fix tab action
+    )
+
+  (use-package treemacs-magit
+    :ensure t
+    :after (treemacs magit))
+
+  (use-package lsp-treemacs
+    :ensure t
+    :after (treemacs lsp-mode)
+    :config
+    (lsp-treemacs-sync-mode 1))
+)
 
 ;(use-package treemacs-projectile
 ;  :after treemacs projectile
