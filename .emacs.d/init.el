@@ -107,15 +107,15 @@
   :hook
     (prog-mode . highlight-indent-guides-mode)
   :config
-  (if (not (display-graphic-p))
-      (progn
-        (setq highlight-indent-guides-auto-enabled nil)
-        (set-face-background 'highlight-indent-guides-odd-face "black")
-        (set-face-background 'highlight-indent-guides-top-odd-face "green")
-        (set-face-background 'highlight-indent-guides-even-face "black")
-        (set-face-background 'highlight-indent-guides-top-even-face "green"))
-      (setq highlight-indent-guides-auto-enabled t)
-    )
+  ;(if (not (display-graphic-p))
+  ;    (progn
+  ;      (setq highlight-indent-guides-auto-enabled nil)
+  ;      (set-face-background 'highlight-indent-guides-odd-face "black")
+  ;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
+  ;      (set-face-background 'highlight-indent-guides-even-face "black")
+  ;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
+  ;    (setq highlight-indent-guides-auto-enabled t)
+  ;  )
   (setq highlight-indent-guides-method 'column)
   (setq highlight-indent-guides-auto-odd-face-perc 10)
   (setq highlight-indent-guides-auto-even-face-perc 10)
