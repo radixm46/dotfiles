@@ -104,6 +104,11 @@
   (use-package lsp-treemacs
     :ensure t
     :after (treemacs lsp-mode)
+    :bind
+    (:map global-map
+          ("C-x t e"       . lsp-treemacs-errors-list)
+          ("C-x t s"       . lsp-treemacs-symbols)
+          )
     :config
     (lsp-treemacs-sync-mode 1))
 )
