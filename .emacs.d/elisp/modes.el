@@ -100,17 +100,6 @@
   (use-package treemacs-magit
     :ensure t
     :after (treemacs magit))
-
-  (use-package lsp-treemacs
-    :ensure t
-    :after (treemacs lsp-mode)
-    :bind
-    (:map global-map
-          ("C-x t e"       . lsp-treemacs-errors-list)
-          ("C-x t s"       . lsp-treemacs-symbols)
-          )
-    :config
-    (lsp-treemacs-sync-mode 1))
 )
 
 ;(use-package treemacs-projectile
@@ -259,6 +248,7 @@
     (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
     )
   (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
   ; (use-package ox-bibtex)
 
   ;configure org-pomodoro
