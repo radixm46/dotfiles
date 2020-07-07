@@ -13,6 +13,7 @@
       ;(XXX-mode . lsp)
       ; if you want which-key integration
       (lsp-mode . lsp-enable-which-key-integration)
+      (lsp-mode . lsp-treemacs)
      )
   :commands lsp
   :bind
@@ -89,6 +90,17 @@
     :commands company-lsp
     )
  )
+
+(use-package lsp-treemacs
+  :ensure t
+  ;:after (treemacs lsp-mode)
+  :hook (lsp-mode . lsp-treemacs)
+  :bind
+  (:map global-map
+        ("C-x t e" . lsp-treemacs-errors-list)
+        ("C-x t s" . lsp-treemacs-symbols))
+  :config
+  (lsp-treemacs-sync-mode 1))
 
 ;; optionally
 ;; if you are helm user
