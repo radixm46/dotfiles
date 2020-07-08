@@ -1,10 +1,14 @@
 #ignorefiles
-.DS_STORE
-.Spotlight-V100
 auto-save-list
+.cache
+.lsp-session*
+bookmarks
+session.*
+transient
 elpa*
 eshell
 skk
+
 custom.el
 local.el
 *.elc
