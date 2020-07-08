@@ -3,8 +3,8 @@
 
 (use-package neotree
   :ensure t
+  :bind ([f7] . neotree-toggle)
   :config
-  (global-set-key [f7] 'neotree-toggle)
   (setq neo-window-fixed-size nil)
   ;; keymap for using with evil mode
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
@@ -254,6 +254,8 @@
   ;configure org-pomodoro
   (use-package org-pomodoro
     :ensure t
+    :hook (org-mode . org-pomodoro)
+    :bind ([f6] . org-pomodoro)
     )
 )
 
