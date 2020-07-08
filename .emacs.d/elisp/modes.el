@@ -254,7 +254,6 @@
   ;configure org-pomodoro
   (use-package org-pomodoro
     :ensure t
-    :hook (org-mode . org-pomodoro)
     :bind ([f6] . org-pomodoro)
     )
 )
