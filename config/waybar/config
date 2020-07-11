@@ -9,9 +9,9 @@
 
     "modules-center": ["sway/window"],
 
-    "modules-right": ["tray", "pulseaudio", "cpu",
-                      "memory", "temperature",
-                      "battery#bat2", "network", "idle_inhibitor",  "backlight", "battery", "clock"],
+    "modules-right": ["tray", "pulseaudio", "cpu", "memory", "temperature",
+                      "network", "idle_inhibitor", "backlight",
+                      "battery", "battery#bat2", "clock"],
                       // "mpd"
 
     // Modules configuration

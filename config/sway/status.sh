@@ -7,7 +7,7 @@ uptime_formatted=$(uptime | cut -d ',' -f1 | cut -d ' ' -f4,5)
 ##date_formatted=$(date +'%Y-%m-%d %H:%M')
 date_formatted=$(date +'%H:%M')
 
-memory_usage=$($HOME/dotfiles/scripts/memstat.sh)
+memory_usage=$($HOME/dotfiles/bin/memstat.sh)
 
 stat_separator="\U23B8"
 

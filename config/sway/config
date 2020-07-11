@@ -22,7 +22,13 @@ set $term alacritty
 # Your preferred application launcher
 # Note: it's recommended that you pass the final command to sway
 # set $menu dmenu_path | wofi -S drun | xargs swaymsg exec --
-set $menu wofi -S drun
+set $menu wofi \
+    --show drun \
+    --allow-images \
+    --allow-markup \
+    --location=top \
+    --prompt="Hello $(whoami) -- $(date +%Y/%m/%d\ %a\ %H:%M:%S)" \
+    --lines=15
 # set $screenshot app
 set $screenshot grim
 # set $screenshot_window
@@ -261,6 +267,11 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioMicMute exec set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym XF86MonBrightnessDown exec light -U 5
 bindsym XF86MonBrightnessUp exec light -A 5
+
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
 
 bindsym $sup+$mod+l exec swaylock  # swaylock
 
