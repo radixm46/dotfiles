@@ -202,14 +202,38 @@ bindkey '^R' history-incremental-pattern-search-backward
 ########################################
 # エイリアス
 
-alias la='ls -a'
-alias ll='ls -l'
+if hash exa 2>/dev/null; then
+    LSCOM="exa"
+else
+    LSCOM="ls"
+fi
+
+case ${OSTYPE} in
+    darwin*)
+        export CLICOLOR=1
+        alias ls='ls -G -F'
+        ;;
+    linux*)
+        alias ls='${LSCOM} -F --color=auto'
+        ;;
+esac
+
+alias la="${LSCOM} -a"
+alias ll="${LSCOM} -l"
 
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
 alias mkdir='mkdir -p'
+
+# if hash bat 2>/dev/null; then
+#     alias cat='bat'
+# fi
+
+if hash fd 2>/dev/null; then
+    alias find='fd'
+fi
 
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
@@ -254,22 +278,6 @@ get_weather() {
 }
 
 alias -g wttr='get_weather'
-
-
-########################################
-# OS 別の設定
-case ${OSTYPE} in
-    darwin*)
-        #Mac用の設定
-        export CLICOLOR=1
-        alias ls='ls -G -F'
-        ;;
-    linux*)
-        #Linux用の設定
-        alias ls='ls -F --color=auto'
-        ;;
-esac
-
 
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
