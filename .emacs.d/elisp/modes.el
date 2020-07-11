@@ -194,6 +194,15 @@
   :mode ("\\.go\\'" . go-mode)
 )
 
+(use-package json-mode
+  :ensure t
+  :mode ("\\.json\\'" . json-mode)
+)
+
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml\\'" . yaml-mode)
+)
 
 ;; org-mode config
 (use-package org
