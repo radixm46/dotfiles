@@ -227,10 +227,6 @@ alias mv='mv -i'
 
 alias mkdir='mkdir -p'
 
-# if hash bat 2>/dev/null; then
-#     alias cat='bat'
-# fi
-
 if hash fd 2>/dev/null; then
     alias find='fd'
 fi
