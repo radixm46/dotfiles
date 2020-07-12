@@ -200,9 +200,11 @@ zplugin light zdharma/fast-syntax-highlighting
 bindkey '^R' history-incremental-pattern-search-backward
 
 ########################################
-# エイリアス
+# alias
 
-if hash exa 2>/dev/null; then
+function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
+
+if is_available exa; then
     LSCOM="exa"
 else
     LSCOM="ls"
@@ -227,27 +229,24 @@ alias mv='mv -i'
 
 alias mkdir='mkdir -p'
 
-if hash fd 2>/dev/null; then
+if is_available fd; then
     alias find='fd'
 fi
 
-# sudo の後のコマンドでエイリアスを有効にする
-alias sudo='sudo '
-
-# グローバルエイリアス
+# glob aliases
 alias -g L='| less'
 alias -g G='| grep'
 
-# C で標準出力をクリップボードにコピーする
-# mollifier delta blog : http://mollifier.hatenablog.com/entry/20100317/p1
-if which pbcopy >/dev/null 2>&1 ; then
-    # Mac
+if is_available bat; then
+    alias -g B='| bat'
+fi
+
+# clipboard manager
+if is_available pbcopy; then
     alias -g C='| pbcopy'
-elif which xsel >/dev/null 2>&1 ; then
-    # Linux
+elif is_available xsel; then
     alias -g C='| xsel --input --clipboard'
-elif which putclip >/dev/null 2>&1 ; then
-    # Cygwin
+elif is_available putclip; then
     alias -g C='| putclip'
 fi
 
@@ -270,7 +269,7 @@ get_weather() {
     shift $((OPTIND - 1))
     local target_loc="$1"
 
-    curl 'wttr.in/'"${target_loc}"\?"${days:=1}"'qA'"${lang_}""${format:=}"
+    curl -s 'wttr.in/'"${target_loc}"\?"${days:=1}"'qA'"${lang_}""${format:=}"
 }
 
 alias -g wttr='get_weather'
