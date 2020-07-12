@@ -273,7 +273,7 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 
-bindsym $sup+$mod+l exec swaylock  # swaylock
+bindsym $sup+$mod+l exec swaylock -f -c 000000  # swaylock
 
 bindsym $sup+$mod+Shift+3 exec $screenshot  # take screenshot
 # bindsym $sup+$mod+Shift+4 exec $screenshot_window
