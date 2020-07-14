@@ -83,10 +83,8 @@ exec swayidle -w \
 #  }
 #refer to inputs file in .config/sway
 
-# set background
-output * bg ${HOME}/dotfiles/img/bgdesktop fill
 # import local io settings
-include ${HOME}/.config/sway/local
+include ${HOME}/.config/sway/local/*
 
 ### Key bindings
 #
