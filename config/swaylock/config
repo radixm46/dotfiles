@@ -25,7 +25,7 @@ image=${HOME}/dotfiles/img/bglock
 # -c to set a background color. If the path potentially contains a
 # ':', prefix it with another
 
-scaling=fit
+scaling=fill
 # scaling
 # Image scaling mode: stretch, fill, fit, center, tile, solid_color.
 # Use solid_color to display only the background color, even if a
