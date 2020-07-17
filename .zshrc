@@ -274,7 +274,8 @@ get_weather() {
 
 alias -g wttr='get_weather'
 
-eval `tset -s xterm-24bits`
+# eval `tset -s xterm-24bits`
+
 
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
