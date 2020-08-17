@@ -173,13 +173,14 @@
 
 (use-package python-mode
   :ensure t
-  :hook (python-mode . lsp)
+  :hook
+  ((python-mode . pipenv-mode)
+   (python-mode . lsp))
   :mode ("\\.py\\'" . python-mode)
   )
 
 (use-package pipenv
   :ensure t
-  :hook (python-mode . pipenv-mode)
   :init
   (setq
    pipenv-projectile-after-switch-function
