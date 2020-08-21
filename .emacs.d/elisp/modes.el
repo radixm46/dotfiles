@@ -197,7 +197,7 @@
 
 (use-package json-mode
   :ensure t
-  :mode ("\\.json\\'" . json-mode)
+  ;; :mode ("\\.json\\'" . json-mode)
 )
 
 (use-package yaml-mode
@@ -215,7 +215,7 @@
    ("C-c c" . org-capture)
    ("C-c a" . org-agenda)
    ("C-c b" . org-iswitchb)
-   ("C-c C-0" . my-org-goto-dir))
+   ("C-c C-o 0" . my-org-goto-dir))
   :config  ;
   ;(setq system-time-locale "C") ; dates written in eng
   (setq org-startup-truncated t)
