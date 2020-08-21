@@ -30,7 +30,7 @@ fi
 # check rust environment
 if hash cargo 2>/dev/null; then
     CARGO_PATH="$HOME/.cargo/bin"
-    if [[ -e $STACK_PATH ]]; then
+    if [[ -e $CARGO_PATH ]]; then
         export PATH="$CARGO_PATH:$PATH"
     fi
 fi
