@@ -45,7 +45,7 @@ if hash pyenv 2>/dev/null; then
     fi
 fi
 
-# export LANGUAGE=en_US.UTF-8
-# export LC_ALL=en_US.UTF-8
-# export LC_CTYPE=en_US.UTF-8
-# export LANG=en_US.UTF-8
+# configure node environment
+if hash node 2>/dev/null; then
+    export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
+fi
