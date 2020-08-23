@@ -203,6 +203,12 @@
   (which-key-mode)
 )
 
+(use-package editorconfig
+  :ensure t
+  :hook (prog-mode . editorconfig-mode)
+  ;:config
+  ;(editorconfig-mode 1)
+)
 
 ; --------------- lsp package ---------------
 (load "~/.emacs.d/elisp/lsp.el")
