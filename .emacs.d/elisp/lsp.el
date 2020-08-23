@@ -20,7 +20,7 @@
   (:map lsp-mode-map
         ("C-c r"   . lsp-rename))
   :config
-  (require 'lsp-clients)
+  ;(require 'lsp-clients)
   ;; LSP UI tools
   (use-package lsp-ui
     :ensure t
