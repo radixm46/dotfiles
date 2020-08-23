@@ -285,6 +285,7 @@
 ;; web-mode
 (use-package web-mode
   :ensure t
+  :hook (web-mode . lsp)
   :mode
   (("\\.html?\\'" . web-mode)
    ("\\.phtml\\'" . web-mode)
