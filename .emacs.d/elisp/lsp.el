@@ -13,7 +13,6 @@
       ;(XXX-mode . lsp)
       ; if you want which-key integration
       (lsp-mode . lsp-enable-which-key-integration)
-      (lsp-mode . lsp-treemacs)
      )
   :commands lsp
   :bind
@@ -94,7 +93,7 @@
 (use-package lsp-treemacs
   :ensure t
   ;:after (treemacs lsp-mode)
-  :hook (lsp-mode . lsp-treemacs)
+  :hook (lsp . lsp-treemacs)
   :bind
   (:map global-map
         ("C-x t e" . lsp-treemacs-errors-list)
