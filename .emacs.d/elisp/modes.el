@@ -160,14 +160,16 @@
   :commands (rustic-mode)
 
   :config
-  ;(use-package quickrun
-  ;:defer t
-  ;:ensure t)
   (use-package racer
     :defer t
     :ensure t
     :commands racer
   )
+)
+
+
+(use-package quickrun
+  :ensure t
 )
 
 
@@ -185,8 +187,6 @@
   (setq
    pipenv-projectile-after-switch-function
    #'pipenv-projectile-after-switch-extended))
-
-
 
 
 (use-package go-mode
@@ -279,4 +279,48 @@
    ("\\.markdown\\'" . markdown-mode))
   :init
   (setq markdown-command "multimarkdown")
+)
+
+
+;; web-mode
+(use-package web-mode
+  :ensure t
+  :hook (web-mode . lsp)
+  :mode
+  (("\\.html?\\'" . web-mode)
+   ("\\.phtml\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode))
+  :config
+  ;; highlights
+  (setq web-mode-enable-current-element-highlight t)
+
+  ;; configure indent
+  (setq web-mode-markup-indent-offset 4)
+  (setq web-mode-css-indent-offset 4)
+  (setq web-mode-code-indent-offset 4)
+
+  ;; auto close tags
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-enable-auto-closing t)
+
+  ;; auto colorize css
+  (setq web-mode-enable-css-colorization t)
+
+  ;(setq web-mode-enable-block-face t)
+  ;(setq web-mode-enable-part-face t)
+  (setq web-mode-enable-comment-interpolation t)
+  (setq web-mode-enable-heredoc-fontification t)
+)
+
+
+(use-package js2-mode
+  :ensure t
+  :hook (js2-mode . lsp)
+  :mode
+  (("\\.js\\'" . js2-mode)
+   ("\\.jsx\\'" . js2-mode))
 )
