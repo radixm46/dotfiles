@@ -2,7 +2,6 @@ setopt no_global_rcs #disable path helper
 typeset -U path PATH
 
 case "$(uname)" in
-
     Darwin)
         HBREW_DIR="/usr/local/bin"
         path=(/usr/local/bin(N-/) $path /usr/sbin /sbin)
@@ -11,9 +10,7 @@ case "$(uname)" in
             alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
             alias vi=vim
         fi
-
         ;;
-
 esac
 
 # check stack installed and add path
