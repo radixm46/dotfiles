@@ -27,7 +27,7 @@
 
 (setq default-frame-alist
       (append (list
-               '(font . "HackGenNerd Console-16"))
+               '(font . "HackGenNerd Console-15"))
   default-frame-alist))
 (menu-bar-mode -1)
 (tool-bar-mode -1)
