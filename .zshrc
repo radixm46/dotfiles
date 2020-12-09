@@ -44,7 +44,11 @@ P_PROM='' #$'\U259B\U259F'
 P_LOGIN=$'\UF2C0'
 case $(uname) in
     Darwin)
-        P_COMPUTER=$'\UF179'
+        if [[ $(uname -m) == arm64 ]]; then
+            P_COMPUTER=$'\UF302'
+        else
+            P_COMPUTER=$'\UF302 \UE216 \UF493'
+        fi
         ;;
     Linux*)
         P_COMPUTER=$'\UF83C'
