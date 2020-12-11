@@ -1,30 +1,158 @@
-# 少し凝った zshrc(改)
-# License : MIT
-# http://mollifier.mit-license.org/
-
-########################################
-# 環境変数
 export LANG=ja_JP.UTF-8
 export XDG_CONFIG_HOME=~/.config
+# export LANGUAGE=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
+# export LC_CTYPE=en_US.UTF-8
+# TODO: should not write here
+# ------------------------------------------------------------------------------
+# zplugin
+# ------------------------------------------------------------------------------
+ZINITDIR=$HOME/.zinit
+if [ ! -d $ZINITDIR ]; then
+    echo 'Installing zplugin...'
+    echo "target dir: $ZINITDIR"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
+fi
 
-# 色を使用出来るようにする
+source $HOME/.zinit/bin/zplugin.zsh
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
+
+zplugin light zsh-users/zsh-autosuggestions
+zplugin light zsh-users/zsh-completions
+zplugin light zdharma/fast-syntax-highlighting
+
+autoload -Uz compinit
+compinit -u
+
+# ------------------------------------------------------------------------------
+# enable colors
 autoload -Uz colors
 colors
 
-# vim 風キーバインドにする
-bindkey -v
-
 # 10ms for key sequences
 KEYTIMEOUT=1
+# Input/Output
+setopt no_flow_control
+setopt ignore_eof # zsh not terminate with C-d
+setopt interactive_comments # '#' 以降をコメントとして扱う
+setopt print_eight_bit
+setopt no_beep
+# setopt short_loops
 
-# ヒストリの設定
+# Changing dir
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+# setopt chase_dots
+# setopt chase_link
+# setopt posix_cd
+
+# expansion and globbing
+setopt extended_glob
+autoload -Uz select-word-style
+
+# ZLE zsh line editor
+zstyle ':zle:*' word-chars " /=;@:{},|"
+zstyle ':zle:*' word-style unspecified
+
+
+# ------------------------------------------------------------------------------
+# history configure
 HISTFILE=~/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
+setopt share_history
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
 
-# プロンプト
-# 1行表示
+# ------------------------------------------------------------------------------
+# completions
+setopt list_types
+setopt auto_menu
+setopt auto_param_keys
+setopt complete_in_word
+setopt always_last_prompt
+# ignore cases
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# ../ の後は今いるディレクトリを補完しない
+zstyle ':completion:*' ignore-parents parent pwd ..
+
+# sudo の後ろでコマンド名を補完する
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+                   /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+
+# ps コマンドのプロセス名補完
+zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
+
+# ------------------------------------------------------------------------------
+# keybinds
+
+bindkey '^R' history-incremental-pattern-search-backward
+bindkey -v  # use vim style keybinding
+
+# ------------------------------------------------------------------------------
+# alias
+function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
+
+case ${OSTYPE} in
+    darwin*)
+        if is_available exa; then
+            LSCOM="exa"
+            alias ls='${LSCOM} -F --color=auto'
+        else
+            LSCOM="ls"
+            export CLICOLOR=1
+            alias ls='ls -G -F'
+        fi
+        ;;
+    linux*)
+        if is_available exa; then
+            LSCOM="exa"
+        else
+            LSCOM="ls"
+        fi
+        alias ls='${LSCOM} -F --color=auto'
+        ;;
+esac
+
+alias la="${LSCOM} -a"
+alias ll="${LSCOM} -l"
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias mkdir='mkdir -p'
+
+if is_available fd; then
+    alias find='fd'
+fi
+
+# glob aliases
+alias -g L='| less'
+alias -g G='| grep'
+
+if is_available bat; then
+    alias -g B='| bat'
+fi
+
+# clipboard manager
+if is_available pbcopy; then
+    alias -g C='| pbcopy'
+elif is_available xsel; then
+    alias -g C='| xsel --input --clipboard'
+elif is_available putclip; then
+    alias -g C='| putclip'
+fi
+
+# ------------------------------------------------------------------------------
+# Prompt config
+# minimal
 # PROMPT="%~ %# "
+
 # P_LOGIN=$'\U23FB'
 # P_COMPUTER=$'\U1F5B5 '
 #P_BEGIN=$'\U2599\U259E\U259A\U2596\U259D\U2598'
@@ -75,39 +203,7 @@ PROMPT="\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}%# "
 
-# 単語の区切り文字を指定する
-autoload -Uz select-word-style
-select-word-style default
-# ここで指定した文字は単語区切りとみなされる
-# / も区切りと扱うので、^W でディレクトリ１つ分を削除できる
-zstyle ':zle:*' word-chars " /=;@:{},|"
-zstyle ':zle:*' word-style unspecified
-
-########################################
-# 補完
-# 補完機能を有効にする
-
-#for zsh-completions
-fpath=(/usr/local/share/zsh-completions $fpath)
-
-autoload -Uz compinit
-compinit -u
-
-# 補完で小文字でも大文字にマッチさせる
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# ../ の後は今いるディレクトリを補完しない
-zstyle ':completion:*' ignore-parents parent pwd ..
-
-# sudo の後ろでコマンド名を補完する
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-                   /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
-
-# ps コマンドのプロセス名補完
-zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
-
-
-########################################
+# ------------------------------------------------------------------------------
 # vcs_info
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
@@ -116,8 +212,7 @@ zstyle ':vcs_info:*' formats \
 "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
-#%K{magenta} %F{white}${P_GITBRANCH} %F{black}%b %f%k"
-#zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
+
 zstyle ':vcs_info:*' actionformats \
 "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
@@ -128,127 +223,7 @@ function _update_vcs_info_msg() {
     RPROMPT="${vcs_info_msg_0_}"
 }
 add-zsh-hook precmd _update_vcs_info_msg
-
-
-########################################
-# オプション
-# 日本語ファイル名を表示可能にする
-setopt print_eight_bit
-
-# beep を無効にする
-setopt no_beep
-
-# フローコントロールを無効にする
-setopt no_flow_control
-
-# Ctrl+Dでzshを終了しない
-setopt ignore_eof
-
-# '#' 以降をコメントとして扱う
-setopt interactive_comments
-
-# ディレクトリ名だけでcdする
-setopt auto_cd
-
-# cd したら自動的にpushdする
-setopt auto_pushd
-
-# 重複したディレクトリを追加しない
-setopt pushd_ignore_dups
-
-# 同時に起動したzshの間でヒストリを共有する
-setopt share_history
-
-# 同じコマンドをヒストリに残さない
-setopt hist_ignore_all_dups
-
-# スペースから始まるコマンド行はヒストリに残さない
-setopt hist_ignore_space
-
-# ヒストリに保存するときに余分なスペースを削除する
-setopt hist_reduce_blanks
-
-# 高機能なワイルドカード展開を使用する
-setopt extended_glob
-
-########################################
-# zplugin
-########################################
-ZINITDIR=$HOME/.zinit
-if [ ! -d $ZINITDIR ]; then
-    echo 'Installing zplugin...'
-    echo "target dir: $ZINITDIR"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
-fi
-
-source $HOME/.zinit/bin/zplugin.zsh
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
-
-zplugin light zsh-users/zsh-autosuggestions
-#zplugin light zsh-users/zsh-completions
-zplugin light zdharma/fast-syntax-highlighting
-
-# autoload -U compinit
-# (compinit -u &)
-
-
-########################################
-# キーバインド
-
-# ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
-bindkey '^R' history-incremental-pattern-search-backward
-
-########################################
-# alias
-
-function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
-
-if is_available exa; then
-    LSCOM="exa"
-else
-    LSCOM="ls"
-fi
-
-case ${OSTYPE} in
-    darwin*)
-        export CLICOLOR=1
-        alias ls='ls -G -F'
-        ;;
-    linux*)
-        alias ls='${LSCOM} -F --color=auto'
-        ;;
-esac
-
-alias la="${LSCOM} -a"
-alias ll="${LSCOM} -l"
-
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-
-alias mkdir='mkdir -p'
-
-if is_available fd; then
-    alias find='fd'
-fi
-
-# glob aliases
-alias -g L='| less'
-alias -g G='| grep'
-
-if is_available bat; then
-    alias -g B='| bat'
-fi
-
-# clipboard manager
-if is_available pbcopy; then
-    alias -g C='| pbcopy'
-elif is_available xsel; then
-    alias -g C='| xsel --input --clipboard'
-elif is_available putclip; then
-    alias -g C='| putclip'
-fi
+# ------------------------------------------------------------------------------
 
 get_weather() {
     local format=""
@@ -274,9 +249,8 @@ get_weather() {
 
 alias -g wttr='get_weather'
 
-# eval `tset -s xterm-24bits`
 
-
+# ------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
