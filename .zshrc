@@ -41,13 +41,13 @@ P_PROM='' #$'\U259B\U259F'
 # P_VCSICO=$'\U1F5D8'
 
 # with nerd fonts
-P_LOGIN=$'\UF2C0'
+P_LOGIN=$'\UF2BD'
 case $(uname) in
     Darwin)
-        if [[ $(uname -m) == arm64 ]]; then
-            P_COMPUTER=$'\UF302'
+        if [[ $(uname -m) == x86_64 ]]; then
+            P_COMPUTER=$'\UF302 \UF129'
         else
-            P_COMPUTER=$'\UF302 \UE216 \UF493'
+            P_COMPUTER=$'\UF302'
         fi
         ;;
     Linux*)
