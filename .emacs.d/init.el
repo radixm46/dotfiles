@@ -5,9 +5,6 @@
 
 ;; emacs configuration by radixM491VA
 (setq inhibit-splash-screen t)
-(set-language-environment "Japanese")
-(prefer-coding-system 'utf-8)
-(set-default 'buffer-file-coding-system 'utf-8)
 (global-display-line-numbers-mode)
 (column-number-mode t)
 (ido-mode t)
@@ -43,6 +40,7 @@
 
 ;; locale and encoding
 (set-locale-environment nil)
+(set-default 'buffer-file-coding-system 'utf-8)
 (set-language-environment "Japanese")
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
