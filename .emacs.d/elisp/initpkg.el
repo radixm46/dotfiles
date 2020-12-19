@@ -16,8 +16,8 @@
    package-archives
 ))
 
-(unless package-archive-contents
-  (package-refresh-contents))
+;(unless package-archive-contents
+;  (package-refresh-contents))
 ;(package-initialize)
 
 
