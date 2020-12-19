@@ -1,5 +1,6 @@
 ;; skk init file
 
+(setq skk-use-azik t)
 (setq skk-show-inline t)
 (setq skk-show-tooltip t)
 (setq skk-show-candidates-always-pop-to-buffer t)
@@ -22,3 +23,6 @@
     (ignore) (skk-get skk-get-jisyo-directory))
 (setq skk-large-jisyo "~/.emacs.d/skk/dict/SKK-JISYO.L")
 ;(setq skk-cdb-large-jisyo "~/.emacs.d/skkdict/SKK-JISYO.L.cdb")
+
+(use-package skk-study
+  :ensure t)

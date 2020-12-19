@@ -40,4 +40,3 @@
 (setq skk-get-jisyo-directory "~/.emacs.d/skk/dict")
 (setq skk-init-file "~/.emacs.d/elisp/initskk.el")
 
-(require 'skk-study)
