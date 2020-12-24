@@ -50,7 +50,6 @@
     (lsp-ui-peek-peek-height 20)
     (lsp-ui-peek-list-width 50)
     (lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
-
     :preface
     (defun ladicle/toggle-lsp-ui-doc ()
       (interactive)
@@ -59,7 +58,6 @@
             (lsp-ui-doc-mode -1)
             (lsp-ui-doc--hide-frame))
         (lsp-ui-doc-mode 1)))
-
     :bind
     (:map lsp-mode-map
           ("C-c C-r" . lsp-ui-peek-find-references)
