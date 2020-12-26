@@ -73,6 +73,13 @@
 
 ;; -------- package config under use-package --------
 
+(use-package undo-tree
+  :ensure t
+  :config
+  (setq undo-tree-visualizer-timestamps t)
+  (global-undo-tree-mode)
+  )
+
 
 ;; enable evil
 (use-package evil
@@ -86,6 +93,7 @@
   (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
   ;(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
   ;(define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (setq evil-undo-system 'undo-tree)
 )
 
 
@@ -212,7 +220,7 @@
   :ensure t
   :config
   (which-key-mode)
-)
+  )
 
 (use-package editorconfig
   :ensure t
