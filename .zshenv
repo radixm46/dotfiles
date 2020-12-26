@@ -2,9 +2,8 @@ typeset -U path PATH
 
 case "$(uname)" in
     Darwin)
-        # setopt no_global_rcs #disable path helper
-        HBREW_DIR="/usr/local/bin"
-        path=($HBREW_DIR(N-/) $path)
+        setopt no_global_rcs #disable path helper
+        path=("/usr/local/bin"(N-/) $path /usr/sbin /sbin)
 
         if [[ -d /Applications/MacVim.app ]]; then
             alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
