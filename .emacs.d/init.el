@@ -32,6 +32,13 @@
 (scroll-bar-mode -1)
 (display-time)
 
+;; ITERM2 MOUSE SUPPORT
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+)
 
 ;; log
 (setq message-log-maxa 10000)
@@ -194,6 +201,12 @@
 (use-package flycheck
  :ensure t)
 
+(use-package ace-window
+  :ensure t
+  :bind
+  (:map global-map
+        ("M-o" . ace-window))
+  )
 
 (use-package which-key
   :ensure t
