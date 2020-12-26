@@ -15,13 +15,13 @@ esac
 
 # check stack installed and add path
 if hash stack 2>/dev/null; then
-    STACK_PATH=$(stack path --local-bin)
-    path=($STACK_PATH(N-/) $path)
+    path=($(stack path --local-bin)(N-/) $path)
 fi
 
 # check rust environment
-CARGO_PATH="$HOME/.cargo/bin"
-path=($CARGO_PATH(N-/) $path)
+if hash cargo 2>/dev/null && [[ -d $HOME/.cargo/bin ]]; then
+    path=("$HOME/.cargo/bin"(N-/) $path)
+fi
 
 # configure pyenv
 if hash pyenv 2>/dev/null; then
