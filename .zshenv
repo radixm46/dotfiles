@@ -32,6 +32,6 @@ if hash pyenv 2>/dev/null; then
 fi
 
 # configure node environment
-if hash node 2>/dev/null; then
+if hash node 2>/dev/null && [[ -d $HOME/.npm-global ]]; then
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
 fi
