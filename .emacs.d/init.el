@@ -5,9 +5,6 @@
 
 ;; emacs configuration by radixM491VA
 (setq inhibit-splash-screen t)
-(set-language-environment "Japanese")
-(prefer-coding-system 'utf-8)
-(set-default 'buffer-file-coding-system 'utf-8)
 (global-display-line-numbers-mode)
 (column-number-mode t)
 (ido-mode t)
@@ -35,6 +32,13 @@
 (scroll-bar-mode -1)
 (display-time)
 
+;; ITERM2 MOUSE SUPPORT
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+)
 
 ;; log
 (setq message-log-maxa 10000)
@@ -43,6 +47,7 @@
 
 ;; locale and encoding
 (set-locale-environment nil)
+(set-default 'buffer-file-coding-system 'utf-8)
 (set-language-environment "Japanese")
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -68,6 +73,13 @@
 
 ;; -------- package config under use-package --------
 
+(use-package undo-tree
+  :ensure t
+  :config
+  (setq undo-tree-visualizer-timestamps t)
+  (global-undo-tree-mode)
+  )
+
 
 ;; enable evil
 (use-package evil
@@ -81,6 +93,7 @@
   (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
   ;(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
   ;(define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (setq evil-undo-system 'undo-tree)
 )
 
 
@@ -196,12 +209,18 @@
 (use-package flycheck
  :ensure t)
 
+(use-package ace-window
+  :ensure t
+  :bind
+  (:map global-map
+        ("M-o" . ace-window))
+  )
 
 (use-package which-key
   :ensure t
   :config
   (which-key-mode)
-)
+  )
 
 (use-package editorconfig
   :ensure t

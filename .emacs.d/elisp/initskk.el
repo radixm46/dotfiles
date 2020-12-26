@@ -1,5 +1,7 @@
 ;; skk init file
 
+(setq skk-use-azik t)
+(setq skk-azik-keyboard-type 'us101)
 (setq skk-show-inline t)
 (setq skk-show-tooltip t)
 (setq skk-show-candidates-always-pop-to-buffer t)

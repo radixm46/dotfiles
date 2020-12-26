@@ -16,9 +16,10 @@
    package-archives
 ))
 
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+;(unless package-archive-contents
+;  (package-refresh-contents))
+;(package-initialize)
+
 
 
 (setq load-prefer-newer t)
@@ -32,12 +33,9 @@
 ;; skk config(use default package.el)
 (unless (package-installed-p 'ddskk)
   (package-install 'ddskk))
-(package-initialize)
 (setq default-input-method "japanese-skk")
 
 ;; skk dict, setting files
 (setq skk-user-directory "~/.emacs.d/skk")
 (setq skk-get-jisyo-directory "~/.emacs.d/skk/dict")
 (setq skk-init-file "~/.emacs.d/elisp/initskk.el")
-
-(require 'skk-study)
