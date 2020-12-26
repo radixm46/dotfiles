@@ -31,7 +31,7 @@ if hash pyenv 2>/dev/null; then
     eval "$(pyenv init -)"
 fi
 
-    # configure node environment
+# configure node environment
 if hash node 2>/dev/null; then
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
 fi
