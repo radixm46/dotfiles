@@ -149,24 +149,7 @@ elif is_available putclip; then
 fi
 
 # ------------------------------------------------------------------------------
-# Prompt config
-# minimal
-# PROMPT="%~ %# "
-
-# P_LOGIN=$'\U23FB'
-# P_COMPUTER=$'\U1F5B5 '
-#P_BEGIN=$'\U2599\U259E\U259A\U2596\U259D\U2598'
-# P_BEGIN=$'\U1F67E  \U2596'
-# P_BEGINR=$'\U2596  \U1F67E'
-# P_MIDTEX=$'\U2593\U2592\U2591'
-# P_MIDTEXR=$'\U2591\U2592\U2593'
-# P_DIR=$'\U1F5BF' #$'\U1F5BF'
-#P_END=$'\U2599\U259E\U259A\U2596\U259D\U2598'
-# P_END=$'\U1F67F \U259D'
-# P_ENDR=$'\U2598\U2597 \U1F67F'
-P_PROM='' #$'\U259B\U259F'
-# P_GITBRANCH=$'\UE0A0'
-# P_VCSICO=$'\U1F5D8'
+P_PROM=''
 
 # with nerd fonts
 P_LOGIN=$'\UF2BD'
