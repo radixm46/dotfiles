@@ -25,8 +25,8 @@ fi
 
 # configure pyenv
 if hash pyenv 2>/dev/null; then
-    PYENV_ROOT="${HOME}/.pyenv"
-    path=($PYENV_ROOT(N-/) $path)
+    # PYENV_ROOT="${HOME}/.pyenv"
+    # path=($PYENV_ROOT/bin(N-/) $path)
     export PIPENV_VENV_IN_PROJECT=true
     eval "$(pyenv init -)"
 fi
