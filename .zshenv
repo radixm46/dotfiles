@@ -37,18 +37,20 @@ case "$(uname)" in
         ;;
 esac
 
+function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
+
 # check stack installed and add path
-if hash stack 2>/dev/null; then
+if is_available stack; then
     path=($(stack path --local-bin)(N-/) $path)
 fi
 
 # check rust environment
-if hash cargo 2>/dev/null && [[ -d $HOME/.cargo/bin ]]; then
+if [[ -d $HOME/.cargo/bin ]]; then
     path=("$HOME/.cargo/bin"(N-/) $path)
 fi
 
 # configure pyenv
-if hash pyenv 2>/dev/null; then
+if is_available pyenv; then
     # PYENV_ROOT="${HOME}/.pyenv"
     # path=($PYENV_ROOT/bin(N-/) $path)
     export PIPENV_VENV_IN_PROJECT=true
@@ -56,6 +58,6 @@ if hash pyenv 2>/dev/null; then
 fi
 
 # configure node environment
-if hash node 2>/dev/null && [[ -d $HOME/.npm-global ]]; then
+if is_available npm && [[ -d $HOME/.npm-global ]]; then
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
 fi

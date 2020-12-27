@@ -101,7 +101,6 @@ bindkey -v  # use vim style keybinding
 
 # ------------------------------------------------------------------------------
 # alias
-function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
 
 case ${OSTYPE} in
     darwin*)
@@ -165,7 +164,7 @@ P_PROM=''
 P_LOGIN=$'\UF2BD'
 case $(uname) in
     Darwin)
-        if [[ $(uname -m) == x86_64 ]]; then
+        if runs_onX86_64; then
             P_COMPUTER=$'\UF302 \UF129'
         else
             P_COMPUTER=$'\UF302'
