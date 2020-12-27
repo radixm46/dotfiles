@@ -18,7 +18,7 @@ ignore-empty-password
 # no-unlock-indicator
 # Disable the unlock indicator.
 
-image=${HOME}/dotfiles/img/bglock
+image=${HOME}/swayimg/bglock
 # configure symlink to path above
 # image [[<output>]:]<path>
 # Display the given image, optionally only on the given output. Use
