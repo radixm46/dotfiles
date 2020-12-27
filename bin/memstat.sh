@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # display current memory in GB
 nerdmem="\UF85A"
 case $(uname) in
