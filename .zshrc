@@ -154,6 +154,10 @@ elif is_available putclip; then
     alias -g C='| putclip'
 fi
 
+if is_available emacs; then
+    alias emacsd='(emacs --bg-daemon &)'
+fi
+
 # ------------------------------------------------------------------------------
 P_PROM=''
 
