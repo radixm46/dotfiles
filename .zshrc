@@ -106,21 +106,21 @@ function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
 case ${OSTYPE} in
     darwin*)
         if is_available exa; then
-            LSCOM="exa"
-            alias ls='${LSCOM} -F --color=auto'
+            LSCOM='exa'
+            alias ls="${LSCOM} -F --color=auto"
         else
-            LSCOM="ls"
+            LSCOM='ls'
             export CLICOLOR=1
-            alias ls='ls -G -F'
+            alias ls="${LSCOM} -G -F"
         fi
         ;;
     linux*)
         if is_available exa; then
-            LSCOM="exa"
+            LSCOM='exa'
         else
-            LSCOM="ls"
+            LSCOM='ls'
         fi
-        alias ls='${LSCOM} -F --color=auto'
+        alias ls="${LSCOM} -F --color=auto"
         ;;
 esac
 
@@ -178,6 +178,7 @@ case $(uname) in
         P_COMPUTER=$'\UF841'
         ;;
 esac
+
 P_BEGINR=$'\UE0C7'
 P_BEGIN=$'\UE0C6'
 P_MIDTEX=$'\UE0C4'

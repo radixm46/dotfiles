@@ -2,10 +2,10 @@ typeset -U path PATH
 
 case "$(uname)" in
     Darwin)
-        BREW_PATH_OPT="/opt/homebrew/bin"
-        BREW_PATH_LOCAL="/usr/local/bin"
         function runs_onArm64() { [ $(uname -m) = 'arm64' ]; }
         function runs_onX86_64() { [ $(uname -m) = 'x86_64' ]; }
+        BREW_PATH_OPT='/opt/homebrew/bin'
+        BREW_PATH_LOCAL='/usr/local/bin'
         function brew_exists_on_opt() { [[ -d $BREW_PATH_OPT ]]; }
         function brew_exists_on_local() { [[ -d $BREW_PATH_LOCAL ]]; }
 
