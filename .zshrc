@@ -154,7 +154,8 @@ elif is_available putclip; then
 fi
 
 if is_available emacs; then
-    function emacsd() {emacs --bg-daemon=$@ &;}
+    alias emacsd='( emacs --bg-daemon & )'
+    function emacsdn() { (emacs --bg-daemon=$@ &); }
 fi
 
 # ------------------------------------------------------------------------------
