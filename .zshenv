@@ -13,11 +13,13 @@ case "$(uname)" in
         path=($path /usr/sbin /sbin) # init path
 
         # switch homebrew dir by arch
-        if  runs_onArm64 && brew_exists_on_opt; then
-            if  brew_exists_on_local; then
+        if runs_onArm64; then
+            if brew_exists_on_opt && brew_exists_on_local; then
                 path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
                 function onr() { $BREW_PATH_LOCAL/$@; }
-            else
+            elif brew_exists_on_local; then
+                path=($BREW_PATH_LOCAL(N-/) $path)
+            elif brew_exists_on_opt; then
                 path=($BREW_PATH_OPT(N-/) $path)
             fi
         elif runs_onX86_64 && brew_exists_on_local; then
