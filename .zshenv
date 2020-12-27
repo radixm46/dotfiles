@@ -2,13 +2,38 @@ typeset -U path PATH
 
 case "$(uname)" in
     Darwin)
+        BREW_PATH_OPT="/opt/homebrew/bin"
+        BREW_PATH_LOCAL="/usr/local/bin"
+        function runs_onArm64() { [ $(uname -m) = 'arm64' ]; }
+        function runs_onX86_64() { [ $(uname -m) = 'x86_64' ]; }
+        function brew_exists_on_opt() { [[ -d $BREW_PATH_OPT ]]; }
+        function brew_exists_on_local() { [[ -d $BREW_PATH_LOCAL ]]; }
+
         setopt no_global_rcs #disable path helper
-        path=("/usr/local/bin"(N-/) $path /usr/sbin /sbin)
+        path=($path /usr/sbin /sbin) # init path
+
+        # switch homebrew dir by arch
+        if runs_onArm64; then
+            if brew_exists_on_opt && brew_exists_on_local; then
+                path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
+                function onr() { $BREW_PATH_LOCAL/$@; }
+            elif brew_exists_on_local; then
+                path=($BREW_PATH_LOCAL(N-/) $path)
+            elif brew_exists_on_opt; then
+                path=($BREW_PATH_OPT(N-/) $path)
+            fi
+        elif runs_onX86_64 && brew_exists_on_local; then
+            path=($BREW_PATH_LOCAL(N-/) $path)
+        fi
 
         if [[ -d /Applications/MacVim.app ]]; then
             alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
             alias vi=vim
         fi
+        # export CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
+        # export LDFLAGS="-L/usr/local/opt/zlib/lib"
+        # export CPPFLAGS="-I/usr/local/opt/zlib/include"
+
         ;;
 esac
 
