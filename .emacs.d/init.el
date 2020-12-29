@@ -209,6 +209,15 @@
 (use-package flycheck
  :ensure t)
 
+(use-package company
+    :ensure t
+    :config
+    (global-company-mode)
+    (setq company-idle-delay 0)
+    (setq company-selection-wrap-around t)
+    (setq completion-ignore-case t)
+    )
+
 (use-package ace-window
   :ensure t
   :bind
