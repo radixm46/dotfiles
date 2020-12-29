@@ -69,23 +69,15 @@
     :hook (lsp-mode . lsp-ui-mode))
 
   ;; Lsp completion
-  (use-package company-lsp
-    :ensure t
-    :config
-    (use-package company
-      :ensure t
-      :config
-      (global-company-mode)
-      (setq company-idle-delay 0)
-      (setq company-selection-wrap-around t)
-      (setq completion-ignore-case t)
-      ) ; completion
-    :custom
-    (company-lsp-cache-candidates t) ;; always using cache
-    (company-lsp-async t)
-    (company-lsp-enable-recompletion nil)
-    :commands company-lsp
-    )
+  ;(use-package company-lsp
+  ;  :ensure t
+  ;  :config
+  ;  :custom
+  ;  (company-lsp-cache-candidates t) ;; always using cache
+  ;  (company-lsp-async t)
+  ;  (company-lsp-enable-recompletion nil)
+  ;  :commands company-lsp
+  ;  )
  )
 
 (use-package lsp-treemacs
