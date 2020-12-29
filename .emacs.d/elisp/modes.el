@@ -322,4 +322,6 @@
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.jsx\\'" . js2-mode))
+  :config
+  (setq js2-basic-offset 2)
 )
