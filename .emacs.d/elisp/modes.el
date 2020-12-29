@@ -89,6 +89,7 @@
         ("C-x t M-t" . treemacs-find-tag))
 
   :config
+  ; treemacs integrations
   (use-package treemacs-evil
     :ensure t
     :after (treemacs evil)
@@ -96,20 +97,18 @@
     (define-key evil-treemacs-state-map (kbd "TAB") #'treemacs-TAB-action)
     ;fix tab action
     )
-
   (use-package treemacs-magit
     :ensure t
     :after (treemacs magit))
+  (use-package treemacs-projectile
+    :after treemacs projectile
+    :ensure t)
+  (use-package treemacs-icons-dired
+    :after treemacs dired
+    :ensure t
+    :config (treemacs-icons-dired-mode))
 )
 
-;(use-package treemacs-projectile
-;  :after treemacs projectile
-;  :ensure t)
-
-;(use-package treemacs-icons-dired
-;  :after treemacs dired
-;  :ensure t
-;  :config (treemacs-icons-dired-mode))
 
 ;(use-package treemacs-persp ;;treemacs-persective if you use perspective.el vs. persp-mode
 ;  :after treemacs persp-mode ;;or perspective vs. persp-mode
