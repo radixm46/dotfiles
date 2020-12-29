@@ -4,25 +4,26 @@ case "$(uname)" in
     Darwin)
         BREW_PATH_OPT='/opt/homebrew/bin'
         BREW_PATH_LOCAL='/usr/local/bin'
-        function runs_onArm64() { [[ $(uname -m) = 'arm64' ]]; }
-        function runs_onX86_64() { [[ $(uname -m) = 'x86_64' ]]; }
-        function brew_exists_on_opt() { [[ -d $BREW_PATH_OPT ]]; }
-        function brew_exists_on_local() { [[ -d $BREW_PATH_LOCAL ]]; }
+        function runs_on_ARM64() { [[ $(uname -m) = 'arm64' ]]; }
+        function runs_on_X86_64() { [[ $(uname -m) = 'x86_64' ]]; }
+        function brew_exists_at_opt() { [[ -d $BREW_PATH_OPT ]]; }
+        function brew_exists_at_local() { [[ -d $BREW_PATH_LOCAL ]]; }
 
         setopt no_global_rcs #disable path helper
         path=($path /usr/sbin /sbin) # init path
 
         # switch homebrew dir by arch
-        if runs_onArm64; then
-            if brew_exists_on_opt && brew_exists_on_local; then
+        if runs_on_ARM64; then
+            if brew_exists_at_opt && brew_exists_at_local; then
                 path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
                 function onr() { $BREW_PATH_LOCAL/$@; }
-            elif brew_exists_on_local; then
+                alias rzsh='onr zsh'
+            elif brew_exists_at_local; then
                 path=($BREW_PATH_LOCAL(N-/) $path)
-            elif brew_exists_on_opt; then
+            elif brew_exists_at_opt; then
                 path=($BREW_PATH_OPT(N-/) $path)
             fi
-        elif runs_onX86_64 && brew_exists_on_local; then
+        elif runs_on_X86_64 && brew_exists_at_local; then
             path=($BREW_PATH_LOCAL(N-/) $path)
         fi
 
