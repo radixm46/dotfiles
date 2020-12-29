@@ -164,7 +164,7 @@ P_PROM=''
 P_LOGIN=$'\UF2BD'
 case $(uname) in
     Darwin)
-        if runs_onX86_64; then
+        if runs_on_X86_64; then
             P_COMPUTER=$'\UF302 \UF129'
         else
             P_COMPUTER=$'\UF302'
