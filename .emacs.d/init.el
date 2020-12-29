@@ -37,8 +37,20 @@
   (require 'mouse)
   (xterm-mouse-mode t)
   (defun track-mouse (e))
-  (setq mouse-sel-mode t)
-)
+  (setq mouse-sel-mode t))
+
+
+; control line spacing
+(setq-default line-spacing 0.25)
+
+(defun sw-lnsp (wdth)
+  (interactive "nset line spacing: ")
+  (setq line-spacing wdth)
+  )
+(defun dbl-lnsp ()
+  (interactive)
+  (setq line-spacing 2.0)
+  )
 
 ;; log
 (setq message-log-maxa 10000)
