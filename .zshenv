@@ -14,16 +14,12 @@ case "$(uname)" in
 
         # switch homebrew dir by arch
         if runs_on_ARM64; then
+            path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
             if brew_exists_at_opt && brew_exists_at_local; then
-                path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
                 function onr() { $BREW_PATH_LOCAL/$@; }
                 alias rzsh='onr zsh'
-            elif brew_exists_at_local; then
-                path=($BREW_PATH_LOCAL(N-/) $path)
-            elif brew_exists_at_opt; then
-                path=($BREW_PATH_OPT(N-/) $path)
             fi
-        elif runs_on_X86_64 && brew_exists_at_local; then
+        elif runs_on_X86_64; then
             path=($BREW_PATH_LOCAL(N-/) $path)
         fi
 
@@ -46,9 +42,7 @@ if is_available stack; then
 fi
 
 # check rust environment
-if [[ -d $HOME/.cargo/bin ]]; then
-    path=("$HOME/.cargo/bin"(N-/) $path)
-fi
+path=("$HOME/.cargo/bin"(N-/) $path)
 
 # configure pyenv
 if is_available pyenv; then
