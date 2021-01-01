@@ -57,4 +57,5 @@ fi
 # configure node environment
 if is_available npm && [[ -d $HOME/.npm-global ]]; then
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
+    path=($NPM_CONFIG_PREFIX/bin(N-/) $path)
 fi
