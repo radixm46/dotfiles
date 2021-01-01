@@ -32,7 +32,7 @@
 (scroll-bar-mode -1)
 (display-time)
 
-;; ITERM2 MOUSE SUPPORT
+;; mouse support on terminal
 (unless window-system
   (require 'mouse)
   (xterm-mouse-mode t)
