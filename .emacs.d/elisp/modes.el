@@ -115,24 +115,6 @@
 ;  :ensure t
 ;  :config (treemacs-set-scope-type 'Perspectives))
 
-(use-package nyan-mode
-  :ensure t
-  :init (nyan-mode)
-  :config
-  (defun nyan-try ()
-    (nyan-stop-animation)
-    (setq nyan-wavy-trail nil)
-    )
-  (defun nyan-xit ()
-    (nyan-start-animation)
-    (setq nyan-wavy-trail t)
-    )
-  :hook
-  ((evil-normal-state-entry . nyan-try)
-   (evil-normal-state-exit . nyan-xit)
-  )
-)
-
 ;; required for racer
 (use-package rust-mode
   :ensure t

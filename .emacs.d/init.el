@@ -108,6 +108,25 @@
   (setq evil-undo-system 'undo-tree)
 )
 
+(use-package nyan-mode
+  :ensure t
+  :init (nyan-mode)
+  :config
+  (defun nyan-try ()
+    (nyan-stop-animation)
+    (setq nyan-wavy-trail nil)
+    )
+  (defun nyan-xit ()
+    (nyan-start-animation)
+    (setq nyan-wavy-trail t)
+    )
+  (nyan-xit)
+  :hook
+  ((evil-normal-state-entry . nyan-try)
+   (evil-normal-state-exit . nyan-xit)
+  )
+)
+
 
 ; ---------- loading doom theme  ----------
 (load "~/.emacs.d/elisp/doom.el")
