@@ -1,13 +1,17 @@
 typeset -U path PATH
 
+function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
+
 case "$(uname)" in
     Darwin)
-        BREW_PATH_OPT='/opt/homebrew/bin'
-        BREW_PATH_LOCAL='/usr/local/bin'
         function runs_on_ARM64() { [[ $(uname -m) = 'arm64' ]]; }
         function runs_on_X86_64() { [[ $(uname -m) = 'x86_64' ]]; }
-        function brew_exists_at_opt() { [[ -d $BREW_PATH_OPT ]]; }
-        function brew_exists_at_local() { [[ -d $BREW_PATH_LOCAL ]]; }
+
+        BREW_PATH_OPT='/opt/homebrew/bin'
+        BREW_PATH_LOCAL='/usr/local/bin'
+        function brew_exists_at_opt() { [[ -d ${BREW_PATH_OPT} ]]; }
+        function brew_exists_at_local() { [[ -d ${BREW_PATH_LOCAL} ]]; }
+
 
         setopt no_global_rcs #disable path helper
         path=($path /usr/sbin /sbin) # init path
@@ -33,8 +37,6 @@ case "$(uname)" in
 
         ;;
 esac
-
-function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
 
 # check stack installed and add path
 if is_available stack; then
