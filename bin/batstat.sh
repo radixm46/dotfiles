@@ -54,29 +54,27 @@ case $(uname) in
         # check if battery is available
         batpath="/sys/class/power_supply/BAT0"
         if [[ -d ${batpath} ]]; then
+            bat_cap=${batpath}/capacity
             case $(<${batpath}/status) in
-                Charging)
-                    battery_stat="\UF587"
+                'Charging')
+                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} true) ${bat_cap}%%"
                 ;;
-                Discharging)
-                    battery_stat="\UF57D"
+                'Discharging')
+                    printf "${pwr_discn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
                     ;;
-                Full)
-                    battery_stat="\UF578"
+                'Full')
+                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
                     ;;
-                "Not charging")
-                    battery_stat="\UF57D"
+                'Not charging')
+                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
                     ;;
-                *)
-                    battery_stat="\UF590"
+                'Unknown')
+                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
                     ;;
             esac
-
-            printf ${battery_stat}\ $(< ${batpath}/capacity)'%%'
         else
             printf "\UFBA3"\ "\UF590"
         fi
-
         ;;
     *)
         printf "\UF00D"
