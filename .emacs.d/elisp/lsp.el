@@ -13,6 +13,7 @@
       ;(XXX-mode . lsp)
       ; if you want which-key integration
       (lsp-mode . lsp-enable-which-key-integration)
+      (sh-mode . lsp)
      )
   :commands lsp
   :bind
