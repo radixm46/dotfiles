@@ -1,31 +1,25 @@
 #!/usr/bin/env bash
 
 # print charging battery sign from nerd fonts
-function print_chrg_batt {
-    # nerd fonts charging bat stat array (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
-    charging_bat_arr=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
-                               '\UF588' '\UF589' '\UF58A'  '\UF584' '\UF578')
-    bat_idx=$(expr $1 / 10)
+# (arg1: bool(charging), arg2: int(capacity))
+function print_batt_sign() {
+    if [[ $1 == true ]]; then
+        # nerd fonts charging bat stat array (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
+        batt_signs=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
+                            '\UF588' '\UF588' '\UF589' '\UF58A' '\UF584')
+    else
+        # nerd fonts non charging bat stat array (00 to 100)
+        batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
+                                    '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
+    fi
+
+    bat_idx=$(expr $2 / 10)
     if ((0 <= ${bat_idx})) && ((${bat_idx} <= 10)); then
-        printf ${non_charging_bat_arr[bat_idx]}
+        printf ${batt_signs[bat_idx]}
     else
         printf '\UF582'
     fi
 }
-
-# print non charging battery sign from nerd fonts
-function print_non_chrg_batt() {
-    # nerd fonts non charging bat stat array (00 to 100)
-    non_charging_bat_arr=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
-                                   '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
-    bat_idx=$(expr $1 / 10)
-    if ((0 <= ${bat_idx})) && ((${bat_idx} <= 10)); then
-        printf ${non_charging_bat_arr[bat_idx]}
-    else
-        printf '\UF582'
-    fi
-}
-
 pwr_conn='\UFBA3'
 pwr_discn='\UFBA4'
 
@@ -33,25 +27,28 @@ pwr_discn='\UFBA4'
 
 case $(uname) in
     Darwin)
-        function print_batt_stat() {
-            case "$1" in
+        function print_mac_batt_stat() {
+            case "$2" in
+                'AC')
+                    printf "${pwr_conn} $(print_batt_sign false $1) $1%%"
+                        ;;
                 'charging')
-                    printf "${pwr_conn} $(print_chrg_batt $2) $2%%"
+                    printf "${pwr_conn} $(print_batt_sign true $1) $1%%"
                         ;;
                 'discharging')
-                    printf "${pwr_discn} $(print_non_chrg_batt $2) $2%%"
+                    printf "${pwr_discn} $(print_batt_sign false $1) $1%%"
                         ;;
                 'charged')
-                    printf "${pwr_discn} $(print_non_chrg_batt $2) $2%%"
+                    printf "${pwr_discn} $(print_batt_sign false $1) $1%%"
                         ;;
                 *)
-                    printf "$(print_non_chrg_batt $2) $2%%"
+                    printf "${pwr_conn} $(print_batt_sign false $1) $1%%"
                         ;;
             esac
         }
-        print_batt_stat $(pmset -g batt | \
-                              awk 'NR==2{print($4 $3)}' | \
-                              sed -e 's/;/\ /g' -e 's/%//')
+        print_mac_batt_stat $(pmset -g batt | \
+                              awk 'NR==2{print($3 $4)}' | \
+                              sed -e 's/;//g' -e 's/%/\ /')
         ;;
     Linux*)
         # check if battery is available
