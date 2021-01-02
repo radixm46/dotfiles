@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
 # print charging battery sign from nerd fonts
-# (arg1: bool(charging), arg2: int(capacity))
-function print_batt_sign() {
-    if [[ $1 == true ]]; then
-        # nerd fonts charging bat stat array (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
+# (arg1: int(battery capacity), arg2: bool(charging status))
+function pr_batt_sign() {
+    if $2; then
+        # nerd fonts charging batt signs (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
         batt_signs=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
                             '\UF588' '\UF588' '\UF589' '\UF58A' '\UF584')
     else
-        # nerd fonts non charging bat stat array (00 to 100)
+        # nerd fonts non charging batt signs (00 to 100)
         batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
-                                    '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
+                             '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
     fi
+    bat_idx=$(expr $1 / 10)
 
-    bat_idx=$(expr $2 / 10)
     if ((0 <= ${bat_idx})) && ((${bat_idx} <= 10)); then
         printf ${batt_signs[bat_idx]}
     else
@@ -30,19 +30,19 @@ case $(uname) in
         function print_mac_batt_stat() {
             case "$2" in
                 'AC')
-                    printf "${pwr_conn} $(print_batt_sign false $1) $1%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
                         ;;
                 'charging')
-                    printf "${pwr_conn} $(print_batt_sign true $1) $1%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 true) $1%%"
                         ;;
                 'discharging')
-                    printf "${pwr_discn} $(print_batt_sign false $1) $1%%"
+                    printf "${pwr_discn} $(pr_batt_sign $1 false) $1%%"
                         ;;
                 'charged')
-                    printf "${pwr_discn} $(print_batt_sign false $1) $1%%"
+                    printf "${pwr_discn} $(pr_batt_sign $1 false) $1%%"
                         ;;
                 *)
-                    printf "${pwr_conn} $(print_batt_sign false $1) $1%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
                         ;;
             esac
         }
