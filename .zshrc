@@ -14,7 +14,7 @@ if [ ! -d $ZINITDIR ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 fi
 
-source $HOME/.zinit/bin/zplugin.zsh
+source "${HOME}/.zinit/bin/zplugin.zsh"
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 
@@ -102,19 +102,21 @@ bindkey -v  # use vim style keybinding
 # ------------------------------------------------------------------------------
 # alias
 
+# define 'ls' default command
+LSCOM='ls'
+
 case ${OSTYPE} in
     darwin*)
-        if is_available exa; then
+        if is_available 'exa'; then
             LSCOM='exa'
             alias ls="${LSCOM} -F --color=auto"
         else
-            LSCOM='ls'
             export CLICOLOR=1
             alias ls="${LSCOM} -G -F"
         fi
         ;;
     linux*)
-        if is_available exa; then
+        if is_available 'exa'; then
             LSCOM='exa'
         else
             LSCOM='ls'
@@ -132,7 +134,7 @@ alias mv='mv -i'
 
 alias mkdir='mkdir -p'
 
-if is_available fd; then
+if is_available 'fd'; then
     alias find='fd'
 fi
 
@@ -153,7 +155,8 @@ elif is_available putclip; then
     alias -g C='| putclip'
 fi
 
-if is_available emacs; then
+if is_available 'emacs'; then
+    # launch emacs daemon background and forked
     function emacsd() { (emacs --bg-daemon=$@ &); }
 fi
 
@@ -162,21 +165,7 @@ P_PROM=''
 
 # with nerd fonts
 P_LOGIN=$'\UF2BD'
-case $(uname) in
-    Darwin)
-        if runs_on_X86_64; then
-            P_COMPUTER=$'\UF302 \UF129'
-        else
-            P_COMPUTER=$'\UF302'
-        fi
-        ;;
-    Linux*)
-        P_COMPUTER=$'\UF83C'
-        ;;
-    *)
-        P_COMPUTER=$'\UF841'
-        ;;
-esac
+P_COMPUTER=$(print_os_glyph)
 
 P_BEGINR=$'\UE0C7'
 P_BEGIN=$'\UE0C6'
@@ -222,34 +211,10 @@ function _update_vcs_info_msg() {
 add-zsh-hook precmd _update_vcs_info_msg
 # ------------------------------------------------------------------------------
 
-get_weather() {
-    local format=""
-    while getopts d:l:sf: option
-    do
-        case ${option} in
-            d) local days="${OPTARG}"  # TODO: chack value(0-3)
-                ;;
-            l) local lang_='&lang='"${OPTARG}"
-                ;;
-            s) local format='&format=%l:+%c++%t++%w++%p++%P'
-                ;;
-            f) local format='&format='"${OPTARG}"
-                ;;
-        esac
-    done
-
-    shift $((OPTIND - 1))
-    local target_loc="$1"
-
-    curl -s 'wttr.in/'"${target_loc}"\?"${days:=1}"'qA'"${lang_}""${format:=}"
-}
-
 alias -g wttr='get_weather'
-
 
 # ------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
-function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
 function is_screen_running() { [ ! -z "$STY" ]; }
 function is_tmux_runnning() { [ ! -z "$TMUX" ]; }
@@ -257,10 +222,11 @@ function is_screen_or_tmux_running() { is_screen_running || is_tmux_runnning; }
 function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
 function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 
+# detect if tmux is running and attach
 function tmux_automatically_attach_session()
 {
     if is_screen_or_tmux_running; then
-        ! is_exists 'tmux' && return 1
+        ! is_available 'tmux' && return 1
 
         if is_tmux_runnning; then
             echo ""
@@ -274,7 +240,7 @@ function tmux_automatically_attach_session()
         fi
     else
         if shell_has_started_interactively && ! is_ssh_running; then
-            if ! is_exists 'tmux'; then
+            if ! is_available 'tmux'; then
                 echo 'Error: tmux command not found' 2>&1
                 return 1
             fi
@@ -299,7 +265,7 @@ function tmux_automatically_attach_session()
                 fi
             fi
 
-            if is_osx && is_exists 'reattach-to-user-namespace'; then
+            if is_osx && is_available 'reattach-to-user-namespace'; then
                 # on OS X force tmux's default command
                 # to spawn a shell in the user's namespace
                 tmux_config=$(cat $HOME/.tmux.conf <(echo 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'))
