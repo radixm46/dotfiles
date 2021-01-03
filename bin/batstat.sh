@@ -78,7 +78,7 @@ case $(uname) in
         elif [[ -d ${batpath_1} ]]; then
             print_batt_stat $(<${batpath_1}/capacity) $(<${batpath_1}/status)
         else
-            printf "\UFBA3"\ "\UF590"
+            printf ${pwr_conn}\ "\UF590"
         fi
         ;;
     *)
