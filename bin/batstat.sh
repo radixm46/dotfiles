@@ -51,27 +51,32 @@ case $(uname) in
                               sed -e 's/;//g' -e 's/%/\ /')
         ;;
     Linux*)
-        # check if battery is available
-        batpath="/sys/class/power_supply/BAT0"
-        if [[ -d ${batpath} ]]; then
-            bat_cap=$(cat ${batpath}/capacity)
-            case $(<${batpath}/status) in
+        function print_batt_stat () {
+            case "$2" in
                 'Charging')
-                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} true) ${bat_cap}%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 true) $1%%"
                 ;;
                 'Discharging')
-                    printf "${pwr_discn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
+                    printf "${pwr_discn} $(pr_batt_sign $1 false) $1%%"
                     ;;
                 'Full')
-                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
                     ;;
                 'Not charging')
-                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
                     ;;
                 'Unknown')
-                    printf "${pwr_conn} $(pr_batt_sign ${bat_cap} false) ${bat_cap}%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
                     ;;
             esac
+        }
+        batpath_0="/sys/class/power_supply/BAT0"
+        batpath_1="/sys/class/power_supply/BAT1"
+        # check if battery is available
+        if [[ -d ${batpath_0} ]]; then
+            print_batt_stat $(<${batpath_0}/capacity) $(<${batpath_0}/status)
+        elif [[ -d ${batpath_1} ]]; then
+            print_batt_stat $(<${batpath_1}/capacity) $(<${batpath_1}/status)
         else
             printf "\UFBA3"\ "\UF590"
         fi
