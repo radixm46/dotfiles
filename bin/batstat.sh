@@ -54,7 +54,7 @@ case $(uname) in
         # check if battery is available
         batpath="/sys/class/power_supply/BAT0"
         if [[ -d ${batpath} ]]; then
-            bat_cap=${batpath}/capacity
+            bat_cap=$(cat ${batpath}/capacity)
             case $(<${batpath}/status) in
                 'Charging')
                     printf "${pwr_conn} $(pr_batt_sign ${bat_cap} true) ${bat_cap}%%"
