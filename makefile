@@ -29,7 +29,6 @@ install:
 
 link-all: \
     check-env \
-    link-vim \
     link-neovim \
     link-swayenv \
     link-emacs \
@@ -40,7 +39,6 @@ link-all: \
 
 link-all-core: \
     check-env \
-    link-vim \
     link-neovim \
     link-emacs \
     link-shellenv \
