@@ -172,9 +172,7 @@ function generate_prompt() {
     local P_BEGINR=$'\UE0C7'
     local P_BEGIN=$'\UE0C6'
     local P_MIDTEX=$'\UE0C4'
-    local P_MIDTEXR=$'\UE0C5'
     local P_END=$'\UE0C6'
-    local P_ENDR=$'\UE0C7'
     local P_DIR=$'\UF07C'
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
@@ -195,18 +193,24 @@ generate_prompt
 # vcs_info
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
-P_GITBRANCH=$'\UF418'
-P_VCSICO=$'\UF7A1'
 
-zstyle ':vcs_info:*' formats \
+function define_vcs_prompt_style {
+    local P_GITBRANCH=$'\UF418'
+    local P_VCSICO=$'\UF7A1'
+    local P_ENDR=$'\UE0C7'
+    local P_MIDTEXR=$'\UE0C5'
+
+    zstyle ':vcs_info:*' formats \
 "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
 
-zstyle ':vcs_info:*' actionformats \
+    zstyle ':vcs_info:*' actionformats \
 "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
+}
+define_vcs_prompt_style
 
 function _update_vcs_info_msg() {
     LANG=en_US.UTF-8 vcs_info
