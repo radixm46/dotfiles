@@ -176,8 +176,6 @@ function generate_prompt() {
     local P_END=$'\UE0C6'
     local P_ENDR=$'\UE0C7'
     local P_DIR=$'\UF07C'
-    local P_GITBRANCH=$'\UF418'
-    local P_VCSICO=$'\UF7A1'
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
@@ -197,6 +195,8 @@ generate_prompt
 # vcs_info
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
+P_GITBRANCH=$'\UF418'
+P_VCSICO=$'\UF7A1'
 
 zstyle ':vcs_info:*' formats \
 "%F{black}${P_MIDTEXR}\
