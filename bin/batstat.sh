@@ -39,7 +39,7 @@ case $(uname) in
                     printf "${pwr_discn} $(pr_batt_sign $1 false) $1%%"
                         ;;
                 'charged')
-                    printf "${pwr_discn} $(pr_batt_sign $1 false) $1%%"
+                    printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
                         ;;
                 *)
                     printf "${pwr_conn} $(pr_batt_sign $1 false) $1%%"
