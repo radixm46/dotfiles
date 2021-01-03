@@ -70,17 +70,17 @@ case $(uname) in
                     ;;
             esac
         }
-        batpath_0="/sys/class/power_supply/BAT0"
-        batpath_1="/sys/class/power_supply/BAT1"
+        batpath_0='/sys/class/power_supply/BAT0'
+        batpath_1='/sys/class/power_supply/BAT1'
         # check if battery is available
         if [[ -d ${batpath_0} ]]; then
             print_batt_stat $(<${batpath_0}/capacity) $(<${batpath_0}/status)
         elif [[ -d ${batpath_1} ]]; then
             print_batt_stat $(<${batpath_1}/capacity) $(<${batpath_1}/status)
         else
-            printf ${pwr_conn}\ "\UF590"
+            printf ${pwr_conn}\ '\UF590'
         fi
         ;;
     *)
-        printf "\UF00D"
+        printf '\UF00D'
 esac
