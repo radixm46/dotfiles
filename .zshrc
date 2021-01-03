@@ -103,30 +103,33 @@ bindkey -v  # use vim style keybinding
 # alias
 
 # define 'ls' default command
-LSCOM='ls'
-
-case ${OSTYPE} in
-    darwin*)
-        if is_available 'exa'; then
-            LSCOM='exa'
+function alias_ls() {
+    local LSCOM='ls'
+    case ${OSTYPE} in
+        darwin*)
+            if is_available 'exa'; then
+                LSCOM='exa'
+                alias ls="${LSCOM} -F --color=auto"
+            else
+                export CLICOLOR=1
+                alias ls="${LSCOM} -G -F"
+            fi
+            ;;
+        linux*)
+            if is_available 'exa'; then
+                LSCOM='exa'
+            else
+                LSCOM='ls'
+            fi
             alias ls="${LSCOM} -F --color=auto"
-        else
-            export CLICOLOR=1
-            alias ls="${LSCOM} -G -F"
-        fi
-        ;;
-    linux*)
-        if is_available 'exa'; then
-            LSCOM='exa'
-        else
-            LSCOM='ls'
-        fi
-        alias ls="${LSCOM} -F --color=auto"
-        ;;
-esac
+            ;;
+    esac
 
-alias la="${LSCOM} -a"
-alias ll="${LSCOM} -l"
+    alias la="${LSCOM} -a"
+    alias ll="${LSCOM} -l"
+}
+
+alias_ls
 
 alias rm='rm -i'
 alias cp='cp -i'
@@ -161,22 +164,21 @@ if is_available 'emacs'; then
 fi
 
 # ------------------------------------------------------------------------------
-P_PROM=''
-
-# with nerd fonts
-P_LOGIN=$'\UF2BD'
-P_COMPUTER=$(print_os_glyph)
-
-P_BEGINR=$'\UE0C7'
-P_BEGIN=$'\UE0C6'
-P_MIDTEX=$'\UE0C4'
-P_MIDTEXR=$'\UE0C5'
-P_END=$'\UE0C6'
-P_ENDR=$'\UE0C7'
-P_DIR=$'\UF07C'
-P_GITBRANCH=$'\UF418'
-P_VCSICO=$'\UF7A1'
-PROMPT="\
+function generate_prompt() {
+    local P_PROM=''
+    # with nerd fonts
+    local P_LOGIN=$'\UF2BD'
+    local P_COMPUTER=$(print_os_glyph)
+    local P_BEGINR=$'\UE0C7'
+    local P_BEGIN=$'\UE0C6'
+    local P_MIDTEX=$'\UE0C4'
+    local P_MIDTEXR=$'\UE0C5'
+    local P_END=$'\UE0C6'
+    local P_ENDR=$'\UE0C7'
+    local P_DIR=$'\UF07C'
+    local P_GITBRANCH=$'\UF418'
+    local P_VCSICO=$'\UF7A1'
+    PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
@@ -188,6 +190,8 @@ PROMPT="\
 %{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}%# "
+}
+generate_prompt
 
 # ------------------------------------------------------------------------------
 # vcs_info
