@@ -79,7 +79,7 @@ case "$(uname)" in
                 alias arm='arch -arm64'
                 # wrap emacs
                 if is_available 'emacs'; then
-                    alias emacs="x86 'emacs'"
+                    alias emacs='x86 emacs'
                 fi
                 # launch zsh on local brew
                 alias rzsh='lbr zsh'
