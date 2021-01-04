@@ -74,15 +74,17 @@ case "$(uname)" in
                 # use local brew dir
                 function lbr() { ${BREW_PATH_LOCAL}/$@; }
                 # launch on rosetta2
-                alias x86='arch -x86_64'
+                function x86() { arch -x86_64 $@; }
                 # launch on arm (native)
-                alias arm='arch -arm64'
+                function arm() { arch -arm64 $@; }
                 # wrap emacs
                 if is_available 'emacs'; then
                     alias emacs='x86 emacs'
                 fi
                 # launch zsh on local brew
-                alias rzsh='lbr zsh'
+                if [[ -e "${BREW_PATH_LOCAL}/zsh" ]]; then
+                    function rzsh() { "${BREW_PATH_LOCAL}/zsh"; }
+                fi
             fi
         elif runs_on_X86_64; then
             path=(${BREW_PATH_LOCAL}(N-/) ${path})
