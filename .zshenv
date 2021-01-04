@@ -73,8 +73,16 @@ case "$(uname)" in
         if runs_on_ARM64; then
             path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
             if brew_exists_at_opt && brew_exists_at_local; then
-                function onr() { ${BREW_PATH_LOCAL}/$@; }
-                alias rzsh='onr zsh'
+                # use local brew dir
+                function lbr() { ${BREW_PATH_LOCAL}/$@; }
+                # launch on rosetta2
+                function x86() { arch -arch x86_64 $@; }
+                # launch on arm (native)
+                function arm() { arch -arch arm64 $@; }
+                # wrap emacs
+                function emacs() { x86 emacs $@; }
+                # launch zsh on local brew
+                alias rzsh='lbr zsh'
             fi
         elif runs_on_X86_64; then
             path=($BREW_PATH_LOCAL(N-/) $path)
