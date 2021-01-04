@@ -67,25 +67,27 @@ case "$(uname)" in
 
 
         setopt no_global_rcs #disable path helper
-        path=($path /usr/sbin /sbin) # init path
+        path=(${path} /usr/sbin /sbin) # init path
 
         # switch homebrew dir by arch
         if runs_on_ARM64; then
-            path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
+            path=(${BREW_PATH_OPT}(N-/) ${BREW_PATH_LOCAL}(N-/) ${path})
             if brew_exists_at_opt && brew_exists_at_local; then
                 # use local brew dir
                 function lbr() { ${BREW_PATH_LOCAL}/$@; }
                 # launch on rosetta2
-                function x86() { arch -arch x86_64 $@; }
+                function x86() { arch -x86_64 $@; }
                 # launch on arm (native)
-                function arm() { arch -arch arm64 $@; }
+                function arm() { arch -arm64 $@; }
                 # wrap emacs
-                function emacs() { x86 emacs $@; }
+                if is_available 'emacs'; then
+                    function emacs() { x86 'emacs' $@; }
+                fi
                 # launch zsh on local brew
                 alias rzsh='lbr zsh'
             fi
         elif runs_on_X86_64; then
-            path=($BREW_PATH_LOCAL(N-/) $path)
+            path=(${BREW_PATH_LOCAL}(N-/) ${path})
         fi
 
         if [[ -d '/Applications/MacVim.app' ]]; then
@@ -101,11 +103,11 @@ esac
 
 # check stack installed and add path
 if is_available 'stack'; then
-    path=($(stack path --local-bin)(N-/) $path)
+    path=($(stack path --local-bin)(N-/) ${path})
 fi
 
 # check rust environment
-path=("${HOME}/.cargo/bin"(N-/) $path)
+path=("${HOME}/.cargo/bin"(N-/) ${path})
 
 # configure pyenv
 if is_available 'pyenv'; then
@@ -116,5 +118,5 @@ fi
 # configure node environment
 if is_available 'npm' && [[ -d "${HOME}/.npm-global" ]]; then
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
-    path=("${NPM_CONFIG_PREFIX}/bin"(N-/) $path)
+    path=("${NPM_CONFIG_PREFIX}/bin"(N-/) ${path})
 fi
