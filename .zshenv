@@ -46,11 +46,13 @@ function get_weather() {
 }
 
 # setup path, environment
-
 typeset -U path PATH
 
 case "$(uname)" in
     Darwin)
+        setopt no_global_rcs #disable path helper
+        path=(${path} '/usr/sbin'(N-/) '/sbin'(N-/)) # init path
+
         # return true if macOS runs on Arm64
         function runs_on_ARM64() { [[ "$(uname -m)" = 'arm64' ]]; }
         # return true if macOS runs on x86_64 or Rosetta2
@@ -64,10 +66,6 @@ case "$(uname)" in
         function brew_exists_at_opt() { [[ -d ${BREW_PATH_OPT} ]]; }
         # returns true if hoembrew installed on /usr/bin
         function brew_exists_at_local() { [[ -d ${BREW_PATH_LOCAL} ]]; }
-
-
-        setopt no_global_rcs #disable path helper
-        path=(${path} /usr/sbin /sbin) # init path
 
         # switch homebrew dir by arch
         if runs_on_ARM64; then
