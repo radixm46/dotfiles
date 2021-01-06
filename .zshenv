@@ -94,9 +94,6 @@ case "$(uname)" in
             alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
             alias vi='vim'
         fi
-        # export CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
-        # export LDFLAGS="-L/usr/local/opt/zlib/lib"
-        # export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
         ;;
 esac
