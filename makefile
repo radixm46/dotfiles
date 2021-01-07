@@ -1,6 +1,6 @@
 SHELLENV:=.zshrc .zshenv .tmux.conf
 
-SHELLTOOLS:=tig
+SHELLTOOLS:=tig bat
 
 EMACS:=.emacs.d
 
