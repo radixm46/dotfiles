@@ -31,24 +31,23 @@ function print_os_glyph() {
 # weather from wttr.in
 function get_weather() {
     local format=""
-    while getopts d:l:sf: option
+    while getopts L:d:l:sf: option
     do
         case ${option} in
+            l) local target_loc="${OPTARG}"
+                ;;
             d) local days="${OPTARG}"  # TODO: chack value(0-3)
                 ;;
-            l) local lang_='&lang='"${OPTARG}"
+            L) local lang_="${OPTARG}"
                 ;;
-            s) local format='&format=%l:+%c++%t++%w++%p++%P'
+            s) local format='%l:+%c++%t++%w++%p++%P'
                 ;;
-            f) local format='&format='"${OPTARG}"
+            f) local format=''"${OPTARG}"
                 ;;
         esac
     done
 
-    shift $((OPTIND - 1))
-    local target_loc="$1"
-
-    curl -s 'wttr.in/'"${target_loc}"\?"${days:=1}"'qA'"${lang_}""${format:=}"
+    curl -s "wttr.in/${target_loc}"\?"${days:-0qn}A&lang=${lang_:-ja}&format=${format:-}"
 }
 
 # setup path, environment

@@ -209,7 +209,7 @@ function _update_vcs_info_msg() {
 add-zsh-hook precmd _update_vcs_info_msg
 # ------------------------------------------------------------------------------
 
-alias -g wttr='get_weather'
+alias wttr='get_weather'
 
 # ------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
