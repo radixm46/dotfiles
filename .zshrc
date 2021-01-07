@@ -104,29 +104,24 @@ bindkey -v  # use vim style keybinding
 
 # define 'ls' default command
 function alias_ls() {
-    local LSCOM='ls'
-    case ${OSTYPE} in
-        darwin*)
-            if is_available 'exa'; then
-                LSCOM='exa'
-                alias ls="${LSCOM} -F --color=auto"
-            else
+    if is_available 'exa'; then
+        alias ls="exa -F --color=always"
+        alias ll="exa -l --git"
+        alias la="exa -a"
+    else
+        case ${OSTYPE} in
+            darwin*)
                 export CLICOLOR=1
-                alias ls="${LSCOM} -G -F"
-            fi
-            ;;
-        linux*)
-            if is_available 'exa'; then
-                LSCOM='exa'
-            else
-                LSCOM='ls'
-            fi
-            alias ls="${LSCOM} -F --color=auto"
-            ;;
-    esac
-
-    alias la="${LSCOM} -a"
-    alias ll="${LSCOM} -l"
+                alias ls="ls -G -F"
+                ;;
+            linux*)
+                alias ls="ls -F --color=auto"
+                ;;
+            *) ;;
+        esac
+        alias la="ls -a"
+        alias ll="ls -l"
+    fi
 }
 
 alias_ls
