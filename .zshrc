@@ -145,7 +145,8 @@ fi
 alias -g L='| less'
 alias -g G='| grep'
 
-if is_available bat; then
+if is_available 'bat'; then
+    alias bat="bat --theme='Solarized (dark)'"
     alias -g B='| bat'
 fi
 
