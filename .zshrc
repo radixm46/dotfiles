@@ -107,6 +107,7 @@ function alias_ls() {
     if is_available 'exa'; then
         alias ls="exa -F --color=always"
         alias ll="exa -l --git"
+        alias lla="exa -la --git"
         alias la="exa -a"
     else
         case ${OSTYPE} in
