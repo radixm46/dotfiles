@@ -20,7 +20,24 @@ function print_os_glyph() {
             fi
             ;;
         Linux*)
-            printf $'\UF83C'
+            local distro_id="$(</etc/os-release|grep '^ID=')"
+            case ${distro_id#'ID='} in
+                arch) printf $'\UF303' ;;
+                centos) printf $'\UF304' ;;
+                debian) printf $'\UF306' ;;
+                fedora) printf $'\UF30A' ;;
+                manjaro) printf $'\UF312' ;;
+                opensuse) printf $'\UF314' ;;
+                raspbian) printf $'\UF315' ;;
+                sles) printf $'\UF314' ;;
+                ubuntu) printf $'\UF31C' ;;
+                # slackware) printf $'\UF318' ;;
+                # nixos) printf $'\UF313' ;;
+                # mint) printf $'\UF30F' ;;
+                # alpine) printf $'\UF300' ;;
+                # redhat) printf $'\UF316' ;;
+                *) printf $'\UF83C' ;;
+            esac
             ;;
         *)
             printf $'\UF841'
