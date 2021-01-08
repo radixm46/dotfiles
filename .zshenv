@@ -64,7 +64,7 @@ function get_weather() {
         esac
     done
 
-    curl -s "wttr.in/${target_loc}"\?"${days:-0qn}A&lang=${lang_:-ja}&format=${format:-}"
+    curl -s "wttr.in/${target_loc}"\?"${days:-1n}qA&lang=${lang_:-ja}&format=${format:-}"
 }
 
 # setup path, environment
