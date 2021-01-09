@@ -5,17 +5,17 @@
 function pr_batt_cap() {
     if $2; then
         # nerd fonts charging batt signs (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
-        batt_signs=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
+        local batt_signs=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
                             '\UF588' '\UF588' '\UF589' '\UF58A' '\UF584')
     else
         # nerd fonts non charging batt signs (00 to 100)
-        batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
+        local batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
                              '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
     fi
-    bat_idx=$(expr $1 / 10)
+    local batt_idx=$(expr $1 / 10)
 
-    if ((0 <= ${bat_idx})) && ((${bat_idx} <= 10)); then
-        printf ${batt_signs[bat_idx]}
+    if ((0 <= ${batt_idx})) && ((${batt_idx} <= 10)); then
+        printf ${batt_signs[batt_idx]}
     else
         printf '\UF582'
     fi
