@@ -93,6 +93,7 @@ bindkey -v  # use vim style keybinding
 function alias_ls() {
     if is_available 'exa'; then
         alias ls="exa -F --color=always --icons"
+        alias lss="exa -F --color=auto"
         alias ll="ls -l --git"
         alias lla="ls -la --git"
         alias la="ls -a"
