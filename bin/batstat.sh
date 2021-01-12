@@ -56,7 +56,7 @@ case $(uname) in
             case "$2" in
                 'Charging')
                     printf "${pwr_conn} $(pr_batt_cap $1 true) $1%%"
-                ;;
+                    ;;
                 'Discharging')
                     printf "${pwr_discn} $(pr_batt_cap $1 false) $1%%"
                     ;;
