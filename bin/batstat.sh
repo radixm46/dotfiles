@@ -3,15 +3,16 @@
 # print charging battery sign from nerd fonts
 # (arg1: int(battery capacity), arg2: bool(charging status))
 function pr_batt_cap() {
-    if $2; then
+    case "$2" in
+        'true')
         # nerd fonts charging batt signs (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
         local batt_signs=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
-                            '\UF588' '\UF588' '\UF589' '\UF58A' '\UF584')
-    else
+                            '\UF588' '\UF588' '\UF589' '\UF58A' '\UF584') ;;
+        'false')
         # nerd fonts non charging batt signs (00 to 100)
         local batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
-                             '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
-    fi
+                             '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578') ;;
+    esac
     local batt_idx=$(expr $1 / 10)
 
     if ((0 <= ${batt_idx})) && ((${batt_idx} <= 10)); then
