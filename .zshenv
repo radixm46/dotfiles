@@ -124,9 +124,9 @@ case "$(uname)" in
         function ktimer() {
             local wait_min=${1:-'5'}
             local wait_sec=${2:-'00'}
-            echo "Timer: for ${wait_min}:${wait_sec}... (from: $(date +%Y/%m/%d_%H:%M:%S))"
+            echo "Timer: count for ${wait_min}:${wait_sec}... (start: $(date +%Y/%m/%d_%H:%M:%S))"
             (sleep $(echo "${wait_min}*60+${wait_sec}"|bc) && \
-                 echo "Timer: ${wait_min}:${wait_sec} passed (at: $(date +%Y/%m/%d_%H:%M:%S))" && \
+                 echo "Timer: ${wait_min}:${wait_sec} passed (end: $(date +%Y/%m/%d_%H:%M:%S))" && \
                  say --voice=Victoria "time has passed" \
                 ) 2> /dev/null
         }
