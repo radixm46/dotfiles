@@ -172,7 +172,9 @@
 
 (use-package go-mode
   :ensure t
-  :hook (go-mode . lsp)
+  :hook ((go-mode . lsp)
+         (before-save . lsp-format-buffer)
+         (before-save . lsp-organize-imports))
   :mode ("\\.go\\'" . go-mode)
 )
 
