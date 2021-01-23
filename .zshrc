@@ -94,8 +94,8 @@ function alias_ls() {
     if is_available 'exa'; then
         alias ls="exa -F --color=always --icons"
         alias lss="exa -F --color=auto"
-        alias ll="ls -l --git"
-        alias lla="ls -la --git"
+        alias ll="ls -l --time-style=long-iso --git"
+        alias lla="ls -la --time-style=long-iso --git"
         alias la="ls -a"
     else
         case ${OSTYPE} in
