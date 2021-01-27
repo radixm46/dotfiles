@@ -5,6 +5,10 @@ set main-view-date-format = "%Y/%m/%d %H:%M"
 set refs-view-date = custom
 set refs-view-date-format = "%Y/%m/%d %H:%M"
 
+set mouse = true
+set mouse-wheel-cursor = true
+set mouse-scroll = 1
+
 set line-graphics = utf-8
 set commit-order = default
 
