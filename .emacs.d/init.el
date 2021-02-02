@@ -21,7 +21,7 @@
 (if (not (file-directory-p my-autosave-dir))
     (make-directory my-autosave-dir t))
 (setq delete-auto-save-files t)
-(setq auto-save-file-name-transforms '((".*" my-autosave-dir t)))
+(setq auto-save-file-name-transforms '((".*"  "~/.emacs.d/.tmp/autosaved" t)))
 (setq auto-save-default t)
 (setq auto-save-timeout 15)
 (setq auto-save-interval 120)
@@ -32,7 +32,7 @@
 (setq make-backup-files t)
 (if (not (file-directory-p my-hist-dir))
     (make-directory my-hist-dir t))
-(setq backup-directory-alist '((".*" . my-hist-dir)))
+(setq backup-directory-alist '((".*" .  "~/.emacs.d/.tmp/hist")))
 (setq version-control t) ; enable version control
 (setq kept-new-versions 5)
 (setq kept-old-versions 1)
