@@ -15,9 +15,28 @@
 ; (setq line-move-visual t)
 ; (setq word-wrap t)
 (setq create-lockfiles nil)
-(setq make-backup-files nil)
+
+; configure auto save files
+(setq my-autosave-dir "~/.emacs.d/.tmp/autosaved")
+(if (not (file-directory-p my-autosave-dir))
+    (make-directory my-autosave-dir t))
 (setq delete-auto-save-files t)
-(setq auto-save-default nil)
+(setq auto-save-file-name-transforms '((".*" my-autosave-dir t)))
+(setq auto-save-default t)
+(setq auto-save-timeout 15)
+(setq auto-save-interval 120)
+(setq auto-save-list-file-prefix nil)
+
+; make backup files
+(setq my-hist-dir "~/.emacs.d/.tmp/hist")
+(setq make-backup-files t)
+(if (not (file-directory-p my-hist-dir))
+    (make-directory my-hist-dir t))
+(setq backup-directory-alist '((".*" . my-hist-dir)))
+(setq version-control t) ; enable version control
+(setq kept-new-versions 5)
+(setq kept-old-versions 1)
+(setq delete-old-versions t)
 
 (add-hook 'prog-mode-hook
           '(lambda () (electric-pair-mode t)))
