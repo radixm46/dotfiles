@@ -1,14 +1,23 @@
 #ignorefiles
+
 auto-save-list
 .cache
+.tmp
 .lsp-session*
 bookmarks
 session.*
 transient
-elpa*
-eshell
-skk
 
+# elpa packages
+/elpa/
+
+# skk dict
+/skk/
+
+# eshell files
+/eshell/
+
+# local .el files
 custom.el
 local.el
 *.elc
