@@ -129,6 +129,11 @@
   ;(define-key evil-insert-state-map (kbd "C-n") 'next-line)
   (setq evil-undo-system 'undo-tree)
 )
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 (use-package nyan-mode
   :ensure t
