@@ -116,10 +116,20 @@
 
 
 ;; enable evil
+;(setq evil-want-integration t)
+;; This is optional since it's already set to t by default.
+(setq evil-want-keybinding nil)
 (use-package evil
   :ensure t
   :config
   (evil-mode 1)
+  (setq evil-undo-system 'undo-tree)
+)
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init)
   (define-key evil-normal-state-map (kbd "C-u") 'scroll-down-command)
   ;; enable emacs cursor movement in insert mode
   (define-key evil-insert-state-map (kbd "C-h") 'delete-backward-char)
@@ -127,13 +137,7 @@
   (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
   ;(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
   ;(define-key evil-insert-state-map (kbd "C-n") 'next-line)
-  (setq evil-undo-system 'undo-tree)
-)
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+  )
 
 (use-package nyan-mode
   :ensure t
