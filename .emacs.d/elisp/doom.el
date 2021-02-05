@@ -159,7 +159,6 @@
   ;(load-theme 'doom-nord t)
   ;(load-theme 'wheatgrass t)
   ;(load-theme 'doom-one t)
-  ; loads different theme on terminal(temporary)
 
   ;(set-face-attribute 'hl-line nil :inherit nil :background "brightblack")
 
