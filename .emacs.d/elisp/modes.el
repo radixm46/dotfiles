@@ -200,6 +200,8 @@
    ("C-c b" . org-iswitchb)
    ("C-c C-o 0" . my-org-goto-dir))
   :config  ;
+  (define-key evil-motion-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-motion-state-map (kbd "k") 'evil-previous-visual-line)
   ;(setq system-time-locale "C") ; dates written in eng
   (setq org-startup-truncated t)
   (setq org-startup-folded nil)
