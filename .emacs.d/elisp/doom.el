@@ -138,7 +138,7 @@
     )
   (defun doom-on-gui ()
     (interactive)
-    (load-theme 'doom-spacegrey t)
+    (load-theme 'doom-molokai t)
     (setq doom-modeline-icon t)
     (doom-themes-treemacs-config)
     )
