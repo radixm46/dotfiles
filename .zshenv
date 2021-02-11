@@ -116,11 +116,13 @@ case "$(uname)" in
             path=(${BREW_PATH_LOCAL}(N-/) ${path})
         fi
 
+        # if macvim available, alias vim to macvim
         if [[ -d '/Applications/MacVim.app' ]]; then
             alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
             alias vi='vim'
         fi
 
+        # simple timer function for tea preparation
         function ktimer() {
             local wait_min=${1:-'5'}
             local wait_sec=${2:-'00'}
