@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Label</key>
+		<string>gnu.emacs4osx.daemon</string>
+		<key>ProgramArguments</key>
+		<array>
+			<string>/bin/zsh</string>
+			<string>-c</string>
+			<string>emacs</string>
+			<string>--daemon</string>
+		</array>
+		<key>StandardOutPath</key>
+		<string>/tmp/gnu.emacs4osx.daemon.stdout</string>
+		<key>StandardErrorPath</key>
+		<string>/tmp/gnu.emacs4osx.daemon.stderr</string>
+		<key>RunAtLoad</key>
+		<true/>
+		<key>KeepAlive</key>
+		<dict>
+			<key>SuccessfulExit</key>
+			<false/>
+		</dict>
+		<key>ServiceDescription</key>
+		<string>Gnu Emacs for OSX daemon</string>
+	</dict>
+</plist>
