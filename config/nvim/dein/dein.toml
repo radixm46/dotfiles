@@ -220,3 +220,7 @@ hook_add = '''
 [[plugins]]
 if = "has('nvim')"
 repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+if = "has('python3')"
+repo = 'editorconfig/editorconfig-vim'
