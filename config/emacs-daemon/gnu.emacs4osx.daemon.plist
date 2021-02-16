@@ -8,8 +8,7 @@
 		<array>
 			<string>/bin/zsh</string>
 			<string>-c</string>
-			<string>emacs</string>
-			<string>--daemon</string>
+			<string>emacs --daemon</string>
 		</array>
 		<key>StandardOutPath</key>
 		<string>/tmp/gnu.emacs4osx.daemon.stdout</string>
