@@ -117,7 +117,10 @@ case "$(uname)" in
                 fi
             fi
         elif runs_on_X86_64; then
-            path=(${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) ${path})
+            path=(\
+                ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
+                ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
+                ${path})
         fi
 
         # if macvim available, alias vim to macvim
