@@ -106,6 +106,13 @@
 (load "~/.emacs.d/elisp/initpkg.el")
 
 ;; -------- package config under use-package --------
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (daemonp)
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PYTHONPATH"))
+  )
 
 (use-package undo-tree
   :ensure t
@@ -272,7 +279,6 @@
         ("C-x C-g G" . git-gutter:end-of-hunk)
         ("C-x C-g x" . git-gutter:revert-hunk)
         ("C-x C-g s" . git-gutter:stage-hunk))
-
   )
 
 
