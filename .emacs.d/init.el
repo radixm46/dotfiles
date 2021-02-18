@@ -265,6 +265,14 @@
     (git-gutter:deleted-sign  "-")
   :config
     (global-git-gutter-mode +1)
+  :bind
+  (:map global-map
+        ("C-x C-g j" . git-gutter:next-hunk)
+        ("C-x C-g k" . git-gutter:previous-hunk)
+        ("C-x C-g G" . git-gutter:end-of-hunk)
+        ("C-x C-g x" . git-gutter:revert-hunk)
+        ("C-x C-g s" . git-gutter:stage-hunk))
+
   )
 
 
