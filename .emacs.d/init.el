@@ -326,3 +326,23 @@
   ; create elisp/local.el if not exists
   (with-temp-file "~/.emacs.d/elisp/local.el" nil)
 )
+
+; ----------- simple writing view -----------
+(defun my-reset-margins ()
+  (interactive) (set-window-margins nil nil nil))
+
+(defun my-center-margins (wdth)
+  (interactive "set text width: ")
+  (my-reset-margins)
+  (let ((margin-size (/ (- (window-width) wdth) 2)))
+    (if (>= margin-size 0)
+      (set-window-margins nil margin-size margin-size)
+      (message "frame width is too narrow"))
+    ))
+
+(defun my-s2writing-style ()
+  (interactive)
+  (my-center-margins 80)
+  (sw-lnsp 1.25)
+  ;(visual-fill-column-mode)
+  )
