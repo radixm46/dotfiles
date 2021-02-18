@@ -6,9 +6,10 @@
 		<string>gnu.emacs4osx.daemon</string>
 		<key>ProgramArguments</key>
 		<array>
-			<string>/bin/zsh</string>
-			<string>-c</string>
-			<string>emacs --daemon</string>
+			<string>/usr/bin/arch</string>
+			<string>-x86_64</string>
+			<string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+			<string>--daemon</string>
 		</array>
 		<key>StandardOutPath</key>
 		<string>/tmp/gnu.emacs4osx.daemon.stdout</string>
@@ -20,8 +21,10 @@
 		<dict>
 			<key>SuccessfulExit</key>
 			<false/>
+			<key>Crashed</key>
+			<true/>
 		</dict>
 		<key>ServiceDescription</key>
-		<string>Gnu Emacs for OSX daemon</string>
+		<string>Gnu Emacs for OSX daemon (x86_64)</string>
 	</dict>
 </plist>
