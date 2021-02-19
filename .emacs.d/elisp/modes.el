@@ -202,6 +202,8 @@
   :config  ;
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
+  (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
+  (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line)
   ;(setq system-time-locale "C") ; dates written in eng
   (setq org-startup-truncated t)
   (setq org-startup-folded nil)
@@ -264,6 +266,11 @@
    ("\\.markdown\\'" . markdown-mode))
   :init
   (setq markdown-command "multimarkdown")
+  :config
+  (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
+  (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
+  (evil-define-key 'normal markdown-mode-map "gj" 'evil-next-line)
+  (evil-define-key 'normal markdown-mode-map "gk" 'evil-previous-line)
 )
 
 
