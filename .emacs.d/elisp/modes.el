@@ -154,20 +154,29 @@
 )
 
 
-(use-package python-mode
-  :ensure t
-  :hook
-  ((python-mode . pipenv-mode)
-   (python-mode . lsp))
-  :mode ("\\.py\\'" . python-mode)
-  )
-
 (use-package pipenv
   :ensure t
   :init
   (setq
    pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended))
+   #'pipenv-projectile-after-switch-extended)
+  (defun python-pipenv-init ()
+    "init python environment on python-mode"
+    (if (not pipenv-mode)
+        (pipenv-mode))
+    (if (eq python-shell-virtualenv-root nil)
+        (pipenv-activate))
+    )
+  )
+
+(use-package python-mode
+  :ensure t
+  :hook
+  ((python-mode . lsp)
+   (python-mode . python-pipenv-init))
+  :mode ("\\.py\\'" . python-mode)
+  )
+
 
 
 (use-package go-mode
