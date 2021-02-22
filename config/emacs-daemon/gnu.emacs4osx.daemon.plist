@@ -6,12 +6,10 @@
 		<string>gnu.emacs4osx.daemon</string>
 		<key>ProgramArguments</key>
 		<array>
-			<string>/usr/bin/arch</string>
-			<string>-x86_64</string>
-			<string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+			<string>/Applications/Emacs.app/Contents/MacOS/Emacs-x86_64-10_14</string>
 			<string>--eval</string>
 			<string>(cd (concat (getenv "HOME") "/"))</string>
-			<string>--daemon</string>
+			<string>--fg-daemon</string>
 		</array>
 		<key>StandardOutPath</key>
 		<string>/tmp/gnu.emacs4osx.daemon.stdout</string>
