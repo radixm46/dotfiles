@@ -9,6 +9,8 @@
 			<string>/usr/bin/arch</string>
 			<string>-x86_64</string>
 			<string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+			<string>--eval</string>
+			<string>(cd (concat (getenv "HOME") "/"))</string>
 			<string>--daemon</string>
 		</array>
 		<key>StandardOutPath</key>
