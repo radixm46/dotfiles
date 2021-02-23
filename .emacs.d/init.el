@@ -270,12 +270,12 @@
   :custom
   (git-gutter:modified-sign " ")
   (git-gutter:added-sign    "+")
-  (git-gutter:deleted-sign  " ")
+  (git-gutter:deleted-sign  "▶")
   :config
   (set-face-background 'git-gutter:modified "DodgerBlue2")
   (set-face-background 'git-gutter:added "SpringGreen2")
   (set-face-foreground 'git-gutter:added "dark slate")
-  (set-face-background 'git-gutter:deleted "tomato2")
+  (set-face-foreground 'git-gutter:deleted "tomato2")
   (global-git-gutter-mode +1)
   (defun git-gutter-fix-init ()
     (interactive)
