@@ -321,6 +321,12 @@
   (which-key-mode)
   )
 
+(use-package hl-todo
+  :ensure t
+  :hook
+  (prog-mode . hl-todo-mode)
+)
+
 (use-package editorconfig
   :ensure t
   :hook (prog-mode . editorconfig-mode)
