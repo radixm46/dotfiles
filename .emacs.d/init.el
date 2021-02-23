@@ -112,8 +112,7 @@
   (setq exec-path-from-shell-arguments (list "-l"))
   :config
   (when (daemonp)
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "PYTHONPATH"))
+    (exec-path-from-shell-initialize))
   )
 
 (use-package undo-tree
