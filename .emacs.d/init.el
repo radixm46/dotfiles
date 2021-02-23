@@ -277,9 +277,14 @@
   (set-face-foreground 'git-gutter:added "dark slate")
   (set-face-background 'git-gutter:deleted "tomato2")
   (global-git-gutter-mode +1)
+  (defun git-gutter-fix-init ()
+    (interactive)
+    (if (eq git-gutter-mode nil)
+        (git-gutter))
+    (git-gutter))
   :bind
   (:map global-map
-        ("C-x C-g g" . git-gutter)
+        ("C-x C-g g" . git-gutter-fix-init)
         ("C-x C-g j" . git-gutter:next-hunk)
         ("C-x C-g k" . git-gutter:previous-hunk)
         ("C-x C-g G" . git-gutter:end-of-hunk)
