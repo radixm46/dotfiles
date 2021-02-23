@@ -108,6 +108,8 @@
 ;; -------- package config under use-package --------
 (use-package exec-path-from-shell
   :ensure t
+  :init
+  (setq exec-path-from-shell-arguments (list "-l"))
   :config
   (when (daemonp)
     (exec-path-from-shell-initialize)
