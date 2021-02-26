@@ -141,8 +141,9 @@
 
 (use-package undo-tree
   :ensure t
+  :custom
+  (undo-tree-visualizer-timestamps t)
   :config
-  (setq undo-tree-visualizer-timestamps t)
   (global-undo-tree-mode)
   )
 
@@ -153,9 +154,10 @@
 (setq evil-want-keybinding nil)
 (use-package evil
   :ensure t
+  :custom
+  (evil-undo-system 'undo-tree)
   :config
   (evil-mode 1)
-  (setq evil-undo-system 'undo-tree)
 )
 (use-package evil-collection
   :after evil
@@ -198,8 +200,9 @@
 ;; enable relative line number
 (use-package linum-relative
   :ensure t
+  :custom
+  (linum-relative-backend 'display-line-numbers-mode)
   :config
-  (setq linum-relative-backend 'display-line-numbers-mode)
   (linum-relative-global-mode)
 )
 
@@ -213,7 +216,7 @@
   :ensure t
   :hook
     (prog-mode . highlight-indent-guides-mode)
-  :config
+  :custom
   ;(if (not (display-graphic-p))
   ;    (progn
   ;      (setq highlight-indent-guides-auto-enabled nil)
@@ -223,12 +226,12 @@
   ;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
   ;    (setq highlight-indent-guides-auto-enabled t)
   ;  )
-  (setq highlight-indent-guides-method 'column)
-  (setq highlight-indent-guides-auto-odd-face-perc 10)
-  (setq highlight-indent-guides-auto-even-face-perc 10)
+  (highlight-indent-guides-method 'column)
+  (highlight-indent-guides-auto-odd-face-perc 10)
+  (highlight-indent-guides-auto-even-face-perc 10)
   ;(setq highlight-indent-guides-auto-character-face-perc 20)
-  (setq highlight-indent-guides-responsive 'top)
-  (setq highlight-indent-guides-delay 0)
+  (highlight-indent-guides-responsive 'top)
+  (highlight-indent-guides-delay 0)
 )
 
 
@@ -240,12 +243,10 @@
 
 ;; configure whitespace
 (use-package whitespace
-  :config
-  (global-whitespace-mode t)
-  (setq whitespace-global-modes
-    '(not dired-mode tar-mode neotree))
-  (setq whitespace-line-column 80)
-  (setq whitespace-style
+  :custom
+  (whitespace-global-modes '(not dired-mode tar-mode neotree))
+  (whitespace-line-column 80)
+  (whitespace-style
     '(face  ; enable
       trailing
       tabs  ; conflicts highlight indent mode
@@ -257,12 +258,14 @@
       ;lines-tail
       ;spaces
   ))
-  (setq whitespace-display-mappings
+  (whitespace-display-mappings
     '(
        (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
        (newline-mark ?\n [?\x21B2 ?\n])  ; display when in some mejor mode
      )
   )
+  :config
+  (global-whitespace-mode t)
   ;; fix color
   (set-face-attribute whitespace-trailing nil
     :foreground "DeepPink"
@@ -324,12 +327,14 @@
  :ensure t)
 
 (use-package company
+  ;company completion framework
     :ensure t
+    :custom
+    (company-idle-delay 0)
+    (company-selection-wrap-around t)
+    (completion-ignore-case t)
     :config
     (global-company-mode)
-    (setq company-idle-delay 0)
-    (setq company-selection-wrap-around t)
-    (setq completion-ignore-case t)
     )
 
 (use-package ace-window
