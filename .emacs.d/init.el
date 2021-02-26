@@ -7,7 +7,6 @@
 (setq inhibit-splash-screen t)
 (global-display-line-numbers-mode)
 (column-number-mode t)
-(ido-mode t)
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
 (setq-default truncate-lines t)
@@ -106,6 +105,31 @@
 (load "~/.emacs.d/elisp/initpkg.el")
 
 ;; -------- package config under use-package --------
+(ido-mode t)
+(ido-everywhere t)
+(setq ido-enable-flex-matching t)
+;; ido extensions
+(use-package smex
+  :ensure t
+  :bind
+  (:map global-map
+        ("M-x" . smex)
+        ("M-X" . smex-major-mode-commands)
+        ; old M-x function
+        ("C-c C-c M-x" . execute-extended-command))
+  :custom
+  (smex-prompt-string "⚡> ")
+  )
+(use-package ido-vertical-mode
+  :ensure t
+  :custom
+  (ido-vertical-show-count t)
+  :config (ido-vertical-mode t))
+(use-package ido-completing-read+
+  :ensure t
+  )
+
+
 (use-package exec-path-from-shell
   :ensure t
   :init

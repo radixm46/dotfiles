@@ -79,6 +79,7 @@
   ;  (company-lsp-enable-recompletion nil)
   ;  :commands company-lsp
   ;  )
+  (require 'lsp-ido)
  )
 
 (use-package lsp-treemacs
