@@ -69,16 +69,6 @@
           ("C-c d"   . ladicle/toggle-lsp-ui-doc))
     :hook (lsp-mode . lsp-ui-mode))
 
-  ;; Lsp completion
-  ;(use-package company-lsp
-  ;  :ensure t
-  ;  :config
-  ;  :custom
-  ;  (company-lsp-cache-candidates t) ;; always using cache
-  ;  (company-lsp-async t)
-  ;  (company-lsp-enable-recompletion nil)
-  ;  :commands company-lsp
-  ;  )
   (require 'lsp-ido)
  )
 
