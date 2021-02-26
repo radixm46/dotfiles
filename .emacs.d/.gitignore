@@ -8,8 +8,13 @@ bookmarks
 session.*
 transient
 
+# ido
+ido.last
+smex-items
+
 # elpa packages
 /elpa/
+/elpa_*/
 
 # skk dict
 /skk/
