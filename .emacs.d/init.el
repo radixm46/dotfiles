@@ -382,7 +382,7 @@
   (interactive) (set-window-margins nil nil nil))
 
 (defun my-center-margins (wdth)
-  (interactive "set text width: ")
+  (interactive "nset text width: ")
   (my-reset-margins)
   (let ((margin-size (/ (- (window-width) wdth) 2)))
     (if (>= margin-size 0)
@@ -392,7 +392,7 @@
 
 (defun my-s2writing-style ()
   (interactive)
-  (my-center-margins 80)
+  (my-center-margins 90)
   (sw-lnsp 1.25)
   ;(visual-fill-column-mode)
   )
