@@ -83,6 +83,10 @@
   :config
   (lsp-treemacs-sync-mode 1))
 
+(use-package lsp-origami
+  :ensure t
+  :hook (lsp-after-open . lsp-origami-try-enable))
+
 ;; optionally
 ;; if you are helm user
 ;(use-package helm-lsp :commands helm-lsp-workspace-symbol)

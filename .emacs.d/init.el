@@ -129,7 +129,6 @@
   :ensure t
   )
 
-
 (use-package exec-path-from-shell
   :ensure t
   :init
@@ -147,7 +146,9 @@
   (global-undo-tree-mode)
   )
 
-
+(use-package origami
+  :ensure t
+  :hook (prog-mode . origami-mode))
 ;; enable evil
 ;(setq evil-want-integration t)
 ;; This is optional since it's already set to t by default.
