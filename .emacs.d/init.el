@@ -210,7 +210,7 @@
 
 (use-package all-the-icons
   :ensure t
-) ;; need installation by all-the-icons-color-install-fonts
+) ;; need installation by all-the-icons-install-fonts
 
 
 (use-package highlight-indent-guides
