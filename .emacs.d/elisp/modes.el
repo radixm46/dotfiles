@@ -4,8 +4,8 @@
 (use-package neotree
   :ensure t
   :bind ([f7] . neotree-toggle)
+  :custom (neo-window-fixed-size nil)
   :config
-  (setq neo-window-fixed-size nil)
   ;; keymap for using with evil mode
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
   (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
@@ -273,8 +273,8 @@
   (("README\\.md\\'" . gfm-mode)
    ("\\.md\\'" . markdown-mode)
    ("\\.markdown\\'" . markdown-mode))
-  :init
-  (setq markdown-command "multimarkdown")
+  :custom
+  (markdown-command "multimarkdown")
   :config
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
@@ -295,26 +295,22 @@
    ("\\.erb\\'" . web-mode)
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode))
-  :config
+  :custom
   ;; highlights
-  (setq web-mode-enable-current-element-highlight t)
-
+  (web-mode-enable-current-element-highlight t)
   ;; configure indent
-  (setq web-mode-markup-indent-offset 4)
-  (setq web-mode-css-indent-offset 4)
-  (setq web-mode-code-indent-offset 4)
-
+  (web-mode-markup-indent-offset 4)
+  (web-mode-css-indent-offset 4)
+  (web-mode-code-indent-offset 4)
   ;; auto close tags
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-auto-closing t)
-
+  (eb-mode-enable-auto-pairing t)
+  (eb-mode-enable-auto-closing t)
   ;; auto colorize css
-  (setq web-mode-enable-css-colorization t)
-
-  ;(setq web-mode-enable-block-face t)
-  ;(setq web-mode-enable-part-face t)
-  (setq web-mode-enable-comment-interpolation t)
-  (setq web-mode-enable-heredoc-fontification t)
+  (web-mode-enable-css-colorization t)
+  (web-mode-enable-block-face t)
+  ;(web-mode-enable-part-face t)
+  (web-mode-enable-comment-interpolation t)
+  (web-mode-enable-heredoc-fontification t)
 )
 
 
@@ -324,6 +320,6 @@
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.jsx\\'" . js2-mode))
-  :config
-  (setq js2-basic-offset 2)
+  :custom
+  (js2-basic-offset 2)
 )
