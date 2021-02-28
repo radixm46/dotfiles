@@ -1,6 +1,4 @@
 ;; major modes loaded by init.el
-
-
 (use-package neotree
   :ensure t
   :bind ([f7] . neotree-toggle)
@@ -137,7 +135,6 @@
    (rustic-mode . racer))
   :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
-
   :config
   (use-package racer
     :defer t
@@ -146,11 +143,9 @@
   )
 )
 
-
 (use-package quickrun
   :ensure t
 )
-
 
 (use-package pipenv
   :ensure t
@@ -174,8 +169,6 @@
    (python-mode . python-pipenv-init))
   :mode ("\\.py\\'" . python-mode)
   )
-
-
 
 (use-package go-mode
   :ensure t
@@ -280,7 +273,6 @@
   (evil-define-key 'normal markdown-mode-map "gk" 'evil-previous-line)
 )
 
-
 ;; web-mode
 (use-package web-mode
   :ensure t
@@ -310,7 +302,6 @@
   (web-mode-enable-comment-interpolation t)
   (web-mode-enable-heredoc-fontification t)
 )
-
 
 (use-package js2-mode
   :ensure t

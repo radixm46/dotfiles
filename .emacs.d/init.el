@@ -239,12 +239,10 @@
   (highlight-indent-guides-delay 0)
 )
 
-
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode)
 )
-
 
 ;; configure whitespace
 (use-package whitespace
@@ -292,10 +290,8 @@
   ;  :background my/bg-color)
 )
 
-
 (use-package magit
   :ensure t)
-
 
 (use-package git-gutter
   :ensure t
@@ -327,7 +323,6 @@
         ("C-x C-g x" . git-gutter:revert-hunk)
         ("C-x C-g s" . git-gutter:stage-hunk))
   )
-
 
 (use-package flycheck
  :ensure t)
