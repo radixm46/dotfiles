@@ -207,15 +207,12 @@
   )
 )
 
-
-; ---------- loading doom theme  ----------
-(load "~/.emacs.d/elisp/doom.el")
-
-
 (use-package all-the-icons
   :ensure t
 ) ;; need installation by all-the-icons-install-fonts
 
+; ---------- loading doom theme  ----------
+(load "~/.emacs.d/elisp/doom.el")
 
 (use-package highlight-indent-guides
   :ensure t
