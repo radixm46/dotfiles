@@ -10,7 +10,7 @@ transient
 
 # ido
 ido.last
-smex-items
+amx-items
 
 # elpa packages
 /elpa/
