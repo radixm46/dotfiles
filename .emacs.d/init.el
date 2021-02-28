@@ -296,6 +296,7 @@
 
 (use-package git-gutter
   :ensure t
+  :hook (prog-mode . git-gutter-fix-init)
   :custom
   (git-gutter:modified-sign " ")
   (git-gutter:added-sign    "+")
