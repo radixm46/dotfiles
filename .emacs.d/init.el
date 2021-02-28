@@ -105,6 +105,7 @@
 ; configure linenumber mode
 (display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative)
+
 ; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
@@ -154,12 +155,12 @@
 (use-package origami
   :ensure t
   :hook (prog-mode . origami-mode))
+
 ;; enable evil
-;(setq evil-want-integration t)
-;; This is optional since it's already set to t by default.
-(setq evil-want-keybinding nil)
 (use-package evil
   :ensure t
+  :init
+  (setq evil-want-keybinding nil)
   :custom
   (evil-undo-system 'undo-tree)
   :config
