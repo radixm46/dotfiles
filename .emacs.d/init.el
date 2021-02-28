@@ -102,6 +102,9 @@
 
 (setq find-file-visit-truename t)
 
+; configure linenumber mode
+(display-line-numbers-mode t)
+(setq display-line-numbers-type 'relative)
 ; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
@@ -198,16 +201,6 @@
 
 ; ---------- loading doom theme  ----------
 (load "~/.emacs.d/elisp/doom.el")
-
-
-;; enable relative line number
-(use-package linum-relative
-  :ensure t
-  :custom
-  (linum-relative-backend 'display-line-numbers-mode)
-  :config
-  (linum-relative-global-mode)
-)
 
 
 (use-package all-the-icons
