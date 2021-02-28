@@ -91,7 +91,7 @@
 ;; (setq coding-system-for-read 'utf-8) ;; conflicts ddskk
 (setq coding-system-for-write 'utf-8)
 
-;; configure tab
+;; configure indent tab to false as default
 (setq-default tab-width 4 indent-tabs-mode nil)
 
 (setq eol-mnemonic-dos "(CRLF)")
