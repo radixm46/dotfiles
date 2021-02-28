@@ -100,6 +100,7 @@
 (which-function-mode 1)
 (transient-mark-mode 1)
 
+(setq find-file-visit-truename t)
 
 ; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
