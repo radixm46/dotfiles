@@ -139,12 +139,8 @@
     (interactive)
     (load-theme 'doom-molokai t)
     (setq doom-modeline-icon t)
-    (doom-themes-treemacs-config)
     )
   (doom-on-gui)
-  ;(if (display-graphic-p)
-  ;    (doom-on-gui)
-  ;    (doom-on-term))
 
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
