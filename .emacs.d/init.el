@@ -105,20 +105,21 @@
 (load "~/.emacs.d/elisp/initpkg.el")
 
 ;; -------- package config under use-package --------
-(ido-mode t)
-(ido-everywhere t)
-(setq ido-enable-flex-matching t)
 ;; ido extensions
-(use-package smex
+(use-package amx
   :ensure t
   :bind
   (:map global-map
-        ("M-x" . smex)
-        ("M-X" . smex-major-mode-commands)
-        ; old M-x function
-        ("C-c C-c M-x" . execute-extended-command))
+        ("M-x" . amx)
+        ("M-X" . amx-major-mode-commands)
+        )
+  :init
+  (ido-mode t)
+  (ido-everywhere t)
+  (setq ido-enable-flex-matching t)
   :custom
-  (smex-prompt-string "⚡> ")
+  (amx-backend 'ido)
+  (amx-prompt-string "⚡> ")
   )
 (use-package ido-vertical-mode
   :ensure t
