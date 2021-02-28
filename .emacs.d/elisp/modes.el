@@ -312,3 +312,7 @@
   :custom
   (js2-basic-offset 2)
 )
+
+(use-package csv-mode
+  :ensure t
+  :mode (".csv" ".tsv"))
