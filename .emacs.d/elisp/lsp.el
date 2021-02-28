@@ -37,12 +37,12 @@
     ;; lsp-ui-flycheck
     (lsp-ui-flycheck-enable t) ;nil
     ;; lsp-ui-sideline
-    (lsp-ui-sideline-enable nil)
+    (lsp-ui-sideline-enable t)
     (lsp-ui-sideline-ignore-duplicate t)
     (lsp-ui-sideline-show-symbol t)
     (lsp-ui-sideline-show-hover t)
-    (lsp-ui-sideline-show-diagnostics t) ;nil
-    (lsp-ui-sideline-show-code-actions t) ;nil
+    (lsp-ui-sideline-show-diagnostics t)
+    (lsp-ui-sideline-show-code-actions t)
     ;; lsp-ui-imenu
     (lsp-ui-imenu-enable nil)
     (lsp-ui-imenu-kind-position 'top)
