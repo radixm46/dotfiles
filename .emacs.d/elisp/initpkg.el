@@ -1,4 +1,4 @@
-;; init package
+; init package
 (require 'package)
 
 ;; use custom.el for package-selected-packages
@@ -22,12 +22,3 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
-
-;; skk config(use default package.el)
-(unless (package-installed-p 'ddskk)
-  (package-install 'ddskk))
-(setq default-input-method "japanese-skk")
-;; skk dict, setting files
-(setq skk-user-directory "~/.emacs.d/skk"
-      skk-get-jisyo-directory "~/.emacs.d/skk/dict"
-      skk-init-file "~/.emacs.d/elisp/initskk.el")

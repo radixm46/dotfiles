@@ -1,5 +1,6 @@
 ;; skk init file
-(setq skk-use-azik t
+(setq skk-get-jisyo-directory "~/.emacs.d/skk/dict"
+      skk-use-azik t
       skk-azik-keyboard-type 'us101
       skk-show-inline t
       skk-show-tooltip t
@@ -15,7 +16,7 @@
       skk-henkan-strict-okuri-precedence t)
 ;(define-key skk-j-mode-map (kbd "M-n"))
 
-(if (file-directory-p skk-get-jisyo-directory)
-    (ignore) (skk-get skk-get-jisyo-directory))
+(unless (file-directory-p skk-get-jisyo-directory)
+  (skk-get skk-get-jisyo-directory))
 (setq skk-large-jisyo "~/.emacs.d/skk/dict/SKK-JISYO.L")
 ;(setq skk-cdb-large-jisyo "~/.emacs.d/skkdict/SKK-JISYO.L.cdb")

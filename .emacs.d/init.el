@@ -109,6 +109,14 @@
 ; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
+; -------------- ddskk init file --------------
+;; skk config(use default package.el)
+(unless (package-installed-p 'ddskk)
+  (package-install 'ddskk))
+(setq default-input-method "japanese-skk"
+      skk-user-directory "~/.emacs.d/skk"
+      skk-init-file "~/.emacs.d/elisp/initskk.el")
+
 ;; -------- package config under use-package --------
 ;; ido extensions
 (use-package amx
