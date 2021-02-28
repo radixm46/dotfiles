@@ -1,4 +1,3 @@
-
 ;; init package
 (require 'package)
 
@@ -16,26 +15,19 @@
    package-archives
 ))
 
-;(unless package-archive-contents
-;  (package-refresh-contents))
-;(package-initialize)
-
-
-
 (setq load-prefer-newer t)
 
-
 ;; auto load use-package package
-(unless (package-installed-p 'use-package)  ;; can't notify upgradable package
-  (package-install 'use-package)
-  (require 'use-package))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
 
 ;; skk config(use default package.el)
 (unless (package-installed-p 'ddskk)
   (package-install 'ddskk))
 (setq default-input-method "japanese-skk")
-
 ;; skk dict, setting files
-(setq skk-user-directory "~/.emacs.d/skk")
-(setq skk-get-jisyo-directory "~/.emacs.d/skk/dict")
-(setq skk-init-file "~/.emacs.d/elisp/initskk.el")
+(setq skk-user-directory "~/.emacs.d/skk"
+      skk-get-jisyo-directory "~/.emacs.d/skk/dict"
+      skk-init-file "~/.emacs.d/elisp/initskk.el")
