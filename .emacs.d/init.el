@@ -55,6 +55,8 @@
 (scroll-bar-mode -1)
 (display-time)
 
+(define-key global-map [f9] 'other-frame)
+
 ;; mouse support on terminal
 (unless window-system
   (require 'mouse)
