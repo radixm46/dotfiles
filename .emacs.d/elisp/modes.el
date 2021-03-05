@@ -239,6 +239,11 @@
   ;modify table face to 1:2
   (set-face-attribute 'org-table nil :family font-for-tables)
 
+  (use-package org-bullets
+    :ensure t
+    :hook (org-mode . org-bullets-mode)
+    )
+
   ;configure bibtex
   (defun org-mode-reftex-setup ()
     (load-library "reftex")
