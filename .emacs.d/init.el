@@ -45,10 +45,11 @@
 
 (setq default-frame-alist
       (append (list
-               '(font . "HackGenNerd Console-15")
+               '(font . "HackGen35Nerd Console-15")
                '(width . 80)
                '(height . 55))
   default-frame-alist))
+(setq font-for-tables "HackGenNerd Console")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (blink-cursor-mode 0)

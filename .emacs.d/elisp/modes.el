@@ -236,6 +236,9 @@
         (plist-put org-format-latex-options :scale 1.5))
   (setq org-image-actual-width nil)
 
+  ;modify table face to 1:2
+  (set-face-attribute 'org-table nil :family font-for-tables)
+
   ;configure bibtex
   (defun org-mode-reftex-setup ()
     (load-library "reftex")
@@ -271,6 +274,8 @@
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
   (evil-define-key 'normal markdown-mode-map "gj" 'evil-next-line)
   (evil-define-key 'normal markdown-mode-map "gk" 'evil-previous-line)
+  ;modify table face to 1:2
+  (set-face-attribute 'markdown-table-face nil :family font-for-tables)
 )
 
 ;; web-mode
