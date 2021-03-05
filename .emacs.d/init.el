@@ -361,9 +361,42 @@
 (use-package editorconfig
   :ensure t
   :hook (prog-mode . editorconfig-mode)
-  ;:config
-  ;(editorconfig-mode 1)
 )
+
+(use-package ov
+:ensure t
+:init
+(defun check-serif-available()
+    (if (member "Noto Serif CJK JP" (font-family-list))
+        (setq ov-serif-available t)
+        (setq ov-serif-available nil)))
+:hook (server-after-make-frame . check-serif-available)
+:commands (ov-reset ov-clear ov)
+)
+
+(use-package darkroom
+  :ensure t
+  :init
+  (setq ov-serif-layer nil)
+  (defun ov-toggle-buffer-serif ()
+    "temporary make buffer to serif, ov-clear if ov available at buffer"
+    (interactive)
+    (if ov-serif-available
+        (if (not (overlays-in (point-min) (point-max)))
+          (setq ov-serif-layer
+                (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP")))
+          (ov-reset ov-serif-layer)
+          )))
+  (defun my-darkroom-init ()
+    (sw-lnsp 0.8); TODO: add toggle behavior
+    (ov-toggle-buffer-serif))
+  :hook (darkroom-mode . my-darkroom-init)
+        ;(darkroom-mode . ov-clear)
+  :bind ([f8] . darkroom-mode)
+  :custom (darkroom-text-scale-increase 1)
+  ;:config
+  ;(doom-modeline t) ;TODO:enable modeline
+  )
 
 ; --------------- lsp package ---------------
 (load "~/.emacs.d/elisp/lsp.el")
@@ -377,23 +410,3 @@
   ; create elisp/local.el if not exists
   (with-temp-file "~/.emacs.d/elisp/local.el" nil)
 )
-
-; ----------- simple writing view -----------
-(defun my-reset-margins ()
-  (interactive) (set-window-margins nil nil nil))
-
-(defun my-center-margins (wdth)
-  (interactive "nset text width: ")
-  (my-reset-margins)
-  (let ((margin-size (/ (- (window-width) wdth) 2)))
-    (if (>= margin-size 0)
-      (set-window-margins nil margin-size margin-size)
-      (message "frame width is too narrow"))
-    ))
-
-(defun my-s2writing-style ()
-  (interactive)
-  (my-center-margins 90)
-  (sw-lnsp 1.25)
-  ;(visual-fill-column-mode)
-  )
