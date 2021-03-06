@@ -10,12 +10,12 @@
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
 (setq-default truncate-lines t)
-; (global-visual-line-mode nil)
-; (setq line-move-visual t)
-; (setq word-wrap t)
+;; (global-visual-line-mode nil)
+;; (setq line-move-visual t)
+;; (setq word-wrap t)
 (setq create-lockfiles nil)
 
-; check directory and set target
+;; check directory and set target
 (let ((my-autosave-dir "~/.emacs.d/.tmp/autosaved")
       (my-hist-dir "~/.emacs.d/.tmp/hist"))
   (if (not (file-directory-p my-autosave-dir))
@@ -24,7 +24,7 @@
       (make-directory my-hist-dir t))
   )
 
-; configure auto save files
+;; configure auto save files
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/.tmp/autosaved" t)))
 (setq delete-auto-save-files t)
 (setq auto-save-default t)
@@ -32,7 +32,7 @@
 (setq auto-save-interval 120)
 (setq auto-save-list-file-prefix nil)
 
-; make backup files
+;; make backup files
 (setq backup-directory-alist '((".*" .  "~/.emacs.d/.tmp/hist")))
 (setq make-backup-files t)
 (setq version-control t) ; enable version control
@@ -65,7 +65,7 @@
   (setq mouse-sel-mode t))
 
 
-; control line spacing
+;; control line spacing
 (setq-default line-spacing 0.25)
 
 (defun sw-lnsp (wdth)
@@ -106,14 +106,14 @@
 
 (setq find-file-visit-truename t)
 
-; configure linenumber mode
+;; configure linenumber mode
 (display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative)
 
-; ---------------  load package ---------------
+;; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
-; -------------- ddskk init file --------------
+;; -------------- ddskk init file --------------
 ;; skk config(use default package.el)
 (unless (package-installed-p 'ddskk)
   (package-install 'ddskk))
@@ -215,7 +215,7 @@
   :ensure t
 ) ;; need installation by all-the-icons-install-fonts
 
-; ---------- loading doom theme  ----------
+;; ---------- loading doom theme  ----------
 (load "~/.emacs.d/elisp/doom.el")
 
 (use-package highlight-indent-guides
@@ -400,13 +400,13 @@
   ;(doom-modeline t) ;TODO:enable modeline
   )
 
-; --------------- lsp package ---------------
+;; --------------- lsp package ---------------
 (load "~/.emacs.d/elisp/lsp.el")
 
-; --------------- major modes ---------------
+;; --------------- major modes ---------------
 (load "~/.emacs.d/elisp/modes.el")
 
-; ------------ loading local.el  ------------
+;; ------------ loading local.el  ------------
 (if (file-exists-p "~/.emacs.d/elisp/local.el")
   (load "~/.emacs.d/elisp/local.el")
   ; create elisp/local.el if not exists
