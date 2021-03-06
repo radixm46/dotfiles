@@ -382,13 +382,15 @@
     "temporary make buffer to serif, ov-clear if ov available at buffer"
     (interactive)
     (if ov-serif-available
-        (if (not (overlays-in (point-min) (point-max)))
-          (setq ov-serif-layer
-                (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP")))
-          (ov-reset ov-serif-layer)
+        (if darkroom-mode
+          (progn (sw-lnsp 0.8)
+                 (setq ov-serif-layer
+                       (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
+          (progn (sw-lnsp 0.25)
+                 (ov-reset ov-serif-layer)
+                 )
           )))
   (defun my-darkroom-init ()
-    (sw-lnsp 0.8); TODO: add toggle behavior
     (ov-toggle-buffer-serif))
   :hook (darkroom-mode . my-darkroom-init)
         ;(darkroom-mode . ov-clear)
