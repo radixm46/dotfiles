@@ -368,8 +368,21 @@
 :init
 (defun check-serif-available()
     (if (member "Noto Serif CJK JP" (font-family-list))
-        (setq ov-serif-available t)
-        (setq ov-serif-available nil)))
+        (setq serif-available-p t)
+        (setq serif-available-p nil)))
+(setq ov-serif-p nil)
+(defun toggle-buffer-ov-serif (trigger-state-p)
+  "temporary make buffer to serif, ov-clear if ov available at buffer"
+  (interactive)
+  (if serif-available-p
+      (if trigger-state-p
+        (progn (sw-lnsp 0.8)
+               (setq ov-serif-p
+                     (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
+        (progn (sw-lnsp 0.25)
+               (ov-reset ov-serif-p)
+               )
+        )))
 :hook (server-after-make-frame . check-serif-available)
 :commands (ov-reset ov-clear ov)
 )
@@ -377,21 +390,8 @@
 (use-package darkroom
   :ensure t
   :init
-  (setq ov-serif-layer nil)
-  (defun ov-toggle-buffer-serif ()
-    "temporary make buffer to serif, ov-clear if ov available at buffer"
-    (interactive)
-    (if ov-serif-available
-        (if darkroom-mode
-          (progn (sw-lnsp 0.8)
-                 (setq ov-serif-layer
-                       (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
-          (progn (sw-lnsp 0.25)
-                 (ov-reset ov-serif-layer)
-                 )
-          )))
   (defun my-darkroom-init ()
-    (ov-toggle-buffer-serif))
+    (toggle-buffer-ov-serif darkroom-mode))
   :hook (darkroom-mode . my-darkroom-init)
         ;(darkroom-mode . ov-clear)
   :bind ([f8] . darkroom-mode)
