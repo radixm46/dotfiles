@@ -21,8 +21,7 @@
   (if (not (file-directory-p my-autosave-dir))
       (make-directory my-autosave-dir t))
   (if (not (file-directory-p my-hist-dir))
-      (make-directory my-hist-dir t))
-  )
+      (make-directory my-hist-dir t)))
 
 ;; configure auto save files
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/.tmp/autosaved" t)))
@@ -35,19 +34,17 @@
 ;; make backup files
 (setq backup-directory-alist '((".*" .  "~/.emacs.d/.tmp/hist")))
 (setq make-backup-files t)
-(setq version-control t) ; enable version control
+(setq version-control t)                ; enable version control
 (setq kept-new-versions 5)
 (setq kept-old-versions 1)
 (setq delete-old-versions t)
 
-(add-hook 'prog-mode-hook
-          '(lambda () (electric-pair-mode t)))
+(add-hook 'prog-mode-hook '(lambda ()
+                             (electric-pair-mode t)))
 
-(setq default-frame-alist
-      (append (list
-               '(font . "HackGen35Nerd Console-15")
-               '(width . 80) '(height . 55))
-              default-frame-alist))
+(setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-15")
+                                        '(width . 80)
+                                        '(height . 55)) default-frame-alist))
 (setq font-for-tables "HackGenNerd Console")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -70,12 +67,10 @@
 
 (defun sw-lnsp (wdth)
   (interactive "nset line spacing: ")
-  (setq line-spacing wdth)
-  )
+  (setq line-spacing wdth))
 (defun dbl-lnsp ()
   (interactive)
-  (setq line-spacing 2.0)
-  )
+  (setq line-spacing 2.0))
 
 ;; log
 (setq message-log-maxa 10000)
@@ -128,24 +123,21 @@
   :bind
   (:map global-map
         ("M-x" . amx)
-        ("M-X" . amx-major-mode-commands)
-        )
+        ("M-X" . amx-major-mode-commands))
   :init
   (ido-mode t)
   (ido-everywhere t)
   (setq ido-enable-flex-matching t)
   :custom
   (amx-backend 'ido)
-  (amx-prompt-string "⚡> ")
-  )
+  (amx-prompt-string "⚡> "))
 (use-package ido-vertical-mode
   :ensure t
   :custom
   (ido-vertical-show-count t)
   :config (ido-vertical-mode t))
 (use-package ido-completing-read+
-  :ensure t
-  )
+  :ensure t)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -153,16 +145,14 @@
   (setq exec-path-from-shell-arguments (list "-l"))
   :config
   (when (daemonp)
-    (exec-path-from-shell-initialize))
-  )
+    (exec-path-from-shell-initialize)))
 
 (use-package undo-tree
   :ensure t
   :custom
   (undo-tree-visualizer-timestamps t)
   :config
-  (global-undo-tree-mode)
-  )
+  (global-undo-tree-mode))
 
 (use-package origami
   :ensure t
@@ -176,8 +166,7 @@
   :custom
   (evil-undo-system 'undo-tree)
   :config
-  (evil-mode 1)
-)
+  (evil-mode 1))
 (use-package evil-collection
   :after evil
   :ensure t
@@ -198,22 +187,17 @@
   :config
   (defun nyan-try ()
     (nyan-stop-animation)
-    (setq nyan-wavy-trail nil)
-    )
+    (setq nyan-wavy-trail nil))
   (defun nyan-xit ()
     (nyan-start-animation)
-    (setq nyan-wavy-trail t)
-    )
+    (setq nyan-wavy-trail t))
   (nyan-xit)
   :hook
   ((evil-normal-state-entry . nyan-try)
-   (evil-normal-state-exit . nyan-xit)
-  )
-)
+   (evil-normal-state-exit . nyan-xit)))
 
 (use-package all-the-icons
-  :ensure t
-) ;; need installation by all-the-icons-install-fonts
+  :ensure t) ;; need installation by all-the-icons-install-fonts
 
 ;; ---------- loading doom theme  ----------
 (load "~/.emacs.d/elisp/doom.el")
@@ -237,13 +221,11 @@
   (highlight-indent-guides-auto-even-face-perc 10)
   ;(setq highlight-indent-guides-auto-character-face-perc 20)
   (highlight-indent-guides-responsive 'top)
-  (highlight-indent-guides-delay 0)
-)
+  (highlight-indent-guides-delay 0))
 
 (use-package rainbow-delimiters
   :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode)
-)
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; configure whitespace
 (use-package whitespace
@@ -266,8 +248,7 @@
     '(
        (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
        (newline-mark ?\n [?\x21B2 ?\n])  ; display when in some mejor mode
-     )
-  )
+     ))
   :config
   (global-whitespace-mode t)
   ;; fix color
@@ -322,8 +303,7 @@
         ("C-x C-g d" . git-gutter:popup-hunk)
         ("C-x C-g v" . git-gutter:mark-hunk)
         ("C-x C-g x" . git-gutter:revert-hunk)
-        ("C-x C-g s" . git-gutter:stage-hunk))
-  )
+        ("C-x C-g s" . git-gutter:stage-hunk)))
 
 (use-package flycheck
  :ensure t)
@@ -336,32 +316,27 @@
     (company-selection-wrap-around t)
     (completion-ignore-case t)
     :config
-    (global-company-mode)
-    )
+    (global-company-mode))
 
 (use-package ace-window
   :ensure t
   :bind
   (:map global-map
-        ("M-o" . ace-window))
-  )
+        ("M-o" . ace-window)))
 
 (use-package which-key
   :ensure t
   :config
-  (which-key-mode)
-  )
+  (which-key-mode))
 
 (use-package hl-todo
   :ensure t
   :hook
-  (prog-mode . hl-todo-mode)
-)
+  (prog-mode . hl-todo-mode))
 
 (use-package editorconfig
   :ensure t
-  :hook (prog-mode . editorconfig-mode)
-)
+  :hook (prog-mode . editorconfig-mode))
 
 (use-package ov
 :ensure t
@@ -406,6 +381,5 @@
 ;; ------------ loading local.el  ------------
 (if (file-exists-p "~/.emacs.d/elisp/local.el")
   (load "~/.emacs.d/elisp/local.el")
-  ; create elisp/local.el if not exists
-  (with-temp-file "~/.emacs.d/elisp/local.el" nil)
-)
+  ;; create elisp/local.el if not exists
+  (with-temp-file "~/.emacs.d/elisp/local.el" nil))
