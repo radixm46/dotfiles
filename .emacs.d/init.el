@@ -137,7 +137,12 @@
   (ido-vertical-show-count t)
   :config (ido-vertical-mode t))
 (use-package ido-completing-read+
-  :ensure t)
+  :ensure t
+  :custom
+  (magit-completing-read-function 'magit-ido-completing-read)
+  (gnus-completing-read-function 'gnus-ido-completing-read)
+  :config
+  (ido-ubiquitous-mode 1))
 
 (use-package exec-path-from-shell
   :ensure t
