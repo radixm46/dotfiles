@@ -370,22 +370,19 @@
     (if (member "Noto Serif CJK JP" (font-family-list))
         (setq serif-available-p t)
         (setq serif-available-p nil)))
-(setq ov-serif-p nil)
+(setq ov-serif nil)
 (defun toggle-buffer-ov-serif (trigger-state-p)
   "temporary make buffer to serif, ov-clear if ov available at buffer"
   (interactive)
   (if serif-available-p
       (if trigger-state-p
         (progn (sw-lnsp 0.8)
-               (setq ov-serif-p
+               (setq ov-serif
                      (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
         (progn (sw-lnsp 0.25)
-               (ov-reset ov-serif-p)
-               )
-        )))
+               (ov-reset ov-serif)))))
 :hook (server-after-make-frame . check-serif-available)
-:commands (ov-reset ov-clear ov)
-)
+:commands (ov-reset ov-clear ov))
 
 (use-package darkroom
   :ensure t
