@@ -1,0 +1,99 @@
+######
+## sidebar config
+##
+set sidebar_visible = yes
+set sidebar_format = "%D%?F? [%F]?%* %?N?%N/?%S"
+set sidebar_delim_chars = "/"
+set sidebar_short_path
+set sidebar_folder_indent
+set sidebar_indent_string = "  "
+
+set new_mail_command="~/.config/neomutt/notifier.sh %v %n %u"
+unset beep
+
+set mail_check_stats
+
+## index format
+set index_format = "%4C %zs%zc%zt %{%b %d} %(%Y/%m/%d %H:%M (%a)) %-15.15L (%?l?%4l&%4c?) %s"
+
+set sort_aux = reverse-date
+set charset = "utf-8"
+set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
+
+######
+## Maildir config
+##
+#set mbox_type=Maildir
+#set folder=~/mail
+#set spoolfile=+/
+# Remember to `mkdir -p ~/.mutt/hcache` first:
+set header_cache = "~/.mutt/hcache"
+set certificate_file = "~/.mutt/certificates"
+set header_cache     = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+
+###############
+# Pager settings
+#
+ignore *
+unignore From Message-ID Date To Cc Bcc Subject
+
+set pager_stop
+unset markers
+
+# Prefer plain text to html.
+# However, for brain dead clients that bundle attachments inside a
+# multipart/alternative, prefer that alternative.
+alternative_order multipart/mixed multipart/related text/plain
+
+# Consult mime.types for determining types of these attachments
+mime_lookup application/octet-stream
+
+# This requires a ~/.mailcap entry with the copiousoutput flag, such as:
+# text/html; lynx -dump -width ${COLUMNS:-80} %s; nametemplate=%s.html; copiousoutput
+set mailcap_path     = "~/.config/neomutt/mailcap"
+auto_view text/html
+
+###############
+# Index settings
+#
+set quit = ask-yes
+set sort = threads
+
+###############
+# Message composition settings
+#
+set edit_headers
+
+set editor = "emacsclient -a emacs -nw"
+# set editor = "vim"
+
+set mime_type_query_command = "xdg-mime query filetype"
+
+# msmtp is a solid SMTP client.
+# mutt also has built-in SMTP, or you can use an MTA like exim4 or postfix.
+# set sendmail = "/usr/bin/msmtp"
+# - not available
+
+# lbdb is a versatile contact query tool.
+# Invoke via ctrl-t in an address prompt
+# set query_command = "/usr/bin/lbdbq"
+# - not available
+
+###############
+# GnuPG
+#
+# unset crypt_use_gpgme
+# source /usr/local/share/doc/mutt/samples/gpg.rc
+# set pgp_default_key = "0x1234567890ABCDEF"
+# set crypt_opportunistic_encrypt
+# set postpone_encrypt
+
+# vim keybinding
+source ./vim-keys.rc
+
+# solarized theme
+source ./solarized-dark-256.neomuttrc
+
+# load accounts
+source ./accounts/config.rc
