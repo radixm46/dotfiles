@@ -1,3 +1,14 @@
+unset beep
+unset help
+set new_mail_command="~/.config/neomutt/notifier.sh %v %n %u"
+set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+set mail_check_stats
+set quit = ask-yes
+
+## index format
+set index_format = "%4C %zs%zc%zt %{%b %d} %(%Y/%m/%d %H:%M (%a)) %-15.15L (%?l?%4l&%4c?) %s"
+
 ######
 ## sidebar config
 ##
@@ -7,18 +18,6 @@ set sidebar_delim_chars = "/"
 set sidebar_short_path
 set sidebar_folder_indent
 set sidebar_indent_string = "  "
-
-set new_mail_command="~/.config/neomutt/notifier.sh %v %n %u"
-unset beep
-unset help
-set quit = ask-yes
-set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
-set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
-set mail_check_stats
-
-## index format
-set index_format = "%4C %zs%zc%zt %{%b %d} %(%Y/%m/%d %H:%M (%a)) %-15.15L (%?l?%4l&%4c?) %s"
-
 
 ###############
 # Index settings
@@ -35,7 +34,6 @@ set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
 #
 ignore *
 unignore From Message-ID Date To Cc Bcc Subject
-
 set pager_index_lines = 10
 set pager_context = 3
 set pager_stop
@@ -50,7 +48,7 @@ unset markers
 #set folder=~/mail
 #set spoolfile=+/
 # Remember to `mkdir -p ~/.mutt/hcache` first:
-set header_cache = "~/.mutt/hcache"
+# set header_cache = "~/.mutt/hcache"
 set certificate_file = "~/.mutt/certificates"
 set header_cache     = "~/.mutt/cache/headers"
 set message_cachedir = "~/.mutt/cache/bodies"
@@ -72,7 +70,6 @@ auto_view text/html
 # Message composition settings
 #
 set edit_headers
-
 set editor = "emacsclient -a emacs -nw"
 # set editor = "vim"
 
