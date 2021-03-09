@@ -25,7 +25,7 @@ set index_format = "%4C %zs%zc%zt %{%b %d} %(%Y/%m/%d %H:%M (%a)) %-15.15L (%?l?
 #
 set sort = threads
 set sort_aux = reverse-last-date-received
-set sort_re
+# set sort_re
 set uncollapse_jump
 set charset = "utf-8"
 set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"

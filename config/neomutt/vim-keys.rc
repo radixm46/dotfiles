@@ -46,6 +46,7 @@ bind pager,index <Esc>O sidebar-open
 
 bind pager,index V noop
 bind pager,index V toggle-new
+bind pager,index gn toggle-read
 
 bind pager <up> previous-line
 bind pager <down> next-line
