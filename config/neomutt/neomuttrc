@@ -49,8 +49,7 @@ unset markers
 #set mbox_type=Maildir
 #set folder=~/mail
 #set spoolfile=+/
-# Remember to `mkdir -p ~/.mutt/hcache` first:
-set header_cache = "~/.mutt/hcache"
+# Remember to `mkdir -p ~/.mutt/hcache/[dirs]` first:
 set certificate_file = "~/.mutt/certificates"
 set header_cache     = "~/.mutt/cache/headers"
 set message_cachedir = "~/.mutt/cache/bodies"
