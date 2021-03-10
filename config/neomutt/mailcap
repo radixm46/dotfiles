@@ -1,1 +1,16 @@
-text/html; w3m -I %{charset} -T text/html; copiousoutput;
+text/html; w3m -I %{charset} -T text/html;\
+           print=emacsclient -a emacs -e '(xwidget-webkit-browse-url \"file://%s\")' &;\
+           nametemplate=%s.html; copiousoutput;
+text/markdown; w3m -I %{charset} -T text/markdown; copiousoutput;
+
+image/jpg; emacsclient -a emacs -e '(xwidget-webkit-browse-url \"file://%s\")' &;\
+           nametemplate=%s.jpg
+image/jpeg; emacsclient -a emacs -e '(xwidget-webkit-browse-url \"file://%s\")' &;\
+           nametemplate=%s.jpeg
+image/png; emacsclient -a emacs -e '(xwidget-webkit-browse-url \"file://%s\")' &;\
+           nametemplate=%s.png
+image/gif; emacsclient -a emacs -e '(xwidget-webkit-browse-url \"file://%s\")' &;\
+           nametemplate=%s.gif
+
+application/zip; emacsclient -a emacs %s &
+application/gzip; emacsclient -a emacs %s &
