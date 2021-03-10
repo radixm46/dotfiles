@@ -5,7 +5,6 @@
 
 ;; emacs configuration by radixM491VA
 (setq inhibit-splash-screen t)
-(global-display-line-numbers-mode)
 (column-number-mode t)
 (show-paren-mode t)
 (setq ring-bell-function 'ignore)
@@ -101,9 +100,6 @@
 
 (setq find-file-visit-truename t)
 
-;; configure linenumber mode
-(display-line-numbers-mode t)
-(setq display-line-numbers-type 'relative)
 
 ;; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
@@ -115,6 +111,17 @@
 (setq default-input-method "japanese-skk"
       skk-user-directory "~/.emacs.d/skk"
       skk-init-file "~/.emacs.d/elisp/initskk.el")
+;; config linenumbers mode
+(use-package display-line-numbers
+  :init
+  (global-display-line-numbers-mode)
+  (display-line-numbers-mode t)
+  (defun disable-line-numbers ()
+    (display-line-numbers-mode -1))
+  :custom
+  (display-line-numbers-type 'relative)
+  :hook
+  (xwidget-webkit-mode . disable-line-numbers))
 
 ;; -------- package config under use-package --------
 ;; ido extensions
