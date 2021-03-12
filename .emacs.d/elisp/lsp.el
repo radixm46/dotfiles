@@ -66,7 +66,10 @@
           ("C-c i"   . lsp-ui-peek-find-implementation)
           ("C-c m"   . lsp-ui-imenu)
           ("C-c s"   . lsp-ui-sideline-mode)
-          ("C-c d"   . ladicle/toggle-lsp-ui-doc))
+          ("C-c d"   . ladicle/toggle-lsp-ui-doc)
+          ("C-c D"   . lsp-ui-doc-focus-frame)
+     :map lsp-ui-doc-frame-mode-map
+          ("C-c q"   . lsp-ui-doc-unfocus-frame))
     :hook (lsp-mode . lsp-ui-mode))
 
   (require 'lsp-ido)
