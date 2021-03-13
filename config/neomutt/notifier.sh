@@ -10,6 +10,10 @@ case "$(uname)" in
         fi
         ;;
     Linux*)
-        # use mako here
+        if is_available notify-send; then
+            notify-send "$1 New Mail" \
+                        "$2 new messages, $3 unread." \
+                        --icon=dialog-information
+        fi
         ;;
 esac
