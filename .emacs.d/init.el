@@ -39,7 +39,10 @@
 (setq delete-old-versions t)
 
 (add-hook 'prog-mode-hook '(lambda ()
-                             (electric-pair-mode t)))
+                             (electric-pair-mode t)
+                             ;; activate fill column indicator (above Emacs27)
+                             (display-fill-column-indicator-mode)
+                             (setq display-fill-column-indicator-column 90)))
 
 (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-15")
                                         '(width . 80)
@@ -50,9 +53,6 @@
 (blink-cursor-mode 0)
 (scroll-bar-mode -1)
 (display-time)
-;; activate fill column indicator (above Emacs27)
-(global-display-fill-column-indicator-mode)
-(setq display-fill-column-indicator-column 90)
 
 (define-key global-map [f9] 'other-frame)
 
