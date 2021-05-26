@@ -13,7 +13,7 @@ function pr_batt_cap() {
         local batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
                              '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578') ;;
     esac
-    local batt_idx=$(expr $1 / 10)
+    local batt_idx=$(($1 / 10))
 
     if ((0 <= ${batt_idx})) && ((${batt_idx} <= 10)); then
         printf ${batt_signs[batt_idx]}
