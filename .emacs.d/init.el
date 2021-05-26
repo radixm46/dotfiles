@@ -50,6 +50,9 @@
 (blink-cursor-mode 0)
 (scroll-bar-mode -1)
 (display-time)
+;; activate fill column indicator (above Emacs27)
+(global-display-fill-column-indicator-mode)
+(setq display-fill-column-indicator-column 90)
 
 (define-key global-map [f9] 'other-frame)
 
