@@ -119,6 +119,10 @@
   :hook
   (xwidget-webkit-mode . disable-line-numbers))
 
+(use-package flymake
+  :if (>= emacs-major-version 26)
+  :hook
+  (prog-mode . flymake-mode))
 ;; -------- package config under use-package --------
 
 ;; skk config(use
@@ -321,9 +325,6 @@
         ("C-x C-g v" . git-gutter:mark-hunk)
         ("C-x C-g x" . git-gutter:revert-hunk)
         ("C-x C-g s" . git-gutter:stage-hunk)))
-
-(use-package flycheck
- :ensure t)
 
 (use-package company
   ;company completion framework

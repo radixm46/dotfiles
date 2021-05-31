@@ -7,7 +7,7 @@
   :custom
   (lsp-document-sync-method nil) ;; always send incremental document
   (lsp-response-timeout 5)
-  (lsp-prefer-flymake nil) ;'flymake
+  (lsp-prefer-flymake t) ;'flymake
   :hook (
       ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
       ;(XXX-mode . lsp)
@@ -35,7 +35,7 @@
     (lsp-ui-doc-use-childframe t)
     (lsp-ui-doc-use-webkit nil)
     ;; lsp-ui-flycheck
-    (lsp-ui-flycheck-enable t) ;nil
+    (lsp-ui-flycheck-enable nil)
     ;; lsp-ui-sideline
     (lsp-ui-sideline-enable t)
     (lsp-ui-sideline-ignore-duplicate t)
