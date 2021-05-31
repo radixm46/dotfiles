@@ -313,7 +313,7 @@
   (set-face-background 'git-gutter:added "SpringGreen2")
   (set-face-foreground 'git-gutter:added "dark slate")
   (set-face-foreground 'git-gutter:deleted "tomato2")
-  (global-git-gutter-mode +1)
+  (global-git-gutter-mode t)
   (defun git-gutter-fix-init ()
     (interactive)
     (if (eq git-gutter-mode nil)
