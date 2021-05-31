@@ -39,10 +39,7 @@
 (setq delete-old-versions t)
 
 (add-hook 'prog-mode-hook '(lambda ()
-                             (electric-pair-mode t)
-                             ;; activate fill column indicator (above Emacs27)
-                             (display-fill-column-indicator-mode)
-                             (setq display-fill-column-indicator-column 90)))
+                             (electric-pair-mode t)))
 
 (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-15")
                                         '(width . 80)
@@ -107,17 +104,25 @@
 ;; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
-;; config linenumbers mode
 (use-package display-line-numbers
+  :if (>= emacs-major-version 26)
   :init
   (global-display-line-numbers-mode)
   (display-line-numbers-mode t)
   (defun disable-line-numbers ()
-    (display-line-numbers-mode -1))
+    (display-line-numbers-mode nil))
   :custom
   (display-line-numbers-type 'relative)
   :hook
   (xwidget-webkit-mode . disable-line-numbers))
+
+(use-package display-fill-column-indicator
+  :if (>= emacs-major-version 27)
+  :custom
+  (display-fill-column-indicator-column 90)
+  :hook
+  (prog-mode . display-fill-column-indicator-mode)
+  )
 
 (use-package flymake
   :if (>= emacs-major-version 26)
