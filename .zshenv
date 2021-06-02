@@ -107,10 +107,6 @@ case "$(uname)" in
                 function x86() { arch -x86_64 $@; }
                 # launch on arm (native)
                 function arm() { arch -arm64 $@; }
-                # wrap emacs
-                if is_available 'emacs'; then
-                    alias emacs='x86 emacs'
-                fi
                 # launch zsh on local brew
                 if [[ -e "${BREW_PATH_LOCAL}/bin/zsh" ]]; then
                     function rzsh() { "${BREW_PATH_LOCAL}/bin/zsh"; }
