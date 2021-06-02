@@ -112,6 +112,13 @@
 ;  :ensure t
 ;  :config (treemacs-set-scope-type 'Perspectives))
 
+(use-package undo-tree
+  :ensure t
+  :custom
+  (undo-tree-visualizer-timestamps t)
+  :config
+  (global-undo-tree-mode))
+
 ;; required for racer
 (use-package rust-mode
   :ensure t
@@ -134,10 +141,6 @@
     :ensure t
     :commands racer
   )
-)
-
-(use-package quickrun
-  :ensure t
 )
 
 (use-package pipenv
