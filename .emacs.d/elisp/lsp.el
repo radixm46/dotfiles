@@ -9,11 +9,11 @@
   (lsp-response-timeout 5)
   (lsp-prefer-flymake t) ;'flymake
   :hook 
-  ((sh-mode
+  ((go-mode
+    js2-mode
     python-mode
-    go-mode
     rustic-mode
-    js2-mode) . lsp)
+    sh-mode) . lsp)
     ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
     ;(XXX-mode . lsp)
     ; if you want which-key integration
