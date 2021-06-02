@@ -125,14 +125,13 @@
   :config
   (setq auto-mode-alist
     (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
+  :hook ((before-save . lsp-format-buffer)
+         (before-save . lsp-organize-imports))
   )
 
 (use-package rustic
   :ensure t
   :defer t
-  :hook
-  ((rustic-mode . lsp)
-   (rustic-mode . racer))
   :mode ("\\.rs\\'" . rustic-mode)
   :commands (rustic-mode)
   :config
@@ -140,8 +139,14 @@
     :defer t
     :ensure t
     :commands racer
+    :hook (rustic-mode . racer)
   )
 )
+
+(use-package python-mode
+  :ensure t
+  :mode ("\\.py\\'" . python-mode)
+  )
 
 (use-package pipenv
   :ensure t
@@ -154,22 +159,13 @@
     (if (not pipenv-mode)
         (pipenv-mode))
     (if (eq python-shell-virtualenv-root nil)
-        (pipenv-activate))
-    )
-  )
-
-(use-package python-mode
-  :ensure t
-  :hook
-  ((python-mode . lsp)
-   (python-mode . python-pipenv-init))
-  :mode ("\\.py\\'" . python-mode)
+        (pipenv-activate)))
+  :hook (python-mode . python-pipenv-init)
   )
 
 (use-package go-mode
   :ensure t
-  :hook ((go-mode . lsp)
-         (before-save . lsp-format-buffer)
+  :hook ((before-save . lsp-format-buffer)
          (before-save . lsp-organize-imports))
   :mode ("\\.go\\'" . go-mode)
 )
@@ -187,7 +183,6 @@
 ;; org-mode config
 (use-package org
   :ensure t
-  :hook ((org-mode . visual-line-mode) (org-mode . display-line-numbers-mode))
   :mode ("\\.org\\'" . org-mode)
   :bind
   (("C-c l" . org-store-link)
@@ -237,8 +232,12 @@
 
   (use-package org-bullets
     :ensure t
-    :hook (org-mode . org-bullets-mode)
-    )
+    :hook (org-mode))
+
+  ;configure org-pomodoro
+  (use-package org-pomodoro
+    :ensure t
+    :bind ([f6] . org-pomodoro))
 
   ;configure bibtex
   (defun org-mode-reftex-setup ()
@@ -246,23 +245,18 @@
     (and (buffer-file-name)
          (file-exists-p (buffer-file-name))
          (reftex-parse-all))
-    (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-    )
-  (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+    (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
 
   ; (use-package ox-bibtex)
 
-  ;configure org-pomodoro
-  (use-package org-pomodoro
-    :ensure t
-    :bind ([f6] . org-pomodoro)
-    )
+  :hook
+   (org-mode . org-mode-reftex-setup)
 )
 
 ;; markdown-mode
 (use-package markdown-mode
   :ensure t
-  :hook ((markdown-mode . visual-line-mode) (markdown-mode . display-line-numbers-mode))
+  ;:hook (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
   :mode
   (("README\\.md\\'" . gfm-mode)
@@ -282,7 +276,6 @@
 ;; web-mode
 (use-package web-mode
   :ensure t
-  :hook (web-mode . lsp)
   :mode
   (("\\.html?\\'" . web-mode)
    ("\\.phtml\\'" . web-mode)
@@ -311,7 +304,6 @@
 
 (use-package js2-mode
   :ensure t
-  :hook (js2-mode . lsp)
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.jsx\\'" . js2-mode))

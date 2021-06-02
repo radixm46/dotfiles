@@ -105,13 +105,17 @@
   :hook
   (prog-mode . electric-pair-mode))
 
+(use-package visual-line-mode
+  :hook
+  ((org-mode markdown-mode) . visual-line-mode))
+
 (use-package display-line-numbers
   :if (>= emacs-major-version 26)
   :custom
   (display-line-numbers-type 'relative)
   (display-line-numbers-width 4)
   :hook
-  (prog-mode . display-line-numbers-mode))
+  ((prog-mode yml-mode org-mode markdown-mode) . display-line-numbers-mode))
 
 (use-package flymake
   :if (>= emacs-major-version 26)

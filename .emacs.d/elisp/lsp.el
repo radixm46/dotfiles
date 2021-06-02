@@ -8,19 +8,21 @@
   (lsp-document-sync-method nil) ;; always send incremental document
   (lsp-response-timeout 5)
   (lsp-prefer-flymake t) ;'flymake
-  :hook (
-      ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-      ;(XXX-mode . lsp)
-      ; if you want which-key integration
-      (lsp-mode . lsp-enable-which-key-integration)
-      (sh-mode . lsp)
-     )
+  :hook 
+  ((sh-mode
+    python-mode
+    go-mode
+    rustic-mode
+    js2-mode) . lsp)
+    ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+    ;(XXX-mode . lsp)
+    ; if you want which-key integration
+    ;(lsp-mode . lsp-enable-which-key-integration)
   :commands lsp
   :bind
   (:map lsp-mode-map
         ("C-c r"   . lsp-rename))
   :config
-  ;(require 'lsp-clients)
   ;; LSP UI tools
   (use-package lsp-ui
     :ensure t

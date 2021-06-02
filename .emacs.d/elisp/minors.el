@@ -2,7 +2,8 @@
 
 (use-package origami
   :ensure t
-  :hook (prog-mode . origami-mode))
+  :hook
+  (prog-mode . origami-mode))
 
 ;; enable evil
 (use-package evil
@@ -45,7 +46,7 @@
 (use-package highlight-indent-guides
   :ensure t
   :hook
-    (prog-mode . highlight-indent-guides-mode)
+  ((prog-mode yml-mode) . highlight-indent-guides-mode)
   :custom
   ;(if (not (display-graphic-p))
   ;    (progn
@@ -65,11 +66,16 @@
 
 (use-package rainbow-delimiters
   :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode))
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
 
 ;; configure whitespace
 (use-package whitespace
-  :hook (prog-mode . whitespace-mode)
+  :hook
+  ((prog-mode
+   yml-mode
+   org-mode
+   markdown-mode) . whitespace-mode)
   :custom
   (whitespace-global-modes '(not dired-mode tar-mode neotree))
   (whitespace-line-column 80)
@@ -111,7 +117,7 @@
   ;  :weight 'bold)
   ;(set-face-attribute 'whitespace-empty nil
   ;  :background my/bg-color)
-)
+  )
 
 (use-package git-gutter
   :ensure t
@@ -171,7 +177,6 @@
 
 (use-package editorconfig
   :ensure t
-  ;:hook (prog-mode . editorconfig-mode)
   :config (editorconfig-mode))
 
 (use-package ov
