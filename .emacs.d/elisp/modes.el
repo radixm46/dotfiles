@@ -107,8 +107,6 @@
     :ensure t
     :config (treemacs-icons-dired-mode))
 )
-
-
 ;(use-package treemacs-persp ;;treemacs-persective if you use perspective.el vs. persp-mode
 ;  :after treemacs persp-mode ;;or perspective vs. persp-mode
 ;  :ensure t
@@ -125,14 +123,6 @@
 (use-package rustic
   :ensure t
   :defer t
-  ;:init
-  ;(add-hook 'rustic-mode-hook #'lsp)
-  ;(add-hook 'rustic-mode-hook
-  ;  '(lambda ()
-  ;    (racer-mode t)
-  ;    (dumb-jump-mode t)
-  ;    (highlight-symbol-mode t)
-  ;    ))
   :hook
   ((rustic-mode . lsp)
    (rustic-mode . racer))
