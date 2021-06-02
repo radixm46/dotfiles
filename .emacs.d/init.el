@@ -115,7 +115,12 @@
   (display-line-numbers-type 'relative)
   (display-line-numbers-width 4)
   :hook
-  ((prog-mode yaml-mode org-mode markdown-mode) . display-line-numbers-mode))
+  ((conf-mode
+    fundamental-mode
+    markdown-mode
+    org-mode
+    prog-mode
+    yaml-mode) . display-line-numbers-mode))
 
 (use-package flymake
   :if (>= emacs-major-version 26)
@@ -127,7 +132,7 @@
   :custom
   (display-fill-column-indicator-column 90)
   :hook
-  (prog-mode . display-fill-column-indicator-mode))
+  ((conf-mode prog-mode) . display-fill-column-indicator-mode))
 
 ;; -------- package config under use-package --------
 

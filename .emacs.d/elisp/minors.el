@@ -46,7 +46,7 @@
 (use-package highlight-indent-guides
   :ensure t
   :hook
-  ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+  ((conf-mode prog-mode yaml-mode) . highlight-indent-guides-mode)
   :custom
   ;(if (not (display-graphic-p))
   ;    (progn
