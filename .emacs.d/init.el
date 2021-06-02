@@ -106,28 +106,24 @@
 
 (use-package display-line-numbers
   :if (>= emacs-major-version 26)
-  :init
-  (global-display-line-numbers-mode)
-  (display-line-numbers-mode t)
-  (defun disable-line-numbers ()
-    (display-line-numbers-mode nil))
   :custom
   (display-line-numbers-type 'relative)
+  (display-line-numbers-width 4)
   :hook
-  (xwidget-webkit-mode . disable-line-numbers))
+  (prog-mode . display-line-numbers-mode))
+
+(use-package flymake
+  :if (>= emacs-major-version 26)
+  :hook
+  (prog-mode . flymake-mode))
 
 (use-package display-fill-column-indicator
   :if (>= emacs-major-version 27)
   :custom
   (display-fill-column-indicator-column 90)
   :hook
-  (prog-mode . display-fill-column-indicator-mode)
-  )
+  (prog-mode . display-fill-column-indicator-mode))
 
-(use-package flymake
-  :if (>= emacs-major-version 26)
-  :hook
-  (prog-mode . flymake-mode))
 ;; -------- package config under use-package --------
 
 ;; skk config(use
