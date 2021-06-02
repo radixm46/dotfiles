@@ -46,7 +46,7 @@
 (use-package highlight-indent-guides
   :ensure t
   :hook
-  ((prog-mode yml-mode) . highlight-indent-guides-mode)
+  ((prog-mode yaml-mode) . highlight-indent-guides-mode)
   :custom
   ;(if (not (display-graphic-p))
   ;    (progn
@@ -73,7 +73,7 @@
 (use-package whitespace
   :hook
   ((prog-mode
-   yml-mode
+   yaml-mode
    org-mode
    markdown-mode) . whitespace-mode)
   :custom

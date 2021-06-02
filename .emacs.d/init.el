@@ -115,7 +115,7 @@
   (display-line-numbers-type 'relative)
   (display-line-numbers-width 4)
   :hook
-  ((prog-mode yml-mode org-mode markdown-mode) . display-line-numbers-mode))
+  ((prog-mode yaml-mode org-mode markdown-mode) . display-line-numbers-mode))
 
 (use-package flymake
   :if (>= emacs-major-version 26)
