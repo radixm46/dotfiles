@@ -297,9 +297,6 @@
   ;  :background my/bg-color)
 )
 
-(use-package magit
-  :ensure t)
-
 (use-package git-gutter
   :ensure t
   :hook (prog-mode . git-gutter-fix-init)

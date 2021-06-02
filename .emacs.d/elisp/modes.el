@@ -1,4 +1,7 @@
 ;; major modes loaded by init.el
+(use-package magit
+  :ensure t)
+
 (use-package neotree
   :ensure t
   :bind ([f7] . neotree-toggle)
