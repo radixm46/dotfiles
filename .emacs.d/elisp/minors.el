@@ -214,5 +214,4 @@
   )
 
 (use-package quickrun
-  :ensure t
-)
+  :ensure t)

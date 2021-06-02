@@ -179,6 +179,7 @@
 
 (use-package all-the-icons
   :ensure t) ;; need installation by all-the-icons-install-fonts
+
 ;; --------------- major modes ---------------
 (load "~/.emacs.d/elisp/modes.el")
 
