@@ -160,6 +160,9 @@
   (gnus-completing-read-function 'gnus-ido-completing-read)
   :config
   (ido-ubiquitous-mode 1))
+(use-package ido-yes-or-no
+  :ensure t
+  :config (ido-yes-or-no-mode t))
 
 (use-package exec-path-from-shell
   :ensure t
