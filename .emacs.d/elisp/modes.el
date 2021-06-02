@@ -191,7 +191,7 @@
 ;; org-mode config
 (use-package org
   :ensure t
-  :hook (org-mode . visual-line-mode)
+  :hook ((org-mode . visual-line-mode) (org-mode . display-line-numbers-mode))
   :mode ("\\.org\\'" . org-mode)
   :bind
   (("C-c l" . org-store-link)
@@ -266,7 +266,7 @@
 ;; markdown-mode
 (use-package markdown-mode
   :ensure t
-  :hook (markdown-mode . visual-line-mode)
+  :hook ((markdown-mode . visual-line-mode) (markdown-mode . display-line-numbers-mode))
   :commands (markdown-mode gfm-mode)
   :mode
   (("README\\.md\\'" . gfm-mode)
