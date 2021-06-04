@@ -12,12 +12,8 @@
   ((go-mode
     js2-mode
     python-mode
-    rustic-mode
+    rust-mode
     sh-mode) . lsp)
-    ;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-    ;(XXX-mode . lsp)
-    ; if you want which-key integration
-    ;(lsp-mode . lsp-enable-which-key-integration)
   :commands lsp
   :bind
   (:map lsp-mode-map
