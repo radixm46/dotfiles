@@ -145,34 +145,40 @@
         skk-init-file "~/.emacs.d/elisp/initskk.el"))
 
 ;; ido extensions
-(use-package amx
-  :ensure t
-  :bind
-  (:map global-map
-        ("M-x" . amx)
-        ("M-X" . amx-major-mode-commands))
+(use-package ido
+  ;; built-in
   :init
   (ido-mode t)
   (ido-everywhere t)
-  (setq ido-enable-flex-matching t)
   :custom
-  (amx-backend 'ido)
-  (amx-prompt-string "⚡> "))
-(use-package ido-vertical-mode
-  :ensure t
-  :custom
-  (ido-vertical-show-count t)
-  :config (ido-vertical-mode t))
-(use-package ido-completing-read+
-  :ensure t
-  :custom
-  (magit-completing-read-function 'magit-ido-completing-read)
-  (gnus-completing-read-function 'gnus-ido-completing-read)
+  (ido-enable-flex-matching t)
   :config
-  (ido-ubiquitous-mode 1))
-(use-package ido-yes-or-no
-  :ensure t
-  :config (ido-yes-or-no-mode t))
+  (use-package amx
+    :ensure t
+    :bind
+    (:map global-map
+          ("M-x" . amx)
+          ("M-X" . amx-major-mode-commands))
+    :custom
+    (amx-backend 'ido)
+    (amx-prompt-string "⚡> "))
+  (use-package ido-vertical-mode
+    :ensure t
+    :custom
+    (ido-vertical-show-count t)
+    (ido-vertical-indicator " ▶")
+    :config (ido-vertical-mode t))
+  (use-package ido-completing-read+
+    :ensure t
+    :custom
+    (magit-completing-read-function 'magit-ido-completing-read)
+    (gnus-completing-read-function 'gnus-ido-completing-read)
+    :config
+    (ido-ubiquitous-mode 1))
+  (use-package ido-yes-or-no
+    :ensure t
+    :config (ido-yes-or-no-mode t))
+)
 
 (use-package exec-path-from-shell
   :ensure t
