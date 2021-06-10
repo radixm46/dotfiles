@@ -8,13 +8,14 @@
   (lsp-document-sync-method nil) ;; always send incremental document
   (lsp-response-timeout 5)
   (lsp-prefer-flymake t) ;'flymake
-  :hook 
+  :commands lsp
+  :hook
   ((go-mode
+    js-mode
     js2-mode
     python-mode
     rust-mode
     sh-mode) . lsp)
-  :commands lsp
   :bind
   (:map lsp-mode-map
         ("C-c r"   . lsp-rename))
