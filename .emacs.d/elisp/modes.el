@@ -302,14 +302,24 @@
   (web-mode-enable-heredoc-fontification t)
 )
 
+(use-package js-mode
+  :if (>= emacs-major-version 27)
+  :custom
+  (js-indent-level 2)
+  :config
+  (use-package js2-mode
+    :ensure t
+    :hook (js-mode . js2-minor-mode)
+    :config (setq js2-basic-offset 2))
+  )
 (use-package js2-mode
+  :if (<= emacs-major-version 26)
   :ensure t
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.jsx\\'" . js2-mode))
-  :custom
-  (js2-basic-offset 2)
-)
+  :config (setq js2-basic-offset 2)
+  )
 
 (use-package csv-mode
   :ensure t
