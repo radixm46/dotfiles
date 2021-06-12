@@ -146,22 +146,24 @@
 (use-package python-mode
   :ensure t
   :mode ("\\.py\\'" . python-mode)
+  :config
+  (use-package poetry
+    :ensure t
+    :hook (python-mode . poetry-tracking-mode))
+  (use-package pipenv
+    :ensure t
+    :custom
+    (pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended)
+    :init
+    (defun python-pipenv-init ()
+      "init python environment on python-mode"
+      (if (not pipenv-mode)
+          (pipenv-mode))
+      (if (eq python-shell-virtualenv-root nil)
+          (pipenv-activate))))
+    ;:hook (python-mode . python-pipenv-init))
   )
 
-(use-package pipenv
-  :ensure t
-  :init
-  (setq
-   pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended)
-  (defun python-pipenv-init ()
-    "init python environment on python-mode"
-    (if (not pipenv-mode)
-        (pipenv-mode))
-    (if (eq python-shell-virtualenv-root nil)
-        (pipenv-activate)))
-  :hook (python-mode . python-pipenv-init)
-  )
 
 (use-package go-mode
   :ensure t
