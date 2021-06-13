@@ -234,7 +234,7 @@
 
   (use-package org-bullets
     :ensure t
-    :hook (org-mode))
+    :hook (org-mode . org-bullets-mode))
 
   ;configure org-pomodoro
   (use-package org-pomodoro
