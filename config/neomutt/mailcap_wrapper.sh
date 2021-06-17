@@ -25,7 +25,7 @@ case "$(uname)" in
             *) macos_open ;;
         esac
         ;;
-    Linux*) 
+    Linux*)
         # require xdg-open
         function linux_open_with_xdg () {
             printf "opening ${file_name}\n o) xdg-open\n e) emacs\n >" 1>&2
