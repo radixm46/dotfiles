@@ -285,7 +285,8 @@
    ("\\.as[cp]x\\'" . web-mode)
    ("\\.erb\\'" . web-mode)
    ("\\.mustache\\'" . web-mode)
-   ("\\.djhtml\\'" . web-mode))
+   ("\\.djhtml\\'" . web-mode)
+   ("\\.vue\\'" . web-mode))
   :custom
   ;; highlights
   (web-mode-enable-current-element-highlight t)
