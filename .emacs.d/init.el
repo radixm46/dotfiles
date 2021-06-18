@@ -165,6 +165,7 @@
   (use-package ido-vertical-mode
     :ensure t
     :custom
+    (ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
     (ido-vertical-show-count t)
     (ido-vertical-indicator " ▶")
     :config (ido-vertical-mode t))
