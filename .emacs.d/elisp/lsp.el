@@ -1,22 +1,15 @@
-;; -------- package for lsp --------
+;; -------- packages for lsp --------
 
 (use-package lsp-mode
   :ensure t
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
-  ; :init (setq lsp-keymap-prefix "C-c C-l")
   :custom
   (lsp-document-sync-method nil) ;; always send incremental document
   (lsp-response-timeout 5)
   (lsp-prefer-flymake t) ;'flymake
-  :commands lsp
-  :hook
-  ((go-mode
-    js-mode
-    js2-mode
-    python-mode
-    rust-mode
-    sh-mode) . lsp)
+  :commands (lsp lsp-deferred)
   :bind
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
+  ; :init (setq lsp-keymap-prefix "C-c C-l")
   (:map lsp-mode-map
         ("C-c r"   . lsp-rename))
   :config

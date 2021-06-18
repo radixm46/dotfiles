@@ -191,17 +191,20 @@
 (use-package all-the-icons
   :ensure t) ;; need installation by all-the-icons-install-fonts
 
-;; --------------- major modes ---------------
-(load "~/.emacs.d/elisp/modes.el")
-
-;; ---------- loading doom theme  ----------
-(load "~/.emacs.d/elisp/doom.el")
-
 ;; --------------- lsp package ---------------
 (load "~/.emacs.d/elisp/lsp.el")
 
 ;; --------------- minor modes ---------------
 (load "~/.emacs.d/elisp/minors.el")
+
+;; --------------- major modes ---------------
+(load "~/.emacs.d/elisp/majors-s.el")
+
+;; --------------- major modes ---------------
+(load "~/.emacs.d/elisp/majors.el")
+
+;; ---------- loading doom theme  ----------
+(load "~/.emacs.d/elisp/doom.el")
 
 ;; ------------ loading local.el  ------------
 (if (file-exists-p "~/.emacs.d/elisp/local.el")
