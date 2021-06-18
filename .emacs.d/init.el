@@ -117,10 +117,9 @@
   :hook
   ((conf-mode
     fundamental-mode
-    markdown-mode
-    org-mode
+    outline-mode
     prog-mode
-    yaml-mode) . display-line-numbers-mode))
+    text-mode) . display-line-numbers-mode))
 
 (use-package flymake
   :if (>= emacs-major-version 26)
