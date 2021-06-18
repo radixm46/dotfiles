@@ -3,27 +3,13 @@
 ;; required for racer
 (use-package rust-mode
   :ensure t
+  :hook (rust-mode . lsp)
+  :custom
+  (rust-format-on-save t)
   :config
-  (setq auto-mode-alist
-    (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
-  :hook ((rust-mode . lsp)
-         (before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports))
+  (use-package cargo
+    :ensure t)
   )
-
-;(use-package rustic
-;  :ensure t
-;  :defer t
-;  :mode ("\\.rs\\'" . rustic-mode)
-;  :commands (rustic-mode)
-;  :config
-;  (use-package racer
-;    :defer t
-;    :ensure t
-;    :commands racer
-;    :hook (rustic-mode . racer)
-;  )
-;)
 
 (use-package python-mode
   :ensure t
