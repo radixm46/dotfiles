@@ -129,7 +129,10 @@
 (use-package highlight-indent-guides
   :ensure t
   :hook
-  ((conf-mode prog-mode yaml-mode) . highlight-indent-guides-mode)
+  ((conf-mode
+    outline-mode
+    prog-mode
+    text-mode) . highlight-indent-guides-mode)
   :custom
   ;(if (not (display-graphic-p))
   ;    (progn
@@ -150,15 +153,16 @@
 (use-package rainbow-delimiters
   :ensure t
   :hook
-  (prog-mode . rainbow-delimiters-mode))
+  ((conf-mode
+    prog-mode) . rainbow-delimiters-mode))
 
 ;; configure whitespace
 (use-package whitespace
   :hook
-  ((prog-mode
-   yaml-mode
-   org-mode
-   markdown-mode) . whitespace-mode)
+  ((conf-mode
+    outline-mode
+    prog-mode
+    text-mode) . whitespace-mode)
   :custom
   (whitespace-global-modes '(not dired-mode tar-mode neotree))
   (whitespace-line-column 80)
