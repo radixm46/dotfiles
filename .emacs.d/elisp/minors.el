@@ -302,3 +302,10 @@
 
 (use-package quickrun
   :ensure t)
+
+(use-package yasnippet
+  :ensure t
+  :hook (prog-mode . yas-minor-mode)
+  :config (yas-reload-all)
+  )
+
