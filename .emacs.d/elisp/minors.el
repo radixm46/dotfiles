@@ -233,14 +233,18 @@
         ("C-x C-g s" . git-gutter:stage-hunk)))
 
 (use-package company
-  ;company completion framework
+  ;; company completion framework
+  :ensure t
+  :custom
+  (company-idle-delay 0)
+  (company-selection-wrap-around t)
+  (completion-ignore-case t)
+  :config
+  (global-company-mode)
+  (use-package company-box
     :ensure t
-    :custom
-    (company-idle-delay 0)
-    (company-selection-wrap-around t)
-    (completion-ignore-case t)
-    :config
-    (global-company-mode))
+    :hook (company-mode . company-box-mode))
+  )
 
 (use-package ace-window
   :ensure t
