@@ -85,18 +85,14 @@
 
 (use-package origami
   :ensure t
-  :hook
-  (prog-mode . origami-mode))
+  :hook (prog-mode . origami-mode))
 
 ;; enable evil
 (use-package evil
   :ensure t
-  :init
-  (setq evil-want-keybinding nil)
-  :custom
-  (evil-undo-system 'undo-tree)
-  :config
-  (evil-mode 1))
+  :init (setq evil-want-keybinding nil)
+  :custom (evil-undo-system 'undo-tree)
+  :config (evil-mode 1))
 (use-package evil-collection
   :after evil
   :ensure t
@@ -167,9 +163,9 @@
   (whitespace-global-modes '(not dired-mode tar-mode neotree))
   (whitespace-line-column 80)
   (whitespace-style
-    '(face  ; enable
+    '(face ;; enable
       trailing
-      tabs  ; conflicts highlight indent mode
+      tabs ;; conflicts highlight indent mode
       space-mark
       tab-mark
       ;newline
@@ -181,7 +177,7 @@
   (whitespace-display-mappings
     '(
        (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-       (newline-mark ?\n [?\x21B2 ?\n])  ; display when in some mejor mode
+       (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some mejor mode
      ))
   :config
   (global-whitespace-mode t)

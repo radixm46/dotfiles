@@ -33,7 +33,7 @@
 ;; make backup files
 (setq backup-directory-alist '((".*" .  "~/.emacs.d/.tmp/hist")))
 (setq make-backup-files t)
-(setq version-control t)                ; enable version control
+(setq version-control t) ;; enable version control
 (setq kept-new-versions 5)
 (setq kept-old-versions 1)
 (setq delete-old-versions t)
