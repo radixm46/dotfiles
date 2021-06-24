@@ -6,6 +6,7 @@
   (lsp-document-sync-method nil) ;; always send incremental document
   (lsp-response-timeout 5)
   (lsp-prefer-flymake t) ;'flymake
+  (lsp-eldoc-enable-hover nil)
   :commands (lsp lsp-deferred)
   :bind
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
