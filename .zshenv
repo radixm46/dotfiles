@@ -149,7 +149,7 @@ path=("${HOME}/.cargo/bin"(N-/) ${path})
 # configure pyenv
 if is_available 'pyenv'; then
     export PIPENV_VENV_IN_PROJECT=true
-    eval "$(pyenv init -)"
+    eval "$(pyenv init --path)"
 fi
 
 # configure node environment
