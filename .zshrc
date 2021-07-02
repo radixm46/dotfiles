@@ -36,6 +36,20 @@ bindkey -M vicmd 'N' history-substring-search-down
 zinit light hlissner/zsh-autopair
 autopair-init
 
+if is_available 'emacs'; then
+    zinit light Flinner/zsh-emacs
+fi
+
+if is_available 'git'; then
+    zinit light mdumitru/git-aliases
+    zinit light paulirish/git-open
+    zinit light mollifier/cd-gitroot
+fi
+
+
+if is_available 'systemctl'; then
+    zinit light le0me55i/zsh-systemd
+fi
 ## ------------------------------------------------------------------------------
 # enable colors
 autoload -Uz colors
