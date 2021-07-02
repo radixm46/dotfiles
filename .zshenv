@@ -13,7 +13,7 @@ function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
 function print_os_glyph() {
     case "$(uname)" in
         Darwin)
-            if runs_on_X86_64; then
+            if runs_on_macX86_64; then
                 printf $'\UF302 \UF129'
             else
                 printf $'\UF302'
@@ -80,9 +80,9 @@ case "$(uname)" in
         path=(${path} '/usr/sbin'(N-/) '/sbin'(N-/)) # init path
 
         # return true if macOS runs on Arm64
-        function runs_on_ARM64() { [[ "$(uname -m)" = 'arm64' ]]; }
+        function runs_on_macARM64() { [[ "$(uname -m)" = 'arm64' ]]; }
         # return true if macOS runs on x86_64 or Rosetta2
-        function runs_on_X86_64() { [[ "$(uname -m)" = 'x86_64' ]]; }
+        function runs_on_macX86_64() { [[ "$(uname -m)" = 'x86_64' ]]; }
 
         # path of hoembrew on /opt/homebrew
         BREW_PATH_OPT='/opt/homebrew'
@@ -94,7 +94,7 @@ case "$(uname)" in
         function brew_exists_at_local() { [[ -d "${BREW_PATH_LOCAL}/bin" ]]; }
 
         # switch homebrew dir by arch
-        if runs_on_ARM64; then
+        if runs_on_macARM64; then
             path=(\
                 ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
                 ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
@@ -112,7 +112,7 @@ case "$(uname)" in
                     function rzsh() { "${BREW_PATH_LOCAL}/bin/zsh"; }
                 fi
             fi
-        elif runs_on_X86_64; then
+        elif runs_on_macX86_64; then
             path=(\
                 ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
                 ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
