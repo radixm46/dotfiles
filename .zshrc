@@ -185,9 +185,6 @@ elif is_available putclip; then
     alias -g C='| putclip'
 fi
 
-if is_available 'emacs'; then
-    # launch emacs daemon background and forked
-    function emacsd() { (emacs --bg-daemon=$@ &); }
 fi
 
 # ------------------------------------------------------------------------------
