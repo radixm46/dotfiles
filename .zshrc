@@ -87,8 +87,23 @@ setopt complete_in_word
 setopt always_last_prompt
 # ignore cases
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
 zstyle ':completion:*' ignore-parents parent pwd ..
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' completer \
+       _expand _complete _match _prefix _approximate _list _history
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-separator '=>'
+
+zstyle ':completion:*:default' menu select=2
+
+zstyle -e ':completion:*:default' list-colors \
+    'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=35}")'
+
+zstyle ':completion:*:manuals' separate-sections true
+zstyle ':completion:*:messages' format '%F{yellow}%d'$DEFAULT
+zstyle ':completion:*:descriptions' format '%F{yellow}=> %B%d%b%f'$DEFAULT
+zstyle ':completion:*:warnings' format '%F{red}No matches for:''%F{yellow} %d'$DEFAULT
+zstyle ':completion:*:options' description 'yes'
 
 zstyle ':completion:*:sudo:*' \
        command-path /sbin /usr/sbin \
