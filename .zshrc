@@ -1,25 +1,42 @@
 # ------------------------------------------------------------------------------
-# zplugin
+# keybinds
+bindkey '^R' history-incremental-pattern-search-backward
+bindkey -v  # use vim style keybinding
+
+# ------------------------------------------------------------------------------
+# zinit install
 # ------------------------------------------------------------------------------
 ZINITDIR=$HOME/.zinit
-if [ ! -d $ZINITDIR ]; then
-    echo 'Installing zplugin...'
+function zinit_install() {
+    echo 'Installing zdharma/zinit...'
     echo "target dir: $ZINITDIR"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+}
+
+if [ ! -d $ZINITDIR ]; then
+    zinit_install
 fi
 
-source "${HOME}/.zinit/bin/zplugin.zsh"
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
+source "${ZINITDIR}/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
-zplugin light zsh-users/zsh-autosuggestions
-zplugin light zsh-users/zsh-completions
-zplugin light zdharma/fast-syntax-highlighting
+zinit light zsh-users/zsh-autosuggestions
 
+zinit light zsh-users/zsh-completions
 autoload -Uz compinit
 compinit -u
 
-# ------------------------------------------------------------------------------
+zinit light zdharma/fast-syntax-highlighting
+
+zinit light zsh-users/zsh-history-substring-search
+bindkey -M vicmd 'n' history-substring-search-up
+bindkey -M vicmd 'N' history-substring-search-down
+
+zinit light hlissner/zsh-autopair
+autopair-init
+
+## ------------------------------------------------------------------------------
 # enable colors
 autoload -Uz colors
 colors
@@ -80,11 +97,6 @@ zstyle ':completion:*:sudo:*' \
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
-# ------------------------------------------------------------------------------
-# keybinds
-
-bindkey '^R' history-incremental-pattern-search-backward
-bindkey -v  # use vim style keybinding
 
 # ------------------------------------------------------------------------------
 # alias
