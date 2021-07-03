@@ -26,8 +26,7 @@ autoload -Uz _zinit
 zinit light zsh-users/zsh-autosuggestions
 
 zinit light zsh-users/zsh-completions
-autoload -Uz compinit
-compinit -u
+autoload -Uz compinit && compinit -u
 
 zinit light zdharma/fast-syntax-highlighting
 
@@ -54,8 +53,7 @@ if is_available 'systemctl'; then
 fi
 ## ------------------------------------------------------------------------------
 # enable colors
-autoload -Uz colors
-colors
+autoload -Uz colors && colors
 
 # 10ms for key sequences
 KEYTIMEOUT=1
