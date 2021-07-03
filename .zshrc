@@ -118,19 +118,25 @@ zstyle ':completion:*' completer \
        _expand _complete _match _prefix _approximate _list _history
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-separator '=>'
+zstyle ':completion:*' list-dirs-first true
+zstyle ':completion:*' list-prompt \
+       '%K{blue} %k%F{blue}%U At %l (%p: TAB for more, or type char) %u%f'
+zstyle ':completion:*' select-prompt \
+       '%K{blue} %k%F{blue}%U At %l (%p: scroll active) %u%f'
 
 zstyle ':completion:*:default' menu select=2
 
 zstyle -e ':completion:*:default' list-colors \
-    'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=35}")'
+       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=35}")'
 
 zstyle ':completion:*:manuals' separate-sections true
-zstyle ':completion:*:messages' format '%F{yellow}%d'$DEFAULT
+zstyle ':completion:*:messages' format '%F{yellow}%d%f'
 zstyle ':completion:*:descriptions' format \
-       "%{${bg[yellow]}%} %{${reset_color}%}%F{yellow}%U %d %u%{${reset_color}%}"
+       "%K{green} %k%F{green}%U %d %u%f"
 zstyle ':completion:*:warnings' format \
-       "%{${bg[red]}%} %{${reset_color}%}%F{red}%U No matches %u"\
-       "%F{yellow}for: %d%{${reset_color}%}"
+       "%K{red} %k%F{red}%U No matches %u%f %F{yellow}for: %d%f"
+zstyle ':completion:*:corrections' format \
+       "%K{red} %k%F{red}%U %d (errors: %e) %u%f"
 zstyle ':completion:*:options' description 'yes'
 
 zstyle ':completion:*:sudo:*' \
