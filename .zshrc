@@ -97,12 +97,20 @@ setopt hist_reduce_blanks
 
 # ------------------------------------------------------------------------------
 # completions
-setopt list_types
+setopt always_last_prompt
 setopt auto_menu
 setopt auto_param_keys
 setopt complete_in_word
-setopt always_last_prompt
+setopt extended_glob
+setopt globdots
+setopt list_types # display file type
+setopt magic_equal_subst # complete after equal sign
+setopt mark_dirs # add '/' at the end of dir name in completion
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3' # autosuggest color
+
 # ignore cases
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.cache/zsh
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' ignore-parents parent pwd ..
 zstyle ':completion:*' verbose yes
