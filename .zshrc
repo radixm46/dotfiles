@@ -206,7 +206,10 @@ elif is_available putclip; then
 fi
 
 # ------------------------------------------------------------------------------
-function generate_prompt() {
+# prompt configure
+autoload -Uz promptinit && promptinit
+
+function prompt_rdm46theme_setup() {
     local P_PROM=''
     # with nerd fonts
     local P_LOGIN=$'\UF2BD'
@@ -229,10 +232,11 @@ function generate_prompt() {
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}%# "
 }
-generate_prompt
+
+prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
 
 # ------------------------------------------------------------------------------
-# vcs_info
+# vcs info TODO: include vcs prompt to theme
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
 
