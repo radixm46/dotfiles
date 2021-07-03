@@ -117,8 +117,11 @@ zstyle -e ':completion:*:default' list-colors \
 
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:messages' format '%F{yellow}%d'$DEFAULT
-zstyle ':completion:*:descriptions' format '%F{yellow}=> %B%d%b%f'$DEFAULT
-zstyle ':completion:*:warnings' format '%F{red}No matches for:''%F{yellow} %d'$DEFAULT
+zstyle ':completion:*:descriptions' format \
+       "%{${bg[yellow]}%} %{${reset_color}%}%F{yellow}%U %d %u%{${reset_color}%}"
+zstyle ':completion:*:warnings' format \
+       "%{${bg[red]}%} %{${reset_color}%}%F{red}%U No matches %u"\
+       "%F{yellow}for: %d%{${reset_color}%}"
 zstyle ':completion:*:options' description 'yes'
 
 zstyle ':completion:*:sudo:*' \
