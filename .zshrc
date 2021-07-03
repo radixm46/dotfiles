@@ -4,6 +4,9 @@ bindkey '^R' history-incremental-pattern-search-backward
 bindkey -v  # use vim style keybinding
 bindkey -M viins "^N" expand-or-complete
 bindkey -M viins "^P" reverse-menu-complete
+bindkey -M viins "^F" forward-char
+bindkey -M viins "^B" backward-char
+bindkey -M viins "^I" menu-complete
 
 # ------------------------------------------------------------------------------
 # zinit install
