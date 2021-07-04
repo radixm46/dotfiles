@@ -24,11 +24,6 @@ source "${ZINITDIR}/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-zinit light zsh-users/zsh-autosuggestions
-
-zinit light zsh-users/zsh-completions
-autoload -Uz compinit && compinit -u
-
 # syntax highlighting
 zinit light zdharma/fast-syntax-highlighting
 
@@ -98,7 +93,15 @@ setopt hist_ignore_space
 setopt hist_reduce_blanks
 
 # ------------------------------------------------------------------------------
-# completions
+# completions config
+zinit light zsh-users/zsh-completions # Additional completion definitions for Zsh
+
+zinit light zsh-users/zsh-autosuggestions # fast/unobtrusive autosuggestions for zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3' # autosuggest color
+
+# activate compinit
+autoload -Uz compinit && compinit -u
+
 setopt always_last_prompt
 setopt auto_menu
 setopt auto_param_keys
@@ -108,7 +111,6 @@ setopt globdots
 setopt list_types # display file type
 setopt magic_equal_subst # complete after equal sign
 setopt mark_dirs # add '/' at the end of dir name in completion
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3' # autosuggest color
 
 # ignore cases
 zstyle ':completion:*' use-cache on
