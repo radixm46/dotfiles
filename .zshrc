@@ -114,8 +114,7 @@ setopt magic_equal_subst # complete after equal sign
 setopt mark_dirs # add '/' at the end of dir name in completion
 
 # ignore cases
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.cache/zsh
+zstyle ':completion:*' use-cache on # store cache to ${ZDOTDIR}/.zcompcache
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' ignore-parents parent pwd ..
 zstyle ':completion:*' verbose yes
