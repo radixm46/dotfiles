@@ -11,7 +11,8 @@ bindkey -M viins "^I" menu-complete
 # ------------------------------------------------------------------------------
 # zinit install
 # ------------------------------------------------------------------------------
-ZINITDIR=$HOME/.zinit
+ZINITDIR="$HOME/.zinit"
+ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 function zinit_install() {
     echo 'Installing zdharma/zinit...'
     echo "target dir: $ZINITDIR"
@@ -84,7 +85,7 @@ zstyle ':zle:*' word-style unspecified
 
 # ------------------------------------------------------------------------------
 # history configure
-HISTFILE=~/.zsh_history
+HISTFILE="${ZDOTDIR}/.zsh_history"
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt share_history
