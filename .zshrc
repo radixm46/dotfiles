@@ -17,11 +17,9 @@ function zinit_install() {
     echo "target dir: $ZINITDIR"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 }
-
 if [ ! -d $ZINITDIR ]; then
     zinit_install
 fi
-
 source "${ZINITDIR}/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
@@ -31,29 +29,33 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 autoload -Uz compinit && compinit -u
 
+# syntax highlighting
 zinit light zdharma/fast-syntax-highlighting
 
+# substring search
 zinit light zsh-users/zsh-history-substring-search
 bindkey -M vicmd 'n' history-substring-search-up
 bindkey -M vicmd 'N' history-substring-search-down
 
+# auto pair brackets
 zinit light hlissner/zsh-autopair
 autopair-init
 
+# plugins depends on external commands
 if is_available 'emacs'; then
-    zinit light Flinner/zsh-emacs
+    zinit light Flinner/zsh-emacs # alias
 fi
-
 if is_available 'git'; then
-    zinit light mdumitru/git-aliases
-    zinit light paulirish/git-open
-    zinit light mollifier/cd-gitroot
+    zinit light mdumitru/git-aliases # alias
+    zinit light paulirish/git-open # open homepage of repo
+    zinit light mollifier/cd-gitroot # move to root dir of repo
 fi
 
 
 if is_available 'systemctl'; then
-    zinit light le0me55i/zsh-systemd
+    zinit light le0me55i/zsh-systemd # alias
 fi
+
 ## ------------------------------------------------------------------------------
 # enable colors
 autoload -Uz colors && colors
