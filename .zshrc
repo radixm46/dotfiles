@@ -128,7 +128,7 @@ zstyle ':completion:*' list-prompt \
 zstyle ':completion:*' select-prompt \
        '%K{blue} %k%F{blue}%U At %l (%p: scroll active) %u%f'
 
-zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*:default' menu select=2 search
 
 zstyle -e ':completion:*:default' list-colors \
        'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=35}")'
