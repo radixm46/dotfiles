@@ -144,7 +144,7 @@ bindkey -M menuselect '^A' beginning-of-line
 bindkey -M menuselect '^E' end-of-line
 
 zstyle -e ':completion:*:default' list-colors \
-       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=35}")'
+       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34;04=35}")'
 
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:messages' format '%F{yellow}%d%f'
