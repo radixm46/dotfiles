@@ -1,12 +1,16 @@
 # ------------------------------------------------------------------------------
 # keybinds
-bindkey '^R' history-incremental-pattern-search-backward
 bindkey -v  # use vim style keybinding
-bindkey -M viins "^N" expand-or-complete
-bindkey -M viins "^P" reverse-menu-complete
-bindkey -M viins "^F" forward-char
-bindkey -M viins "^B" backward-char
-bindkey -M viins "^I" menu-complete
+bindkey -M vicmd '^R' history-incremental-pattern-search-backward
+bindkey -M viins '^N' menu-complete # enter search
+bindkey -M viins '^P' reverse-menu-complete
+bindkey -M viins '^F' forward-char
+bindkey -M viins '^B' backward-char
+bindkey -M viins '^I' expand-or-complete
+bindkey -M viins '^H' backward-delete-char
+bindkey -M viins '^D' delete-char
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
 
 # ------------------------------------------------------------------------------
 # zinit install
@@ -102,6 +106,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3' # autosuggest color
 
 # activate compinit
 autoload -Uz compinit && compinit -u
+zmodload -i zsh/complist
 
 setopt always_last_prompt
 setopt auto_menu
@@ -128,7 +133,15 @@ zstyle ':completion:*' list-prompt \
 zstyle ':completion:*' select-prompt \
        '%K{blue} %k%F{blue}%U At %l (%p: scroll active) %u%f'
 
-zstyle ':completion:*:default' menu select=2 search
+zstyle ':completion:*:default' menu select=2 interactive
+bindkey -M menuselect '^N' down-line-or-history
+bindkey -M menuselect '^P' up-line-or-history
+bindkey -M menuselect '^S' history-incremental-search-forward
+bindkey -M menuselect '^J' accept-and-infer-next-history
+bindkey -M menuselect '^H' backward-delete-char
+bindkey -M menuselect '^D' delete-char
+bindkey -M menuselect '^A' beginning-of-line
+bindkey -M menuselect '^E' end-of-line
 
 zstyle -e ':completion:*:default' list-colors \
        'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=35}")'
