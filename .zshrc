@@ -133,6 +133,8 @@ zstyle ':completion:*' select-prompt \
        '%K{blue} %k%F{blue}%U At %l (%p: scroll active) %u%f'
 
 zstyle ':completion:*:default' menu select=2 interactive
+zstyle -e ':completion:*:default' list-colors \
+       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34;04=35}")'
 bindkey -M menuselect '^N' down-line-or-history
 bindkey -M menuselect '^P' up-line-or-history
 bindkey -M menuselect '^S' history-incremental-search-forward
@@ -141,9 +143,7 @@ bindkey -M menuselect '^H' backward-delete-char
 bindkey -M menuselect '^D' delete-char
 bindkey -M menuselect '^A' beginning-of-line
 bindkey -M menuselect '^E' end-of-line
-
-zstyle -e ':completion:*:default' list-colors \
-       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34;04=35}")'
+bindkey -M menuselect ' ' accept-search # when press space, explicitly quit menuselect mode
 
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:messages' format '%F{yellow}%d%f'
