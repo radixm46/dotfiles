@@ -100,9 +100,8 @@ setopt hist_reduce_blanks
 # ------------------------------------------------------------------------------
 # completions config
 zinit light zsh-users/zsh-completions # Additional completion definitions for Zsh
-
 zinit light zsh-users/zsh-autosuggestions # fast/unobtrusive autosuggestions for zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3' # autosuggest color
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=gray,underline' # autosuggest color
 
 # activate compinit
 autoload -Uz compinit && compinit -u
