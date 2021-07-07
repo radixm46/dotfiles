@@ -31,12 +31,10 @@ autoload -Uz _zinit
 
 # syntax highlighting
 zinit light zdharma/fast-syntax-highlighting
-
 # substring search
 zinit light zsh-users/zsh-history-substring-search
 bindkey -M vicmd 'n' history-substring-search-up
 bindkey -M vicmd 'N' history-substring-search-down
-
 # auto pair brackets
 zinit light hlissner/zsh-autopair
 autopair-init
@@ -45,6 +43,7 @@ autopair-init
 if is_available 'emacs'; then
     zinit light Flinner/zsh-emacs # alias
 fi
+
 if is_available 'git'; then
     zinit light mdumitru/git-aliases # alias
     zinit light paulirish/git-open # open homepage of repo
@@ -86,7 +85,6 @@ autoload -Uz select-word-style
 zstyle ':zle:*' word-chars " /=;@:{},|"
 zstyle ':zle:*' word-style unspecified
 
-
 # ------------------------------------------------------------------------------
 # history configure
 HISTFILE="${ZDOTDIR}/.zsh_history"
@@ -117,9 +115,8 @@ setopt list_types # display file type
 setopt magic_equal_subst # complete after equal sign
 setopt mark_dirs # add '/' at the end of dir name in completion
 
-# ignore cases
 zstyle ':completion:*' use-cache on # store cache to ${ZDOTDIR}/.zcompcache
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore cases
 zstyle ':completion:*' ignore-parents parent pwd ..
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' completer \
