@@ -29,8 +29,15 @@ source "${ZINITDIR}/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# syntax highlighting
-zinit light zdharma/fast-syntax-highlighting
+# load syntax-highilight, additional completions, and autosuggestions
+zinit wait lucid for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zdharma/fast-syntax-highlighting \
+    blockf \
+        zsh-users/zsh-completions \
+    atload"!_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions
+
 # substring search
 zinit light zsh-users/zsh-history-substring-search
 bindkey -M vicmd 'n' history-substring-search-up
@@ -97,8 +104,6 @@ setopt hist_reduce_blanks
 
 # ------------------------------------------------------------------------------
 # completions config
-zinit light zsh-users/zsh-completions # Additional completion definitions for Zsh
-zinit light zsh-users/zsh-autosuggestions # fast/unobtrusive autosuggestions for zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=gray,underline' # autosuggest color
 
 # activate compinit
