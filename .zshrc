@@ -57,7 +57,6 @@ if is_available 'git'; then
     zinit light mollifier/cd-gitroot # move to root dir of repo
 fi
 
-
 if is_available 'systemctl'; then
     zinit light le0me55i/zsh-systemd # alias
 fi
@@ -223,6 +222,70 @@ elif is_available putclip; then
     alias -g C='| putclip'
 fi
 
+
+# ------------------------------------------------------------------------------
+# define functions
+# print os glyph from nerd fonts
+function print_os_glyph() {
+    case "$(uname)" in
+        Darwin)
+            if runs_on_macX86_64; then
+                printf $'\UF302 \UF129'
+            else
+                printf $'\UF302'
+            fi
+            ;;
+        Linux*)
+            if [[ -e '/etc/os-release' ]]; then
+                local distro_id="$(</etc/os-release|grep '^ID=')"
+                case ${distro_id#'ID='} in
+                    arch) printf $'\UF303' ;;
+                    centos) printf $'\UF304' ;;
+                    debian) printf $'\UF306' ;;
+                    fedora) printf $'\UF30A' ;;
+                    manjaro) printf $'\UF312' ;;
+                    opensuse) printf $'\UF314' ;;
+                    raspbian) printf $'\UF315' ;;
+                    sles) printf $'\UF314' ;;
+                    ubuntu) printf $'\UF31C' ;;
+                    # slackware) printf $'\UF318' ;;
+                    # nixos) printf $'\UF313' ;;
+                    # mint) printf $'\UF30F' ;;
+                    # alpine) printf $'\UF300' ;;
+                    # redhat) printf $'\UF316' ;;
+                esac
+            else
+                printf $'\UF83C'
+            fi
+            ;;
+        *)
+            printf $'\UF841'
+            ;;
+    esac
+}
+
+# weather from wttr.in
+function get_weather() {
+    local format=""
+    while getopts L:d:l:sf: option
+    do
+        case ${option} in
+            l) local target_loc="${OPTARG}"
+                ;;
+            d) local days="${OPTARG}"  # TODO: chack value(0-3)
+                ;;
+            L) local lang_="${OPTARG}"
+                ;;
+            s) local format='%l:+%c++%t++%w++%p++%P'
+                ;;
+            f) local format=''"${OPTARG}"
+                ;;
+        esac
+    done
+    curl -s "wttr.in/${target_loc}"\?"${days:=1n}qA&lang=${lang_:=ja}&format=${format:=}"
+}
+alias wttr='get_weather'
+
 # ------------------------------------------------------------------------------
 # prompt configure
 autoload -Uz promptinit && promptinit
@@ -281,9 +344,6 @@ function _update_vcs_info_msg() {
     RPROMPT="${vcs_info_msg_0_}"
 }
 add-zsh-hook precmd _update_vcs_info_msg
-# ------------------------------------------------------------------------------
-
-alias wttr='get_weather'
 
 # ------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
