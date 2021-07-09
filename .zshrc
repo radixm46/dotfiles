@@ -135,7 +135,7 @@ zstyle ':completion:*' select-prompt \
 
 zstyle ':completion:*:default' menu select=2 interactive
 zstyle -e ':completion:*:default' list-colors \
-       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34;04=35}")'
+       'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34;04=35}:${(s.:.)LS_COLORS}")'
 bindkey -M menuselect '^N' down-line-or-history
 bindkey -M menuselect '^P' up-line-or-history
 bindkey -M menuselect '^S' history-incremental-search-forward
