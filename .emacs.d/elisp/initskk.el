@@ -1,5 +1,5 @@
 ;; skk init file
-(setq skk-get-jisyo-directory "~/.emacs.d/skk/dict"
+(setq skk-get-jisyo-directory "~/.emacs.d/.cache/skk/dict"
       skk-use-azik t
       skk-azik-keyboard-type 'us101
       skk-show-inline t
@@ -18,5 +18,5 @@
 
 (unless (file-directory-p skk-get-jisyo-directory)
   (skk-get skk-get-jisyo-directory))
-(setq skk-large-jisyo "~/.emacs.d/skk/dict/SKK-JISYO.L")
+(setq skk-large-jisyo "~/.emacs.d/.cache/skk/dict/SKK-JISYO.L")
 ;(setq skk-cdb-large-jisyo "~/.emacs.d/skkdict/SKK-JISYO.L.cdb")

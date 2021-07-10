@@ -1,24 +1,19 @@
 #ignorefiles
 
-auto-save-list
 .cache
-.tmp
+.games
 .lsp-session*
+.tmp
+auto-save-list
 bookmarks
 session.*
 transient
 url
-
-# ido
-ido.last
-amx-items
+var
 
 # elpa packages
 /elpa/
 /elpa_*/
-
-# skk dict
-/skk/
 
 # eshell files
 /eshell/

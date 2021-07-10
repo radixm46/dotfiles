@@ -123,7 +123,7 @@
    ("C-c c" . org-capture)
    ("C-c a" . org-agenda)
    ("C-c b" . org-iswitchb)
-   ("C-c C-o 0" . my-org-goto-dir))
+   ("C-c C-o 0" . my/org-goto-dir))
   :config  ;
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
@@ -141,7 +141,7 @@
         (list org-directory))
   (setq org-refile-targets
         '((org-agenda-files :maxlevel . 3)))
-  (defun my-org-goto-dir ()
+  (defun my/org-goto-dir ()
     (interactive)
     (find-file "~/org"))
   (setq org-todo-keywords

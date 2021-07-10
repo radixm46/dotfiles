@@ -59,7 +59,7 @@
   :ensure ddskk
   :init
   (setq default-input-method "japanese-skk"
-        skk-user-directory "~/.emacs.d/skk"
+        skk-user-directory "~/.emacs.d/.cache/skk"
         skk-init-file "~/.emacs.d/elisp/initskk.el"))
 
 ;; ido extensions
@@ -70,6 +70,7 @@
   (ido-everywhere t)
   :custom
   (ido-enable-flex-matching t)
+  (ido-save-directory-list-file "~/.emacs.d/.cache/ido.last")
   :config
   (use-package amx
     :ensure t
@@ -78,6 +79,7 @@
           ("M-x" . amx)
           ("M-X" . amx-major-mode-commands))
     :custom
+    (amx-save-file "~/.emacs.d/.cache/amx-items")
     (amx-backend 'ido)
     (amx-prompt-string "⚡> "))
   (use-package ido-vertical-mode

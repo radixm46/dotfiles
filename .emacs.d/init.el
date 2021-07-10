@@ -15,15 +15,15 @@
 (setq create-lockfiles nil)
 
 ;; check directory and set target
-(let ((my-autosave-dir "~/.emacs.d/.tmp/autosaved")
-      (my-hist-dir "~/.emacs.d/.tmp/hist"))
+(let ((my-autosave-dir "~/.emacs.d/.cache/autosaved")
+      (my-hist-dir "~/.emacs.d/.cache/hist"))
   (if (not (file-directory-p my-autosave-dir))
       (make-directory my-autosave-dir t))
   (if (not (file-directory-p my-hist-dir))
       (make-directory my-hist-dir t)))
 
 ;; configure auto save files
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/.tmp/autosaved" t)))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/.cache/autosaved" t)))
 (setq delete-auto-save-files t)
 (setq auto-save-default t)
 (setq auto-save-timeout 15)
@@ -31,7 +31,7 @@
 (setq auto-save-list-file-prefix nil)
 
 ;; make backup files
-(setq backup-directory-alist '((".*" .  "~/.emacs.d/.tmp/hist")))
+(setq backup-directory-alist '((".*" .  "~/.emacs.d/.cache/hist")))
 (setq make-backup-files t)
 (setq version-control t) ;; enable version control
 (setq kept-new-versions 5)
