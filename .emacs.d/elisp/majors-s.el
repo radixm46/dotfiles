@@ -119,3 +119,11 @@
   (undo-tree-visualizer-timestamps t)
   :config
   (global-undo-tree-mode))
+
+(use-package vterm
+  :ensure t
+  :init
+  (add-to-list 'evil-emacs-state-modes 'vterm-mode)
+  (add-hook 'vterm-mode-hook (lambda () (sw-lnsp 1)))
+  :bind (:map vterm-mode-map
+              ("C-u" . vterm-send-C-u)))
