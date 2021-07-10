@@ -38,6 +38,20 @@
     prog-mode
     text-mode) . display-fill-column-indicator-mode))
 
+(use-package recentf
+  :custom
+  (recentf-save-file "~/.emacs.d/.cache/recentf")
+  (recentf-max-saved-items 2000)
+  (recentf-auto-cleanup 'never)
+  (recentf-exclude
+   '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
+     "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
+  :init
+  (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
+
+  (recentf-mode 1)
+  )
+
 ;; ------------------------------------------------------------
 
 ;; skk config(use
@@ -81,7 +95,13 @@
     :config (ido-ubiquitous-mode 1))
   (use-package ido-yes-or-no
     :ensure t
-    :config (ido-yes-or-no-mode t)))
+    :config (ido-yes-or-no-mode t))
+
+  (defun my/ido-recentf ()
+    ;; works with recentf-mode
+    (interactive)
+    (find-file (ido-completing-read "Find from recent: " recentf-list)))
+  )
 
 (use-package origami
   :ensure t
