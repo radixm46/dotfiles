@@ -37,6 +37,8 @@ case "$(uname)" in
                 ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
                 ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
                 ${path})
+            # add BREW_PATH_OPT/zsh to fpath
+            fpath=(${BREW_PATH_OPT}/share/zsh/site-functions(N-/) ${fpath})
 
             if brew_exists_at_opt && brew_exists_at_local; then
                 # use local brew dir
