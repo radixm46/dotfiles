@@ -24,10 +24,10 @@ case "$(uname)" in
 
         # path of hoembrew on /opt/homebrew
         BREW_PATH_OPT='/opt/homebrew'
-        # path of hoembrew on /usr/local
-        BREW_PATH_LOCAL='/usr/local'
         # returns true if hoembrew installed on /opt
         function brew_exists_at_opt() { [[ -d "${BREW_PATH_OPT}/bin" ]]; }
+        # path of hoembrew on /usr/local
+        BREW_PATH_LOCAL='/usr/local'
         # returns true if hoembrew installed on /usr/bin
         function brew_exists_at_local() { [[ -d "${BREW_PATH_LOCAL}/bin" ]]; }
 
