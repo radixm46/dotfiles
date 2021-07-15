@@ -17,45 +17,37 @@ case "$(uname)" in
         setopt no_global_rcs #disable path helper
         path=(${path} '/usr/sbin'(N-/) '/sbin'(N-/)) # init path
 
-        # return true if macOS runs on Arm64
+        # return true if macOS runs on certain arch
         function runs_on_macARM64() { [[ "$(uname -m)" = 'arm64' ]]; }
-        # return true if macOS runs on x86_64 or Rosetta2
         function runs_on_macX86_64() { [[ "$(uname -m)" = 'x86_64' ]]; }
-
         # path of hoembrew on /opt/homebrew
         BREW_PATH_OPT='/opt/homebrew'
-        # returns true if hoembrew installed on /opt
         function brew_exists_at_opt() { [[ -d "${BREW_PATH_OPT}/bin" ]]; }
         # path of hoembrew on /usr/local
         BREW_PATH_LOCAL='/usr/local'
-        # returns true if hoembrew installed on /usr/bin
         function brew_exists_at_local() { [[ -d "${BREW_PATH_LOCAL}/bin" ]]; }
 
         # switch homebrew dir by arch
-        if runs_on_macARM64; then
+        if runs_on_macARM64 && brew_exists_at_opt; then
             path=(\
                 ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
-                ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
                 ${path})
             # add BREW_PATH_OPT/zsh to fpath
             fpath=(${BREW_PATH_OPT}/share/zsh/site-functions(N-/) ${fpath})
-
-            if brew_exists_at_opt && brew_exists_at_local; then
-                # use local brew dir
-                function lbr() { ${BREW_PATH_LOCAL}/bin/$@; }
-                # launch on rosetta2
-                function x86() { arch -x86_64 $@; }
-                # launch on arm (native)
-                function arm() { arch -arm64 $@; }
-                # launch zsh on local brew
+            # switch arch
+            function x86() { arch -x86_64 $@; }
+            function arm() { arch -arm64 $@; }
+            # launch zsh on rosetta2
+            function zsh_ovrst2() {
                 if [[ -e "${BREW_PATH_LOCAL}/bin/zsh" ]]; then
-                    function rzsh() { "${BREW_PATH_LOCAL}/bin/zsh"; }
+                    x86 "${BREW_PATH_LOCAL}/bin/zsh"
+                else
+                    x86 '/bin/zsh'
                 fi
-            fi
-        elif runs_on_macX86_64; then
+            }
+        elif runs_on_macX86_64 && brew_exists_at_local; then
             path=(\
                 ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
-                ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
                 ${path})
         fi
 
