@@ -288,6 +288,7 @@ alias wttr='get_weather'
 
 # ------------------------------------------------------------------------------
 # config for libvt2
+autoload -Uz add-zsh-hook
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
         # Tell tmux to pass the escape sequences through
@@ -304,7 +305,8 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
 fi
 # vterm-buffer-name-string
-add-zsh-hook -Uz chpwd (){ print -Pn "\e]2;%m:%2~\a" }
+function _vertm_chpwd (){ print -Pn "\e]2;%m:%2~\a" }
+add-zsh-hook -Uz chpwd _vterm_chpwd
 
 # ------------------------------------------------------------------------------
 # prompt configure
@@ -339,7 +341,6 @@ prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
 # ------------------------------------------------------------------------------
 # vcs info TODO: include vcs prompt to theme
 autoload -Uz vcs_info
-autoload -Uz add-zsh-hook
 
 function define_vcs_prompt_style {
     local P_GITBRANCH=$'\UF418'
