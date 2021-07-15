@@ -50,13 +50,11 @@ autopair-init
 if is_available 'emacs'; then
     zinit light Flinner/zsh-emacs # alias
 fi
-
 if is_available 'git'; then
     zinit light mdumitru/git-aliases # alias
     zinit light paulirish/git-open # open homepage of repo
     zinit light mollifier/cd-gitroot # move to root dir of repo
 fi
-
 if is_available 'systemctl'; then
     zinit light le0me55i/zsh-systemd # alias
 fi
@@ -163,7 +161,6 @@ zstyle ':completion:*:sudo:*' \
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
-
 # ------------------------------------------------------------------------------
 # alias
 
@@ -190,7 +187,6 @@ function alias_ls() {
         alias ll="ls -l"
     fi
 }
-
 alias_ls
 
 alias rm='rm -i'
@@ -347,12 +343,10 @@ function define_vcs_prompt_style {
     local P_VCSICO=$'\UF7A1'
     local P_ENDR=$'\UE0C7'
     local P_MIDTEXR=$'\UE0C5'
-
     zstyle ':vcs_info:*' formats \
 "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
-
     zstyle ':vcs_info:*' actionformats \
 "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
@@ -360,11 +354,11 @@ function define_vcs_prompt_style {
 }
 define_vcs_prompt_style
 
-function _update_vcs_info_msg() {
+function _update_vcs_info() {
     LANG=en_US.UTF-8 vcs_info
     RPROMPT="${vcs_info_msg_0_}"
 }
-add-zsh-hook precmd _update_vcs_info_msg
+add-zsh-hook precmd _update_vcs_info
 
 # ------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
