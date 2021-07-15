@@ -47,7 +47,14 @@
    '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
      "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
   :init
-  (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
+  (defmacro with-suppressed-message (&rest body)
+    "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
+    (declare (indent 0))
+    (let ((message-log-max nil))
+    `(with-temp-message (or (current-message) "") ,@body)))
+  (setq recentf-auto-save-timer
+        (run-with-idle-timer 30 t '(lambda ()
+                                     (with-suppressed-message (recentf-save-list)))))
 
   (recentf-mode 1)
   )
