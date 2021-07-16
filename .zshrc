@@ -301,7 +301,7 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
 fi
 # vterm-buffer-name-string
-function _vertm_chpwd (){ print -Pn "\e]2;%m:%2~\a" }
+function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a" }
 add-zsh-hook -Uz chpwd _vterm_chpwd
 
 # ------------------------------------------------------------------------------
