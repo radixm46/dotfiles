@@ -47,9 +47,9 @@ case $(uname) in
                         ;;
             esac
         }
-        print_mac_batt_stat $(pmset -g batt | \
-                              awk 'NR==2{print($3 $4)}' | \
-                              sed -e 's/;//g' -e 's/%/\ /')
+        print_mac_batt_stat $(pmset -g batt \
+                              | awk 'NR==2{print($3 $4)}' \
+                              | sed -e 's/;//g' -e 's/%/\ /')
         ;;
     Linux*)
         function print_batt_stat () {
