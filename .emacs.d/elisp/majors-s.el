@@ -18,7 +18,7 @@
   (evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
   (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
   (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
-)
+  )
 
 (use-package treemacs
   :ensure t
@@ -94,9 +94,8 @@
     :ensure t
     :after (treemacs evil)
     :config
-    (define-key evil-treemacs-state-map (kbd "TAB") #'treemacs-TAB-action)
     ;; fix tab action
-    )
+    (define-key evil-treemacs-state-map (kbd "TAB") #'treemacs-TAB-action))
   (use-package treemacs-magit
     :ensure t
     :after (treemacs magit))
@@ -106,13 +105,12 @@
   (use-package treemacs-all-the-icons
     :after treemacs
     :ensure t
-    :config (treemacs-load-theme "all-the-icons")
-    )
+    :config (treemacs-load-theme "all-the-icons"))
   (use-package treemacs-icons-dired
     :after treemacs dired
     :ensure t
     :config (treemacs-icons-dired-mode))
-)
+  )
 ;(use-package treemacs-persp ;;treemacs-persective if you use perspective.el vs. persp-mode
 ;  :after treemacs persp-mode ;;or perspective vs. persp-mode
 ;  :ensure t
