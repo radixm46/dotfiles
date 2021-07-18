@@ -1,5 +1,10 @@
 ;; major modes loaded by init.el
 
+(use-package dired
+  :config
+  (put 'dired-find-alternate-file 'disabled nil)
+  )
+
 (use-package magit
   :ensure t)
 
