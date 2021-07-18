@@ -287,7 +287,8 @@
 (use-package which-key
   :ensure t
   :config
-  (which-key-mode))
+  (which-key-mode)
+  (which-key-setup-side-window-right-bottom))
 
 (use-package hl-todo
   :ensure t
