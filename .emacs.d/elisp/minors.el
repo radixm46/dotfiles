@@ -315,6 +315,7 @@
 :ensure t
 :init
 (defun check-serif-available()
+  "check Noto Serif font available"
     (if (member "Noto Serif CJK JP" (font-family-list))
         (setq serif-available-p t)
         (setq serif-available-p nil)))

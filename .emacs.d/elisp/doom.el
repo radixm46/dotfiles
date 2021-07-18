@@ -131,14 +131,17 @@
 
   :config
   (defun doom-on-term ()
+    "switch doom-theme without doom-modeline-icon disabled"
     (interactive)
     (load-theme 'doom-spacegrey t)
     (setq doom-modeline-icon nil))
   (defun doom-on-gui ()
+    "switch doom-theme with doom-modeline-icon enabled"
     (interactive)
     (load-theme 'doom-molokai t)
     (setq doom-modeline-icon t))
   (defun switch-doom-theme ()
+    "switch doom-theme and doom-modeline-icon via emacs state"
       (not (or (daemonp) (display-graphic-p))))
 
   (if (switch-doom-theme)

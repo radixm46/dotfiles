@@ -142,6 +142,7 @@
   (setq org-refile-targets
         '((org-agenda-files :maxlevel . 3)))
   (defun my/org-goto-dir ()
+    "open dir '~/org' with dired"
     (interactive)
     (find-file "~/org"))
   (setq org-todo-keywords
@@ -175,6 +176,7 @@
 
   ;; configure bibtex
   (defun org-mode-reftex-setup ()
+    "setup reftex on org-mode doc"
     (load-library "reftex")
     (and (buffer-file-name)
          (file-exists-p (buffer-file-name))
