@@ -105,9 +105,12 @@
   (use-package ido-yes-or-no
     :ensure t
     :config (ido-yes-or-no-mode t))
+  (use-package ido-complete-space-or-hyphen
+    :ensure t
+    :config (ido-complete-space-or-hyphen-mode t))
 
   (defun my/ido-recentf ()
-    ;; works with recentf-mode
+    "works with recentf-mode"
     (interactive)
     (find-file (ido-completing-read "Find from recent: " recentf-list)))
   )
