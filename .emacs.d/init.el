@@ -6,7 +6,6 @@
 ;; emacs configuration by radixM491VA
 (setq inhibit-splash-screen t)
 (column-number-mode t)
-(show-paren-mode t)
 (setq ring-bell-function 'ignore)
 (setq-default truncate-lines t)
 ;; (global-visual-line-mode nil)

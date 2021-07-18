@@ -1,7 +1,14 @@
 ;; minor mode plugins
 
 ;; emacs built-in modes
+(use-package paren
+  :config
+  (set-face-attribute 'show-paren-match nil
+                      :background "SpringGreen2")
+  (show-paren-mode t))
+
 (use-package electric-pair-mode
+  :if (>= emacs-major-version 24)
   :hook
   ((conf-mode
     prog-mode) . electric-pair-mode))
