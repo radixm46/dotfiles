@@ -118,14 +118,14 @@
 ;; --------------- minor modes ---------------
 (load "~/.emacs.d/elisp/minors.el")
 
+;; ---------- loading doom theme  ----------
+(load "~/.emacs.d/elisp/doom.el")
+
 ;; --------------- major modes ---------------
 (load "~/.emacs.d/elisp/majors-s.el")
 
 ;; --------------- major modes ---------------
 (load "~/.emacs.d/elisp/majors.el")
-
-;; ---------- loading doom theme  ----------
-(load "~/.emacs.d/elisp/doom.el")
 
 ;; ------------ loading local.el  ------------
 (if (file-exists-p "~/.emacs.d/elisp/local.el")
