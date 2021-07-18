@@ -221,7 +221,7 @@
   (whitespace-display-mappings
     '(
        (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-       (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some mejor mode
+       (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some major mode
      ))
   :config
   (global-whitespace-mode t)

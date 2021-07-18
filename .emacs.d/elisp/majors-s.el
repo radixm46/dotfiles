@@ -6,7 +6,8 @@
   )
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :custom (magit-completing-read-function 'magit-ido-completing-read))
 
 (use-package neotree
   :ensure t
