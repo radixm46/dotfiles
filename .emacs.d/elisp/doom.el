@@ -140,11 +140,8 @@
     (interactive)
     (load-theme 'doom-molokai t)
     (setq doom-modeline-icon t))
-  (defun switch-doom-theme ()
-    "switch doom-theme and doom-modeline-icon via emacs state"
-      (not (or (daemonp) (display-graphic-p))))
 
-  (if (switch-doom-theme)
+  (if (emacs-works-on-term-p)
     (doom-on-term) (doom-on-gui))
 
   (doom-themes-visual-bell-config)

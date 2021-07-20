@@ -67,6 +67,10 @@
   (interactive)
   (setq line-spacing 2.0))
 
+  (defun emacs-works-on-term-p ()
+    "returns t if emacs seems running on term"
+      (not (or (daemonp) (display-graphic-p))))
+
 ;; log
 (setq message-log-maxa 10000)
 (setq history-length 1000)
