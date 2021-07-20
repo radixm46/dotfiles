@@ -299,8 +299,14 @@
 (use-package which-key
   :ensure t
   :config
+  (use-package which-key-posframe
+    :ensure t
+    :custom
+    (which-key-posframe-poshandler 'posframe-poshandler-frame-top-left-corner))
   (which-key-mode)
-  (which-key-setup-side-window-right-bottom))
+  (if (emacs-works-on-term-p)
+      (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
+  )
 
 (use-package hl-todo
   :ensure t
