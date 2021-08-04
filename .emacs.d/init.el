@@ -116,14 +116,14 @@
 (use-package all-the-icons
   :ensure t) ;; need installation by all-the-icons-install-fonts
 
-;; --------------- lsp package ---------------
-(load "~/.emacs.d/elisp/lsp.el")
-
 ;; --------------- minor modes ---------------
 (load "~/.emacs.d/elisp/minors.el")
 
 ;; ---------- loading doom theme  ----------
 (load "~/.emacs.d/elisp/doom.el")
+
+;; --------------- lsp package ---------------
+(load "~/.emacs.d/elisp/lsp.el")
 
 ;; --------------- major modes ---------------
 (load "~/.emacs.d/elisp/majors-s.el")
