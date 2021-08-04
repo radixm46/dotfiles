@@ -205,6 +205,15 @@ alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
 
+if is_available 'fzf'; then
+    # page-up page-down temporary binded like emacs
+    export FZF_DEFAULT_OPTS="--multi --cycle --color=dark --reverse --border=rounded --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+    if is_available 'bat'; then
+        alias fzf='fzf --preview "bat --color=always --style=header,grid --line-range :100 {}"'
+    fi
+    alias -g F='| fzf'
+fi
+
 if is_available 'bat'; then
     alias -g B='| bat'
 fi
