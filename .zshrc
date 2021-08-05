@@ -388,7 +388,7 @@ function prompt_rdm46theme_setup() {
 
 prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
 
-# fix prompt when C-c (does not work if included in theme function)
+# fix prompt when C-c in normal state (does not work if included in theme function)
 function TRAPINT() {
     vi_mode=${_vi_ins}
     return $(( 128 + $1 ))
