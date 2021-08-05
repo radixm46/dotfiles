@@ -65,6 +65,34 @@ fi
 if is_available 'systemctl'; then
     zinit light le0me55i/zsh-systemd # alias
 fi
+if is_available 'fzf'; then
+    # page-up page-down temporary binded like emacs
+    export FZF_DEFAULT_OPTS="--multi --cycle --color=dark --reverse --border=rounded --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+    alias -g F='| fzf'
+    if is_available 'bat'; then
+        alias -g Fp='| fzf --preview "bat --color=always --style=header,grid --line-range :100 {}"'
+    fi
+
+    zinit light mollifier/anyframe
+    autoload -Uz anyframe-init && anyframe-init
+    zstyle ":anyframe:selector:fzf:" \
+           command 'fzf --ansi --select-1'
+    # enable anyframe binding with prefix ctrl+f in vi cmd mode
+    bindkey -M vicmd '^fb'  anyframe-widget-cdr
+    bindkey -M vicmd '^fr'  anyframe-widget-execute-history
+    bindkey -M vicmd '^f^r' anyframe-widget-execute-history
+    bindkey -M vicmd '^fi'  anyframe-widget-put-history
+    bindkey -M vicmd '^f^i' anyframe-widget-put-history
+    bindkey -M vicmd '^fk'  anyframe-widget-kill
+    bindkey -M vicmd '^f^k' anyframe-widget-kill
+    bindkey -M vicmd '^f^s' anyframe-widget-checkout-git-branch
+    bindkey -M vicmd '^fe'  anyframe-widget-insert-git-branch
+    bindkey -M vicmd '^f^e' anyframe-widget-insert-git-branch
+    if is_available 'ghq'; then
+        bindkey -M vicmd '^fg'  anyframe-widget-cd-ghq-repository
+        bindkey -M vicmd '^f^g' anyframe-widget-cd-ghq-repository
+    fi
+fi
 
 ## ------------------------------------------------------------------------------
 # enable colors
@@ -211,15 +239,6 @@ alias -g L='| less'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
-
-if is_available 'fzf'; then
-    # page-up page-down temporary binded like emacs
-    export FZF_DEFAULT_OPTS="--multi --cycle --color=dark --reverse --border=rounded --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
-    if is_available 'bat'; then
-        alias fzf='fzf --preview "bat --color=always --style=header,grid --line-range :100 {}"'
-    fi
-    alias -g F='| fzf'
-fi
 
 if is_available 'bat'; then
     alias -g B='| bat'
