@@ -218,6 +218,10 @@ if is_available 'bat'; then
     alias -g B='| bat'
 fi
 
+if is_available 'duf'; then
+    alias duf='duf -all -style=unicode -theme=dark'
+fi
+
 # clipboard manager
 if is_available pbcopy; then
     alias -g C='| pbcopy'
