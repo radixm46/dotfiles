@@ -38,6 +38,13 @@ zinit wait lucid for \
     atload"!_zsh_autosuggest_start" \
         zsh-users/zsh-autosuggestions
 
+autoload -Uz \
+         chpwd_recent_dirs \
+         cdr \
+         add-zsh-hook \
+         vcs_info
+add-zsh-hook chpwd chpwd_recent_dirs
+
 # substring search
 zinit light zsh-users/zsh-history-substring-search
 bindkey -M vicmd 'n' history-substring-search-up
@@ -297,7 +304,6 @@ alias wttr='get_weather'
 
 # ------------------------------------------------------------------------------
 # config for libvt2
-autoload -Uz add-zsh-hook
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
         # Tell tmux to pass the escape sequences through
@@ -349,8 +355,6 @@ prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
 
 # ------------------------------------------------------------------------------
 # vcs info TODO: include vcs prompt to theme
-autoload -Uz vcs_info
-
 function define_vcs_prompt_style {
     local P_GITBRANCH=$'\UF418'
     local P_VCSICO=$'\UF7A1'
