@@ -225,6 +225,7 @@ function alias_ls() {
 }
 alias_ls
 
+alias ...='cd ../..'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
