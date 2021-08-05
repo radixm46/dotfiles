@@ -364,10 +364,6 @@ function prompt_rdm46theme_setup() {
         vi_mode=${_vi_ins}
     }
     zle -N zle-line-finish
-    function TRAPINT() {
-        vi_mode=${_vi_ins}
-        return $(( 128 + $1 ))
-    }
     local P_PROM=''
     # with nerd fonts
     local P_LOGIN=$'\UF2BD'
@@ -391,6 +387,12 @@ function prompt_rdm46theme_setup() {
 }
 
 prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
+
+# fix prompt when C-c (does not work if included in theme function)
+function TRAPINT() {
+    vi_mode=${_vi_ins}
+    return $(( 128 + $1 ))
+}
 
 # ------------------------------------------------------------------------------
 # vcs info TODO: include vcs prompt to theme
