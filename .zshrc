@@ -346,12 +346,30 @@ add-zsh-hook -Uz chpwd _vterm_chpwd
 # ------------------------------------------------------------------------------
 # prompt configure
 autoload -Uz promptinit && promptinit
-
+setopt prompt_subst
+# vi state
 function prompt_rdm46theme_setup() {
+    _isign=$'\UF10C'
+    _csign=$'\UF111'
+    _vi_ins="%{${fg[blue]}%} ${_isign} %{${reset_color}%}"
+    _vi_cmd="%{${fg[green]}%} ${_csign} %{${reset_color}%}"
+    vi_mode=${_vi_ins}
+    function zle-keymap-select {
+        vi_mode="${${KEYMAP/vicmd/${_vi_cmd}}/(main|viins)/${_vi_ins}}"
+        zle reset-prompt
+    }
+    zle -N zle-keymap-select
+    function zle-line-finish {
+        vi_mode=${_vi_ins}
+    }
+    zle -N zle-line-finish
+    function TRAPINT() {
+        vi_mode=${_vi_ins}
+        return $(( 128 + $1 ))
+    }
     local P_PROM=''
     # with nerd fonts
     local P_LOGIN=$'\UF2BD'
-    local P_COMPUTER=$(print_os_glyph)
     local P_BEGINR=$'\UE0C7'
     local P_BEGIN=$'\UE0C6'
     local P_MIDTEX=$'\UE0C4'
@@ -361,14 +379,14 @@ function prompt_rdm46theme_setup() {
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg[red]}%} ${P_COMPUTER}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[red]}%} $(print_os_glyph)%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg_bold[black]}%} %m %{${reset_color}%}\
 %{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN}%{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 %{${bg[black]}%}%{${fg[green]}%} ${P_DIR}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
-%{${fg[black]}%}${P_PROM}%{${reset_color}%}%# "
+%{${fg[black]}%}${P_PROM}%{${reset_color}%}"'${vi_mode}%# '
 }
 
 prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
