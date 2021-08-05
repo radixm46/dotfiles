@@ -85,6 +85,7 @@ if is_available 'fzf'; then
     bindkey -M vicmd '^f^i' anyframe-widget-put-history
     bindkey -M vicmd '^fk'  anyframe-widget-kill
     bindkey -M vicmd '^f^k' anyframe-widget-kill
+    bindkey -M vicmd '^fs'  anyframe-widget-checkout-git-branch
     bindkey -M vicmd '^f^s' anyframe-widget-checkout-git-branch
     bindkey -M vicmd '^fe'  anyframe-widget-insert-git-branch
     bindkey -M vicmd '^f^e' anyframe-widget-insert-git-branch
