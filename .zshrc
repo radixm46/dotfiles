@@ -350,8 +350,8 @@ autoload -Uz promptinit && promptinit
 setopt prompt_subst
 # vi state
 function prompt_rdm46theme_setup() {
-    _isign=$'\UF10C'
-    _csign=$'\UF111'
+    local _isign=$'\UF10C'
+    local _csign=$'\UF111'
     _vi_ins="%{${fg[blue]}%} ${_isign} %{${reset_color}%}"
     _vi_cmd="%{${fg[green]}%} ${_csign} %{${reset_color}%}"
     vi_mode=${_vi_ins}
