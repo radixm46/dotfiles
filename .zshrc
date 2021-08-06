@@ -400,16 +400,19 @@ function prompt_rdm46theme_setup() {
         esac
     }
     # for zsh builtin bindkey -v -----------------------------------------------
-    # vi_mode=${_vi_ins}
-    # function zle-keymap-select {
-    #     vi_mode="${${KEYMAP/vicmd/${_vi_nor}}/(main|viins)/${_vi_ins}}"
-    #     zle reset-prompt
-    # }
-    # zle -N zle-keymap-select
-    # function zle-line-finish {
-    #     vi_mode=${_vi_ins}
-    # }
-    # zle -N zle-line-finish
+    # if zvm not loaded
+    if [[ $(type zvm_init) == 'zvm_init not found' ]]; then
+        vi_mode=${_vi_ins}
+        function zle-keymap-select {
+            vi_mode="${${KEYMAP/vicmd/${_vi_nor}}/(main|viins)/${_vi_ins}}"
+            zle reset-prompt
+        }
+        zle -N zle-keymap-select
+        function zle-line-finish {
+            vi_mode=${_vi_ins}
+        }
+        zle -N zle-line-finish
+    fi
     local P_PROM=''
     # with nerd fonts
     local P_LOGIN=$'\UF2BD'
