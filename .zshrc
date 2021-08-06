@@ -79,7 +79,7 @@ fi
 if is_available 'fzf'; then
     # page-up page-down temporary binded like emacs
     export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
-    function is_tmux_version_higher_than() { [[ $((${${$(tmux -V)#tmux}%[a-z]} > $1)) ]] }
+    function is_tmux_newer_than() { [[ 1 == $((${${$(tmux -V)#tmux}%[a-z]} >= $1)) ]] }
     function fzf_prev_command() {
         if is_available 'bat'; then
             printf '"bat --color=always --style=header,grid --line-range :100 {}"'
@@ -91,7 +91,7 @@ if is_available 'fzf'; then
     zinit light mollifier/anyframe
     autoload -Uz anyframe-init && anyframe-init
 
-    if is_available 'tmux' && is_tmux_version_higher_than '3.2'; then
+    if is_available 'tmux' && is_tmux_newer_than '3.2'; then
         alias -g F='| fzf-tmux -h60%'
         alias -g Fp="| fzf-tmux -h60% -w85% --preview $(fzf_prev_command)"
         zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85%  --select-1'
