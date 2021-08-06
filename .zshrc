@@ -62,8 +62,7 @@ zinit light zsh-users/zsh-history-substring-search
 bindkey -M vicmd 'n' history-substring-search-up
 bindkey -M vicmd 'N' history-substring-search-down
 # auto pair brackets
-zinit light hlissner/zsh-autopair
-autopair-init
+zinit light hlissner/zsh-autopair && autopair-init
 
 # plugins depends on external commands
 if is_available 'emacs'; then
