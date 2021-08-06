@@ -75,8 +75,13 @@ if is_available 'fzf'; then
 
     zinit light mollifier/anyframe
     autoload -Uz anyframe-init && anyframe-init
-    zstyle ":anyframe:selector:fzf:" \
-           command 'fzf --ansi --select-1'
+
+    function is_tmux_version_higher_than() { [[ $((${${$(tmux -V)#tmux}%[a-z]} > $1)) ]] }
+    if is_available 'tmux' && is_tmux_version_higher_than '3.2'; then
+        zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% --select-1'
+    else
+        zstyle ":anyframe:selector:fzf:" command 'fzf --select-1'
+    fi
     # enable anyframe binding with prefix ctrl+f in vi cmd mode
     bindkey -M vicmd '^fb'  anyframe-widget-cdr
     bindkey -M vicmd '^fr'  anyframe-widget-execute-history
