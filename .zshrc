@@ -47,8 +47,8 @@ ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BEAM
 ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 _vi_remap # remap after zvm load
-zvm_bindkey vicmd 'dd' zvm_kill_line
-zvm_bindkey vicmd 'D'  zvm_forward_kill_line
+bindkey -M vicmd 'dd' zvm_kill_line
+bindkey -M vicmd 'D'  zvm_forward_kill_line
 
 autoload -Uz \
          chpwd_recent_dirs \
