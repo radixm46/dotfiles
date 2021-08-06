@@ -31,6 +31,11 @@ source "${ZINITDIR}/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+# if failed to load zinit
+if [[ $(type zinit) == 'zinit not found' ]]; then
+    function zinit() { echo "zinit not loaded: $@" 1>&2; return 1 }
+fi
+
 # load syntax-highilight, additional completions, and autosuggestions
 zinit wait lucid for \
     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
