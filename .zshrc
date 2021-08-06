@@ -1,17 +1,19 @@
 # ------------------------------------------------------------------------------
 # keybinds
 bindkey -v  # use vim style keybinding
-bindkey -M vicmd '^R' history-incremental-pattern-search-backward
-bindkey -M viins '^N' menu-complete # enter search
-bindkey -M viins '^P' reverse-menu-complete
-bindkey -M viins '^F' forward-char
-bindkey -M viins '^B' backward-char
-bindkey -M viins '^I' expand-or-complete
-bindkey -M viins '^H' backward-delete-char
-bindkey -M viins '^D' delete-char
-bindkey -M viins '^A' beginning-of-line
-bindkey -M viins '^E' end-of-line
-
+export KEYTIMEOUT=1
+function _vi_remap() {
+    bindkey -M vicmd '^R' history-incremental-pattern-search-backward
+    bindkey -M viins '^F' forward-char
+    bindkey -M viins '^B' backward-char
+    bindkey -M viins '^I' expand-or-complete
+    bindkey -M viins '^H' backward-delete-char
+    bindkey -M viins '^D' delete-char
+    bindkey -M viins '^A' beginning-of-line
+    bindkey -M viins '^E' end-of-line
+    bindkey -M viins '^N' menu-complete
+    bindkey -M viins '^P' reverse-menu-complete
+}
 # ------------------------------------------------------------------------------
 # zinit install
 # ------------------------------------------------------------------------------
@@ -37,6 +39,16 @@ zinit wait lucid for \
         zsh-users/zsh-completions \
     atload"!_zsh_autosuggest_start" \
         zsh-users/zsh-autosuggestions
+
+ZVM_INIT_MODE=sourcing # init immediately after sourced
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
+ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BEAM
+ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+_vi_remap # remap after zvm load
+zvm_bindkey vicmd 'dd' zvm_kill_line
+zvm_bindkey vicmd 'D'  zvm_forward_kill_line
 
 autoload -Uz \
          chpwd_recent_dirs \
@@ -365,17 +377,35 @@ function prompt_rdm46theme_setup() {
     local _isign=$'\UF10C'
     local _csign=$'\UF111'
     _vi_ins="%{${fg[blue]}%} ${_isign} %{${reset_color}%}"
-    _vi_cmd="%{${fg[green]}%} ${_csign} %{${reset_color}%}"
-    vi_mode=${_vi_ins}
-    function zle-keymap-select {
-        vi_mode="${${KEYMAP/vicmd/${_vi_cmd}}/(main|viins)/${_vi_ins}}"
-        zle reset-prompt
+    _vi_nor="%{${fg[green]}%} ${_csign} %{${reset_color}%}"
+    _vi_vis="%{${fg[magenta]}%} ${_csign} %{${reset_color}%}"
+    _vi_rep="%{${fg[yellow]}%} ${_isign} %{${reset_color}%}"
+    # for zsh jeffreytse/zsh-vi-mode -------------------------------------------
+    function zvm_after_select_vi_mode() {
+        case $ZVM_MODE in
+            $ZVM_MODE_NORMAL)
+                vi_mode=${_vi_nor} ;;
+            $ZVM_MODE_INSERT)
+                vi_mode=${_vi_ins} ;;
+            $ZVM_MODE_VISUAL)
+                vi_mode=${_vi_vis} ;;
+            $ZVM_MODE_VISUAL_LINE)
+                vi_mode=${_vi_vis} ;;
+            $ZVM_MODE_REPLACE)
+                vi_mode=${_vi_rep} ;;
+        esac
     }
-    zle -N zle-keymap-select
-    function zle-line-finish {
-        vi_mode=${_vi_ins}
-    }
-    zle -N zle-line-finish
+    # for zsh builtin bindkey -v -----------------------------------------------
+    # vi_mode=${_vi_ins}
+    # function zle-keymap-select {
+    #     vi_mode="${${KEYMAP/vicmd/${_vi_nor}}/(main|viins)/${_vi_ins}}"
+    #     zle reset-prompt
+    # }
+    # zle -N zle-keymap-select
+    # function zle-line-finish {
+    #     vi_mode=${_vi_ins}
+    # }
+    # zle -N zle-line-finish
     local P_PROM=''
     # with nerd fonts
     local P_LOGIN=$'\UF2BD'
