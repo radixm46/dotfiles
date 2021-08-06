@@ -67,7 +67,7 @@ if is_available 'systemctl'; then
 fi
 if is_available 'fzf'; then
     # page-up page-down temporary binded like emacs
-    export FZF_DEFAULT_OPTS="--multi --cycle --color=dark --reverse --border=rounded --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+    export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --border=rounded --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
     alias -g F='| fzf'
     if is_available 'bat'; then
         alias -g Fp='| fzf --preview "bat --color=always --style=header,grid --line-range :100 {}"'
