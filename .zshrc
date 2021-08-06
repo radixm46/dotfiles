@@ -67,7 +67,7 @@ if is_available 'systemctl'; then
 fi
 if is_available 'fzf'; then
     # page-up page-down temporary binded like emacs
-    export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --border=rounded --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+    export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
     function is_tmux_version_higher_than() { [[ $((${${$(tmux -V)#tmux}%[a-z]} > $1)) ]] }
     function fzf_prev_command() {
         if is_available 'bat'; then
@@ -85,8 +85,8 @@ if is_available 'fzf'; then
         alias -g Fp="| fzf-tmux -h60% -w85% --preview $(fzf_prev_command)"
         zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85%  --select-1'
     else
-        alias -g F='| fzf'
-        alias -g Fp="| fzf --preview $(fzf_prev_command)"
+        alias -g F='| fzf --border=rounded'
+        alias -g Fp="| fzf --border=rounded --preview $(fzf_prev_command)"
         zstyle ":anyframe:selector:fzf:" command 'fzf --select-1'
     fi
     # enable anyframe binding with prefix ctrl+f in vi cmd mode
