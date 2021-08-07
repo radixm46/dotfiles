@@ -33,7 +33,7 @@ autoload -Uz _zinit
 
 # if failed to load zinit
 if [[ $(type zinit) == 'zinit not found' ]]; then
-    function zinit() { echo "zinit not loaded: $@" 1>&2; return 1 }
+    function zinit() { echo "zinit not loaded: $@" 1>&2; return 1; }
 fi
 
 # load syntax-highilight, additional completions, and autosuggestions
@@ -89,7 +89,7 @@ fi
 if is_available 'fzf'; then
     # page-up page-down temporary binded like emacs
     export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
-    function is_tmux_newer_than() { [[ 1 == $((${${$(tmux -V)#tmux}%[a-z]} >= $1)) ]] }
+    function is_tmux_newer_than() { [[ 1 == $((${${$(tmux -V)#tmux}%[a-z]} >= $1)) ]]; }
     function fzf_prev_command() {
         if is_available 'bat'; then
             printf '"bat --color=always --style=header,grid --line-range :100 {}"'
@@ -374,7 +374,7 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
 fi
 # vterm-buffer-name-string
-function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a" }
+function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a"; }
 add-zsh-hook -Uz chpwd _vterm_chpwd
 
 # ------------------------------------------------------------------------------
@@ -413,9 +413,7 @@ function prompt_rdm46theme_setup() {
             zle reset-prompt
         }
         zle -N zle-keymap-select
-        function zle-line-finish {
-            vi_mode=${_vi_ins}
-        }
+        function zle-line-finish { vi_mode=${_vi_ins}; }
         zle -N zle-line-finish
     fi
     local P_PROM=''
@@ -476,8 +474,8 @@ add-zsh-hook precmd _update_vcs_info
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
 function is_screen_running() { [ ! -z "$STY" ]; }
-function is_tmux_runnning() { [ ! -z "$TMUX" ]; }
-function is_screen_or_tmux_running() { is_screen_running || is_tmux_runnning; }
+function is_tmux_running() { [ ! -z "$TMUX" ]; }
+function is_screen_or_tmux_running() { is_screen_running || is_tmux_running; }
 function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
 function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 
@@ -487,7 +485,7 @@ function tmux_automatically_attach_session()
     if is_screen_or_tmux_running; then
         ! is_available 'tmux' && return 1
 
-        if is_tmux_runnning; then
+        if is_tmux_running; then
             echo ""
             echo "${fg_bold[red]}.||.  .. .. ..   ... ...  ... ...${reset_color}"
             echo "${fg_bold[red]} ||    || || ||   ||  ||   '|..' ${reset_color}"
