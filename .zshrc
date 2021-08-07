@@ -45,15 +45,20 @@ zinit wait lucid for \
     atload"!_zsh_autosuggest_start" \
         zsh-users/zsh-autosuggestions
 
-ZVM_INIT_MODE=sourcing # init immediately after sourced
+# init immediately after sourced
+ZVM_INIT_MODE=sourcing
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
-ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BEAM
-ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+function zvm_config() {
+    # always use block cursor
+    # (when moving around tmux pane, cursor not modified in different state shells)
+    ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+    ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+    ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
+    bindkey -M vicmd 'dd' zvm_kill_line
+    bindkey -M vicmd 'D'  zvm_forward_kill_line
+}
 _vi_remap # remap after zvm load
-bindkey -M vicmd 'dd' zvm_kill_line
-bindkey -M vicmd 'D'  zvm_forward_kill_line
 
 autoload -Uz \
          chpwd_recent_dirs \
