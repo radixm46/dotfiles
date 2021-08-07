@@ -52,12 +52,12 @@ zinit light jeffreytse/zsh-vi-mode
 function zvm_config() {
     # always use block cursor
     # (when moving around tmux pane, cursor not modified in different state shells)
-    ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-    ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-    ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
     bindkey -M vicmd 'dd' zvm_kill_line
     bindkey -M vicmd 'D'  zvm_forward_kill_line
 }
+ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
 _vi_remap # remap after zvm load
 
 autoload -Uz \
