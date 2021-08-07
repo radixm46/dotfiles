@@ -101,14 +101,16 @@ if is_available 'fzf'; then
     zinit light mollifier/anyframe
     autoload -Uz anyframe-init && anyframe-init
 
-    if is_available 'tmux' && is_tmux_newer_than '3.2'; then
+    if is_available 'tmux' && is_tmux_newer_than '3.2' && [ ! -z ${TMUX} ]; then
         alias -g F='| fzf-tmux -h60%'
         alias -g Fp="| fzf-tmux -h60% -w85% --preview $(fzf_prev_command)"
+        zstyle ":anyframe:selector:" use fzf-tmux
         zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85%  --select-1'
     else
         alias -g F='| fzf --border=rounded'
         alias -g Fp="| fzf --border=rounded --preview $(fzf_prev_command)"
-        zstyle ":anyframe:selector:fzf:" command 'fzf --select-1'
+        zstyle ":anyframe:selector:" use fzf
+        zstyle ":anyframe:selector:fzf:" command 'fzf --border=rounded --select-1'
     fi
     # enable anyframe binding with prefix ctrl+f in vi cmd mode
     bindkey -M vicmd '^fb'  anyframe-widget-cdr
