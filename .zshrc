@@ -33,7 +33,8 @@ autoload -Uz _zinit
 
 # if failed to load zinit
 if [[ $(type zinit) == 'zinit not found' ]]; then
-    function zinit() { echo "zinit not loaded: $@" 1>&2; return 1; }
+    echo 'Failed to load zinit'
+    function zinit() { return 1; }
 fi
 
 # load syntax-highilight, additional completions, and autosuggestions
@@ -86,6 +87,9 @@ fi
 if is_available 'systemctl'; then
     zinit light le0me55i/zsh-systemd # alias
 fi
+if is_available 'jq' && is_available 'fzf'; then
+    zinit light reegnz/jq-zsh-plugin
+fi
 if is_available 'fzf'; then
     # page-up page-down temporary binded like emacs
     export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
@@ -97,6 +101,8 @@ if is_available 'fzf'; then
             printf '"cat"'
         fi
     }
+
+    # TODO: write own completion pattern -- how to works with zsh default completion?
 
     zinit light mollifier/anyframe
     autoload -Uz anyframe-init && anyframe-init
