@@ -389,7 +389,7 @@ add-zsh-hook -Uz chpwd _vterm_chpwd
 # prompt configure
 autoload -Uz promptinit && promptinit
 setopt prompt_subst
-# vi state
+
 function prompt_rdm46theme_setup() {
     local _isign=$'\UF10C'
     local _csign=$'\UF111'
