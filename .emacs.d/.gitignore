@@ -10,6 +10,8 @@ session.*
 transient
 url
 var
+straight
+.cask/*
 
 # elpa packages
 /elpa/
