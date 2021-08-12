@@ -37,7 +37,7 @@
 (setq kept-old-versions 1)
 (setq delete-old-versions t)
 
-(setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-15")
+(setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-14.1")
                                         '(width . 80)
                                         '(height . 55)) default-frame-alist))
 (setq font-for-tables "HackGenNerd Console")
