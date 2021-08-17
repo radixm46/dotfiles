@@ -41,7 +41,7 @@
     ;; initialize leaf-keywords.el
     (leaf-keywords-init))
   ;; install feather.el
-  (leaf feather
+  (leaf feather :disabled t
     :ensure t
     :el-get conao3/feather.el
     :config
