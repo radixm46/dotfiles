@@ -6,8 +6,7 @@
   :config
   (set-face-attribute 'show-paren-match nil
                       :background "SpringGreen2")
-  :global-minor-mode show-paren-mode
-  )
+  :global-minor-mode show-paren-mode)
 
 (leaf electric-pair-mode
   :tag "builtin"
@@ -69,18 +68,27 @@
     "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
     (declare (indent 0))
     (let ((message-log-max nil))
-    `(with-temp-message (or (current-message) "") ,@body)))
+      `(with-temp-message (or (current-message) "") ,@body)))
   (setq recentf-auto-save-timer
         (run-with-idle-timer 30 t '(lambda ()
                                      (with-suppressed-message (recentf-save-list)))))
-
   (recentf-mode 1)
   )
-
 ;; ------------------------------------------------------------
 
+(leaf exec-path-from-shell
+  :ensure t
+  :init
+  (setq exec-path-from-shell-arguments (list "-l"))
+  :config
+  (when (daemonp)
+    (exec-path-from-shell-initialize)))
+
+(leaf all-the-icons
+  :ensure t) ;; need installation by all-the-icons-install-fonts
+
 ;; skk config(use
-(use-package skk
+(leaf skk
   :ensure ddskk
   :init
   (setq default-input-method "japanese-skk"
@@ -90,7 +98,6 @@
 ;; ido extensions
 (leaf ido
   :tag "builtin"
-  ;; built-in
   :init
   (ido-mode t)
   (ido-everywhere t)
@@ -136,9 +143,9 @@
     (find-file (ido-completing-read "Find from recent: " recentf-list)))
   )
 
-(use-package origami
+(leaf origami
   :ensure t
-  :hook (prog-mode . origami-mode))
+  :hook (prog-mode-hook . origami-mode))
 
 ;; enable evil
 (use-package evil
@@ -180,93 +187,90 @@
   ((evil-normal-state-entry . nyan-try)
    (evil-normal-state-exit . nyan-xit)))
 
-(use-package highlight-indent-guides
+(leaf highlight-indent-guides
   :ensure t
   :hook
-  ((conf-mode
-    outline-mode
-    prog-mode
-    text-mode) . highlight-indent-guides-mode)
+  ((conf-mode-hook
+    outline-mode-hook
+    prog-mode-hook
+    text-mode-hook) . highlight-indent-guides-mode)
   :custom
-  ;(if (not (display-graphic-p))
-  ;    (progn
-  ;      (setq highlight-indent-guides-auto-enabled nil)
-  ;      (set-face-background 'highlight-indent-guides-odd-face "black")
-  ;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
-  ;      (set-face-background 'highlight-indent-guides-even-face "black")
-  ;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
-  ;    (setq highlight-indent-guides-auto-enabled t)
-  ;  )
-  (highlight-indent-guides-method 'column)
-  (highlight-indent-guides-auto-odd-face-perc 10)
-  (highlight-indent-guides-auto-even-face-perc 10)
-  ;(setq highlight-indent-guides-auto-character-face-perc 20)
-  (highlight-indent-guides-responsive 'top)
-  (highlight-indent-guides-delay 0))
+  ;;(if (not (display-graphic-p))
+  ;;    (progn
+  ;;      (setq highlight-indent-guides-auto-enabled nil)
+  ;;      (set-face-background 'highlight-indent-guides-odd-face "black")
+  ;;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
+  ;;      (set-face-background 'highlight-indent-guides-even-face "black")
+  ;;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
+  ;;    (setq highlight-indent-guides-auto-enabled t)
+  ;;  )
+  (highlight-indent-guides-method . 'column)
+  (highlight-indent-guides-auto-odd-face-perc . 10)
+  (highlight-indent-guides-auto-even-face-perc . 10)
+  ;;(setq highlight-indent-guides-auto-character-face-perc 20)
+  (highlight-indent-guides-responsive . 'top)
+  (highlight-indent-guides-delay . 0))
 
-(use-package rainbow-delimiters
+(leaf rainbow-delimiters
   :ensure t
   :hook
-  ((conf-mode
-    prog-mode) . rainbow-delimiters-mode))
+  ((conf-mode-hook
+    prog-mode-hook) . rainbow-delimiters-mode))
 
 ;; configure whitespace
-(use-package whitespace
+(leaf whitespace
   :hook
-  ((conf-mode
-    outline-mode
-    prog-mode
-    text-mode) . whitespace-mode)
+  ((conf-mode-hook
+    outline-mode-hook
+    prog-mode-hook
+    text-mode-hook) . whitespace-mode)
   :custom
-  (whitespace-global-modes '(not dired-mode tar-mode neotree))
-  (whitespace-line-column 80)
-  (whitespace-style
-    '(face ;; enable
-      trailing
-      tabs ;; conflicts highlight indent mode
-      space-mark
-      tab-mark
-      ;newline
-      ;newline-mark
-      ;empty  ; empty line
-      ;lines-tail
-      ;spaces
-  ))
-  (whitespace-display-mappings
-    '(
-       (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-       (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some major mode
-     ))
+  (whitespace-global-modes . '(not dired-mode tar-mode neotree))
+  (whitespace-line-column . 80)
+  (whitespace-style . '(face ;; enable
+                        trailing
+                        tabs ;; conflicts highlight indent mode
+                        space-mark
+                        tab-mark
+                        ;;newline
+                        ;;newline-mark
+                        ;;empty  ; empty line
+                        ;;lines-tail
+                        ;;spaces
+                        ))
+  (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+                                   (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some major mode
+                                   ))
   :config
   (global-whitespace-mode t)
   ;; fix color
   (set-face-attribute whitespace-trailing nil
-    :foreground "DeepPink"
-    :background (face-attribute 'default :background)
-    :underline t)
+                      :foreground "DeepPink"
+                      :background (face-attribute 'default :background)
+                      :underline t)
   (set-face-attribute whitespace-tab nil
-    :foreground "gray22"
-    :background nil
-    :underline t)
-  ;(set-face-attribute 'whitespace-newline nil
-  ;  :foreground "SlateGray"
-  ;  :background nil
-  ;  :underline nil)
-  ;(set-face-attribute 'whitespace-space nil
-  ;  :background my/bg-color
-  ;  :foreground "GreenYellow"
-  ;  :weight 'bold)
-  ;(set-face-attribute 'whitespace-empty nil
-  ;  :background my/bg-color)
+                      :foreground "gray22"
+                      :background nil
+                      :underline t)
+  ;;(set-face-attribute 'whitespace-newline nil
+  ;;  :foreground "SlateGray"
+  ;;  :background nil
+  ;;  :underline nil)
+  ;;(set-face-attribute 'whitespace-space nil
+  ;;  :background my/bg-color
+  ;;  :foreground "GreenYellow"
+  ;;  :weight 'bold)
+  ;;(set-face-attribute 'whitespace-empty nil
+  ;;  :background my/bg-color)
   )
 
-(use-package git-gutter
+(leaf git-gutter
   :ensure t
-  :hook (prog-mode . git-gutter-fix-init)
+  :hook (prog-mode-hook . git-gutter-fix-init)
   :custom
-  (git-gutter:modified-sign "~")
-  (git-gutter:added-sign    "+")
-  (git-gutter:deleted-sign  "▶")
+  (git-gutter:modified-sign . " ")
+  (git-gutter:added-sign    . "+")
+  (git-gutter:deleted-sign  . "▶")
   :config
   (set-face-background 'git-gutter:modified "DodgerBlue2")
   (set-face-foreground 'git-gutter:modified "DodgerBlue2")
@@ -279,100 +283,95 @@
     (if (eq git-gutter-mode nil)
         (git-gutter))
     (git-gutter))
-  :bind
-  (:map global-map
-        ("C-x C-g g" . git-gutter-fix-init)
-        ("C-x C-g j" . git-gutter:next-hunk)
-        ("C-x C-g k" . git-gutter:previous-hunk)
-        ("C-x C-g G" . git-gutter:end-of-hunk)
-        ("C-x C-g r" . git-gutter:update-all-windows)
-        ("C-x C-g d" . git-gutter:popup-hunk)
-        ("C-x C-g v" . git-gutter:mark-hunk)
-        ("C-x C-g x" . git-gutter:revert-hunk)
-        ("C-x C-g s" . git-gutter:stage-hunk)))
+  :bind (:global-map
+         ("C-x C-g g" . git-gutter-fix-init)
+         ("C-x C-g j" . git-gutter:next-hunk)
+         ("C-x C-g k" . git-gutter:previous-hunk)
+         ("C-x C-g G" . git-gutter:end-of-hunk)
+         ("C-x C-g r" . git-gutter:update-all-windows)
+         ("C-x C-g d" . git-gutter:popup-hunk)
+         ("C-x C-g v" . git-gutter:mark-hunk)
+         ("C-x C-g x" . git-gutter:revert-hunk)
+         ("C-x C-g s" . git-gutter:stage-hunk)))
 
-(use-package company
+(leaf company
   ;; company completion framework
   :ensure t
   :custom
-  (company-idle-delay 0)
-  (company-selection-wrap-around t)
-  (completion-ignore-case t)
+  (company-idle-delay . 0)
+  (company-selection-wrap-around . t)
+  (completion-ignore-case . t)
   :config
   (global-company-mode)
-  (use-package company-box
+  (leaf company-box
     :ensure t
-    :hook (company-mode . company-box-mode))
+    :hook (company-mode-hook . company-box-mode))
   )
 
-(use-package ace-window
+(leaf ace-window
   :ensure t
-  :bind
-  (:map global-map
-        ("M-o" . ace-window)))
+  :bind (:global-map
+         ("M-o" . ace-window)))
 
-(use-package which-key
+(leaf which-key
   :ensure t
   :config
-  (use-package which-key-posframe
+  (leaf which-key-posframe
     :ensure t
     :custom
-    (which-key-posframe-poshandler 'posframe-poshandler-frame-top-left-corner))
+    (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner))
   (which-key-mode)
   (if (emacs-works-on-term-p)
       (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
   )
 
-(use-package hl-todo
+(leaf hl-todo
   :ensure t
   :hook
-  (prog-mode . hl-todo-mode))
+  (prog-mode-hook . hl-todo-mode))
 
-(use-package editorconfig
+(leaf editorconfig
   :ensure t
   :config (editorconfig-mode))
 
-(use-package ov
-:ensure t
-:init
-(defun check-serif-available()
-  "check Noto Serif font available"
+(leaf ov
+  :ensure t
+  :init
+  (defun check-serif-available()
+    "check Noto Serif font available"
     (if (member "Noto Serif CJK JP" (font-family-list))
         (setq serif-available-p t)
-        (setq serif-available-p nil)))
-(setq ov-serif nil)
-(defun toggle-buffer-ov-serif (trigger-state-p)
-  "temporary make buffer to serif, ov-clear if ov available at buffer"
-  (interactive)
-  (if serif-available-p
-      (if trigger-state-p
-        (progn (sw-lnsp 0.8)
-               (setq ov-serif
-                     (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
-        (progn (sw-lnsp 0.25)
-               (ov-reset ov-serif)))))
-:hook (server-after-make-frame . check-serif-available)
-:commands (ov-reset ov-clear ov))
+      (setq serif-available-p nil)))
+  (setq ov-serif nil)
+  (defun toggle-buffer-ov-serif (trigger-state-p)
+    "temporary make buffer to serif, ov-clear if ov available at buffer"
+    (interactive)
+    (if serif-available-p
+        (if trigger-state-p
+            (progn (sw-lnsp 0.8)
+                   (setq ov-serif
+                         (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
+          (progn (sw-lnsp 0.25)
+                 (ov-reset ov-serif)))))
+  :hook (server-after-make-frame-hook . check-serif-available)
+  :commands (ov-reset ov-clear ov))
 
-(use-package darkroom
+(leaf darkroom
   :ensure t
   :init
   (defun my-darkroom-init ()
     (toggle-buffer-ov-serif darkroom-mode))
-  :hook (darkroom-mode . my-darkroom-init)
-        ;(darkroom-mode . ov-clear)
+  :hook (darkroom-mode-hook . my-darkroom-init)
+  ;;(darkroom-mode . ov-clear)
   :bind ([f8] . darkroom-mode)
-  :custom (darkroom-text-scale-increase 1)
-  ;:config
-  ;(doom-modeline t) ;TODO:enable modeline
+  :custom (darkroom-text-scale-increase . 1)
+  ;;:config
+  ;;(doom-modeline t) ;TODO:enable modeline
   )
 
-(use-package quickrun
-  :ensure t)
+(leaf quickrun :ensure t)
 
-(use-package yasnippet
+(leaf yasnippet
   :ensure t
-  :hook (prog-mode . yas-minor-mode)
-  :config (yas-reload-all)
-  )
-
+  :hook (prog-mode-hook . yas-minor-mode)
+  :config (yas-reload-all))
