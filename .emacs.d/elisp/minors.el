@@ -101,13 +101,13 @@
   (leaf amx
     :ensure t
     :bind
-    (:global-map
-           ("M-x" . amx)
-           ("M-X" . amx-major-mode-commands))
+    (:global-map ("M-x" . amx)
+                 ("M-X" . amx-major-mode-commands))
     :custom
     (amx-save-file . "~/.emacs.d/.cache/amx-items")
     (amx-backend . 'ido)
-    (amx-prompt-string . "⚡> "))
+    (amx-prompt-string . "⚡> ")
+    :global-minor-mode amx-mode)
   (leaf ido-vertical-mode
     :ensure t
     :custom
