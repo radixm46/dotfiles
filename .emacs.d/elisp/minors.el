@@ -88,42 +88,45 @@
         skk-init-file "~/.emacs.d/elisp/initskk.el"))
 
 ;; ido extensions
-(use-package ido
+(leaf ido
+  :tag "builtin"
   ;; built-in
   :init
   (ido-mode t)
   (ido-everywhere t)
   :custom
-  (ido-enable-flex-matching t)
-  (ido-save-directory-list-file "~/.emacs.d/.cache/ido.last")
+  (ido-enable-flex-matching . t)
+  (ido-save-directory-list-file . "~/.emacs.d/.cache/ido.last")
   :config
-  (use-package amx
+  (leaf amx
     :ensure t
     :bind
-    (:map global-map
-          ("M-x" . amx)
-          ("M-X" . amx-major-mode-commands))
+    (:global-map
+           ("M-x" . amx)
+           ("M-X" . amx-major-mode-commands))
     :custom
-    (amx-save-file "~/.emacs.d/.cache/amx-items")
-    (amx-backend 'ido)
-    (amx-prompt-string "⚡> "))
-  (use-package ido-vertical-mode
+    (amx-save-file . "~/.emacs.d/.cache/amx-items")
+    (amx-backend . 'ido)
+    (amx-prompt-string . "⚡> "))
+  (leaf ido-vertical-mode
     :ensure t
     :custom
-    (ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-    (ido-vertical-show-count t)
-    (ido-vertical-indicator " ▶")
+    (ido-vertical-define-keys . 'C-n-C-p-up-down-left-right)
+    (ido-vertical-show-count . t)
+    (ido-vertical-indicator . " ▶")
     :config (ido-vertical-mode t))
-  (use-package ido-completing-read+
+  (leaf ido-completing-read+
     :ensure t
+    :commands ido-ubiquitous-mode
     :custom
-    (magit-completing-read-function 'magit-ido-completing-read)
-    (gnus-completing-read-function 'gnus-ido-completing-read)
+    (magit-completing-read-function . 'magit-ido-completing-read)
+    (gnus-completing-read-function  . 'gnus-ido-completing-read)
     :config (ido-ubiquitous-mode 1))
-  (use-package ido-yes-or-no
+  (leaf ido-yes-or-no
     :ensure t
+    :commands ido-yes-or-no-mode
     :config (ido-yes-or-no-mode t))
-  (use-package ido-complete-space-or-hyphen
+  (leaf ido-complete-space-or-hyphen
     :ensure t
     :config (ido-complete-space-or-hyphen-mode t))
 
