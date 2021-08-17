@@ -8,6 +8,7 @@ auto-save-list
 bookmarks
 session.*
 transient
+tramp
 url
 var
 straight
@@ -16,6 +17,9 @@ straight
 # elpa packages
 /elpa/
 /elpa_*/
+
+# el-get
+/el-get/
 
 # eshell files
 /eshell/
