@@ -5,11 +5,9 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
-
 (setq package-archives (append '(("melpa" . "https://melpa.org/packages/")
                                  ("melpa-stable" . "https://stable.melpa.org/packages/")
                                  ("org" . "http://orgmode.org/elpa/")) package-archives))
-
 (setq load-prefer-newer t)
 
 ;; auto load use-package package
@@ -23,6 +21,36 @@
   (package-refresh-contents)
   (package-install 'leaf))
 (require 'leaf)
+
+;; configure leaf related packages
+(leaf leaf
+  :config
+  (leaf leaf-convert :ensure t)
+  (leaf leaf-tree
+    :ensure t
+    :custom ((imenu-list-size . 30)
+             (imenu-list-position . 'left)))
+  (leaf leaf-keywords
+    :ensure t
+    :init
+    ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
+    (leaf hydra :ensure t)
+    (leaf el-get :ensure t)
+    ;;(leaf blackout :ensure t)
+    :config
+    ;; initialize leaf-keywords.el
+    (leaf-keywords-init))
+  ;; install feather.el
+  (leaf feather
+    :ensure t
+    :el-get conao3/feather.el
+    :config
+    (feather-mode))
+  (defcustom leaf-alias-keyword-alist '((:ensure . :feather))
+  "The alias keyword.  KEY is treated as an alias for VALUE."
+  :type 'sexp
+  :group 'leaf)
+  )
 
 ;; setup straight.el
 (defvar bootstrap-version)
