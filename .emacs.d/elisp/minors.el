@@ -1,49 +1,60 @@
 ;; minor mode plugins
 
 ;; emacs built-in modes
-(use-package paren
+(leaf paren
+  :tag "builtin"
   :config
   (set-face-attribute 'show-paren-match nil
                       :background "SpringGreen2")
-  (show-paren-mode t))
+  :global-minor-mode show-paren-mode
+  )
 
-(use-package electric-pair-mode
-  :if (>= emacs-major-version 24)
+(leaf electric-pair-mode
+  :tag "builtin"
+  :emacs>= "24"
   :hook
-  ((conf-mode
-    prog-mode) . electric-pair-mode))
+  ((conf-mode-hook
+    prog-mode-hook) . electric-pair-mode))
 
-(use-package visual-line-mode
+(leaf visual-line-mode
+  :tag "builtin"
   :hook
-  ((org-mode markdown-mode) . visual-line-mode))
+  ((org-mode-hook
+    markdown-mode-hook) . visual-line-mode))
 
-(use-package display-line-numbers
-  :if (>= emacs-major-version 26)
+(leaf display-line-numbers
+  :tag "builtin"
+  :emacs>= "26"
   :custom
-  (display-line-numbers-type 'relative)
-  (display-line-numbers-width 4)
+  (display-line-numbers-type . 'relative)
+  ;; preserve width
+  (display-line-numbers-width . 4)
   :hook
-  ((conf-mode
-    fundamental-mode
-    outline-mode
-    prog-mode
-    text-mode) . display-line-numbers-mode))
+  ((conf-mode-hook
+    fundamental-mode-hook
+    outline-mode-hook
+    prog-mode-hook
+    text-mode-hook) . display-line-numbers-mode)
+  )
 
-(use-package flymake
-  :if (>= emacs-major-version 26)
+(leaf flymake
+  :tag "builtin"
+  :emacs>= "26"
   :hook
-  (prog-mode . flymake-mode))
+  (prog-mode-hook . flymake-mode))
 
-(use-package display-fill-column-indicator
-  :if (>= emacs-major-version 27)
+(leaf display-fill-column-indicator
+  :tag "builtin"
+  :emacs>= "27"
   :custom
-  (display-fill-column-indicator-column 90)
+  (display-fill-column-indicator-column . 90)
   :hook
-  ((conf-mode
-    fundamental-mode
-    outline-mode
-    prog-mode
-    text-mode) . display-fill-column-indicator-mode))
+  ((conf-mode-hook
+    fundamental-mode-hook
+    outline-mode-hook
+    prog-mode-hook
+    text-mode-hook) . display-fill-column-indicator-mode)
+  )
 
 (use-package recentf
   :custom
