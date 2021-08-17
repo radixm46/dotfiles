@@ -274,7 +274,11 @@ alias mv='mv -i'
 alias mkdir='mkdir -p'
 
 if is_available 'fd'; then
-    alias find='fd'
+    alias find='fd --color=auto'
+fi
+
+if is_available 'rg'; then
+    alias grep='rg --color=auto'
 fi
 
 # glob aliases
