@@ -56,14 +56,14 @@
     text-mode-hook) . display-fill-column-indicator-mode)
   )
 
-(use-package recentf
+(leaf recentf
+  :tag "builtin"
   :custom
-  (recentf-save-file "~/.emacs.d/.cache/recentf")
-  (recentf-max-saved-items 2000)
-  (recentf-auto-cleanup 'never)
-  (recentf-exclude
-   '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
-     "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
+  (recentf-save-file . "~/.emacs.d/.cache/recentf")
+  (recentf-max-saved-items . 2000)
+  (recentf-auto-cleanup . 'never)
+  (recentf-exclude . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
+                       "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
   :init
   (defmacro with-suppressed-message (&rest body)
     "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
