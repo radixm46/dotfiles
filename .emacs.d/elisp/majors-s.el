@@ -1,6 +1,7 @@
 ;; major modes loaded by init.el
 
-(use-package dired
+(leaf dired
+  :tag "builtin"
   :config
   (put 'dired-find-alternate-file 'disabled nil)
   )
