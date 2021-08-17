@@ -250,11 +250,12 @@
   :ensure t
   :hook (prog-mode . git-gutter-fix-init)
   :custom
-  (git-gutter:modified-sign " ")
+  (git-gutter:modified-sign "~")
   (git-gutter:added-sign    "+")
   (git-gutter:deleted-sign  "▶")
   :config
   (set-face-background 'git-gutter:modified "DodgerBlue2")
+  (set-face-foreground 'git-gutter:modified "DodgerBlue2")
   (set-face-background 'git-gutter:added "SpringGreen2")
   (set-face-foreground 'git-gutter:added "dark slate")
   (set-face-foreground 'git-gutter:deleted "tomato2")
