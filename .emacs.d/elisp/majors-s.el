@@ -1,5 +1,6 @@
 ;; major modes loaded by init.el
 (leaf file-manage
+  :doc "file management related config"
   :config
   (leaf dired
     :tag "builtin"
