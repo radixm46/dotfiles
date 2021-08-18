@@ -147,6 +147,9 @@
       (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
   )
 
+(leaf hydra
+  :ensure t)
+
 (leaf editorconfig
   :ensure t
   :config (editorconfig-mode))
