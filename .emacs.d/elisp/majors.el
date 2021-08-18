@@ -33,11 +33,11 @@
     ;:hook (python-mode . python-pipenv-init))
   )
 
-(use-package go-mode
+(leaf go-mode
   :ensure t
-  :hook ((go-mode . lsp)
-         (before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports))
+  :hook ((go-mode-hook . lsp)
+         (before-save-hook . lsp-format-buffer)
+         (before-save-hook . lsp-organize-imports))
   :mode ("\\.go\\'" . go-mode)
 )
 
