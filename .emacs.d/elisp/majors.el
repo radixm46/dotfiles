@@ -208,5 +208,4 @@
   (set-face-attribute 'markdown-table-face nil :family font-for-tables)
 )
 
-(use-package systemd
-  :ensure t)
+(leaf systemd :ensure t)
