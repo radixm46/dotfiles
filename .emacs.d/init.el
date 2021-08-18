@@ -147,13 +147,8 @@
   )
 
 
-;; -------- package config under use-package --------
-
 ;; --------------- minor modes ---------------
 (load "~/.emacs.d/elisp/minors.el")
-
-;; ---------- loading doom theme  ----------
-(load "~/.emacs.d/elisp/doom.el")
 
 ;; --------------- lsp package ---------------
 (load "~/.emacs.d/elisp/lsp.el")
