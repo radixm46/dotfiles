@@ -55,6 +55,188 @@
       (setq line-spacing 2.0))
     )
 
+  (leaf paren
+    :tag "builtin"
+    :config
+    (set-face-attribute 'show-paren-match nil
+                        :background "SpringGreen2")
+    :global-minor-mode show-paren-mode)
+
+  (leaf electric-pair-mode
+    :tag "builtin"
+    :emacs>= "24"
+    :hook
+    ((conf-mode-hook
+      prog-mode-hook) . electric-pair-mode))
+
+  (leaf visual-line-mode
+    :tag "builtin"
+    :hook
+    ((org-mode-hook
+      markdown-mode-hook) . visual-line-mode))
+
+  (leaf display-line-numbers
+    :tag "builtin"
+    :emacs>= "26"
+    :custom
+    (display-line-numbers-type . 'relative)
+    ;; preserve width
+    (display-line-numbers-width . 4)
+    :hook
+    ((conf-mode-hook
+      fundamental-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook) . display-line-numbers-mode)
+    )
+
+  (leaf display-fill-column-indicator
+    :tag "builtin"
+    :emacs>= "27"
+    :custom
+    (display-fill-column-indicator-column . 90)
+    :hook
+    ((conf-mode-hook
+      fundamental-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook) . display-fill-column-indicator-mode)
+    )
+
+  (leaf hl-todo
+    :ensure t
+    :hook
+    (prog-mode-hook . hl-todo-mode))
+
+  (leaf ov
+    :ensure t
+    :init
+    (defun check-serif-available()
+      "check Noto Serif font available"
+      (if (member "Noto Serif CJK JP" (font-family-list))
+          (setq serif-available-p t)
+        (setq serif-available-p nil)))
+    (setq ov-serif nil)
+    (defun toggle-buffer-ov-serif (trigger-state-p)
+      "temporary make buffer to serif, ov-clear if ov available at buffer"
+      (interactive)
+      (if serif-available-p
+          (if trigger-state-p
+              (progn (sw-lnsp 0.8)
+                     (setq ov-serif
+                           (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
+            (progn (sw-lnsp 0.25)
+                   (ov-reset ov-serif)))))
+    :hook (server-after-make-frame-hook . check-serif-available)
+    :commands (ov-reset ov-clear ov))
+
+  (leaf darkroom
+    :ensure t
+    :init
+    (defun my-darkroom-init ()
+      (toggle-buffer-ov-serif darkroom-mode))
+    :hook (darkroom-mode-hook . my-darkroom-init)
+    ;;(darkroom-mode . ov-clear)
+    :bind ([f8] . darkroom-mode)
+    :custom (darkroom-text-scale-increase . 1)
+    ;;:config
+    ;;(doom-modeline t) ;TODO:enable modeline
+    )
+
+  (leaf all-the-icons :ensure t) ;; need installation by all-the-icons-install-fonts
+
+  (use-package nyan-mode
+    :ensure t
+    :init (nyan-mode)
+    :config
+    (defun nyan-try ()
+      (nyan-stop-animation)
+      (setq nyan-wavy-trail nil))
+    (defun nyan-xit ()
+      (nyan-start-animation)
+      (setq nyan-wavy-trail t))
+    (nyan-xit)
+    :hook
+    ((evil-normal-state-entry . nyan-try)
+     (evil-normal-state-exit . nyan-xit)))
+
+  (leaf highlight-indent-guides
+    :ensure t
+    :hook
+    ((conf-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook) . highlight-indent-guides-mode)
+    :custom
+    ;;(if (not (display-graphic-p))
+    ;;    (progn
+    ;;      (setq highlight-indent-guides-auto-enabled nil)
+    ;;      (set-face-background 'highlight-indent-guides-odd-face "black")
+    ;;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
+    ;;      (set-face-background 'highlight-indent-guides-even-face "black")
+    ;;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
+    ;;    (setq highlight-indent-guides-auto-enabled t)
+    ;;  )
+    (highlight-indent-guides-method . 'column)
+    (highlight-indent-guides-auto-odd-face-perc . 10)
+    (highlight-indent-guides-auto-even-face-perc . 10)
+    ;;(setq highlight-indent-guides-auto-character-face-perc 20)
+    (highlight-indent-guides-responsive . 'top)
+    (highlight-indent-guides-delay . 0))
+
+  (leaf rainbow-delimiters
+    :ensure t
+    :hook
+    ((conf-mode-hook
+      prog-mode-hook) . rainbow-delimiters-mode))
+
+  ;; configure whitespace
+  (leaf whitespace
+    :hook
+    ((conf-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook) . whitespace-mode)
+    :custom
+    (whitespace-global-modes . '(not dired-mode tar-mode neotree))
+    (whitespace-line-column . 80)
+    (whitespace-style . '(face ;; enable
+                          trailing
+                          tabs ;; conflicts highlight indent mode
+                          space-mark
+                          tab-mark
+                          ;;newline
+                          ;;newline-mark
+                          ;;empty  ; empty line
+                          ;;lines-tail
+                          ;;spaces
+                          ))
+    (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+                                     (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some major mode
+                                     ))
+    :config
+    (global-whitespace-mode t)
+    ;; fix color
+    (set-face-attribute whitespace-trailing nil
+                        :foreground "DeepPink"
+                        :background (face-attribute 'default :background)
+                        :underline t)
+    (set-face-attribute whitespace-tab nil
+                        :foreground "gray22"
+                        :background nil
+                        :underline t)
+    ;;(set-face-attribute 'whitespace-newline nil
+    ;;  :foreground "SlateGray"
+    ;;  :background nil
+    ;;  :underline nil)
+    ;;(set-face-attribute 'whitespace-space nil
+    ;;  :background my/bg-color
+    ;;  :foreground "GreenYellow"
+    ;;  :weight 'bold)
+    ;;(set-face-attribute 'whitespace-empty nil
+    ;;  :background my/bg-color)
+    )
+
   ;; ---------- loading doom theme  ----------
   (load "~/.emacs.d/elisp/doom.el")
   )
