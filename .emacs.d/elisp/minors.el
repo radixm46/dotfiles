@@ -107,7 +107,6 @@
   (set-face-background 'git-gutter:added "SpringGreen2")
   (set-face-foreground 'git-gutter:added "dark slate")
   (set-face-foreground 'git-gutter:deleted "tomato2")
-  (global-git-gutter-mode t)
   (defun git-gutter-fix-init ()
     (interactive)
     (if (eq git-gutter-mode nil)
@@ -122,7 +121,9 @@
          ("C-x C-g d" . git-gutter:popup-hunk)
          ("C-x C-g v" . git-gutter:mark-hunk)
          ("C-x C-g x" . git-gutter:revert-hunk)
-         ("C-x C-g s" . git-gutter:stage-hunk)))
+         ("C-x C-g s" . git-gutter:stage-hunk))
+  :global-minor-mode (global-git-gutter-mode t)
+  )
 
 (leaf company
   ;; company completion framework
@@ -140,8 +141,7 @@
 
 (leaf ace-window
   :ensure t
-  :bind (:global-map
-         ("M-o" . ace-window)))
+  :bind (:global-map ("M-o" . ace-window)))
 
 (leaf which-key
   :ensure t
