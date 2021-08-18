@@ -98,7 +98,6 @@
     (setq history-delete-duplicates t))
   )
 
-(define-key global-map [f9] 'other-frame)
 
 
 (leaf lang-locales
