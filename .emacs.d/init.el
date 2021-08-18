@@ -96,8 +96,26 @@
     (setq message-log-maxa 10000)
     (setq history-length 1000)
     (setq history-delete-duplicates t))
-  )
 
+  (leaf recentf
+    :tag "builtin"
+    :custom
+    (recentf-save-file . "~/.emacs.d/.cache/recentf")
+    (recentf-max-saved-items . 2000)
+    (recentf-auto-cleanup . 'never)
+    (recentf-exclude . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
+                         "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
+    :init
+    (defmacro with-suppressed-message (&rest body)
+      "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
+      (declare (indent 0))
+      (let ((message-log-max nil))
+        `(with-temp-message (or (current-message) "") ,@body)))
+    (setq recentf-auto-save-timer
+          (run-with-idle-timer 30 t '(lambda ()
+                                       (with-suppressed-message (recentf-save-list)))))
+    (recentf-mode 1))
+  )
 
 
 (leaf lang-locales
