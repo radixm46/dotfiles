@@ -22,17 +22,18 @@
   )
 
 (leaf set-appearance
+  :custom
+  (inhibit-splash-screen . t)
+  (ring-bell-function . 'ignore)
   :config
-  (setq inhibit-splash-screen t)
-  (column-number-mode t)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
-  (blink-cursor-mode 0)
   (scroll-bar-mode -1)
   (display-time)
+  (column-number-mode t)
+  (blink-cursor-mode 0)
   (which-function-mode 1)
   (transient-mark-mode 1)
-  (setq ring-bell-function 'ignore)
   ;; (global-visual-line-mode nil)
   ;; (setq line-move-visual t)
   ;; (setq word-wrap t)
@@ -145,9 +146,8 @@
 
   (leaf all-the-icons :ensure t) ;; need installation by all-the-icons-install-fonts
 
-  (use-package nyan-mode
+  (leaf nyan-mode
     :ensure t
-    :init (nyan-mode)
     :config
     (defun nyan-try ()
       (nyan-stop-animation)
@@ -157,8 +157,9 @@
       (setq nyan-wavy-trail t))
     (nyan-xit)
     :hook
-    ((evil-normal-state-entry . nyan-try)
-     (evil-normal-state-exit . nyan-xit)))
+    ((evil-normal-state-entry-hook . nyan-try)
+     (evil-normal-state-exit-hook . nyan-xit))
+    :global-minor-mode nyan-mode)
 
   (leaf highlight-indent-guides
     :ensure t
@@ -215,7 +216,6 @@
                                      (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some major mode
                                      ))
     :config
-    (global-whitespace-mode t)
     ;; fix color
     (set-face-attribute whitespace-trailing nil
                         :foreground "DeepPink"
@@ -225,6 +225,8 @@
                         :foreground "gray22"
                         :background nil
                         :underline t)
+    ;;(global-whitespace-mode t)
+    :global-minor-mode global-whitespace-mode
     ;;(set-face-attribute 'whitespace-newline nil
     ;;  :foreground "SlateGray"
     ;;  :background nil
@@ -246,41 +248,40 @@
   (leaf set-cache-path
     :doc "check directory and set target"
     :config
-    (let ((my-autosave-dir "~/.emacs.d/.cache/autosaved")
-          (my-hist-dir "~/.emacs.d/.cache/hist"))
-      (if (not (file-directory-p my-autosave-dir))
-          (make-directory my-autosave-dir t))
-      (if (not (file-directory-p my-hist-dir))
-          (make-directory my-hist-dir t)))
-    )
+    (let ((my/autosave-dir "~/.emacs.d/.cache/autosaved")
+          (my/hist-dir "~/.emacs.d/.cache/hist"))
+      (if (not (file-directory-p my/autosave-dir))
+          (make-directory my/autosave-dir t))
+      (if (not (file-directory-p my/hist-dir))
+          (make-directory my/hist-dir t))))
 
   (leaf autosave
     :doc "configure auto save files"
-    :config
-    (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/.cache/autosaved" t)))
-    (setq delete-auto-save-files t)
-    (setq auto-save-default t)
-    (setq auto-save-timeout 15)
-    (setq auto-save-interval 120)
-    (setq auto-save-list-file-prefix nil))
+    :custom
+    (auto-save-file-name-transforms . '((".*" "~/.emacs.d/.cache/autosaved" t)))
+    (delete-auto-save-files . t)
+    (auto-save-default . t)
+    (auto-save-timeout . 15)
+    (auto-save-interval . 120)
+    (auto-save-list-file-prefix . nil))
 
   (leaf backup-files
     :doc "make backup files"
-    :config
-    (setq backup-directory-alist '((".*" .  "~/.emacs.d/.cache/hist")))
-    (setq make-backup-files t)
-    (setq version-control t) ;; enable version control
-    (setq kept-new-versions 5)
-    (setq kept-old-versions 1)
-    (setq delete-old-versions t)
-    (setq create-lockfiles nil))
+    :custom
+    (backup-directory-alist . '((".*" .  "~/.emacs.d/.cache/hist")))
+    (make-backup-files . t)
+    (version-control . t) ;; enable version control
+    (kept-new-versions . 5)
+    (kept-old-versions . 1)
+    (delete-old-versions . t)
+    (create-lockfiles . nil))
 
   (leaf history
     :doc "configure history, log"
-    :config
-    (setq message-log-maxa 10000)
-    (setq history-length 1000)
-    (setq history-delete-duplicates t))
+    :custom
+    (message-log-maxa . 10000)
+    (history-length . 1000)
+    (history-delete-duplicates . t))
 
   (leaf recentf
     :tag "builtin"
@@ -299,7 +300,8 @@
     (setq recentf-auto-save-timer
           (run-with-idle-timer 30 t '(lambda ()
                                        (with-suppressed-message (recentf-save-list)))))
-    (recentf-mode 1))
+    :global-minor-mode recentf-mode
+    )
   )
 
 
