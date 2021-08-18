@@ -19,6 +19,14 @@
   (defun emacs-works-on-term-p ()
     "returns t if emacs seems running on term"
     (not (or (daemonp) (display-graphic-p))))
+
+  (leaf exec-path-from-shell
+    :doc "load path from shell at startup"
+    :ensure t
+    :init
+    (setq exec-path-from-shell-arguments (list "-l"))
+    :config
+    (when (daemonp) (exec-path-from-shell-initialize)))
   )
 
 (leaf set-appearance
