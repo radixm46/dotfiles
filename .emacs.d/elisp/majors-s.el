@@ -103,13 +103,15 @@
       :ensure t
       :after (treemacs magit))
     (use-package treemacs-projectile
+    (leaf treemacs-projectile
       :after treemacs projectile
       :ensure t)
     (use-package treemacs-all-the-icons
       :after treemacs
       :ensure t
       :config (treemacs-load-theme "all-the-icons"))
-    (use-package treemacs-icons-dired
+    (leaf treemacs-icons-dired
+      :doc "treemacs icons on dired(treemacs-all-the-icons, use all-the-icons)"
       :after treemacs dired
       :ensure t
       :config (treemacs-icons-dired-mode))
