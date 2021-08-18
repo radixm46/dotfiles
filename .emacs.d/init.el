@@ -54,6 +54,9 @@
       (interactive)
       (setq line-spacing 2.0))
     )
+
+  ;; ---------- loading doom theme  ----------
+  (load "~/.emacs.d/elisp/doom.el")
   )
 
 (leaf conf-cache-history
