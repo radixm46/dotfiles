@@ -119,8 +119,8 @@
 
 
 (leaf lang-locales
+  :doc "locale and encoding"
   :config
-  ;; locale and encoding
   (set-locale-environment nil)
   (set-default 'buffer-file-coding-system 'utf-8)
   (set-language-environment "Japanese")
@@ -132,7 +132,15 @@
   (setq default-coding-systems 'utf-8)
   ;; (setq coding-system-for-read 'utf-8) ;; conflicts ddskk
   (setq coding-system-for-write 'utf-8)
-  )
+
+  ;; skk config(use
+  (leaf skk
+    :ensure ddskk
+    :init
+    (setq default-input-method "japanese-skk"
+          skk-user-directory "~/.emacs.d/.cache/skk"
+          skk-init-file "~/.emacs.d/elisp/initskk.el")))
+
 
 (leaf editor-defaults
   :config
