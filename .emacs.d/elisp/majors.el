@@ -11,18 +11,18 @@
     :ensure t)
   )
 
-(use-package python-mode
+(leaf python-mode
   :ensure t
   :mode ("\\.py\\'" . python-mode)
-  :hook (python-mode . lsp-deferred)
+  :hook (python-mode-hook . lsp-deferred)
   :config
-  (use-package poetry
+  (leaf poetry
     :ensure t
-    :hook (python-mode . poetry-tracking-mode))
-  (use-package pipenv
+    :hook (python-mode-hook . poetry-tracking-mode))
+  (leaf pipenv
     :ensure t
     :custom
-    (pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended)
+    (pipenv-projectile-after-switch-function . #'pipenv-projectile-after-switch-extended)
     :init
     (defun python-pipenv-init ()
       "init python environment on python-mode"
