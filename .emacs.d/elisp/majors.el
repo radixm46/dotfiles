@@ -1,13 +1,12 @@
 ;; major modes loaded by init.el
 
 ;; required for racer
-(use-package rust-mode
+(leaf rust-mode
   :ensure t
-  :hook (rust-mode . lsp)
-  :custom
-  (rust-format-on-save t)
+  :hook (rust-mode-hook . lsp)
+  :custom (rust-format-on-save . t)
   :config
-  (use-package cargo
+  (leaf cargo
     :ensure t)
   )
 
