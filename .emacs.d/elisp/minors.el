@@ -69,15 +69,16 @@
   :hook (prog-mode-hook . origami-mode))
 
 ;; enable evil
-(use-package evil
+(leaf evil
   :ensure t
   :init (setq evil-want-keybinding nil)
-  :custom (evil-undo-system 'undo-tree)
+  :custom
+  (evil-undo-system . 'undo-tree)
   :config
-  (use-package evil-surround
+  (leaf evil-surround
     :ensure t
-    :config (global-evil-surround-mode t))
-  (use-package evil-collection
+    :global-minor-mode global-evil-surround-mode)
+  (leaf evil-collection
     :after evil
     :ensure t
     :config
@@ -90,7 +91,7 @@
     ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
     ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
     )
-  (evil-mode 1)
+  :global-minor-mode evil-mode
   )
 
 (leaf git-gutter
