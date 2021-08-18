@@ -102,7 +102,6 @@
     (use-package treemacs-magit
       :ensure t
       :after (treemacs magit))
-    (use-package treemacs-projectile
     (leaf treemacs-projectile
       :after treemacs projectile
       :ensure t)
