@@ -8,6 +8,19 @@
 ;; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
+(leaf startup
+  :config
+  ;; mouse support on terminal
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t))
+  (defun emacs-works-on-term-p ()
+    "returns t if emacs seems running on term"
+    (not (or (daemonp) (display-graphic-p))))
+  )
+
 (leaf set-appearance
   :config
   (setq inhibit-splash-screen t)
@@ -85,15 +98,6 @@
     (setq history-delete-duplicates t))
   )
 
-;; mouse support on terminal
-(unless window-system
-  (require 'mouse)
-  (xterm-mouse-mode t)
-  (defun track-mouse (e))
-  (setq mouse-sel-mode t))
-(defun emacs-works-on-term-p ()
-  "returns t if emacs seems running on term"
-  (not (or (daemonp) (display-graphic-p))))
 (define-key global-map [f9] 'other-frame)
 
 
@@ -121,9 +125,10 @@
   (setq eol-mnemonic-dos "(CRLF)")
   (setq eol-mnemonic-mac "(CR)")
   (setq eol-mnemonic-unix "(LF)")
+  (setq find-file-visit-truename t)
+  :bind ([f9] . other-frame)
   )
 
-(setq find-file-visit-truename t)
 
 ;; -------- package config under use-package --------
 
