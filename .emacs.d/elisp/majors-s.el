@@ -4,8 +4,7 @@
   :config
   (leaf dired
     :tag "builtin"
-    :config
-    (put 'dired-find-alternate-file 'disabled nil))
+    :config (put 'dired-find-alternate-file 'disabled nil))
 
   (leaf neotree
     :ensure t
@@ -125,10 +124,8 @@
 
 (leaf undo-tree
   :ensure t
-  :custom
-  (undo-tree-visualizer-timestamps . t)
-  :config
-  (global-undo-tree-mode))
+  :custom (undo-tree-visualizer-timestamps . t)
+  :global-minor-mode (global-undo-tree-mode))
 
 (leaf vterm
   :ensure t
