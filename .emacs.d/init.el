@@ -351,6 +351,12 @@
       markdown-mode-hook) . visual-line-mode)
   ;; (global-visual-line-mode nil)
     )
+
+  (leaf editorconfig
+    :doc "load editorconfig"
+    :ensure t
+    :config (editorconfig-mode))
+  )
   )
 
 

@@ -150,10 +150,6 @@
 (leaf hydra
   :ensure t)
 
-(leaf editorconfig
-  :ensure t
-  :config (editorconfig-mode))
-
 (leaf quickrun :ensure t)
 
 (leaf yasnippet
