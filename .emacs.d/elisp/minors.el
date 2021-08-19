@@ -133,7 +133,7 @@
 
 (leaf ace-window
   :ensure t
-  :bind (:global-map ("M-o" . ace-window)))
+  :bind ("M-o" . ace-window))
 
 (leaf which-key
   :ensure t
