@@ -123,53 +123,53 @@
    ("C-c a" . org-agenda)
    ("C-c b" . org-iswitchb)
    ("C-c C-o 0" . my/org-goto-dir))
+  :custom
+  (org-startup-truncated        t)
+  (org-startup-folded           nil)
+  ;; priority
+  (org-priority-highest         ?1)
+  (org-priority-lowest          ?4)
+  (org-priority-default         ?3)
+  ;; keywords
+  (org-refile-targets           '((org-agenda-files :maxlevel . 3)))
+  (org-todo-keywords            '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
+                                            "DONE(d)" "CANCELLED(c)")))
+  (org-capture-templates        '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
+                                   "** TODO %?\n  %U\n  %a") ; %u->%t
+                                  ("n" "Note to Inbox" entry (file+headline "" "Inbox")
+                                   "** %?\nEntered on %U\n %i\n %a")))
+  (org-log-done                 'time)
+  (org-clock-clocked-in-display 'frame-title)
+  (org-image-actual-width       nil)
   :config  ;
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
   (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
   (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line)
   ;(setq system-time-locale "C") ;; dates written in eng
-  (setq org-startup-truncated t)
-  (setq org-startup-folded nil)
-  (setq org-directory "~/org/orgfiles")
-  (setq org-default-notes-file
-        (concat org-directory "/notes.org"))
-  (setq org-todofile
-        (concat org-directory "/todo.org"))
-  (setq org-agenda-files
-        (list org-directory))
-  (setq org-refile-targets
-        '((org-agenda-files :maxlevel . 3)))
-  (defun my/org-goto-dir ()
-    "open dir '~/org' with dired"
-    (interactive)
-    (find-file "~/org"))
-  (setq org-todo-keywords
-        '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
-                    "DONE(d)" "CANCELLED(c)")))
-  (setq org-highest-priority ?1)
-  (setq org-lowest-priority ?4)
-  (setq org-default-priority ?3)
-  (setq org-capture-templates
-        '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
-           "** TODO %?\n  %U\n  %a") ; %u->%t
-          ("n" "Note to Inbox" entry (file+headline "" "Inbox")
-           "** %?\nEntered on %U\n %i\n %a")))
-  (setq org-log-done 'time)
-  (setq org-clock-clocked-in-display 'frame-title)
-  (setq org-format-latex-options
-        (plist-put org-format-latex-options :scale 1.5))
-  (setq org-image-actual-width nil)
+  (custom-set-variables
+   ;; set directory
+   '(org-directory            "~/org/orgfiles")
+   '(org-default-notes-file   (concat org-directory "/notes.org"))
+   '(org-todofile             (concat org-directory "/todo.org")) ;; not defined at default
+   '(org-agenda-files         (list org-directory))
+   ;; set latex option
+   '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+   )
 
   ;; modify table face to 1:2
   (set-face-attribute 'org-table nil :family font-for-tables)
 
-  (use-package org-bullets
-    :ensure t
-    :hook (org-mode . org-bullets-mode))
+  (defun my/org-goto-dir ()
+    "open dir '~/org' with dired"
+    (interactive)
+    (find-file "~/org"))
 
-  ;; configure org-pomodoro
-  (use-package org-pomodoro
+  (leaf org-bullets
+    :ensure t
+    :hook (org-mode-hook . org-bullets-mode))
+  (leaf org-pomodoro
+    :doc "configure org-pomodoro"
     :ensure t
     :bind ([f6] . org-pomodoro))
 
