@@ -51,8 +51,8 @@
   (setq font-for-tables "HackGenNerd Console")
 
   (leaf set-linespacing
+    :doc "control line spacing"
     :config
-    ;; control line spacing
     (setq-default line-spacing 0.25)
     (defun sw-lnsp (wdth)
       "switch line spacing"
@@ -65,6 +65,7 @@
     )
 
   (leaf paren
+    :doc "configure show-paren-mode"
     :tag "builtin"
     :config
     (set-face-attribute 'show-paren-match nil
@@ -72,6 +73,7 @@
     :global-minor-mode show-paren-mode)
 
   (leaf electric-pair-mode
+    :doc "automatic pares parenthesis"
     :tag "builtin"
     :emacs>= "24"
     :hook
