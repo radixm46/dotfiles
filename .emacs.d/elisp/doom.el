@@ -134,12 +134,12 @@
     "switch doom-theme without doom-modeline-icon disabled"
     (interactive)
     (load-theme 'doom-spacegrey t)
-    (setq doom-modeline-icon nil))
+    (custom-set-variables '(doom-modeline-icon nil)))
   (defun doom-on-gui ()
     "switch doom-theme with doom-modeline-icon enabled"
     (interactive)
     (load-theme 'doom-molokai t)
-    (setq doom-modeline-icon t))
+    (custom-set-variables '(doom-modeline-icon t)))
 
   (if (emacs-works-on-term-p)
     (doom-on-term) (doom-on-gui))
