@@ -42,9 +42,6 @@
   (blink-cursor-mode 0)
   (which-function-mode 1)
   (transient-mark-mode 1)
-  ;; (global-visual-line-mode nil)
-  ;; (setq line-move-visual t)
-  ;; (setq word-wrap t)
   (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-14.1")
                                           '(width . 80)
                                           '(height . 55)) default-frame-alist))
@@ -79,12 +76,6 @@
     :hook
     ((conf-mode-hook
       prog-mode-hook) . electric-pair-mode))
-
-  (leaf visual-line-mode
-    :tag "builtin"
-    :hook
-    ((org-mode-hook
-      markdown-mode-hook) . visual-line-mode))
 
   (leaf display-line-numbers
     :tag "builtin"
@@ -340,15 +331,26 @@
 
 
 (leaf editor-defaults
+  :bind ([f9] . other-frame)
   :config
   ;; configure indent tab to false as default
-  (setq-default truncate-lines t)
   (setq-default tab-width 4 indent-tabs-mode nil)
   (setq eol-mnemonic-dos "(CRLF)")
   (setq eol-mnemonic-mac "(CR)")
   (setq eol-mnemonic-unix "(LF)")
   (setq find-file-visit-truename t)
-  :bind ([f9] . other-frame)
+  (setq-default truncate-lines t)
+  ;; (setq line-move-visual t)
+  ;; (setq word-wrap t)
+
+  (leaf visual-line-mode
+    :doc "visual line mode enables word wrap"
+    :tag "builtin"
+    :hook
+    ((org-mode-hook
+      markdown-mode-hook) . visual-line-mode)
+  ;; (global-visual-line-mode nil)
+    )
   )
 
 
