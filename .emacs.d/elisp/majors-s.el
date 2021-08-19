@@ -94,6 +94,7 @@
     (leaf treemacs-evil
       :ensure t
       :after (treemacs evil)
+      :require treemacs-evil
       ;; fix tab action
       :bind (:evil-treemacs-state-map ("TAB" . treemacs-TAB-action)))
     (leaf treemacs-magit
