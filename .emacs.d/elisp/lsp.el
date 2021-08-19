@@ -1,18 +1,16 @@
 ;; -------- packages for lsp --------
 
-(use-package lsp-mode
+(leaf lsp-mode
   :ensure t
-  :custom
-  (lsp-document-sync-method nil) ;; always send incremental document
-  (lsp-response-timeout 5)
-  (lsp-prefer-flymake t) ;'flymake
-  (lsp-eldoc-enable-hover nil)
-  :commands (lsp lsp-deferred)
-  :bind
+  :init (setq lsp-keymap-prefix "C-c C-l")
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
-  ; :init (setq lsp-keymap-prefix "C-c C-l")
-  (:map lsp-mode-map
-        ("C-c r"   . lsp-rename))
+  :commands (lsp lsp-deferred)
+  :custom
+  (lsp-document-sync-method . nil) ;; always send incremental document
+  (lsp-response-timeout . 5)
+  (lsp-prefer-flymake . t) ;'flymake
+  (lsp-eldoc-enable-hover . nil)
+  :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
   :config
   ;; LSP UI tools
   (use-package lsp-ui
@@ -65,20 +63,17 @@
           ("C-c q"   . lsp-ui-doc-unfocus-frame))
     :hook (lsp-mode . lsp-ui-mode))
 
-  (use-package lsp-treemacs
+  (leaf lsp-treemacs
     :ensure t
     ;:after (treemacs lsp-mode)
     :hook (lsp . lsp-treemacs)
-    :bind
-    (:map global-map
-          ("C-x t e" . lsp-treemacs-errors-list)
-          ("C-x t s" . lsp-treemacs-symbols))
-    :config
-    (lsp-treemacs-sync-mode 1))
+    :bind (:global-map ("C-x t e" . lsp-treemacs-errors-list)
+                       ("C-x t s" . lsp-treemacs-symbols))
+    :config (lsp-treemacs-sync-mode 1))
 
-  (use-package lsp-origami
+  (leaf lsp-origami
     :ensure t
-    :hook (lsp-after-open . lsp-origami-try-enable))
+    :hook (lsp-after-open-hook . lsp-origami-try-enable))
 
   (require 'lsp-ido)
  )
