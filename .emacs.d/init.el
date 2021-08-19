@@ -358,6 +358,53 @@
     :ensure t
     :config (editorconfig-mode))
   )
+
+(leaf ido
+  :doc "configure ido based completion"
+  :tag "builtin"
+  :init
+  (ido-mode t)
+  (ido-everywhere t)
+  :custom
+  (ido-enable-flex-matching . t)
+  (ido-save-directory-list-file . "~/.emacs.d/.cache/ido.last")
+  :config
+  (leaf amx
+    :ensure t
+    :bind
+    (:global-map ("M-x" . amx)
+                 ("M-X" . amx-major-mode-commands))
+    :custom
+    (amx-save-file . "~/.emacs.d/.cache/amx-items")
+    (amx-backend . 'ido)
+    (amx-prompt-string . "⚡> ")
+    :global-minor-mode amx-mode)
+  (leaf ido-vertical-mode
+    :ensure t
+    :custom
+    (ido-vertical-define-keys . 'C-n-C-p-up-down-left-right)
+    (ido-vertical-show-count . t)
+    (ido-vertical-indicator . " ▶")
+    :config (ido-vertical-mode t))
+  (leaf ido-completing-read+
+    :ensure t
+    :commands ido-ubiquitous-mode
+    :custom
+    (magit-completing-read-function . 'magit-ido-completing-read)
+    (gnus-completing-read-function  . 'gnus-ido-completing-read)
+    :config (ido-ubiquitous-mode 1))
+  (leaf ido-yes-or-no
+    :ensure t
+    :commands ido-yes-or-no-mode
+    :config (ido-yes-or-no-mode t))
+  (leaf ido-complete-space-or-hyphen
+    :ensure t
+    :config (ido-complete-space-or-hyphen-mode t))
+
+  (defun my/ido-recentf ()
+    "works with recentf-mode"
+    (interactive)
+    (find-file (ido-completing-read "Find from recent: " recentf-list)))
   )
 
 
