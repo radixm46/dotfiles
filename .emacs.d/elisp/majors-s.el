@@ -87,30 +87,27 @@
     (treemacs-fringe-indicator-mode t)
     (pcase (cons (not (null (executable-find "git")))
                  (not (null treemacs-python-executable)))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple)))
+      (`(t . t) (treemacs-git-mode 'deferred))
+      (`(t . _) (treemacs-git-mode 'simple)))
 
     ;; treemacs integrations
-    (use-package treemacs-evil
+    (leaf treemacs-evil
       :ensure t
       :after (treemacs evil)
-      :config
       ;; fix tab action
-      (define-key evil-treemacs-state-map (kbd "TAB") #'treemacs-TAB-action))
-    (use-package treemacs-magit
+      :bind (:evil-treemacs-state-map ("TAB" . treemacs-TAB-action)))
+    (leaf treemacs-magit
       :ensure t
       :after (treemacs magit))
     (leaf treemacs-projectile
       :after treemacs projectile
       :ensure t)
-    (use-package treemacs-all-the-icons
-      :after treemacs
-      :ensure t
+    (leaf treemacs-all-the-icons
+      :after treemacs all-the-icons
+      :ensure t :require t
       :config (treemacs-load-theme "all-the-icons"))
     (leaf treemacs-icons-dired
-      :doc "treemacs icons on dired(treemacs-all-the-icons, use all-the-icons)"
+      :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
       :after treemacs dired
       :ensure t
       :config (treemacs-icons-dired-mode))
