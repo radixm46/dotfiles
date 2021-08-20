@@ -89,26 +89,28 @@
     :hook (js-mode . js2-minor-mode)
     :config (setq js2-basic-offset 2)))
 
-(use-package sh-mode
-  ;; emacs built-in mode
-  :hook (sh-mode . lsp))
+(leaf sh-mode
+  :tag "builtin"
+  :hook (sh-mode-hook . lsp))
 
-(use-package csv-mode
+(leaf csv-mode
   :ensure t
   :mode (".csv" ".tsv"))
 
-(use-package json-mode
+(leaf json-mode
   :ensure t
   ;; :mode ("\\.json\\'" . json-mode)
-)
+  )
 
-(use-package yaml-mode
+(leaf yaml-mode
   :ensure t
-  :mode ("\\.yml\\'" . yaml-mode)
-)
+  :mode ("\\.yml\\'" . yaml-mode))
 
-;; org-mode config
-(use-package org
+(leaf systemd :ensure t)
+
+
+(leaf org
+  :doc "org-mode config"
   :ensure t
   :mode ("\\.org\\'" . org-mode)
   :bind
@@ -118,23 +120,23 @@
    ("C-c b" . org-iswitchb)
    ("C-c C-o 0" . my/org-goto-dir))
   :custom
-  (org-startup-truncated        t)
-  (org-startup-folded           nil)
+  (org-startup-truncated        . t)
+  (org-startup-folded           . nil)
   ;; priority
-  (org-priority-highest         ?1)
-  (org-priority-lowest          ?4)
-  (org-priority-default         ?3)
+  (org-priority-highest         . ?1) ;; FIXME: value
+  (org-priority-lowest          . ?4)
+  (org-priority-default         . ?3)
   ;; keywords
-  (org-refile-targets           '((org-agenda-files :maxlevel . 3)))
-  (org-todo-keywords            '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
-                                            "DONE(d)" "CANCELLED(c)")))
-  (org-capture-templates        '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
-                                   "** TODO %?\n  %U\n  %a") ; %u->%t
-                                  ("n" "Note to Inbox" entry (file+headline "" "Inbox")
-                                   "** %?\nEntered on %U\n %i\n %a")))
-  (org-log-done                 'time)
-  (org-clock-clocked-in-display 'frame-title)
-  (org-image-actual-width       nil)
+  (org-refile-targets           . '((org-agenda-files :maxlevel . 3)))
+  (org-todo-keywords            . '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
+                                              "DONE(d)" "CANCELLED(c)")))
+  (org-capture-templates        . '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
+                                     "** TODO %?\n  %U\n  %a") ; %u->%t
+                                    ("n" "Note to Inbox" entry (file+headline "" "Inbox")
+                                     "** %?\nEntered on %U\n %i\n %a")))
+  (org-log-done                 . 'time)
+  (org-clock-clocked-in-display . 'frame-title)
+  (org-image-actual-width       . nil)
   :config  ;
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
@@ -148,8 +150,7 @@
    '(org-todofile             (concat org-directory "/todo.org")) ;; not defined at default
    '(org-agenda-files         (list org-directory))
    ;; set latex option
-   '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
-   )
+   '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
 
   ;; modify table face to 1:2
   (set-face-attribute 'org-table nil :family font-for-tables)
@@ -160,6 +161,7 @@
     (find-file "~/org"))
 
   (leaf org-bullets
+    :doc "pretty looking bullet list"
     :ensure t
     :hook (org-mode-hook . org-bullets-mode))
   (leaf org-pomodoro
@@ -176,14 +178,14 @@
          (reftex-parse-all))
     (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
 
-  ; (use-package ox-bibtex)
+    ; (use-package ox-bibtex)
 
   :hook
-   (org-mode . org-mode-reftex-setup)
-)
+  (org-mode . org-mode-reftex-setup)
+  )
 
 ;; markdown-mode
-(use-package markdown-mode
+(leaf markdown-mode
   :ensure t
   ;:hook (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
@@ -191,8 +193,7 @@
   (("README\\.md\\'" . gfm-mode)
    ("\\.md\\'" . markdown-mode)
    ("\\.markdown\\'" . markdown-mode))
-  :custom
-  (markdown-command "multimarkdown")
+  :custom (markdown-command . "multimarkdown")
   :config
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
@@ -200,6 +201,5 @@
   (evil-define-key 'normal markdown-mode-map "gk" 'evil-previous-line)
   ;; modify table face to 1:2
   (set-face-attribute 'markdown-table-face nil :family font-for-tables)
-)
+  )
 
-(leaf systemd :ensure t)
