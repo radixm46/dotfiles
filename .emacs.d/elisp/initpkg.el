@@ -42,15 +42,16 @@
     (leaf-keywords-init))
   ;; install feather.el
   (leaf feather :disabled t
-    :ensure t
     :el-get conao3/feather.el
+    :init
+    :custom (leaf-alias-keyword-alist . '((:ensure . :feather)))
     :config
-    (feather-mode))
-  (defcustom leaf-alias-keyword-alist '((:ensure . :feather))
-  "The alias keyword.  KEY is treated as an alias for VALUE."
-  :type 'sexp
-  :group 'leaf)
-  )
+    (feather-mode)))
+
+(leaf paradox
+  :doc "modernized emacs package menu"
+  :ensure t
+  :config (paradox-enable))
 
 ;; setup straight.el
 (defvar bootstrap-version)
