@@ -41,7 +41,7 @@
 )
 
 ;; web-mode
-(use-package web-mode
+(leaf web-mode
   :ensure t
   :mode
   (("\\.html?\\'" . web-mode)
@@ -51,49 +51,43 @@
    ("\\.erb\\'" . web-mode)
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)
-   ("\\.vue\\'" . web-mode))
-  :hook (web-mode . lsp)
+   ("\\.vue\\'" . web-mode)
+   ("\\.js\\'" . js2-mode)
+   ("\\.jsx\\'" . js2-mode))
+  :hook (web-mode-hook . lsp)
   :custom
   ;; highlights
-  (web-mode-enable-current-element-highlight t)
+  (web-mode-enable-current-element-highlight . t)
   ;; configure indent
-  (web-mode-markup-indent-offset 4)
-  (web-mode-css-indent-offset 4)
-  (web-mode-code-indent-offset 4)
+  (web-mode-markup-indent-offset . 2)
+  (web-mode-css-indent-offset . 2)
+  (web-mode-code-indent-offset . 2)
   ;; auto close tags
-  (eb-mode-enable-auto-pairing t)
-  (eb-mode-enable-auto-closing t)
+  (web-mode-enable-auto-pairing . t)
+  (web-mode-enable-auto-closing . t)
+  (web-mode-auto-close-style . 2)
+  (web-mode-tag-auto-close-style . 2)
   ;; auto colorize css
-  (web-mode-enable-css-colorization t)
-  (web-mode-enable-block-face t)
+  (web-mode-enable-css-colorization . t)
+  (web-mode-enable-block-face . t)
   ;(web-mode-enable-part-face t)
-  (web-mode-enable-comment-interpolation t)
-  (web-mode-enable-heredoc-fontification t)
-)
+  (web-mode-enable-comment-interpolation . t)
+  (web-mode-enable-heredoc-fontification . t))
 
-(use-package js-mode
-  ;; emacs built-in mode
-  :if (>= emacs-major-version 27)
-  :mode ("\\.jsx\\'" . js2-mode)
-  :hook (js-mode . lsp)
-  :custom
-  (js-indent-level 2)
+(leaf js-mode
+  :tag "builtin"
+  :emacs>= "27"
+  ;; :mode
+  ;; (("\\.js\\'" . js2-mode)
+  ;;  ("\\.jsx\\'" . js2-mode))
+  :hook (js-mode-hook . lsp)
+  :custom (js-indent-level . 2)
   :config
-  (use-package js2-mode
-    :if (>= emacs-major-version 27)
+  (leaf js2-mode
+    ;;:if (>= emacs-major-version 27)
     :ensure t
     :hook (js-mode . js2-minor-mode)
-    :config (setq js2-basic-offset 2))
-  )
-(use-package js2-mode
-  :if (<= emacs-major-version 26)
-  :ensure t
-  :mode
-  (("\\.js\\'" . js2-mode)
-   ("\\.jsx\\'" . js2-mode))
-  :hook (js2-mode . lsp)
-  :config (setq js2-basic-offset 2)
-  )
+    :config (setq js2-basic-offset 2)))
 
 (use-package sh-mode
   ;; emacs built-in mode
