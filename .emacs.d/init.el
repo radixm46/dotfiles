@@ -331,16 +331,17 @@
           skk-init-file "~/.emacs.d/elisp/initskk.el")))
 
 
-(leaf editor-defaults
-  :bind ([f9] . other-frame)
+(leaf editor-functions
+  :init
+  (setq-default tab-width 4
+                indent-tabs-mode nil
+                truncate-lines t)
   :config
   ;; configure indent tab to false as default
-  (setq-default tab-width 4 indent-tabs-mode nil)
   (setq eol-mnemonic-dos "(CRLF)")
   (setq eol-mnemonic-mac "(CR)")
   (setq eol-mnemonic-unix "(LF)")
   (setq find-file-visit-truename t)
-  (setq-default truncate-lines t)
   ;; (setq line-move-visual t)
   ;; (setq word-wrap t)
 
@@ -447,6 +448,7 @@
   )
 
 (leaf helpful-things
+  :bind ([f9] . other-frame)
   :config
   (leaf ace-window
     :ensure t
