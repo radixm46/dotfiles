@@ -475,7 +475,7 @@
 
 (leaf helpful-things
   :config
-  (leaf bind-key :disabled t
+  (leaf bind-key
     :doc "move frames with function-key"
     :bind ([f9] . other-frame))
 
