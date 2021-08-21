@@ -468,9 +468,7 @@
       :hook (company-mode-hook . company-box-mode))
     )
 
-  (leaf load-lsp-config
-    :doc "loading lsp configuration"
-    (load "~/.emacs.d/elisp/lsp.el"))
+    (load "~/.emacs.d/elisp/lsp.el")
   )
 
 (leaf helpful-things
