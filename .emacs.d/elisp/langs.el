@@ -165,6 +165,7 @@
     :doc "pretty looking bullet list"
     :ensure t
     :hook (org-mode-hook . org-bullets-mode))
+
   (leaf org-pomodoro
     :doc "configure org-pomodoro"
     :ensure t
@@ -179,7 +180,7 @@
          (reftex-parse-all))
     (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
 
-  -;; (use-package ox-bibtex)
+  ;; (use-package ox-bibtex)
 
   :hook
   (org-mode . org-mode-reftex-setup)
