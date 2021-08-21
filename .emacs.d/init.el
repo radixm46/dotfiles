@@ -8,6 +8,7 @@
 ;; ---------------  load package ---------------
 (load "~/.emacs.d/elisp/initpkg.el")
 
+
 (leaf startup
   :config
   ;; mouse support on terminal
@@ -23,13 +24,12 @@
   (leaf exec-path-from-shell
     :doc "load path from shell at startup"
     :ensure t
-    :init
-    (setq exec-path-from-shell-arguments (list "-l"))
-    :config
-    (when (daemonp) (exec-path-from-shell-initialize)))
+    :custom (exec-path-from-shell-arguments . '(list "-l"))
+    :config (when (daemonp) (exec-path-from-shell-initialize)))
   )
 
-(leaf set-appearance
+
+(leaf conf-appearance
   :custom
   (inhibit-splash-screen . t)
   (ring-bell-function . 'ignore)
@@ -244,6 +244,7 @@
   (load "~/.emacs.d/elisp/doom.el")
   )
 
+
 (leaf conf-cache-history
   :config
   (leaf set-cache-path
@@ -336,7 +337,6 @@
   (setq-default tab-width 4
                 indent-tabs-mode nil
                 truncate-lines t)
-  :config
   ;; configure indent tab to false as default
   (setq eol-mnemonic-dos "(CRLF)")
   (setq eol-mnemonic-mac "(CR)")
@@ -351,7 +351,7 @@
     :hook
     ((org-mode-hook
       markdown-mode-hook) . visual-line-mode)
-  ;; (global-visual-line-mode nil)
+    ;; (global-visual-line-mode nil)
     )
 
   (leaf editorconfig
@@ -395,6 +395,7 @@
 
   (leaf quickrun :ensure t)
   )
+
 
 (leaf ido
   :doc "configure ido based completion"
@@ -468,12 +469,17 @@
       :hook (company-mode-hook . company-box-mode))
     )
 
-    (load "~/.emacs.d/elisp/lsp.el")
+  (leaf load-lsp-config
+    :config (load "~/.emacs.d/elisp/lsp.el"))
   )
 
+
 (leaf helpful-things
-  :bind ([f9] . other-frame)
   :config
+  (leaf bind-key :disabled t
+    :doc "move frames with function-key"
+    :bind ([f9] . other-frame))
+
   (leaf ace-window
     :ensure t
     :bind ("M-o" . ace-window))
@@ -487,11 +493,10 @@
       (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner))
     (which-key-mode)
     (if (emacs-works-on-term-p)
-	(which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
+	    (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
     )
 
-  (leaf hydra
-    :ensure t)
+  (leaf hydra :ensure t)
 
   (leaf undo-tree
     :ensure t
