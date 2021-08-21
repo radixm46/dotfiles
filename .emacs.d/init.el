@@ -661,7 +661,10 @@
     (leaf treemacs-all-the-icons
       :after treemacs all-the-icons
       :ensure t :require t
-      :config (treemacs-load-theme "all-the-icons"))
+      :config
+      (if (emacs-works-on-term-p)
+          (treemacs-load-theme "Default")
+          (treemacs-load-theme "all-the-icons")))
     (leaf treemacs-icons-dired
       :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
       :after treemacs dired
