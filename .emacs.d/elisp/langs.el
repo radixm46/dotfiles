@@ -43,7 +43,6 @@
   :mode ("\\.go\\'" . go-mode)
 )
 
-;; web-mode
 (leaf web-mode
   :ensure t
   :mode
@@ -110,7 +109,6 @@
   :mode ("\\.yml\\'" . yaml-mode))
 
 (leaf systemd :ensure t)
-
 
 (leaf org
   :doc "org-mode config"
@@ -181,13 +179,12 @@
          (reftex-parse-all))
     (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
 
-    ; (use-package ox-bibtex)
+  -;; (use-package ox-bibtex)
 
   :hook
   (org-mode . org-mode-reftex-setup)
   )
 
-;; markdown-mode
 (leaf markdown-mode
   :ensure t
   ;:hook (markdown-mode . visual-line-mode)
