@@ -537,8 +537,8 @@
 ;; --------------- major modes ---------------
 (load "~/.emacs.d/elisp/majors-s.el")
 
-;; --------------- major modes ---------------
-(load "~/.emacs.d/elisp/majors.el")
+;; ---------- languages major modes ----------
+(load "~/.emacs.d/elisp/langs.el")
 
 ;; ------------ loading local.el  ------------
 (if (file-exists-p "~/.emacs.d/elisp/local.el")
