@@ -51,8 +51,8 @@
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)
    ("\\.vue\\'" . web-mode)
-   ("\\.js\\'" . js2-mode)
-   ("\\.jsx\\'" . js2-mode))
+   ("\\.js\\'" . web-mode)
+   ("\\.jsx\\'" . web-mode))
   :hook (web-mode-hook . lsp)
   :custom
   ;; highlights
