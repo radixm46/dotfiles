@@ -150,12 +150,12 @@
    ;; set directory
    '(org-directory            "~/org/orgfiles")
    '(org-default-notes-file   (concat org-directory "/notes.org"))
-   '(org-todofile             (concat org-directory "/todo.org")) ;; not defined at default
    '(org-agenda-files         (list org-directory))
    ;; set latex option
    '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
+   (setq org-todofile         (concat org-directory "/todo.org")) ;; not defined at default
 
-  ;; modify table face to 1:2
+
   (set-face-attribute 'org-table nil :family font-for-tables)
 
   (defun my/org-goto-dir ()
