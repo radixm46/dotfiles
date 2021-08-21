@@ -1,5 +1,9 @@
 ;; major modes loaded by init.el
 
+(leaf emacs-lisp-mode
+  :tag "builtin"
+  :hook (emacs-lisp-mode-hook . hs-minor-mode))
+
 ;; required for racer
 (leaf rust-mode
   :ensure t
