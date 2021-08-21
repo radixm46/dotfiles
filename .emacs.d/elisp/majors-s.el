@@ -122,10 +122,6 @@
     )
   )
 
-(leaf magit
-  :ensure t
-  :custom (magit-completing-read-function . 'magit-ido-completing-read))
-
 (leaf undo-tree
   :ensure t
   :custom (undo-tree-visualizer-timestamps . t)
