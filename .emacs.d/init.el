@@ -24,7 +24,7 @@
   (leaf exec-path-from-shell
     :doc "load path from shell at startup"
     :ensure t
-    :custom (exec-path-from-shell-arguments . '(list "-l"))
+    :custom (exec-path-from-shell-arguments . '("-l"))
     :config (when (daemonp) (exec-path-from-shell-initialize)))
   )
 
