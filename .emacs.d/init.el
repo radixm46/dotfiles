@@ -162,6 +162,9 @@
      (evil-normal-state-exit-hook . nyan-xit))
     :global-minor-mode nyan-mode)
 
+  (leaf config-doom-modeline
+    :config (load "~/.emacs.d/elisp/doom.el"))
+
   (leaf highlight-indent-guides
     :ensure t
     :hook
@@ -226,8 +229,6 @@
                         :foreground "gray22"
                         :background nil
                         :underline t)
-    ;;(global-whitespace-mode t)
-    :global-minor-mode global-whitespace-mode
     ;;(set-face-attribute 'whitespace-newline nil
     ;;  :foreground "SlateGray"
     ;;  :background nil
@@ -238,10 +239,8 @@
     ;;  :weight 'bold)
     ;;(set-face-attribute 'whitespace-empty nil
     ;;  :background my/bg-color)
+    :global-minor-mode global-whitespace-mode
     )
-
-  ;; ---------- loading doom theme  ----------
-  (load "~/.emacs.d/elisp/doom.el")
   )
 
 
