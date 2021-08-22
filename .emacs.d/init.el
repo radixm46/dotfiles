@@ -468,11 +468,10 @@
     (company-selection-wrap-around . t)
     (completion-ignore-case . t)
     :config
-    (global-company-mode)
     (leaf company-box
       :ensure t
       :hook (company-mode-hook . company-box-mode))
-    )
+    :global-minor-mode global-company-mode)
 
   (leaf load-lsp-config
     :config (load "~/.emacs.d/elisp/lsp.el"))
