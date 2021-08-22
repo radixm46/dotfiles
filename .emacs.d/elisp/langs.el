@@ -95,7 +95,19 @@
 
 (leaf sh-mode
   :tag "builtin"
-  :hook (sh-mode-hook . lsp))
+  :hook
+  (sh-mode-hook . lsp)
+  (sh-mode-hook . flycheck-mode)
+  ;; :config (setq flycheck-checker 'sh-shellcheck)
+  :init
+  (leaf shfmt :if (executable-find "shfmt")
+    :doc "format code on save"
+    :ensure t
+    :hook (sh-mode-hook . shfmt-on-save-mode))
+  (leaf flycheck-by-shellcheck :if (executable-find "shellcheck")
+    :doc "use shellcheck for flychecker with lsp"
+    :hook (lsp-after-initialize-hook . (lambda () (flycheck-add-next-checker 'lsp 'sh-shellcheck))))
+  )
 
 (leaf csv-mode
   :ensure t
