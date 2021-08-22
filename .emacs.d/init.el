@@ -448,11 +448,17 @@
 (leaf competion-linting
   :doc "completion and linting packages"
   :config
-  (leaf flymake
+  (leaf flymake :disabled t
     :tag "builtin"
     :emacs>= "26"
-    :hook
-    (prog-mode-hook . flymake-mode))
+    :hook (prog-mode-hook . flymake-mode))
+
+  (leaf flycheck
+    :ensure t
+    :bind
+    (("M-l" . flycheck-list-errors)
+     ("M-n" . flycheck-next-error)
+     ("M-p" . flycheck-previous-error)))
 
   (leaf company
     ;; company completion framework
