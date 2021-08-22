@@ -2,7 +2,9 @@
 
 (leaf emacs-lisp-mode
   :tag "builtin"
-  :hook (emacs-lisp-mode-hook . hs-minor-mode))
+  :hook
+  (emacs-lisp-mode-hook . hs-minor-mode)
+  (emacs-lisp-mode-hook . flycheck-mode))
 
 ;; required for racer
 (leaf rust-mode
