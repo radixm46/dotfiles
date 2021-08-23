@@ -448,6 +448,11 @@
 (leaf competion-linting
   :doc "completion and linting packages"
   :config
+  (leaf auto-completion
+    :tag "builtin"
+    :config
+    (setq-default ac-sources '(ac-source-filename
+                               ac-source-words-in-all-buffer)))
   (leaf flymake :disabled t
     :tag "builtin"
     :emacs>= "26"
