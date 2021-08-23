@@ -11,10 +11,10 @@
 (setq load-prefer-newer t)
 
 ;; auto load use-package package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+;; (require 'use-package)
 
 ;; auto load leaf.el package
 (unless (package-installed-p 'leaf)
