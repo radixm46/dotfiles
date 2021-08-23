@@ -87,18 +87,27 @@
 
 (leaf js-mode
   :tag "builtin"
-  :emacs>= "27"
-  ;; :mode
-  ;; (("\\.js\\'" . js2-mode)
-  ;;  ("\\.jsx\\'" . js2-mode))
-  :hook (js-mode-hook . lsp)
   :custom (js-indent-level . 2)
+  :init
+  (leaf js-mode :emacs>= "27"
+    :mode ("\\.js\\'" . js-mode)
+    :hook (js-mode-hook . lsp))
+
+  (leaf flycheck-use-eslint :if (executable-find "eslint") :disabled t
+    :config (add-hook 'lsp-after-initialize-hook
+                      (lambda () (flycheck-add-mode 'javascript-eslint 'js-mode)
+                        (flycheck-add-next-checker 'lsp 'javascript-eslint) )))
   :config
   (leaf js2-mode
-    ;;:if (>= emacs-major-version 27)
     :ensure t
-    :hook (js-mode . js2-minor-mode)
-    :config (setq js2-basic-offset 2)))
+    :config
+    (setq js2-basic-offset 2)
+
+    (leaf js2-mode :emacs< "27"
+      :mode ("\\.js\\'" . js2-mode)
+      :hook (js2-mode-hook . lsp))
+    (leaf js2-mode :emacs>= "27"
+      :hook (js-mode-hook . js2-minor-mode))))
 
 (leaf sh-mode
   :tag "builtin"
