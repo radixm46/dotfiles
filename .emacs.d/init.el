@@ -396,7 +396,7 @@
   )
 
 
-(leaf ido
+(leaf ido :disabled t
   :doc "configure ido based completion"
   :tag "builtin"
   :init
@@ -445,6 +445,105 @@
   )
 
 
+(leaf minibuffer-extentions
+  :doc "extend minibuffer functions"
+  :config
+  (leaf consult
+    :ensure t
+    :doc "Useful search and navigation commands"
+    :init
+    (leaf consult-use-fd :if (executable-find "fd")
+      :doc "use fd for find if avalable"
+      :custom (consult-find-command . "fd --color=never --full-path ARG OPTS"))
+    (leaf consult-use-rigrep :if (executable-find "rg")
+      :doc "use ripgrep for grep if avalable"
+      :custom (consult-grep-command . '(concat "rg --null --color=ansi"
+                                               "--max-columns=250"
+                                               "--no-heading --line-number "
+                                               ;; adding these to default
+                                               "--smart-case --hidden "
+                                               "--max-columns-preview "
+                                               ;; add back filename to get parsing to work
+                                               "--with-filename "
+                                               ;; defaults
+                                               "-e ARG OPTS")))
+    (leaf consult-dir :ensure t))
+
+  (leaf orderless
+    :ensure t
+    :doc "Advanced completion style"
+    :custom
+    (completion-styles . '(orderless))
+    (completion-category-defaults . nil)
+    (completion-category-overrides . '((file (style partial-completion)))))
+
+  (leaf marginalia
+    :ensure t
+    :doc "Rich annotations in the minibuffer"
+    :config (marginalia-mode))
+
+  (leaf embark
+    :ensure t
+    :doc "Emacs Mini-Buffer Actions Rooted in Keymaps"
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("C-;" . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :init
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none))))
+
+    (leaf embark-consult
+      :ensure t
+      :doc "consult embark binding package"
+      :after (embark consult)
+                                        ;:demand t ; only necessary if you have the hook below
+      ;; if you want to have consult previews as you move around an
+      ;; auto-updating embark collect buffer
+      :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
+    )
+
+  (leaf vertico
+    :ensure t
+    :doc "VERTical Interactive COmpletion"
+    :init
+    (vertico-mode)
+    (leaf savehist
+      :tag "builtin"
+      :doc "Persist history over Emacs restarts. Vertico sorts by history position."
+      :custom (savehist-file . "~/.emacs.d/.cache/history")
+      :init (savehist-mode))
+
+    ;; Add prompt indicator to `completing-read-multiple'.
+    ;; Alternatively try `consult-completing-read-multiple'.
+    (defun crm-indicator (args)
+      (cons (concat "[CRM] " (car args)) (cdr args)))
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+    (leaf hide-commads-unnecessary :emacs>= "28"
+      :doc
+      "Emacs 28: Hide commands in M-x which do not work in the current mode.
+       Vertico commands are hidden in normal buffers."
+      :config
+      (setq read-extended-command-predicate
+            #'command-completion-default-include-p))
+
+    :custom
+    (vertico-count . 15)
+    (vertico-cycle . t)
+    ;; Enable recursive minibuffers
+    (enable-recursive-minibuffers . t)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties . '(read-only t cursor-intangible t face minibuffer-prompt))
+    :hook (minibuffer-setup-hook . cursor-intangible-mode))
+  )
+
+
 (leaf competion-linting
   :doc "completion and linting packages"
   :config
@@ -463,7 +562,8 @@
     :bind
     (("M-l" . flycheck-list-errors)
      ("M-n" . flycheck-next-error)
-     ("M-p" . flycheck-previous-error)))
+     ("M-p" . flycheck-previous-error))
+    :init (leaf consult-flycheck :ensure t))
 
   (leaf company
     ;; company completion framework
@@ -558,7 +658,8 @@
     (leaf lsp-ido
       :after lsp
       :require lsp-ido)
-    )
+
+    (leaf consult-lsp :ensure t)
   ;; optionally
   ;; if you are helm user
   ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
