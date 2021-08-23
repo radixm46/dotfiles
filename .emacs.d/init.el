@@ -743,7 +743,7 @@
 
   (leaf magit
     :ensure t
-    :custom (magit-completing-read-function . 'magit-ido-completing-read)
+    ;:custom (magit-completing-read-function . 'magit-ido-completing-read)
     :config (add-hook 'magit-section-mode-hook #'(lambda () (whitespace-mode -1))))
   )
 
