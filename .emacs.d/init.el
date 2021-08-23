@@ -487,11 +487,12 @@
     :custom
     (lsp-document-sync-method . nil) ;; always send incremental document
     (lsp-response-timeout . 5)
-    ;; (lsp-prefer-flymake . nil) ;'flymake NOTE: not defined
     (lsp-eldoc-enable-hover . nil)
-    ;; (lsp-auto-configure . nil) ;; NOTE: disable auto configuration
+    (lsp-auto-configure . t)
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
     :config
+    (setq lsp-prefer-flymake nil))
+
     (leaf lsp-ui
       :doc "LSP UI tools"
       :ensure t
