@@ -214,6 +214,61 @@
   (org-mode . org-mode-reftex-setup)
   )
 
+(leaf org-roam
+  :ensure t
+  :init (setq org-roam-v2-ack t)
+  :bind
+  (("C-c n c" . org-roam-capture)
+   ("C-c n f" . org-roam-find-file)
+   ("C-c n g" . org-roam-graph)
+   (:org-mode-map
+    ("C-c n i" . org-roam-insert)
+    ("C-c n I" . org-roam-insert-immediate)))
+  :custom
+  (org-roam-capture-templates . '(("d" "default" plain
+                                   "%?"
+                                   :if-new
+                                   (file+head "${slug}.org" "#+title: ${title}\n")
+                                   :immediate-finish t
+                                   :unnarrowed t)
+                                  ;; ("r" "bibliography reference" plain "%?"
+                                  ;;  :if-new
+                                  ;;  (file+head "references/${citekey}.org" "#+title: ${title}\n")
+                                  ;;  :unnarrowed t)
+                                  ;;("r" "Roam" plain (function org-roam--capture-get-point)
+                                  ;;"%?"
+                                  ;;:file-name "%<%Y%m%d%H%M%S>-${slug}.org"
+                                  ;;:head "#+title: ${title}\n"
+                                  ;;:unnarrowed t)
+                                  ))
+  :config
+  (custom-set-variables
+  '(org-roam-directory           (file-truename "~/org/roam"))
+  '(org-roam-index-file          (file-truename "~/org/roam/Index.org"))
+  '(org-roam-db-location         (file-truename "~/.emacs.d/.cache/org-roam.db")))
+
+  (org-roam-db-autosync-mode)
+
+  (leaf org-roam-ui :disabled t ;; NOTE: not working yet
+    :doc "org-roam frontend package"
+    :straight
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+    :preface
+    ;; dependencies
+    (leaf websocket
+      :ensure t :after org-roam)
+    (leaf simple-httpd
+      :ensure t :after org-roam)
+    (leaf f
+      :ensure t :after org-roam)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+  )
+
 (leaf markdown-mode
   :ensure t
   ;:hook (markdown-mode . visual-line-mode)
