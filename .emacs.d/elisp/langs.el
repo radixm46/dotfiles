@@ -16,7 +16,7 @@
   )
 
 (leaf python-mode
-  :ensure t
+  :tag "builtin"
   :mode ("\\.py\\'" . python-mode)
   :hook (python-mode-hook . lsp-deferred)
   :config
@@ -59,6 +59,13 @@
    ("\\.js\\'" . web-mode)
    ("\\.jsx\\'" . web-mode))
   :hook (web-mode-hook . lsp)
+  :preface
+  (leaf flycheck-use-tidy :if (executable-find "tidy")
+    :doc "enable flycheck with html-tidy on web-mode"
+    :config (add-hook 'lsp-after-initialize-hook
+                      (lambda ()
+                        (flycheck-add-mode 'html-tidy 'web-mode)
+                        (flycheck-add-next-checker 'lsp 'html-tidy))))
   :custom
   ;; highlights
   (web-mode-enable-current-element-highlight . t)
@@ -152,21 +159,19 @@
   (org-log-done                 . 'time)
   (org-clock-clocked-in-display . 'frame-title)
   (org-image-actual-width       . nil)
-  :config  ;
+  :config
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
   (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
   (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line)
   ;(setq system-time-locale "C") ;; dates written in eng
-  (custom-set-variables
-   ;; set directory
+  (custom-set-variables ;; set directory
    '(org-directory            "~/org/orgfiles")
    '(org-default-notes-file   (concat org-directory "/notes.org"))
    '(org-agenda-files         (list org-directory))
    ;; set latex option
    '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
-   (setq org-todofile         (concat org-directory "/todo.org")) ;; not defined at default
-
+   (defvar org-todofile       (concat org-directory "/todo.org") "default org todo file path")
 
   (set-face-attribute 'org-table nil :family font-for-tables)
 
