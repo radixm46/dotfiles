@@ -280,7 +280,7 @@
   (leaf history
     :doc "configure history, log"
     :custom
-    (message-log-maxa . 10000)
+    (message-log-max . 10000)
     (history-length . 1000)
     (history-delete-duplicates . t))
 
