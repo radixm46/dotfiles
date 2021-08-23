@@ -127,8 +127,8 @@
               (progn (sw-lnsp 0.8)
                      (setq ov-serif
                            (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
-            (progn (sw-lnsp 0.25)
-                   (ov-reset ov-serif)))))
+              (progn (sw-lnsp 0.25)
+                     (ov-reset ov-serif)))))
     :hook (server-after-make-frame-hook . check-serif-available)
     :commands (ov-reset ov-clear ov))
 
@@ -500,8 +500,8 @@
       (lsp-ui-doc-max-height . 30)
       (lsp-ui-doc-use-childframe . t)
       (lsp-ui-doc-use-webkit . nil)
-      ;; lsp-ui-flycheck NOTE: 定義されてない変数かも
-      ;; (lsp-ui-flycheck-enable . nil)
+      ;; lsp-ui-flycheck
+      (lsp-ui-flycheck-enable . t)
       ;; lsp-ui-sideline
       (lsp-ui-sideline-enable . t)
       (lsp-ui-sideline-ignore-duplicate . t)
@@ -632,12 +632,12 @@
            ("C-x C-g v" . git-gutter:mark-hunk)
            ("C-x C-g x" . git-gutter:revert-hunk)
            ("C-x C-g s" . git-gutter:stage-hunk))
-    :global-minor-mode (global-git-gutter-mode t)
-    )
+    :global-minor-mode (global-git-gutter-mode t))
 
   (leaf magit
     :ensure t
-    :custom (magit-completing-read-function . 'magit-ido-completing-read))
+    :custom (magit-completing-read-function . 'magit-ido-completing-read)
+    :config (add-hook 'magit-section-mode-hook #'(lambda () (whitespace-mode -1))))
   )
 
 
@@ -768,11 +768,12 @@
   )
 
 
-;; ---------- languages major modes ----------
-(load "~/.emacs.d/elisp/langs.el")
+(leaf load-lang-settings
+  :config (load "~/.emacs.d/elisp/langs.el"))
 
-;; ------------ loading local.el  ------------
-(if (file-exists-p "~/.emacs.d/elisp/local.el")
-  (load "~/.emacs.d/elisp/local.el")
-  ;; create elisp/local.el if not exists
-  (with-temp-file "~/.emacs.d/elisp/local.el" nil))
+
+(leaf load-local-conf
+  :config (if (file-exists-p "~/.emacs.d/elisp/local.el")
+              (load "~/.emacs.d/elisp/local.el")
+              ;; create elisp/local.el if not exists
+              (with-temp-file "~/.emacs.d/elisp/local.el" nil)))
