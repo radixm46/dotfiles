@@ -48,23 +48,30 @@
     :init
     :custom (leaf-alias-keyword-alist . '((:ensure . :feather)))
     :config
-    (feather-mode)))
+    (feather-mode))
+
+  (leaf straight-setup :if (executable-find "git")
+    :doc "setup straight.el (require git)"
+    :config
+    (defvar bootstrap-version)
+    (let ((bootstrap-file
+           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+          (bootstrap-version 5))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+             'silent 'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage))
+
+    ;; use straight as leaf default package management
+    :custom (leaf-alias-keyword-alist . '((:ensure . :straight))))
+  )
 
 (leaf paradox
   :doc "modernized emacs package menu"
   :ensure t
   :config (paradox-enable))
 
-;; setup straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
