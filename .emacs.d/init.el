@@ -258,6 +258,7 @@
 
   (leaf autosave
     :doc "configure auto save files"
+    :tag "builtin"
     :custom
     (auto-save-file-name-transforms . '((".*" "~/.emacs.d/.cache/autosaved" t)))
     (delete-auto-save-files . t)
@@ -268,6 +269,7 @@
 
   (leaf backup-files
     :doc "make backup files"
+    :tag "builtin"
     :custom
     (backup-directory-alist . '((".*" .  "~/.emacs.d/.cache/hist")))
     (make-backup-files . t)
@@ -279,6 +281,7 @@
 
   (leaf history
     :doc "configure history, log"
+    :tag "builtin"
     :custom
     (message-log-max . 10000)
     (history-length . 1000)
