@@ -249,19 +249,14 @@
 
   (org-roam-db-autosync-mode)
 
-  (leaf org-roam-ui :disabled t ;; NOTE: not working yet
+  (leaf org-roam-ui
     :doc "org-roam frontend package"
     :straight
-    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    (org-roam-ui
+     :type git :host github
+     :repo "org-roam/org-roam-ui" :branch "main"
+     :files ("*.el" "out"))
     :after org-roam
-    :preface
-    ;; dependencies
-    (leaf websocket
-      :ensure t :after org-roam)
-    (leaf simple-httpd
-      :ensure t :after org-roam)
-    (leaf f
-      :ensure t :after org-roam)
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
