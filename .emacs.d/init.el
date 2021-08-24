@@ -674,7 +674,7 @@
       :ensure t
       :hook (lsp-after-open-hook . lsp-origami-try-enable))
 
-    (leaf lsp-ido
+    (leaf lsp-ido :disabled t
       :after lsp
       :require lsp-ido)
 
