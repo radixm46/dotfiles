@@ -45,7 +45,6 @@
   ;; install feather.el
   (leaf feather :disabled t
     :el-get conao3/feather.el
-    :init
     :custom (leaf-alias-keyword-alist . '((:ensure . :feather)))
     :config
     (feather-mode))
