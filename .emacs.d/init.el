@@ -306,6 +306,13 @@
                                        (with-suppressed-message (recentf-save-list)))))
     :global-minor-mode recentf-mode
     )
+
+  (leaf bookmark
+    :tag "builtin"
+    :config
+    (custom-set-variables
+     '(bookmark-default-file  (file-truename "~/.emacs.d/.cache/bookmarks")))
+    )
   )
 
 
@@ -599,7 +606,10 @@
     (lsp-auto-configure . t)
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
     :config
-    (setq lsp-prefer-flymake nil))
+    (setq lsp-prefer-flymake nil)
+    (custom-set-variables
+     '(lsp-session-file
+       (expand-file-name ".cache/.lsp-session-v1" user-emacs-directory)))
 
     (leaf lsp-ui
       :doc "LSP UI tools"
@@ -862,7 +872,15 @@
       :after (treemacs magit))
     (leaf treemacs-projectile
       :after treemacs projectile
-      :ensure t)
+      :ensure t
+      :init
+      (custom-set-variables
+       '(projectile-cache-file
+         (expand-file-name ".cache/projectile.cache" user-emacs-directory))
+       '(projectile-known-projects-file
+         (expand-file-name ".cache/projectile-known-projects.eld" user-emacs-directory))
+       ))
+
     (leaf treemacs-all-the-icons
       :after treemacs all-the-icons
       :ensure t :require t
