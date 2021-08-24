@@ -563,10 +563,12 @@
   (leaf flycheck
     :ensure t
     :bind
-    (("M-l" . flycheck-list-errors)
-     ("M-n" . flycheck-next-error)
+    (("M-n" . flycheck-next-error)
      ("M-p" . flycheck-previous-error))
-    :init (leaf consult-flycheck :ensure t))
+    :init
+    (leaf consult-flycheck
+      :ensure t
+      :bind ("M-l" . consult-flycheck)))
 
   (leaf company
     ;; company completion framework
