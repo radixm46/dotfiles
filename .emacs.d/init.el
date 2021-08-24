@@ -451,6 +451,9 @@
   (leaf consult
     :ensure t
     :doc "Useful search and navigation commands"
+    :bind
+    (("M-g g"   . consult-line)
+     ("M-g M-g" . consult-line)) ;; replace native goto-line
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
