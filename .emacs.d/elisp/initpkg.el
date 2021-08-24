@@ -26,10 +26,12 @@
 (leaf leaf
   :config
   (leaf leaf-convert :ensure t)
+
   (leaf leaf-tree
     :ensure t
     :custom ((imenu-list-size . 30)
              (imenu-list-position . 'left)))
+
   (leaf leaf-keywords
     :ensure t
     :init

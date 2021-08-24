@@ -565,6 +565,7 @@
     :config
     (setq-default ac-sources '(ac-source-filename
                                ac-source-words-in-all-buffer)))
+
   (leaf flymake :disabled t
     :tag "builtin"
     :emacs>= "26"
@@ -678,14 +679,15 @@
       :require lsp-ido)
 
     (leaf consult-lsp :ensure t)
-  ;; optionally
-  ;; if you are helm user
-  ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
-  ;; if you are ivy user
-  ;;(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-  ;; optionally if you want to use debugger
-  ;;(use-package dap-mode)
-  ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+    ;; optionally
+    ;; if you are helm user
+    ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+    ;; if you are ivy user
+    ;;(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+    ;; optionally if you want to use debugger
+    ;;(use-package dap-mode)
+    ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+    )
   )
 
 
@@ -867,9 +869,11 @@
       :require treemacs-evil
       ;; fix tab action
       :bind (:evil-treemacs-state-map ("TAB" . treemacs-TAB-action)))
+
     (leaf treemacs-magit
       :ensure t
       :after (treemacs magit))
+
     (leaf treemacs-projectile
       :after treemacs projectile
       :ensure t
@@ -888,6 +892,7 @@
       (if (emacs-works-on-term-p)
           (treemacs-load-theme "Default")
           (treemacs-load-theme "all-the-icons")))
+
     (leaf treemacs-icons-dired
       :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
       :after treemacs dired
