@@ -222,8 +222,13 @@
    ("C-c n f" . org-roam-find-file)
    ("C-c n g" . org-roam-graph)
    (:org-mode-map
+    ("C-c n n" . org-roam-node-insert)
     ("C-c n i" . org-roam-insert)
-    ("C-c n I" . org-roam-insert-immediate)))
+    ("C-c n I" . org-roam-insert-immediate)
+    ("C-c n a" . org-roam-alias-add)
+    ("C-c n A" . org-roam-alias-remove)
+    ("C-c n t" . org-roam-tag-add)
+    ("C-c n T" . org-roam-tag-remove)))
   :custom
   (org-roam-capture-templates . '(("d" "default" plain
                                    "%?"
@@ -241,6 +246,7 @@
                                   ;;:head "#+title: ${title}\n"
                                   ;;:unnarrowed t)
                                   ))
+  :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
   :config
   (custom-set-variables
   '(org-roam-directory           (file-truename "~/org/roam"))
