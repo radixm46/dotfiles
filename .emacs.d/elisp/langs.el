@@ -220,7 +220,7 @@
   :bind
   (("C-c n c" . org-roam-capture)
    ("C-c n f" . org-roam-find-file)
-   ("C-c n g" . org-roam-graph)
+   ("C-c n g" . org-roam-ui-mode)
    (:org-mode-map
     ("C-c n n" . org-roam-node-insert)
     ("C-c n i" . org-roam-insert)
