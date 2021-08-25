@@ -199,6 +199,14 @@
     :ensure t
     :bind ([f6] . org-pomodoro))
 
+  (leaf org-sidebar
+    :doc "sidebar for org-mode"
+    :ensure t
+    :bind
+    (:org-mode-map
+     ("M-9" . org-sidebar-tree-toggle)
+     ("M-8" . org-sidebar-toggle)))
+
   ;; configure bibtex
   (defun org-mode-reftex-setup ()
     "setup reftex on org-mode doc"
@@ -258,10 +266,9 @@
   (leaf org-roam-ui
     :doc "org-roam frontend package"
     :straight
-    (org-roam-ui
-     :type git :host github
-     :repo "org-roam/org-roam-ui" :branch "main"
-     :files ("*.el" "out"))
+    (org-roam-ui :type git :host github
+                 :repo "org-roam/org-roam-ui" :branch "main"
+                 :files ("*.el" "out"))
     :after org-roam
     :config
     (setq org-roam-ui-sync-theme t
