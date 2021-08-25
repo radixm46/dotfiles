@@ -34,9 +34,11 @@
   (inhibit-splash-screen . t)
   (ring-bell-function . 'ignore)
   :config
+  (if (not (emacs-works-on-term-p))
+      (progn
+        (tool-bar-mode -1)
+        (scroll-bar-mode -1)))
   (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
   (display-time)
   (column-number-mode t)
   (blink-cursor-mode 0)
