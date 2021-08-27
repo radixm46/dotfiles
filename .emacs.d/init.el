@@ -726,7 +726,7 @@
     :ensure t
     :init
     (add-to-list 'evil-emacs-state-modes 'vterm-mode)
-    (add-hook 'vterm-mode-hook (lambda () (sw-lnsp 1)))
+    :hook (vterm-mode-hook . (lambda () (sw-lnsp 1)))
     :bind (:vterm-mode-map ("C-u" . vterm-send-C-u)))
   )
 

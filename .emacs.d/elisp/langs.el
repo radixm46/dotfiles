@@ -219,7 +219,8 @@
   ;; (use-package ox-bibtex)
 
   :hook
-  (org-mode . org-mode-reftex-setup)
+  (org-mode-hook . org-mode-reftex-setup)
+  (org-mode-hook . org-indent-mode)
   )
 
 (leaf org-roam
