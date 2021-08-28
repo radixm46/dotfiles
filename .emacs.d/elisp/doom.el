@@ -130,20 +130,6 @@
   (doom-themes-enable-italic . t)
 
   :config
-  (defun doom-on-term ()
-    "switch doom-theme without doom-modeline-icon disabled"
-    (interactive)
-    (load-theme 'doom-spacegrey t)
-    (custom-set-variables '(doom-modeline-icon nil)))
-  (defun doom-on-gui ()
-    "switch doom-theme with doom-modeline-icon enabled"
-    (interactive)
-    (load-theme 'doom-molokai t)
-    (custom-set-variables '(doom-modeline-icon t)))
-
-  (if (emacs-works-on-term-p)
-    (doom-on-term) (doom-on-gui))
-
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
   (doom-themes-treemacs-config)

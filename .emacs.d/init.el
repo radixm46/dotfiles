@@ -889,11 +889,7 @@
 
     (leaf treemacs-all-the-icons
       :after treemacs all-the-icons
-      :ensure t :require t
-      :config
-      (if (emacs-works-on-term-p)
-          (treemacs-load-theme "Default")
-          (treemacs-load-theme "all-the-icons")))
+      :ensure t :require t)
 
     (leaf treemacs-icons-dired
       :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
@@ -907,6 +903,27 @@
     )
   )
 
+(leaf conf-appearance-on-state
+  :doc "switch appearance when on gui or term"
+  :require treemacs doom-modeline
+  :config
+  (defun emacs-on-term ()
+    "switch emacs appearance for term with doom-spacegrey"
+    (interactive)
+    (load-theme 'doom-spacegrey t)
+    (custom-set-variables '(doom-modeline-icon nil))
+    (treemacs-load-theme "Default"))
+
+  (defun emacs-on-gui ()
+    "switch emacs appearance for gui with doom-molokai and modeline icons"
+    (interactive)
+    (load-theme 'doom-molokai t)
+    (custom-set-variables '(doom-modeline-icon t))
+    (treemacs-load-theme "all-the-icons"))
+
+  (if (emacs-works-on-term-p)
+      (emacs-on-term) (emacs-on-gui))
+  )
 
 (leaf load-lang-settings
   :config (load "~/.emacs.d/elisp/langs.el"))
