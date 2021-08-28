@@ -197,8 +197,8 @@
     ((conf-mode-hook
       prog-mode-hook) . rainbow-delimiters-mode))
 
-  ;; configure whitespace
   (leaf whitespace
+    :doc "configure whitespace"
     :hook
     ((conf-mode-hook
       outline-mode-hook
