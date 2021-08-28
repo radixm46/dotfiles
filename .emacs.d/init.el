@@ -797,6 +797,10 @@
     (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
     (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle))
 
+  (leaf projectile
+    :ensure t
+    :config (projectile-mode +1))
+
   (leaf treemacs
     :ensure t
     ;; :defer t
