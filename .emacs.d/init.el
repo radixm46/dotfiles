@@ -464,8 +464,12 @@
     :ensure t
     :doc "Useful search and navigation commands"
     :bind
-    (("M-g g"   . consult-line)
-     ("M-g M-g" . consult-line)) ;; replace native goto-line
+    (("M-g g"       . consult-line)
+     ("M-g M-g"     . consult-line) ;; replace native goto-line
+     ("C-c C-o o"   . consult-recent-file)
+     ("C-c C-o C-o" . consult-recent-file)
+     ("C-c C-o d"   . consult-dir)
+     ("C-c C-o C-d" . consult-dir))
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
