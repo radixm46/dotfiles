@@ -48,16 +48,16 @@
 (leaf web-mode
   :ensure t
   :mode
-  (("\\.html?\\'" . web-mode)
-   ("\\.phtml\\'" . web-mode)
-   ("\\.[agj]sp\\'" . web-mode)
-   ("\\.as[cp]x\\'" . web-mode)
-   ("\\.erb\\'" . web-mode)
-   ("\\.mustache\\'" . web-mode)
-   ("\\.djhtml\\'" . web-mode)
-   ("\\.vue\\'" . web-mode)
-   ("\\.js\\'" . web-mode)
-   ("\\.jsx\\'" . web-mode))
+  (("\\.html?\\'"
+    "\\.phtml\\'"
+    "\\.[agj]sp\\'"
+    "\\.as[cp]x\\'"
+    "\\.erb\\'"
+    "\\.mustache\\'"
+    "\\.djhtml\\'"
+    "\\.vue\\'"
+    "\\.js\\'"
+    "\\.jsx\\'") . web-mode)
   :hook (web-mode-hook . lsp)
   :preface
   (leaf flycheck-use-tidy :if (executable-find "tidy")
