@@ -44,7 +44,7 @@
   (blink-cursor-mode 0)
   (which-function-mode 1)
   (transient-mark-mode 1)
-  (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-14.1")
+  (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-13.5")
                                           '(width . 80)
                                           '(height . 55)) default-frame-alist))
   (setq font-for-tables "HackGenNerd Console")
@@ -52,7 +52,7 @@
   (leaf set-linespacing
     :doc "control line spacing"
     :config
-    (setq-default line-spacing 0.25)
+    (setq-default line-spacing 0.40)
     (defun sw-lnsp (wdth)
       "switch line spacing"
       (interactive "nset line spacing: ")
