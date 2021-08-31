@@ -575,7 +575,12 @@
   (leaf flymake :disabled t
     :tag "builtin"
     :emacs>= "26"
-    :hook (prog-mode-hook . flymake-mode))
+    :hook (prog-mode-hook . flymake-mode)
+    :bind
+    (("M-n" . flymake-goto-next-error)
+     ("M-p" . flymake-goto-previous-error)
+     ("M-l" . consult-flymake))
+    )
 
   (leaf flycheck
     :ensure t
