@@ -283,9 +283,9 @@
   ;:hook (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
   :mode
-  (("README\\.md\\'" . gfm-mode)
-   ("\\.md\\'" . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode))
+  (("README\\.md\\'"  . gfm-mode)
+   ("\\.md\\'"
+    "\\.markdown\\'") . markdown-mode)
   :custom (markdown-command . "multimarkdown")
   :config
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
