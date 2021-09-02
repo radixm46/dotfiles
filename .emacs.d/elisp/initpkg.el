@@ -22,8 +22,8 @@
   (package-install 'leaf))
 (require 'leaf)
 
-;; configure leaf related packages
 (leaf leaf
+  :doc "configure leaf related packages"
   :config
   (leaf leaf-convert :ensure t)
 
