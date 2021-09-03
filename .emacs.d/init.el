@@ -748,12 +748,13 @@
     (git-gutter:modified-sign . " ")
     (git-gutter:added-sign    . "+")
     (git-gutter:deleted-sign  . "▶")
+    :custom-face
+    (git-gutter:modified . '((t (:foreground "DodgerBlue2"
+                                 :background "DodgerBlue2"))))
+    (git-gutter:added    . '((t (:foreground "dark slate"
+                                 :background "SpringGreen2"))))
+    (git-gutter:deleted  . '((t (:foreground  "tomato2"))))
     :config
-    (set-face-background 'git-gutter:modified "DodgerBlue2")
-    (set-face-foreground 'git-gutter:modified "DodgerBlue2")
-    (set-face-background 'git-gutter:added "SpringGreen2")
-    (set-face-foreground 'git-gutter:added "dark slate")
-    (set-face-foreground 'git-gutter:deleted "tomato2")
     (defun git-gutter-fix-init ()
       (interactive)
       (if (eq git-gutter-mode nil)
