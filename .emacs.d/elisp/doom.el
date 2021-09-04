@@ -128,7 +128,6 @@
   :custom
   (doom-themes-enable-bold . t)
   (doom-themes-enable-italic . t)
-
   :config
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)

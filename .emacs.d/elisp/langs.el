@@ -305,4 +305,3 @@
   ;; modify table face to 1:2
   (set-face-attribute 'markdown-table-face nil :family font-for-tables)
   )
-

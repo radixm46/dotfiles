@@ -146,7 +146,11 @@
     ;;(doom-modeline t) ;TODO:enable modeline
     )
 
-  (leaf all-the-icons :ensure t) ;; need installation by all-the-icons-install-fonts
+  (leaf all-the-icons :ensure t) ; need installation by all-the-icons-install-fonts
+
+  (leaf unicode-fonts
+    :ensure t
+    :config (unicode-fonts-setup))
 
   (leaf nyan-mode
     :ensure t
