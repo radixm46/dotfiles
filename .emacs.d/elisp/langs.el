@@ -211,7 +211,7 @@
 
   (leaf org-sidebar
     :doc "sidebar for org-mode"
-    :ensure t
+    :ensure t :require org-sidebar ; explicitly require
     :bind
     (:org-mode-map
      ("M-9" . org-sidebar-tree-toggle)
