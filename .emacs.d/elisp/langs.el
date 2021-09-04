@@ -27,6 +27,7 @@
     :ensure t
     :custom
     (pipenv-projectile-after-switch-function . #'pipenv-projectile-after-switch-extended)
+    ;; :hook (python-mode . python-pipenv-init))
     :init
     (defun python-pipenv-init ()
       "init python environment on python-mode"
@@ -34,7 +35,6 @@
           (pipenv-mode))
       (if (eq python-shell-virtualenv-root nil)
           (pipenv-activate))))
-    ;:hook (python-mode . python-pipenv-init))
   )
 
 (leaf go-mode
@@ -81,7 +81,7 @@
   ;; auto colorize css
   (web-mode-enable-css-colorization . t)
   (web-mode-enable-block-face . t)
-  ;(web-mode-enable-part-face t)
+  ;; (web-mode-enable-part-face t)
   (web-mode-enable-comment-interpolation . t)
   (web-mode-enable-heredoc-fontification . t))
 
@@ -161,7 +161,7 @@
   (org-startup-truncated        . t)
   (org-startup-folded           . nil)
   ;; priority
-  (org-priority-highest         . ?1) ;; FIXME: value
+  (org-priority-highest         . ?1) ; FIXME: value
   (org-priority-lowest          . ?4)
   (org-priority-default         . ?3)
   ;; keywords
@@ -180,8 +180,8 @@
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
   (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
   (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line)
-  ;(setq system-time-locale "C") ;; dates written in eng
-  (custom-set-variables ;; set directory
+  ;; (setq system-time-locale "C") ; dates written in eng
+  (custom-set-variables ; set directory
    '(org-directory            "~/org/orgfiles")
    '(org-default-notes-file   (concat org-directory "/notes.org"))
    '(org-agenda-files         (list org-directory))
@@ -287,7 +287,7 @@
 
 (leaf markdown-mode
   :ensure t
-  ;:hook (markdown-mode . visual-line-mode)
+  ;; :hook (markdown-mode . visual-line-mode)
   :commands (markdown-mode gfm-mode)
   :mode
   (("README\\.md\\'"  . gfm-mode)

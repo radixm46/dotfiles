@@ -7,14 +7,14 @@
       skk-show-candidates-always-pop-to-buffer t
       skk-henkan-show-candidates-rows 2
       skk-dcomp-activate nil
-      ;skk-dcomp-multiple-activate t
-      ;skk-dcomp-multiple-rows 10
+      ;;skk-dcomp-multiple-activate t
+      ;;skk-dcomp-multiple-rows 10
       skk-japanese-message-and-error t
       skk-show-japanese-menu t
       skk-delete-implies-kakutei nil
       skk-use-look t
       skk-henkan-strict-okuri-precedence t)
-;(define-key skk-j-mode-map (kbd "M-n"))
+;;(define-key skk-j-mode-map (kbd "M-n"))
 
 (unless (file-directory-p skk-get-jisyo-directory)
   (skk-get skk-get-jisyo-directory))
