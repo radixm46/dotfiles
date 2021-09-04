@@ -93,28 +93,31 @@
     :doc "use js-mode with lsp"
     :mode ("\\.js\\'" . js-mode)
     :custom (js-indent-level . 2)
-    :hook (js-mode-hook . lsp))
+    :hook (js-mode-hook . lsp)
+    :init
+    (leaf js2-mode
+      :ensure t
+      :doc "use js2-mode as minor mode with js-mode"
+      :hook (js-mode-hook . js2-minor-mode)
+      :custom
+      (js2-basic-offset . 2))
 
     (leaf flycheck-use-eslint :if (executable-find "eslint") :disabled t
       :hook (lsp-after-initialize-hook . (lambda ()
                                            (flycheck-add-mode 'javascript-eslint 'js-mode)
                                            (flycheck-add-next-checker 'lsp 'javascript-eslint))))
-
-    (leaf js2-mode
-      :ensure t
-      :preface
-      (leaf js2-mode :emacs>= "27"
-        :doc "use js2-mode as minor mode with js-mode"
-        :hook (js-mode-hook . js2-minor-mode))
-
-      (leaf js2-mode :emacs< "27"
-        :doc "use js2-mode as major mode with lsp"
-        :mode ("\\.js\\'" . js2-mode)
-        :hook (js2-mode-hook . lsp))
-      :custom
-      (js2-basic-offset . 2)
-      )
     )
+
+  (leaf js2-mode :emacs< "27"
+    :ensure t
+    :doc "use js2-mode as major mode with lsp"
+    :mode ("\\.js\\'" . js2-mode)
+    :hook (js2-mode-hook . lsp)
+    :custom (js2-basic-offset . 2)
+    :init
+    )
+
+  )
 
 (leaf sh-mode
   :tag "builtin"
