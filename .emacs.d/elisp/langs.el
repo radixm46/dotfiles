@@ -19,7 +19,7 @@
   :tag "builtin"
   :mode ("\\.py\\'" . python-mode)
   :hook (python-mode-hook . lsp-deferred)
-  :config
+  :init
   (leaf poetry
     :ensure t
     :hook (python-mode-hook . poetry-tracking-mode))
