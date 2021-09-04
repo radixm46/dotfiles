@@ -43,7 +43,7 @@
          (before-save-hook . lsp-format-buffer)
          (before-save-hook . lsp-organize-imports))
   :mode ("\\.go\\'" . go-mode)
-)
+  )
 
 (leaf web-mode
   :ensure t
@@ -190,7 +190,7 @@
    '(org-agenda-files         (list org-directory))
    ;; set latex option
    '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
-   (defvar org-todofile       (concat org-directory "/todo.org") "default org todo file path")
+  (defvar org-todofile       (concat org-directory "/todo.org") "default org todo file path")
 
   (set-face-attribute 'org-table nil :family font-for-tables)
 
@@ -268,9 +268,9 @@
   :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
   :config
   (custom-set-variables
-  '(org-roam-directory           (file-truename "~/org/roam"))
-  '(org-roam-index-file          (file-truename "~/org/roam/Index.org"))
-  '(org-roam-db-location         (file-truename "~/.emacs.d/.cache/org-roam.db")))
+   '(org-roam-directory           (file-truename "~/org/roam"))
+   '(org-roam-index-file          (file-truename "~/org/roam/Index.org"))
+   '(org-roam-db-location         (file-truename "~/.emacs.d/.cache/org-roam.db")))
 
   (org-roam-db-autosync-mode)
 
