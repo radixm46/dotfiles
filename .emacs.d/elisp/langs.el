@@ -16,14 +16,13 @@
   (leaf cargo :ensure t)
   )
 
-(leaf python-mode
-  :tag "builtin"
-  :mode ("\\.py\\'" . python-mode)
-  :hook (python-mode-hook . lsp-deferred)
-  :init
+(leaf python-config
+  :doc "python related configuration"
+  :config
   (leaf poetry
     :ensure t
     :hook (python-mode-hook . poetry-tracking-mode))
+
   (leaf pipenv
     :ensure t
     :custom
@@ -36,6 +35,28 @@
           (pipenv-mode))
       (if (eq python-shell-virtualenv-root nil)
           (pipenv-activate))))
+
+  (leaf python-mode
+    :tag "builtin" :ensure t
+    :mode ("\\.py\\'" . python-mode)
+    :hook (python-mode-hook . lsp-deferred))
+
+  (leaf hy-mode
+    :ensure t
+    :mode ("\\.hy\\'" . hy-mode)
+    :hook
+    ((hy-mode-hook . hs-minor-mode)
+     (hy-mode-hook . poetry-tracking-mode)
+     (hy-mode-hook . eldoc-box-hover-at-point-mode))
+    :init
+    (leaf eglot-hyls-config :disable t
+      :doc "enable hy-lang language server with eglot"
+      :require eglot
+      :config
+      (add-to-list 'eglot-server-programs
+                   '(hy-mode . ("hyls" . nil)))
+      (add-hook 'hy-mode-hook 'eglot-ensure))
+    )
   )
 
 (leaf go-mode
