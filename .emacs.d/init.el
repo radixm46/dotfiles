@@ -712,6 +712,11 @@
     ;;(use-package dap-mode)
     ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
     )
+
+  (leaf eglot
+    :ensure t
+    :doc "another lsp client"
+    :hook (eglot--managed-mode-hook . eldoc-box-hover-mode))
   )
 
 
