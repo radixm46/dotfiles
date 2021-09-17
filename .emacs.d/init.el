@@ -575,6 +575,12 @@
     (setq-default ac-sources '(ac-source-filename
                                ac-source-words-in-all-buffer)))
 
+  (leaf eldoc
+    :ensure t
+    :tag "builtin"
+    :config
+    (leaf eldoc-box :ensure t))
+
   (leaf flymake :disabled t
     :tag "builtin"
     :emacs>= "26"
