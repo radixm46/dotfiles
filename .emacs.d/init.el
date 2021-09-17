@@ -44,10 +44,14 @@
   (blink-cursor-mode 0)
   (which-function-mode 1)
   (transient-mark-mode 1)
-  (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-13.5")
-                                          '(width . 80)
-                                          '(height . 55)) default-frame-alist))
-  (setq font-for-tables "HackGenNerd Console")
+
+  (leaf font-configure
+    :doc "font configure"
+    :config
+    (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-13.5")
+                                            '(width . 80)
+                                            '(height . 55)) default-frame-alist))
+    (setq font-for-tables "HackGenNerd Console"))
 
   (leaf set-linespacing
     :doc "control line spacing"
@@ -222,7 +226,7 @@
                           ;;spaces
                           ))
     (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-                                     (newline-mark ?\n [?\x21B2 ?\n]) ;; display when in some major mode
+                                     (newline-mark ?\n [?\x21B2 ?\n]) ; display when in some major mode
                                      ))
     :config
     ;; fix color
