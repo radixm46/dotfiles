@@ -49,7 +49,7 @@
      (hy-mode-hook . poetry-tracking-mode)
      (hy-mode-hook . eldoc-box-hover-at-point-mode))
     :init
-    (leaf eglot-hyls-config :disable t
+    (leaf eglot-hyls-config :disabled t
       :doc "enable hy-lang language server with eglot"
       :require eglot
       :config
