@@ -590,20 +590,23 @@
     :emacs>= "26"
     :hook (prog-mode-hook . flymake-mode)
     :bind
-    (("M-n" . flymake-goto-next-error)
-     ("M-p" . flymake-goto-previous-error)
-     ("M-l" . consult-flymake))
+    (:flymake-mode-map ("M-n" . flymake-goto-next-error)
+                       ("M-p" . flymake-goto-previous-error)
+                       ("M-l" . consult-flymake))
     )
 
   (leaf flycheck
     :ensure t
     :bind
-    (("M-n" . flycheck-next-error)
-     ("M-p" . flycheck-previous-error))
-    :init
+    (:flycheck-mode-map ("M-n" . flycheck-next-error)
+                        ("M-p" . flycheck-previous-error))
+    :config
     (leaf consult-flycheck
       :ensure t
-      :bind ("M-l" . consult-flycheck)))
+      :bind
+      (:flycheck-mode-map
+       :package flycheck
+       ("M-l" . consult-flycheck))))
 
   (leaf company
     ;; company completion framework
