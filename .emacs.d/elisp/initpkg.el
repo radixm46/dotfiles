@@ -25,23 +25,27 @@
 (leaf leaf
   :doc "configure leaf related packages"
   :config
-  (leaf leaf-convert :ensure t)
-
-  (leaf leaf-tree
-    :ensure t
-    :custom ((imenu-list-size . 30)
-             (imenu-list-position . 'left)))
-
   (leaf leaf-keywords
     :ensure t
+    :doc "additional leaf.el keywords"
     :init
     ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
-    (leaf hydra :ensure t)
-    (leaf el-get :ensure t)
+    ;; (leaf hydra :ensure t)
+    (leaf el-get :ensure t :disabled t
+      :doc "Manage the external elisp bits and pieces you depend upon")
     ;;(leaf blackout :ensure t)
     :config
     ;; initialize leaf-keywords.el
     (leaf-keywords-init))
+
+  (leaf leaf-convert :ensure t
+    :doc "convert many format to leaf format")
+
+  (leaf leaf-tree
+    :doc "interactive side-bar feature"
+    :ensure t
+    :custom ((imenu-list-size . 30)
+             (imenu-list-position . 'left)))
 
   ;; install feather.el
   (leaf feather :disabled t
@@ -68,6 +72,12 @@
 
     ;; use straight as leaf default package management
     :custom (leaf-alias-keyword-alist . '((:ensure . :straight))))
+
+  ;; optional packages for leaf keywords (under straight.el)
+  (leaf hydra :ensure t)
+
+  (leaf blackout :disabled t
+    :ensure t)
   )
 
 (leaf paradox

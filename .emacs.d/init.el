@@ -742,8 +742,6 @@
 	    (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
     )
 
-  (leaf hydra :ensure t)
-
   (leaf undo-tree
     :ensure t
     :custom (undo-tree-visualizer-timestamps . t)
