@@ -26,6 +26,11 @@
     :ensure t
     :custom (exec-path-from-shell-arguments . '("-l"))
     :config (when (daemonp) (exec-path-from-shell-initialize)))
+
+  (leaf supress-cl-warning :emacs>= "27"
+    :doc "supress cl warning"
+    :config
+    (setq byte-compile-warnings '(not cl-functions obsolete)))
   )
 
 
