@@ -140,10 +140,21 @@
     :doc "use js2-mode as major mode with lsp"
     :mode ("\\.js\\'" . js2-mode)
     :hook (js2-mode-hook . lsp)
-    :custom (js2-basic-offset . 2)
-    :init
-    )
+    :custom (js2-basic-offset . 2))
+  )
 
+(leaf typescript-mode
+  :ensure t
+  :mode ("\\.ts\\'" . typescript-mode)
+  ;:hook (typescript-mode . lsp)
+  :config
+  (leaf tide
+    :ensure t
+    :hook
+    (before-save-hook  . tide-format-before-save)
+    (typescript-mode-hook . tide-setup)
+    :config
+    (tide--hl-identifier-mode +1))
   )
 
 (leaf sh-mode
