@@ -107,6 +107,9 @@
     :emacs>= "27"
     :custom
     (display-fill-column-indicator-column . 90)
+    (display-fill-column-indicator-character . ?\N{U+22C5}) ; use '⋅' as indicator
+    :custom-face
+    (fill-column-indicator . '((t (:foreground "DeepSkyBlue3"))))
     :hook
     ((conf-mode-hook
       fundamental-mode-hook
@@ -606,6 +609,15 @@
     (:flycheck-mode-map ("M-n" . flycheck-next-error)
                         ("M-p" . flycheck-previous-error))
     :config
+    (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
+      :ensure t
+      :hook (flycheck-mode-hook . flycheck-posframe-mode)
+      :custom
+      (flycheck-posframe-position       . 'window-bottom-right-corner)
+      (flycheck-posframe-info-prefix    . "\x2139 ")
+      (flycheck-posframe-warning-prefix . "\x26a0 ")
+      (flycheck-posframe-error-prefix   . "\x274c "))
+
     (leaf consult-flycheck
       :ensure t
       :bind
