@@ -598,16 +598,16 @@
     :emacs>= "26"
     :hook (prog-mode-hook . flymake-mode)
     :bind
-    (:flymake-mode-map ("M-n" . flymake-goto-next-error)
-                       ("M-p" . flymake-goto-previous-error)
+    (:flymake-mode-map ("M-j" . flymake-goto-next-error)
+                       ("M-k" . flymake-goto-previous-error)
                        ("M-l" . consult-flymake))
     )
 
   (leaf flycheck
     :ensure t
     :bind
-    (:flycheck-mode-map ("M-n" . flycheck-next-error)
-                        ("M-p" . flycheck-previous-error))
+    (:flycheck-mode-map ("M-j" . flycheck-next-error)
+                        ("M-k" . flycheck-previous-error))
     :config
     (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
       :ensure t
