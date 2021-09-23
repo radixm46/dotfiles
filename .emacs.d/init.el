@@ -609,9 +609,8 @@
     (:flycheck-mode-map ("M-j" . flycheck-next-error)
                         ("M-k" . flycheck-previous-error))
     :config
-    (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
+    (leaf flycheck-posframe
       :ensure t
-      :hook (flycheck-mode-hook . flycheck-posframe-mode)
       :custom
       (flycheck-posframe-position       . 'window-bottom-right-corner)
       (flycheck-posframe-info-prefix    . "\x2139 ")

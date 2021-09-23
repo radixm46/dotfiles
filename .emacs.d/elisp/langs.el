@@ -5,7 +5,12 @@
   :hook
   (emacs-lisp-mode-hook . hs-minor-mode)
   (emacs-lisp-mode-hook . flycheck-mode)
-  (emacs-lisp-mode-hook . eldoc-box-hover-mode))
+  (emacs-lisp-mode-hook . eldoc-box-hover-mode)
+  :config
+  (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
+    :doc "hook flycheck-posframe"
+    :hook (emacs-lisp-mode-hook . flycheck-posframe-mode))
+  )
 
 ;; required for racer
 (leaf rust-mode
