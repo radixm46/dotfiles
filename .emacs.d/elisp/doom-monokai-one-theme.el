@@ -174,7 +174,8 @@ determine the exact padding."
    (rainbow-delimiters-depth-7-face :foreground green)
    ;;;; not italic treemacs icons
    (treemacs-all-the-icons-file-face :foreground base6 :italic nil)
-                                     )
+   ;;;; web-mode blockface
+   (web-mode-block-face :background bg-alt))
 
   ;;;; Base theme variable overrides
   ;; ()
