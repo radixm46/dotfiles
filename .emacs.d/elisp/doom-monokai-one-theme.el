@@ -175,7 +175,8 @@ determine the exact padding."
    ;;;; not italic treemacs icons
    (treemacs-all-the-icons-file-face :foreground base6 :italic nil)
    ;;;; web-mode blockface
-   (web-mode-block-face :background bg-alt))
+   (web-mode-block-face :background bg-alt)
+   (web-mode-current-element-highlight-face :inherit 'highlight))
 
   ;;;; Base theme variable overrides
   ;; ()
