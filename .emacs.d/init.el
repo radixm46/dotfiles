@@ -967,6 +967,11 @@
     "switch emacs appearance for gui with doom-molokai and modeline icons"
     (interactive)
     (load-theme 'doom-molokai t)
+    (leaf patch-doom-molokai
+      :doc "patch doom-one bg color to doom-molokai theme"
+      :custom-face
+      (default                         . '((t (:background "#282c34"))))
+      (mode-line                       . '((t (:background "#1d2026")))))
     (custom-set-variables '(doom-modeline-icon t))
     (treemacs-load-theme "all-the-icons"))
 
