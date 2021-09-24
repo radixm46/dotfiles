@@ -240,16 +240,12 @@
     (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
                                      (newline-mark ?\n [?\x21B2 ?\n]) ; display when in some major mode
                                      ))
-    :config
+    :custom-face 
     ;; fix color
-    (set-face-attribute whitespace-trailing nil
-                        :foreground "DeepPink"
-                        :background (face-attribute 'default :background)
-                        :underline t)
-    (set-face-attribute whitespace-tab nil
-                        :foreground "gray22"
-                        :background nil
-                        :underline t)
+    (whitespace-trailing . '((nil
+                              (:inherit 'default :foreground "DeepPink" :underline t))))
+    (whitespace-tab      . '((nil
+                              (:inherit 'default :foreground "gray22" :underline t))))
     ;;(set-face-attribute 'whitespace-newline nil
     ;;  :foreground "SlateGray"
     ;;  :background nil
