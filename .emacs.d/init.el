@@ -75,8 +75,8 @@
   (leaf paren
     :doc "configure show-paren-mode"
     :tag "builtin"
-    :custom-face
-    (show-paren-match  . '((nil (:background "SpringGreen2"))))
+    ;; :custom-face
+    ;; (show-paren-match  . '((nil (:background "SpringGreen2"))))
     :global-minor-mode show-paren-mode)
 
   (leaf electric-pair-mode

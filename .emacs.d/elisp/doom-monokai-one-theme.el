@@ -173,6 +173,8 @@ determine the exact padding."
    (rainbow-delimiters-depth-5-face :foreground magenta)
    (rainbow-delimiters-depth-6-face :foreground orange)
    (rainbow-delimiters-depth-7-face :foreground green)
+   ;;;; show-paren
+   (show-paren-match  :inherit 'highlight)
    ;;;; not italic treemacs icons
    (treemacs-all-the-icons-file-face :foreground base6 :italic nil)
    ;;;; web-mode blockface
