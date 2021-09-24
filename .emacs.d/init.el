@@ -652,6 +652,7 @@
     (lsp-response-timeout . 5)
     (lsp-eldoc-enable-hover . nil)
     (lsp-auto-configure . t)
+    (lsp-headerline-breadcrumb-icons-enable . nil)
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
     :config
     (setq lsp-prefer-flymake nil)
