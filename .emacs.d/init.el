@@ -182,6 +182,10 @@
   (leaf config-doom-modeline
     :config (load "~/.emacs.d/elisp/doom.el"))
 
+  (leaf config-custom-thems-path
+    :doc "load custom theme from elisp dir"
+    :custom (custom-theme-directory . "~/.emacs.d/elisp/"))
+
   (leaf highlight-indent-guides
     :ensure t
     :hook
@@ -959,19 +963,14 @@
   (defun emacs-on-term ()
     "switch emacs appearance for term with doom-spacegrey"
     (interactive)
-    (load-theme 'doom-spacegrey t)
+    (load-theme 'doom-monokai-one t)
     (custom-set-variables '(doom-modeline-icon nil))
     (treemacs-load-theme "Default"))
 
   (defun emacs-on-gui ()
     "switch emacs appearance for gui with doom-molokai and modeline icons"
     (interactive)
-    (load-theme 'doom-molokai t)
-    (leaf patch-doom-molokai
-      :doc "patch doom-one bg color to doom-molokai theme"
-      :custom-face
-      (default                         . '((t (:background "#282c34"))))
-      (mode-line                       . '((t (:background "#1d2026")))))
+    (load-theme 'doom-monokai-one t)
     (custom-set-variables '(doom-modeline-icon t))
     (treemacs-load-theme "all-the-icons"))
 
