@@ -59,7 +59,7 @@ determine the exact padding."
    ;; face categories
    (highlight      orange)
    (vertical-bar   (doom-lighten bg 0.1))
-   (selection      base5)
+   (selection      dark-blue)
    (builtin        orange)
    (comments       (if doom-monokai-one-brighter-comments violet base5))
    (doc-comments   (if doom-monokai-one-brighter-comments (doom-lighten violet 0.1) (doom-lighten base5 0.25)))
