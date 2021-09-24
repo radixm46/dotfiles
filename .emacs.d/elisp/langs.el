@@ -83,6 +83,7 @@
     "\\.mustache\\'"
     "\\.djhtml\\'"
     "\\.vue\\'"
+    "\\.svelte\\'"
     "\\.js\\'"
     "\\.jsx\\'") . web-mode)
   :hook (web-mode-hook . lsp)
