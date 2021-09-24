@@ -3,7 +3,7 @@
 (require 'doom-themes)
 
 ;;
-(defgroup doom-monokai-one nil
+(defgroup doom-monokai-one-theme nil
   "Options for doom-monokai."
   :group 'doom-themes)
 
