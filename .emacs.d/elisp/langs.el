@@ -84,7 +84,8 @@
     "\\.jsx\\'") . web-mode)
   :hook (web-mode-hook . lsp)
   :preface
-  (leaf flycheck-use-tidy :if (executable-find "tidy")
+  (leaf flycheck-use-tidy :disabled t
+    :if (executable-find "tidy")
     :doc "enable flycheck with html-tidy on web-mode"
     :config (add-hook 'lsp-after-initialize-hook
                       (lambda ()
