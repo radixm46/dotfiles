@@ -479,6 +479,15 @@
     :bind
     (("M-g g"       . consult-line)
      ("M-g M-g"     . consult-line) ;; replace native goto-line
+     ("M-g o"       . consult-outline)
+     ("M-g M-o"     . consult-outline)
+     ("M-g i"       . consult-imenu)
+     ("M-g M-i"     . consult-imenu)
+     ("M-g m"       . consult-mark)
+     ("M-g M-m"     . consult-mark)
+     ("M-g M"       . consult-global-mark)
+     ("M-g M-M"     . consult-global-mark)
+     ("M-y"         . consult-yank-from-kill-ring)
      ("C-c C-o o"   . consult-recent-file)
      ("C-c C-o C-o" . consult-recent-file)
      ("C-c C-o d"   . consult-dir)
