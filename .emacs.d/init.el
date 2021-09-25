@@ -615,8 +615,9 @@
     (:flycheck-mode-map ("M-j" . flycheck-next-error)
                         ("M-k" . flycheck-previous-error))
     :config
-    (leaf flycheck-posframe
+    (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
       :ensure t
+      :hook (flycheck-mode-hook . flycheck-posframe-mode)
       :custom
       (flycheck-posframe-position       . 'window-bottom-right-corner)
       (flycheck-posframe-info-prefix    . "\x2139 ")
@@ -710,7 +711,10 @@
         ("C-c D"   . lsp-ui-doc-focus-frame))
        (:lsp-ui-doc-frame-mode-map
         ("C-c q"   . lsp-ui-doc-unfocus-frame)))
-      :hook (lsp-mode-hook . lsp-ui-mode))
+      :hook
+      (lsp-mode-hook . lsp-ui-mode)
+      (lsp-ui-mode-hook . (lambda () (flycheck-posframe-mode -1))) ; disable flycheck-posframe
+      )
 
     (leaf lsp-treemacs
       :ensure t
