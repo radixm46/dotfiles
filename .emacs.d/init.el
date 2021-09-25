@@ -591,7 +591,13 @@
     :ensure t
     :tag "builtin"
     :config
-    (leaf eldoc-box :ensure t))
+    (leaf eldoc-box :if (not (emacs-works-on-term-p))
+      :ensure t
+      :hook (eldoc-mode-hook . eldoc-box-hover-at-point-mode)
+      :config
+      (custom-set-faces ;; modify bg og eldoc-box-body
+       `(eldoc-box-body ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))))
+    )
 
   (leaf flymake :disabled t
     :tag "builtin"
@@ -736,7 +742,10 @@
   (leaf eglot
     :ensure t
     :doc "another lsp client"
-    :hook (eglot--managed-mode-hook . eldoc-box-hover-mode))
+    :preface
+    (leaf eldoc-box-mode :if (not (emacs-works-on-term-p))
+      :doc "use eldoc-box-mode if not on term"
+      :hook (eglot--managed-mode-hook . eldoc-box-hover-mode)))
   )
 
 
