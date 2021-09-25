@@ -128,9 +128,10 @@
       (js2-basic-offset . 2))
 
     (leaf flycheck-use-eslint :if (executable-find "eslint") :disabled t
-      :hook (lsp-after-initialize-hook . (lambda ()
-                                           (flycheck-add-mode 'javascript-eslint 'js-mode)
-                                           (flycheck-add-next-checker 'lsp 'javascript-eslint))))
+      :hook
+      (lsp-after-initialize-hook . (lambda ()
+                                     (flycheck-add-mode 'javascript-eslint 'js-mode)
+                                     (flycheck-add-next-checker 'lsp 'javascript-eslint))))
     )
 
   (leaf js2-mode :emacs< "27"
