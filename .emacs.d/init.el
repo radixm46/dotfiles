@@ -527,9 +527,9 @@
     :ensure t
     :doc "Emacs Mini-Buffer Actions Rooted in Keymaps"
     :bind
-    (("C-." . embark-act)         ;; pick some comfortable binding
-     ("C-;" . embark-dwim)        ;; good alternative: M-.
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    (("C-." . embark-act)         ; pick some comfortable binding
+     ("C-;" . embark-dwim)        ; good alternative: M-.
+     ("C-h B" . embark-bindings)) ; alternative for `describe-bindings'
     :init
     ;; Optionally replace the key help with a completing-read interface
     (setq prefix-help-command #'embark-prefix-help-command)
@@ -543,7 +543,7 @@
       :ensure t
       :doc "consult embark binding package"
       :after (embark consult)
-                                        ;:demand t ; only necessary if you have the hook below
+      ;; :demand t ; only necessary if you have the hook below
       ;; if you want to have consult previews as you move around an
       ;; auto-updating embark collect buffer
       :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
@@ -973,6 +973,7 @@
     )
   )
 
+
 (leaf conf-appearance-on-state
   :doc "switch appearance when on gui or term"
   :require treemacs doom-modeline
@@ -994,6 +995,7 @@
   (if (emacs-works-on-term-p)
       (emacs-on-term) (emacs-on-gui))
   )
+
 
 (leaf load-lang-settings
   :config (load "~/.emacs.d/elisp/langs.el"))

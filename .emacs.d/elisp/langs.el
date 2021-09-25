@@ -5,7 +5,6 @@
   :hook
   (emacs-lisp-mode-hook . hs-minor-mode)
   (emacs-lisp-mode-hook . flycheck-mode)
-  (emacs-lisp-mode-hook . eldoc-box-hover-mode)
   )
 
 ;; required for racer
