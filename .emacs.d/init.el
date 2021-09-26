@@ -228,9 +228,9 @@
     (whitespace-line-column . 80)
     (whitespace-style . '(face ;; enable
                           trailing
-                          tabs ;; conflicts highlight indent mode
                           space-mark
-                          tab-mark
+                          ;; tab-mark
+                          ;; tabs ;; conflicts highlight indent mode
                           ;;newline
                           ;;newline-mark
                           ;;empty  ; empty line
@@ -240,7 +240,7 @@
     (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
                                      (newline-mark ?\n [?\x21B2 ?\n]) ; display when in some major mode
                                      ))
-    :custom-face 
+    :custom-face
     ;; fix color
     (whitespace-trailing . '((nil (:inherit 'default :foreground "DeepPink" :underline t))))
     (whitespace-tab      . '((nil (:inherit 'default :foreground "gray22" :underline t))))
