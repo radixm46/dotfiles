@@ -115,16 +115,19 @@
   (leaf js-mode :emacs>= "27"
     :tag "builtin"
     :doc "use js-mode with lsp"
-    :mode ("\\.js\\'" . js-mode)
+    :mode ("\\.json\\'" . js-mode)
     :custom (js-indent-level . 2)
     :hook (js-mode-hook . lsp)
     :init
     (leaf js2-mode
       :ensure t
-      :doc "use js2-mode as minor mode with js-mode"
-      :hook (js-mode-hook . js2-minor-mode)
-      :custom
-      (js2-basic-offset . 2))
+      :doc "use js2-mode as minor mode with js-mode on .js file"
+      ;; :hook (js-mode-hook . js2-minor-mode)
+      :mode ("\\.js\\'" . (lambda ()
+                            (js-mode)
+                            (js2-minor-mode)))
+      :custom (js2-basic-offset . 2)
+      )
 
     (leaf flycheck-use-eslint :if (executable-find "eslint") :disabled t
       :hook
