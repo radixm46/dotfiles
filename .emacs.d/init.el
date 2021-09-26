@@ -224,26 +224,25 @@
       prog-mode-hook
       text-mode-hook) . whitespace-mode)
     :custom
-    (whitespace-global-modes . '(not dired-mode tar-mode neotree))
+    (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode))
     (whitespace-line-column . 80)
     (whitespace-style . '(face ;; enable
                           trailing
                           space-mark
-                          ;; tab-mark
-                          ;; tabs ;; conflicts highlight indent mode
-                          ;;newline
-                          ;;newline-mark
+                          newline newline-mark
+                          ;;tab-mark tabs ;; conflicts highlight indent mode
                           ;;empty  ; empty line
                           ;;lines-tail
                           ;;spaces
                           ))
     (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-                                     (newline-mark ?\n [?\x21B2 ?\n]) ; display when in some major mode
+                                     (newline-mark ?\n [?\x21B2 ?\n])
                                      ))
     :custom-face
     ;; fix color
     (whitespace-trailing . '((nil (:inherit 'default :foreground "DeepPink" :underline t))))
     (whitespace-tab      . '((nil (:inherit 'default :foreground "gray22" :underline t))))
+    (whitespace-newline  . '((nil (:inherit 'shadow))))
     ;;(set-face-attribute 'whitespace-newline nil
     ;;  :foreground "SlateGray"
     ;;  :background nil
