@@ -477,21 +477,21 @@
     :ensure t
     :doc "Useful search and navigation commands"
     :bind
-    (("M-g g"       . consult-line)
-     ("M-g M-g"     . consult-line) ;; replace native goto-line
-     ("M-g o"       . consult-outline)
-     ("M-g M-o"     . consult-outline)
-     ("M-g i"       . consult-imenu)
-     ("M-g M-i"     . consult-imenu)
-     ("M-g m"       . consult-mark)
-     ("M-g M-m"     . consult-mark)
-     ("M-g M"       . consult-global-mark)
-     ("M-g M-M"     . consult-global-mark)
-     ("M-y"         . consult-yank-from-kill-ring)
-     ("C-c C-o o"   . consult-recent-file)
-     ("C-c C-o C-o" . consult-recent-file)
-     ("C-c C-o d"   . consult-dir)
-     ("C-c C-o C-d" . consult-dir))
+    (("M-g g"   . consult-line)
+     ("M-g M-g" . consult-line) ;; replace native goto-line
+     ("M-g o"   . consult-outline)
+     ("M-g M-o" . consult-outline)
+     ("M-g i"   . consult-imenu)
+     ("M-g M-i" . consult-imenu)
+     ("M-g m"   . consult-mark)
+     ("M-g M-m" . consult-mark)
+     ("M-g M"   . consult-global-mark)
+     ("M-g M-M" . consult-global-mark)
+     ("M-y"     . consult-yank-from-kill-ring)
+     ("M-g r"   . consult-recent-file)
+     ("M-g M-r" . consult-recent-file)
+     ("M-g d"   . consult-dir)
+     ("M-g M-d" . consult-dir))
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
