@@ -738,7 +738,10 @@
       :after lsp
       :require lsp-ido)
 
-    (leaf consult-lsp :ensure t)
+    (leaf consult-lsp
+      :ensure t
+      :require t
+      :bind (:lsp-mode-map ("C-M-l" . consult-lsp-diagnostics)))
     ;; optionally
     ;; if you are helm user
     ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
