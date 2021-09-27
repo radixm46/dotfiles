@@ -203,9 +203,9 @@
   (org-startup-truncated        . t)
   (org-startup-folded           . nil)
   ;; priority
-  (org-priority-highest         . ?1) ; FIXME: value
-  (org-priority-lowest          . ?4)
-  (org-priority-default         . ?3)
+  (org-priority-highest         . 1)
+  (org-priority-lowest          . 4)
+  (org-priority-default         . 3)
   ;; keywords
   (org-refile-targets           . '((org-agenda-files :maxlevel . 3)))
   (org-todo-keywords            . '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
