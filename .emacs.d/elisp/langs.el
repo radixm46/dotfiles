@@ -152,10 +152,10 @@
   (leaf tide
     :ensure t
     :hook
-    (before-save-hook  . tide-format-before-save)
+    ;; (before-save-hook  . tide-format-before-save)
     (typescript-mode-hook . tide-setup)
     :config
-    (tide--hl-identifier-mode +1))
+    (tide-hl-identifier-mode +1))
   )
 
 (leaf sh-mode
