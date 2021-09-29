@@ -819,16 +819,19 @@
       (if (eq git-gutter-mode nil)
           (git-gutter))
       (git-gutter))
+    :hydra (hydra-git-gutter nil
+            "git-gutter"
+            ("j" git-gutter:next-hunk           "next")
+            ("k" git-gutter:previous-hunk       "previous")
+            ("G" git-gutter:end-of-hunk         "end")
+            ("d" git-gutter:popup-hunk          "popup")
+            ("v" git-gutter:mark-hunk           "mark")
+            ("x" git-gutter:revert-hunk         "revert")
+            ("s" git-gutter:stage-hunk          "stage")
+            ("g" git-gutter-fix-init            "fix init")
+            ("r" git-gutter:update-all-windows  "update all windows"))
     :bind (:global-map
-           ("C-x C-g g" . git-gutter-fix-init)
-           ("C-x C-g j" . git-gutter:next-hunk)
-           ("C-x C-g k" . git-gutter:previous-hunk)
-           ("C-x C-g G" . git-gutter:end-of-hunk)
-           ("C-x C-g r" . git-gutter:update-all-windows)
-           ("C-x C-g d" . git-gutter:popup-hunk)
-           ("C-x C-g v" . git-gutter:mark-hunk)
-           ("C-x C-g x" . git-gutter:revert-hunk)
-           ("C-x C-g s" . git-gutter:stage-hunk))
+           ("C-x C-g" . hydra-git-gutter/body))
     :global-minor-mode (global-git-gutter-mode t))
 
   (leaf magit
