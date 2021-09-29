@@ -396,6 +396,41 @@
     :ensure t
     :init (setq evil-want-keybinding nil)
     :custom (evil-undo-system . 'undo-tree)
+    :hydra
+    (hydra-evil-window-manage
+     nil
+     "
+    select           move         resize          split
+----------------------------------------------------------
+       _k_         _R_⃔   _K_   ⃕_r_        _+_              _v_
+       ↑              ↑              ↑              |
+   _h_ ←   → _l_      _H_ ←   → _L_      _<_ ← _=_ → _>_      _s_ --+--
+       ↓              ↓              ↓              |
+       _j_              _J_              _-_
+   _p_revious     delete(_c_)   delete other(_o_)   _n_ew
+"
+     ("h" evil-window-left)
+     ("j" evil-window-down)
+     ("k" evil-window-up)
+     ("l" evil-window-right)
+     ("H" evil-window-move-far-left)
+     ("J" evil-window-move-very-down)
+     ("K" evil-window-move-very-up)
+     ("L" evil-window-move-far-right)
+     ("r" evil-window-rotate-downwards)
+     ("R" evil-window-rotate-upwards)
+     ("+" evil-window-increase-height)
+     ("-" evil-window-decrease-height)
+     (">" evil-window-increase-width)
+     ("<" evil-window-decrease-width)
+     ("=" balance-wondows)
+     ("v" evil-window-vsplit)
+     ("s" evil-window-split)
+     ("p" evil-window-mru)
+     ("c" evil-window-delete)
+     ("o" evil-delete-other-windows :exit t)
+     ("n" evil-window-new))
+    :bind (:global-map ("<f4>" . hydra-evil-window-manage/body))
     :config
     (leaf evil-surround
       :ensure t
