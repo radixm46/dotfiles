@@ -486,11 +486,14 @@
      ("M-g M-m" . consult-mark)
      ("M-g M"   . consult-global-mark)
      ("M-g M-M" . consult-global-mark)
-     ("M-y"     . consult-yank-from-kill-ring)
-     ("M-g r"   . consult-recent-file)
-     ("M-g M-r" . consult-recent-file)
      ("M-g d"   . consult-dir)
-     ("M-g M-d" . consult-dir))
+     ("M-g M-d" . consult-dir)
+     ("M-g c"   . consult-minor-mode-menu) ; narrowing with i/o/l/g
+     ("M-g M-c" . consult-minor-mode-menu)
+     ("M-g C"   . consult-mode-command) ; narrowing with l/g/m
+     ("M-g M-C" . consult-mode-command)
+     ("M-y"     . consult-yank-from-kill-ring)
+     ("C-x b"   . consult-buffer)) ; replace switch-to-buffer. narrowing with b/f/m/p
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
