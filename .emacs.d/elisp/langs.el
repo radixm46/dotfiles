@@ -218,10 +218,22 @@
   (org-clock-clocked-in-display . 'frame-title)
   (org-image-actual-width       . nil)
   :config
-  (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
-  (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
-  (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line)
+  (leaf reconfig-org-vi-key :if (fboundp 'evil-mode)
+    :config
+    (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
+    (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
+    (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
+    (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line))
+
+  (leaf reconfig-org-consult-key :if (fboundp 'consult-buffer)
+    :doc "bind consult functions if available"
+    :bind
+    (:org-mode-map
+     ("M-g o"   . consult-org-heading)
+     ("M-g M-o" . consult-org-heading)
+     ("M-g a"   . consult-org-agenda)
+     ("M-g M-a" . consult-org-agenda)))
+
   ;; (setq system-time-locale "C") ; dates written in eng
   (custom-set-variables ; set directory
    '(org-directory            "~/org/orgfiles")
