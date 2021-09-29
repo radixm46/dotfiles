@@ -995,6 +995,7 @@
     (git-gutter:modified-sign . " ")
     (git-gutter:added-sign    . "+")
     (git-gutter:deleted-sign  . "▶")
+    (git-gutter:ask-p         . nil)
     :custom-face
     (git-gutter:modified . '((t (:foreground "DodgerBlue2"
                                  :background "DodgerBlue2"))))
@@ -1017,7 +1018,8 @@
             ("x" git-gutter:revert-hunk         "revert")
             ("s" git-gutter:stage-hunk          "stage")
             ("g" git-gutter-fix-init            "fix init")
-            ("r" git-gutter:update-all-windows  "update all windows"))
+            ("r" git-gutter:update-all-windows  "update all windows")
+            ("M" magit                          "enter magit" :exit t))
     :bind (:global-map
            ("C-x C-g" . hydra-git-gutter/body))
     :global-minor-mode (global-git-gutter-mode t))
