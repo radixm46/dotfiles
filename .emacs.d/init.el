@@ -510,6 +510,155 @@
   (leaf consult
     :ensure t
     :doc "Useful search and navigation commands"
+    :hydra
+    ((hydra-consult nil
+      "
+                 ^consult functions^
+-----------------------------------------------------
+ _v_irtual buffers   _s_earch        _m_odes
+ _e_diting           _g_rep & find   _o_rg
+ _r_egister          _c_ompilation   m_i_scellaneous
+ _n_avigation        _h_istories
+"
+      ("v" hydra-consult:virtual-buffer/body :exit t)
+      ("e" hydra-consult:editing/body        :exit t)
+      ("r" hydra-consult:register/body       :exit t)
+      ("n" hydra-consult:navigation/body     :exit t)
+      ("s" hydra-consult:search/body         :exit t)
+      ("g" hydra-consult:grep-find/body      :exit t)
+      ("c" hydra-consult:compilation/body    :exit t)
+      ("h" hydra-consult:histories/body      :exit t)
+      ("m" hydra-consult:modes/body          :exit t)
+      ("o" hydra-consult:org/body            :exit t)
+      ("i" hydra-consult:miscellaneous/body  :exit t))
+
+     (hydra-consult:virtual-buffer nil "
+              ^consult virtual-buffer^
+-----------------------------------------------------
+ _b_uffer            other _f_rame     _r_ecent file
+ _o_ther window      _B_ookmark
+"
+      ("b" consult-buffer       :exit t)
+      ("o" consult-other-window :exit t)
+      ("f" consult-other-frame  :exit t)
+      ("B" consult-bookmark     :exit t)
+      ("r" consult-recent-file  :exit t))
+
+     (hydra-consult:editing nil "
+                 ^consult editing^
+-----------------------------------------------------
+ _y_ank from kill ring            yank _r_eplace
+ yank _p_op                       _k_macro
+"
+      ("y" consult-yank-from-kill-ring :exit t)
+      ("p" consult-yank-pop            :exit t)
+      ("r" consult-yank-replace        :exit t)
+      ("k" consult-kmacro              :exit t))
+
+     (hydra-consult:register nil "
+                 ^consult register^
+-----------------------------------------------------
+ _r_egister        register _w_indow  register _s_tore
+ register _l_oad   register _f_ormat
+"
+      ("r" consult-register        :exit t)
+      ("l" consult-register-load   :exit t)
+      ("w" consult-register-window :exit t)
+      ("f" consult-register-format :exit t)
+      ("s" consult-register-store  :exit t))
+
+     (hydra-consult:navigation nil "
+                ^consult navitation^
+-----------------------------------------------------
+ _g_oto line       global _M_ark      _i_menu
+ _m_ark            _o_utline          _I_menu multi
+"
+      ("g" consult-goto-line   :exit t)
+      ("m" consult-mark        :exit t)
+      ("M" consult-global-mark :exit t)
+      ("o" consult-outline     :exit t)
+      ("i" consult-imenu       :exit t)
+      ("I" consult-imenu-multi :exit t))
+
+     (hydra-consult:search nil "
+                  ^consult search^
+-----------------------------------------------------
+ _l_ine            i_s_earch          _k_eep lines
+ line _m_ulti      _M_ulti occur      _f_ocus lines
+"
+      ("l" consult-line        :exit t)
+      ("m" consult-line-multi  :exit t)
+      ("s" consult-isearch     :exit t)
+      ("M" consult-multi-occur :exit t)
+      ("k" consult-keep-lines  :exit t)
+      ("f" consult-focus-lines :exit t))
+
+     (hydra-consult:grep-find nil "
+                   ^consult find^
+-----------------------------------------------------
+ _g_rep            _G_it grep         _l_ocate
+ _r_ipgrep         _f_ind
+"
+      ("g" consult-grep     :exit t)
+      ("r" consult-ripgrep  :exit t)
+      ("G" consult-git-grep :exit t)
+      ("f" consult-find     :exit t)
+      ("l" consult-locate   :exit t))
+
+     (hydra-consult:compilation nil "
+               ^consult compilation^
+-----------------------------------------------------
+ compile _e_rror       fly_m_ake             _x_ref
+                       fly_c_heck
+"
+      ("e" consult-compile-error :exit t)
+      ("m" consult-flymake       :exit t)
+      ("c" consult-flycheck      :exit t)
+      ("x" consult-xref          :exit t))
+
+     (hydra-consult:histories nil "
+                 ^consult histories^
+-----------------------------------------------------
+ _c_omplex command                  _h_istory
+"
+      ("c" consult-complex-command :exit t)
+      ("h" consult-history         :exit t))
+
+     (hydra-consult:modes nil "
+                   ^consult modes^
+-----------------------------------------------------
+ _m_inor mode menu                  mode _c_ommand
+                      [prefix]
+ [i]on/[o]ff/[l]ocal/[g]lobal    [l]ocal-minor/[g]lobal-minor/[m]ajor
+"
+      ("m" consult-minor-mode-menu :exit t)
+      ("c" consult-mode-command    :exit t))
+
+     (hydra-consult:org nil
+      "
+                   ^consult modes^
+-----------------------------------------------------
+ org _h_eading                         org _a_genda
+"
+      ("h" consult-org-heading :exit t)
+      ("a" consult-org-agenda  :exit t))
+
+     (hydra-consult:miscellaneous nil "
+                      ^consult cellaneous^
+--------------------------------------------------------------------
+ _a_propos          _t_heme             _c_ompletion in region
+ _m_an              _p_review at point  completion read _M_ultiple
+ _f_ile externally
+"
+      ("a" consult-apropos                  :exit t)
+      ("m" consult-man                      :exit t)
+      ("f" consult-file-externally          :exit t)
+      ("t" consult-theme                    :exit t)
+      ("p" consult-preview-at-point         :exit t)
+      ("c" consult-completion-in-region     :exit t)
+      ("M" consult-completion-read-multiple :exit t))
+     )
+
     :bind
     (("M-g g"   . consult-line)
      ("M-g M-g" . consult-line) ;; replace native goto-line
@@ -528,7 +677,8 @@
      ("M-g C"   . consult-mode-command) ; narrowing with l/g/m
      ("M-g M-C" . consult-mode-command)
      ("M-y"     . consult-yank-from-kill-ring)
-     ("C-x b"   . consult-buffer)) ; replace switch-to-buffer. narrowing with b/f/m/p
+     ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
+     ("<f5>"    . hydra-consult/body))
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
