@@ -522,10 +522,10 @@
     :hydra
     ((hydra-consult
      (:hint nil) "
-                 ^consult functions^
------------------------------------------------------
+               ^^^consult functions^^^
+^^^^^^-----------------------------------------------
  virtual _b_uffers   _s_earch        _m_odes
- _e_diting           _g_rep & find   _o_rg
+ _e_diting           _g_rep & find
  _r_egister          _c_ompilation   m_i_scellaneous
  _n_avigation        _h_istories
 "
@@ -544,7 +544,7 @@
      (hydra-consult:virtual-buffer
       (:hint nil) "
               ^consult virtual-buffer^
------------------------------------------------------
+^^^^^^-----------------------------------------------
  _b_uffer            other _f_rame     _r_ecent file
  _o_ther window      _B_ookmark
 
@@ -560,7 +560,7 @@
      (hydra-consult:editing
       (:hint nil) "
                  ^consult editing^
------------------------------------------------------
+^^^^^^-----------------------------------------------
  _y_ank from kill ring            yank _r_eplace
  yank _p_op                       _k_macro
 
@@ -575,7 +575,7 @@
      (hydra-consult:register
       (:hint nil) "
                  ^consult register^
------------------------------------------------------
+^^^^^^-----------------------------------------------
  _r_egister        register _w_indow  register _s_tore
  register _l_oad   register _f_ormat
 
@@ -591,7 +591,7 @@
      (hydra-consult:navigation
       (:hint nil) "
                 ^consult navitation^
------------------------------------------------------
+^^^^^^-----------------------------------------------
  _g_oto line       global _M_ark      _i_menu
  _m_ark            _o_utline          _I_menu multi
 
@@ -608,7 +608,7 @@
      (hydra-consult:search
       (:hint nil) "
                   ^consult search^
------------------------------------------------------
+^^^^^^-----------------------------------------------
  _l_ine            i_s_earch          _k_eep lines
  line _m_ulti      _M_ulti occur      _f_ocus lines
 
@@ -625,7 +625,7 @@
      (hydra-consult:grep-find
       (:hint nil) "
                    ^consult find^
------------------------------------------------------
+^^^^^^-----------------------------------------------
  _g_rep            _G_it grep         _l_ocate
  _r_ipgrep         _f_ind
 
@@ -641,9 +641,9 @@
      (hydra-consult:compilation
       (:hint nil) "
                ^consult compilation^
------------------------------------------------------
+^^^^-------------------------------------------------
  compile _e_rror       fly_m_ake             _x_ref
-                       fly_c_heck
+         ^ ^           fly_c_heck
 
  _SPC_: BACK
 "
@@ -668,27 +668,15 @@
      (hydra-consult:modes
       (:hint nil) "
                            ^consult modes^
------------------------------------------------------------------------
+^^^^-------------------------------------------------------------------
       _m_inor mode menu                         mode _c_ommand
-                              [prefix]
- [i]on/[o]ff/[l]ocal/[g]lobal      [l]ocal-minor/[g]lobal-minor/[m]ajor
+                            ^^[prefix]^^
+^[i]on/[o]ff/[l]ocal/[g]lobal^    ^[l]ocal-minor/[g]lobal-minor/[m]ajor^
 
  _SPC_: BACK
 "
       ("m" consult-minor-mode-menu :exit t)
       ("c" consult-mode-command    :exit t)
-      ("SPC" hydra-consult/body :exit t))
-
-     (hydra-consult:org
-      (:hint nil) "
-                   ^consult modes^
------------------------------------------------------
- org _h_eading                         org _a_genda
-
- _SPC_: BACK
-"
-      ("h" consult-org-heading :exit t)
-      ("a" consult-org-agenda  :exit t)
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:miscellaneous
