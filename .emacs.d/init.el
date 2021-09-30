@@ -240,8 +240,8 @@
                                      ))
     :custom-face
     ;; fix color
-    (whitespace-trailing . '((nil (:inherit 'default :foreground "DeepPink" :underline t))))
     (whitespace-tab      . '((nil (:inherit 'default :foreground "gray22" :underline t))))
+    (whitespace-trailing . '((nil (:inherit 'default :foreground "DeepPink" :underline (:style wave)))))
     (whitespace-newline  . '((nil (:inherit 'shadow))))
     ;;(set-face-attribute 'whitespace-newline nil
     ;;  :foreground "SlateGray"
