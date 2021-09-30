@@ -257,8 +257,7 @@
 
   (leaf org-pomodoro
     :doc "configure org-pomodoro"
-    :ensure t
-    :bind ([f6] . org-pomodoro))
+    :ensure t)
 
   (leaf org-sidebar
     :doc "sidebar for org-mode"
@@ -282,6 +281,32 @@
   :hook
   (org-mode-hook . org-mode-reftex-setup)
   (org-mode-hook . org-indent-mode)
+
+  :hydra
+  (hydra-org-timers
+   (:hint nil) "
+                                 ^org timer^
+----------------------------------------------------------------------------
+ _t_: timer                _c_: set timer         _p_: pomodoro
+ _s_: start                _I_: timer item        _P_: extend last pomodoro
+ _e_: stop                 _C_: change (region)
+ _i_: pause or continue
+ _S_: show remaining
+"
+   ("t" org-timer)
+   ("c" org-timer-set-timer)
+   ("s" org-timer-start)
+   ("e" org-timer-stop)
+   ("i" org-timer-pause-or-continue)
+   ("S" org-timer-show-remaining-time)
+   ("C" org-timer-change-times-in-region)
+   ("I" org-timer-item)
+   ("p" org-pomodoro)
+   ("P" org-pomodoro-extend-last-clock))
+  :bind
+  (:global-map
+  ("M-6"  . hydra-org-timers/body)
+  ("<f6>" . hydra-org-timers/body) )
   )
 
 (leaf org-roam

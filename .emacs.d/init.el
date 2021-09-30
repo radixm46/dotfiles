@@ -398,7 +398,7 @@
     :custom (evil-undo-system . 'undo-tree)
     :hydra
     (hydra-manage-frames
-     nil
+     (:hint nil)
      "
                      ^managing frames^
 ----------------------------------------------------------
@@ -409,8 +409,8 @@
    _h_ ←   → _l_      _H_ ←   → _L_      _<_ ← _=_ → _>_      _s_ --+--
        ↓              ↓              ↓              |
        _j_              _J_              _-_
-   _p_revious     delete(_c_)   delete other(_o_)   _n_ew
-   _a_ce window
+   _p_revious     delete (_c_)          _n_ew
+   _a_ce window   delete other (_o_)
 "
      ("h" evil-window-left)
      ("j" evil-window-down)
@@ -436,8 +436,8 @@
      ("n" evil-window-new))
     :bind
     (:global-map
-     ("<f6>" . hydra-manage-frames/body)
-     ("M-6"  . hydra-manage-frames/body))
+     ("<f4>" . hydra-manage-frames/body)
+     ("M-4"  . hydra-manage-frames/body))
     :config
     (leaf evil-surround
       :ensure t
@@ -519,7 +519,7 @@
     :doc "Useful search and navigation commands"
     :hydra
     ((hydra-consult
-      nil "
+     (:hint nil) "
                  ^consult functions^
 -----------------------------------------------------
  virtual _b_uffers   _s_earch        _m_odes
@@ -540,7 +540,7 @@
       ("i" hydra-consult:miscellaneous/body  :exit t))
 
      (hydra-consult:virtual-buffer
-      nil "
+      (:hint nil) "
               ^consult virtual-buffer^
 -----------------------------------------------------
  _b_uffer            other _f_rame     _r_ecent file
@@ -553,7 +553,7 @@
       ("r" consult-recent-file  :exit t))
 
      (hydra-consult:editing
-      nil "
+      (:hint nil) "
                  ^consult editing^
 -----------------------------------------------------
  _y_ank from kill ring            yank _r_eplace
@@ -565,7 +565,7 @@
       ("k" consult-kmacro              :exit t))
 
      (hydra-consult:register
-      nil "
+      (:hint nil) "
                  ^consult register^
 -----------------------------------------------------
  _r_egister        register _w_indow  register _s_tore
@@ -578,7 +578,7 @@
       ("s" consult-register-store  :exit t))
 
      (hydra-consult:navigation
-      nil "
+      (:hint nil) "
                 ^consult navitation^
 -----------------------------------------------------
  _g_oto line       global _M_ark      _i_menu
@@ -592,7 +592,7 @@
       ("I" consult-imenu-multi :exit t))
 
      (hydra-consult:search
-      nil "
+      (:hint nil) "
                   ^consult search^
 -----------------------------------------------------
  _l_ine            i_s_earch          _k_eep lines
@@ -606,7 +606,7 @@
       ("f" consult-focus-lines :exit t))
 
      (hydra-consult:grep-find
-      nil "
+      (:hint nil) "
                    ^consult find^
 -----------------------------------------------------
  _g_rep            _G_it grep         _l_ocate
@@ -619,7 +619,7 @@
       ("l" consult-locate   :exit t))
 
      (hydra-consult:compilation
-      nil "
+      (:hint nil) "
                ^consult compilation^
 -----------------------------------------------------
  compile _e_rror       fly_m_ake             _x_ref
@@ -631,7 +631,7 @@
       ("x" consult-xref          :exit t))
 
      (hydra-consult:histories
-      nil "
+      (:hint nil) "
                  ^consult histories^
 -----------------------------------------------------
  _c_omplex command                  _h_istory
@@ -640,18 +640,18 @@
       ("h" consult-history         :exit t))
 
      (hydra-consult:modes
-      nil "
-                   ^consult modes^
------------------------------------------------------
- _m_inor mode menu                  mode _c_ommand
-                      [prefix]
- [i]on/[o]ff/[l]ocal/[g]lobal    [l]ocal-minor/[g]lobal-minor/[m]ajor
+      (:hint nil) "
+                           ^consult modes^
+-----------------------------------------------------------------------
+      _m_inor mode menu                         mode _c_ommand
+                              [prefix]
+ [i]on/[o]ff/[l]ocal/[g]lobal      [l]ocal-minor/[g]lobal-minor/[m]ajor
 "
       ("m" consult-minor-mode-menu :exit t)
       ("c" consult-mode-command    :exit t))
 
      (hydra-consult:org
-      nil "
+      (:hint nil) "
                    ^consult modes^
 -----------------------------------------------------
  org _h_eading                         org _a_genda
@@ -660,11 +660,11 @@
       ("a" consult-org-agenda  :exit t))
 
      (hydra-consult:miscellaneous
-      nil "
-                      ^consult cellaneous^
---------------------------------------------------------------------
- _a_propos          _t_heme             _c_ompletion in region
- _m_an              _p_review at point  completion read _M_ultiple
+      (:hint nil) "
+                        ^consult cellaneous^
+---------------------------------------------------------------------
+ _a_propos           _t_heme              _c_ompletion in region
+ _m_an               _p_review at point   completion read _M_ultiple
  _f_ile externally
 "
       ("a" consult-apropos                  :exit t)
@@ -1027,17 +1027,25 @@
           (git-gutter))
       (git-gutter))
     :hydra (hydra-git-gutter
-            nil "git-gutter"
-            ("j" git-gutter:next-hunk           "next")
-            ("k" git-gutter:previous-hunk       "previous")
-            ("G" git-gutter:end-of-hunk         "end")
-            ("d" git-gutter:popup-hunk          "popup")
-            ("v" git-gutter:mark-hunk           "mark")
-            ("x" git-gutter:revert-hunk         "revert")
-            ("s" git-gutter:stage-hunk          "stage")
-            ("g" git-gutter-fix-init            "fix init")
-            ("r" git-gutter:update-all-windows  "update all windows")
-            ("M" magit                          "enter magit" :exit t))
+            (:hint nil) "
+                          ^git gutter^
+--------------------------------------------------------------------
+    move to hunk          act on hunk              etc
+--------------------------------------------------------------------
+  _j_: next hunk       _d_: popup hunk    _r_: update all windows
+  _k_: previous hunk   _v_: mark hunk     _g_: open magit mode
+  _G_: end of hunk     _s_: stage hunk
+                     _x_: revert hunk
+"
+            ("j" git-gutter:next-hunk)
+            ("k" git-gutter:previous-hunk)
+            ("G" git-gutter:end-of-hunk)
+            ("d" git-gutter:popup-hunk)
+            ("v" git-gutter:mark-hunk)
+            ("x" git-gutter:revert-hunk)
+            ("s" git-gutter:stage-hunk)
+            ("r" git-gutter:update-all-windows)
+            ("g" magit :exit t))
     :bind
     (:global-map
      ("<f3>" . hydra-git-gutter/body)
