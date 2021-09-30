@@ -515,16 +515,16 @@
     :ensure t
     :doc "Useful search and navigation commands"
     :hydra
-    ((hydra-consult nil
-      "
+    ((hydra-consult
+      nil "
                  ^consult functions^
 -----------------------------------------------------
- _v_irtual buffers   _s_earch        _m_odes
+ virtual _b_uffers   _s_earch        _m_odes
  _e_diting           _g_rep & find   _o_rg
  _r_egister          _c_ompilation   m_i_scellaneous
  _n_avigation        _h_istories
 "
-      ("v" hydra-consult:virtual-buffer/body :exit t)
+      ("b" hydra-consult:virtual-buffer/body :exit t)
       ("e" hydra-consult:editing/body        :exit t)
       ("r" hydra-consult:register/body       :exit t)
       ("n" hydra-consult:navigation/body     :exit t)
@@ -536,7 +536,8 @@
       ("o" hydra-consult:org/body            :exit t)
       ("i" hydra-consult:miscellaneous/body  :exit t))
 
-     (hydra-consult:virtual-buffer nil "
+     (hydra-consult:virtual-buffer
+      nil "
               ^consult virtual-buffer^
 -----------------------------------------------------
  _b_uffer            other _f_rame     _r_ecent file
@@ -548,7 +549,8 @@
       ("B" consult-bookmark     :exit t)
       ("r" consult-recent-file  :exit t))
 
-     (hydra-consult:editing nil "
+     (hydra-consult:editing
+      nil "
                  ^consult editing^
 -----------------------------------------------------
  _y_ank from kill ring            yank _r_eplace
@@ -559,7 +561,8 @@
       ("r" consult-yank-replace        :exit t)
       ("k" consult-kmacro              :exit t))
 
-     (hydra-consult:register nil "
+     (hydra-consult:register
+      nil "
                  ^consult register^
 -----------------------------------------------------
  _r_egister        register _w_indow  register _s_tore
@@ -571,7 +574,8 @@
       ("f" consult-register-format :exit t)
       ("s" consult-register-store  :exit t))
 
-     (hydra-consult:navigation nil "
+     (hydra-consult:navigation
+      nil "
                 ^consult navitation^
 -----------------------------------------------------
  _g_oto line       global _M_ark      _i_menu
@@ -584,7 +588,8 @@
       ("i" consult-imenu       :exit t)
       ("I" consult-imenu-multi :exit t))
 
-     (hydra-consult:search nil "
+     (hydra-consult:search
+      nil "
                   ^consult search^
 -----------------------------------------------------
  _l_ine            i_s_earch          _k_eep lines
@@ -597,7 +602,8 @@
       ("k" consult-keep-lines  :exit t)
       ("f" consult-focus-lines :exit t))
 
-     (hydra-consult:grep-find nil "
+     (hydra-consult:grep-find
+      nil "
                    ^consult find^
 -----------------------------------------------------
  _g_rep            _G_it grep         _l_ocate
@@ -609,7 +615,8 @@
       ("f" consult-find     :exit t)
       ("l" consult-locate   :exit t))
 
-     (hydra-consult:compilation nil "
+     (hydra-consult:compilation
+      nil "
                ^consult compilation^
 -----------------------------------------------------
  compile _e_rror       fly_m_ake             _x_ref
@@ -620,7 +627,8 @@
       ("c" consult-flycheck      :exit t)
       ("x" consult-xref          :exit t))
 
-     (hydra-consult:histories nil "
+     (hydra-consult:histories
+      nil "
                  ^consult histories^
 -----------------------------------------------------
  _c_omplex command                  _h_istory
@@ -628,7 +636,8 @@
       ("c" consult-complex-command :exit t)
       ("h" consult-history         :exit t))
 
-     (hydra-consult:modes nil "
+     (hydra-consult:modes
+      nil "
                    ^consult modes^
 -----------------------------------------------------
  _m_inor mode menu                  mode _c_ommand
@@ -638,8 +647,8 @@
       ("m" consult-minor-mode-menu :exit t)
       ("c" consult-mode-command    :exit t))
 
-     (hydra-consult:org nil
-      "
+     (hydra-consult:org
+      nil "
                    ^consult modes^
 -----------------------------------------------------
  org _h_eading                         org _a_genda
@@ -647,7 +656,8 @@
       ("h" consult-org-heading :exit t)
       ("a" consult-org-agenda  :exit t))
 
-     (hydra-consult:miscellaneous nil "
+     (hydra-consult:miscellaneous
+      nil "
                       ^consult cellaneous^
 --------------------------------------------------------------------
  _a_propos          _t_heme             _c_ompletion in region
@@ -682,7 +692,7 @@
      ("M-g M-C" . consult-mode-command)
      ("M-y"     . consult-yank-from-kill-ring)
      ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
-     ("<f5>"    . hydra-consult/body))
+     ("M-5"     . hydra-consult/body))
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
@@ -1012,8 +1022,8 @@
       (if (eq git-gutter-mode nil)
           (git-gutter))
       (git-gutter))
-    :hydra (hydra-git-gutter nil
-            "git-gutter"
+    :hydra (hydra-git-gutter
+            nil "git-gutter"
             ("j" git-gutter:next-hunk           "next")
             ("k" git-gutter:previous-hunk       "previous")
             ("G" git-gutter:end-of-hunk         "end")
@@ -1024,8 +1034,7 @@
             ("g" git-gutter-fix-init            "fix init")
             ("r" git-gutter:update-all-windows  "update all windows")
             ("M" magit                          "enter magit" :exit t))
-    :bind (:global-map
-           ("C-x C-g" . hydra-git-gutter/body))
+    :bind (:global-map ("M-3" . hydra-git-gutter/body))
     :global-minor-mode (global-git-gutter-mode t))
 
   (leaf magit
