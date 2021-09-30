@@ -691,7 +691,7 @@
 
      (hydra-consult:miscellaneous
       (:hint nil) "
-                        ^consult cellaneous^
+                      ^consult miscellaneous^
 ---------------------------------------------------------------------
  _a_propos           _t_heme              _c_ompletion in region
  _m_an               _p_review at point   completion read _M_ultiple
@@ -994,18 +994,18 @@
       (:hint nil) "
                                      ^lsp functions^
 -----------------------------------------------------------------------------------------------
-  act on code                      find                             signature
+  act on code                    find                               signature
  _r_:   rename                    _s r_: references       (ui peek)    _s j_: next
- _f_:   format buffer             _s d_: definitions      (ui peek)    _s q_: stop
- _F_:   format region             _s i_: implementation   (ui peek)    _s S_: mode
- _o_:   organize imports          _s s_: workspace symbol (ui peek)
-                                _s D_: definition                     miscellaneous
-  consult                       _s R_: references                    _C i_: install server
- _c d_: lsp diagnostics           _s e_: declaration                   _C D_: doctor
- _c s_: lsp symbols                                                  _C d_: disconnect
-                                                                   _C v_: version
-  diagnos
- _l_:   flycheck-list (lsp-ui)                                       _a_:   appearance
+ _f_:   format buffer             _s d_: definitions      (ui peek)    _s k_: previous
+ _F_:   format region             _s i_: implementation   (ui peek)    _s q_: stop
+ _o_:   organize imports          _s s_: workspace symbol (ui peek)    _s d_: toggle full doc
+                                _s D_: definition                    _s a_: toggle auto activate
+  consult                       _s R_: references
+ _c d_: lsp diagnostics           _s e_: declaration                    miscellaneous
+ _c s_: lsp symbols                                                  _C i_: install server
+                                                                   _C D_: doctor
+  diagnos                                                          _C d_: disconnect
+ _l_:   flycheck-list (lsp-ui)    _a_:   appearance                    _C v_: version
 "
       ;; act on code
       ("r"   lsp-rename :exit t)
@@ -1025,9 +1025,12 @@
       ("s D" lsp-find-definition)
       ("s R" lsp-find-references)
       ("s e" lsp-find-declaration)
+      ;; sianature
       ("s j" lsp-signature-next)
+      ("s k" lsp-signature-previous)
       ("s q" lsp-signature-stop)
-      ("s S" lsp-signature-mode)
+      ("s d" lsp-signature-toggle-full-docs)
+      ("s a" lsp-toggle-signature-auto-activate)
       ;; appearance
       ("a"   hydra-lsp-appearance/body :exit t)
       ;; misc
@@ -1040,7 +1043,7 @@
       (:hint nil) "
                                      ^lsp functions (appearance)^
 -----------------------------------------------------------------------------------------------
-                                 len                                 treemacs
+                                   len                                treemacs
   _s_   :sideline mode              _l l_ :lens mode                     _t s_ lsp symbols
   _m_   :imenu                      _l h_ :hide                          _t r_ lsp references
                                   _l s_ :show                          _t e_ lsp errors list
