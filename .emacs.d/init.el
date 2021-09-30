@@ -434,7 +434,10 @@
      ("c" evil-window-delete)
      ("o" delete-other-windows :exit t)
      ("n" evil-window-new))
-    :bind (:global-map ("M-6" . hydra-manage-frames/body))
+    :bind
+    (:global-map
+     ("<f6>" . hydra-manage-frames/body)
+     ("M-6"  . hydra-manage-frames/body))
     :config
     (leaf evil-surround
       :ensure t
@@ -692,7 +695,8 @@
      ("M-g M-C" . consult-mode-command)
      ("M-y"     . consult-yank-from-kill-ring)
      ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
-     ("M-5"     . hydra-consult/body))
+     ("M-5"     . hydra-consult/body)
+     ("<f5>"    . hydra-consult/body))
     :init
     (leaf consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
@@ -1034,7 +1038,10 @@
             ("g" git-gutter-fix-init            "fix init")
             ("r" git-gutter:update-all-windows  "update all windows")
             ("M" magit                          "enter magit" :exit t))
-    :bind (:global-map ("M-3" . hydra-git-gutter/body))
+    :bind
+    (:global-map
+     ("<f3>" . hydra-git-gutter/body)
+     ("M-3"  . hydra-git-gutter/body))
     :global-minor-mode (global-git-gutter-mode t))
 
   (leaf magit
