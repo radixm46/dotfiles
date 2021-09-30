@@ -545,12 +545,15 @@
 -----------------------------------------------------
  _b_uffer            other _f_rame     _r_ecent file
  _o_ther window      _B_ookmark
+
+ _SPC_: BACK
 "
       ("b" consult-buffer       :exit t)
       ("o" consult-other-window :exit t)
       ("f" consult-other-frame  :exit t)
       ("B" consult-bookmark     :exit t)
-      ("r" consult-recent-file  :exit t))
+      ("r" consult-recent-file  :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:editing
       (:hint nil) "
@@ -558,11 +561,14 @@
 -----------------------------------------------------
  _y_ank from kill ring            yank _r_eplace
  yank _p_op                       _k_macro
+
+ _SPC_: BACK
 "
       ("y" consult-yank-from-kill-ring :exit t)
       ("p" consult-yank-pop            :exit t)
       ("r" consult-yank-replace        :exit t)
-      ("k" consult-kmacro              :exit t))
+      ("k" consult-kmacro              :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:register
       (:hint nil) "
@@ -570,12 +576,15 @@
 -----------------------------------------------------
  _r_egister        register _w_indow  register _s_tore
  register _l_oad   register _f_ormat
+
+ _SPC_: BACK
 "
       ("r" consult-register        :exit t)
       ("l" consult-register-load   :exit t)
       ("w" consult-register-window :exit t)
       ("f" consult-register-format :exit t)
-      ("s" consult-register-store  :exit t))
+      ("s" consult-register-store  :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:navigation
       (:hint nil) "
@@ -583,13 +592,16 @@
 -----------------------------------------------------
  _g_oto line       global _M_ark      _i_menu
  _m_ark            _o_utline          _I_menu multi
+
+ _SPC_: BACK
 "
       ("g" consult-goto-line   :exit t)
       ("m" consult-mark        :exit t)
       ("M" consult-global-mark :exit t)
       ("o" consult-outline     :exit t)
       ("i" consult-imenu       :exit t)
-      ("I" consult-imenu-multi :exit t))
+      ("I" consult-imenu-multi :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:search
       (:hint nil) "
@@ -597,13 +609,16 @@
 -----------------------------------------------------
  _l_ine            i_s_earch          _k_eep lines
  line _m_ulti      _M_ulti occur      _f_ocus lines
+
+ _SPC_: BACK
 "
       ("l" consult-line        :exit t)
       ("m" consult-line-multi  :exit t)
       ("s" consult-isearch     :exit t)
       ("M" consult-multi-occur :exit t)
       ("k" consult-keep-lines  :exit t)
-      ("f" consult-focus-lines :exit t))
+      ("f" consult-focus-lines :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:grep-find
       (:hint nil) "
@@ -611,12 +626,15 @@
 -----------------------------------------------------
  _g_rep            _G_it grep         _l_ocate
  _r_ipgrep         _f_ind
+
+ _SPC_: BACK
 "
       ("g" consult-grep     :exit t)
       ("r" consult-ripgrep  :exit t)
       ("G" consult-git-grep :exit t)
       ("f" consult-find     :exit t)
-      ("l" consult-locate   :exit t))
+      ("l" consult-locate   :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:compilation
       (:hint nil) "
@@ -624,20 +642,26 @@
 -----------------------------------------------------
  compile _e_rror       fly_m_ake             _x_ref
                        fly_c_heck
+
+ _SPC_: BACK
 "
       ("e" consult-compile-error :exit t)
       ("m" consult-flymake       :exit t)
       ("c" consult-flycheck      :exit t)
-      ("x" consult-xref          :exit t))
+      ("x" consult-xref          :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:histories
       (:hint nil) "
                  ^consult histories^
 -----------------------------------------------------
  _c_omplex command                  _h_istory
+
+ _SPC_: BACK
 "
       ("c" consult-complex-command :exit t)
-      ("h" consult-history         :exit t))
+      ("h" consult-history         :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:modes
       (:hint nil) "
@@ -646,18 +670,24 @@
       _m_inor mode menu                         mode _c_ommand
                               [prefix]
  [i]on/[o]ff/[l]ocal/[g]lobal      [l]ocal-minor/[g]lobal-minor/[m]ajor
+
+ _SPC_: BACK
 "
       ("m" consult-minor-mode-menu :exit t)
-      ("c" consult-mode-command    :exit t))
+      ("c" consult-mode-command    :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:org
       (:hint nil) "
                    ^consult modes^
 -----------------------------------------------------
  org _h_eading                         org _a_genda
+
+ _SPC_: BACK
 "
       ("h" consult-org-heading :exit t)
-      ("a" consult-org-agenda  :exit t))
+      ("a" consult-org-agenda  :exit t)
+      ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:miscellaneous
       (:hint nil) "
@@ -666,6 +696,8 @@
  _a_propos           _t_heme              _c_ompletion in region
  _m_an               _p_review at point   completion read _M_ultiple
  _f_ile externally
+
+ _SPC_: BACK
 "
       ("a" consult-apropos                  :exit t)
       ("m" consult-man                      :exit t)
@@ -673,7 +705,8 @@
       ("t" consult-theme                    :exit t)
       ("p" consult-preview-at-point         :exit t)
       ("c" consult-completion-in-region     :exit t)
-      ("M" consult-completion-read-multiple :exit t))
+      ("M" consult-completion-read-multiple :exit t)
+      ("SPC" hydra-consult/body :exit t))
      )
 
     :bind
@@ -956,7 +989,93 @@
     ;; optionally if you want to use debugger
     ;;(use-package dap-mode)
     ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+    :hydra
+    ((hydra-lsp-functions
+      (:hint nil) "
+                                     ^lsp functions^
+-----------------------------------------------------------------------------------------------
+  act on code                      find                             signature
+ _r_:   rename                    _s r_: references       (ui peek)    _s j_: next
+ _f_:   format buffer             _s d_: definitions      (ui peek)    _s q_: stop
+ _F_:   format region             _s i_: implementation   (ui peek)    _s S_: mode
+ _o_:   organize imports          _s s_: workspace symbol (ui peek)
+                                _s D_: definition                     miscellaneous
+  consult                       _s R_: references                    _C i_: install server
+ _c d_: lsp diagnostics           _s e_: declaration                   _C D_: doctor
+ _c s_: lsp symbols                                                  _C d_: disconnect
+                                                                   _C v_: version
+  diagnos
+ _l_:   flycheck-list (lsp-ui)                                       _a_:   appearance
+"
+      ;; act on code
+      ("r"   lsp-rename :exit t)
+      ("f"   lsp-format-buffer :exit t)
+      ("F"   lsp-format-region  :exit t)
+      ("o"   lsp-organize-imports :exit t)
+      ;; consult
+      ("c d" consult-lsp-diagnostics)
+      ("c s" consult-lsp-symbols)
+      ;; diagnos
+      ("l"   lsp-ui-flycheck-list)
+      ;; find
+      ("s r" lsp-ui-peek-find-references)
+      ("s d" lsp-ui-peek-find-definitions)
+      ("s i" lsp-ui-peek-find-implementation)
+      ("s s" lsp-ui-peek-find-workspace-symbol)
+      ("s D" lsp-find-definition)
+      ("s R" lsp-find-references)
+      ("s e" lsp-find-declaration)
+      ("s j" lsp-signature-next)
+      ("s q" lsp-signature-stop)
+      ("s S" lsp-signature-mode)
+      ;; appearance
+      ("a"   hydra-lsp-appearance/body :exit t)
+      ;; misc
+      ("C i" lsp-install-server)
+      ("C d" lsp-disconnect)
+      ("C D" lsp-doctor)
+      ("C v" lsp-version))
+
+     (hydra-lsp-appearance
+      (:hint nil) "
+                                     ^lsp functions (appearance)^
+-----------------------------------------------------------------------------------------------
+                                 len                                 treemacs
+  _s_   :sideline mode              _l l_ :lens mode                     _t s_ lsp symbols
+  _m_   :imenu                      _l h_ :hide                          _t r_ lsp references
+                                  _l s_ :show                          _t e_ lsp errors list
+   lsp ui doc                                                        _t i_ lsp implementations
+  _d d_ :toggle                                                        _t t_ lsp type hierarchy
+  _d f_ :focus frame                                                   _t c_ lsp call hierarchy
+  _d g_ :glance
+
+  _SPC_ :BACK
+"
+      ;; appearance
+      ("s"   lsp-ui-sideline-mode)
+      ("m"   lsp-ui-imenu)
+      ("d d" ladicle/toggle-lsp-ui-doc)
+      ("d f" lsp-ui-doc-focus-frame)
+      ("d g" lsp-ui-doc-glance)
+      ("l l" lsp-lens-mode)
+      ("l h" lsp-lens-hide)
+      ("l s" lsp-lens-show)
+      ;; treemacs
+      ("t s" lsp-treemacs-symbols :exit t)
+      ("t r" lsp-treemacs-references :exit t)
+      ("t e" lsp-treemacs-errors-list :exit t)
+      ("t c" lsp-treemacs-call-hierarchy :exit t)
+      ("t t" lsp-treemacs-type-hierarchy :exit t)
+      ("t i" lsp-treemacs-implementations :exit t)
+
+      ("SPC" hydra-lsp-functions/body :exit t))
     )
+
+    :bind
+    (:global-map
+     ("<f7>" . hydra-lsp-functions/body)
+     ("M-7"  . hydra-lsp-functions/body))
+  )
 
   (leaf eglot
     :ensure t
@@ -1068,7 +1187,7 @@
 
   (leaf neotree
     :ensure t
-    :bind ([f7] . neotree-toggle)
+    ;; :bind ([f7] . neotree-toggle)
     :custom (neo-window-fixed-size . nil)
     :config
     ;; keymap for using with evil mode
