@@ -193,12 +193,6 @@
   :doc "org-mode config"
   :ensure t
   :mode ("\\.org\\'" . org-mode)
-  :bind
-  (("C-c l" . org-store-link)
-   ("C-c c" . org-capture)
-   ("C-c a" . org-agenda)
-   ("C-c b" . org-iswitchb)
-   ("C-c C-o 0" . my/org-goto-dir))
   :custom
   (org-startup-truncated        . t)
   (org-startup-folded           . nil)
@@ -262,10 +256,7 @@
   (leaf org-sidebar
     :doc "sidebar for org-mode"
     :ensure t :require org-sidebar ; explicitly require
-    :bind
-    (:org-mode-map
-     ("M-9" . org-sidebar-tree-toggle)
-     ("M-8" . org-sidebar-toggle)))
+    )
 
   ;; configure bibtex
   (defun org-mode-reftex-setup ()
@@ -278,90 +269,155 @@
 
   ;; (use-package ox-bibtex)
 
+  (leaf org-roam
+    :ensure t
+    :init (setq org-roam-v2-ack t)
+    :bind
+    (("C-c n c" . org-roam-capture)
+     ("C-c n f" . org-roam-find-file)
+     ("C-c n g" . org-roam-ui-mode)
+     (:org-mode-map
+      ("C-c n n" . org-roam-node-insert)
+      ("C-c n i" . org-roam-insert)
+      ("C-c n I" . org-roam-insert-immediate)
+      ("C-c n a" . org-roam-alias-add)
+      ("C-c n A" . org-roam-alias-remove)
+      ("C-c n t" . org-roam-tag-add)
+      ("C-c n T" . org-roam-tag-remove)))
+    :hydra
+    (hydra-org-roam
+     (:hint nil) "
+                               ^^^org roam^^^
+^^^^^^----------------------------------------------------------------------
+ _c_: capture              _f_:   find file       _g_:   ui mode
+^^^^^^----------------------------------------------------------------------
+ _i_: insert               _a a_: alias add       _t a_: tag add
+ _I_: insert immediate     _a r_: alias remove    _t r_: tag remove
+ _n_: node insert
+
+ _SPC_: BACK
+"
+     ("c"   org-roam-capture)
+     ("f"   org-roam-find-file)
+     ("g"   org-roam-ui-mode)
+     ("i"   org-roam-insert)
+     ("I"   org-roam-insert-immediate)
+     ("n"   org-roam-node-insert)
+     ("a a" org-roam-alias-add)
+     ("a r" org-roam-alias-remove)
+     ("t a" org-roam-tag-add)
+     ("t r" org-roam-tag-remove)
+     ("SPC" hydra-org/body :exit t))
+    :custom
+    (org-roam-capture-templates . '(("d" "default" plain
+                                     "%?"
+                                     :if-new
+                                     (file+head "${slug}.org" "#+title: ${title}\n")
+                                     :immediate-finish t
+                                     :unnarrowed t)
+                                    ;; ("r" "bibliography reference" plain "%?"
+                                    ;;  :if-new
+                                    ;;  (file+head "references/${citekey}.org" "#+title: ${title}\n")
+                                    ;;  :unnarrowed t)
+                                    ;;("r" "Roam" plain (function org-roam--capture-get-point)
+                                    ;;"%?"
+                                    ;;:file-name "%<%Y%m%d%H%M%S>-${slug}.org"
+                                    ;;:head "#+title: ${title}\n"
+                                    ;;:unnarrowed t)
+                                    ))
+    :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
+    :config
+    (custom-set-variables
+     '(org-roam-directory           (file-truename "~/org/roam"))
+     '(org-roam-index-file          (file-truename "~/org/roam/Index.org"))
+     '(org-roam-db-location         (file-truename "~/.emacs.d/.cache/org-roam.db")))
+
+    (org-roam-db-autosync-mode)
+
+    (leaf org-roam-ui
+      :doc "org-roam frontend package"
+      :straight
+      (org-roam-ui :type git :host github
+                   :repo "org-roam/org-roam-ui" :branch "main"
+                   :files ("*.el" "out"))
+      :after org-roam
+      :config
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t))
+    )
+
   :hook
   (org-mode-hook . org-mode-reftex-setup)
   (org-mode-hook . org-indent-mode)
 
   :hydra
-  (hydra-org-timers
-   (:hint nil) "
-                                 ^org timer^
-----------------------------------------------------------------------------
+  ((hydra-org
+    (:hint nil) "
+                                ^^^org functions^^^
+^^^-------------------------------------------------------------------------------^^^
+ _c_:   capture                _l s_: store link               _a_: agenda (consult)
+ ^ ^                           _l i_: insert link (last)       _A_: agenda
+
+ ^time stamp^                  ^toggle sidebar^                ^heading^
+^^^------------------------------- (in org mode) ---------------------------------^^^
+ _t a_: add active             _s t_: toggle sidebar           _H_: consult heading
+ _t A_: add active (+time)     _s T_: toggle sidebar (tree)
+ _t i_: add inactive           _s b_: sidebar with backlinks
+ _t I_: add inactive (+time)
+
+ _m t_: timer                  _m r_: roam                     _o_: open org dir
+"
+    ("c"   org-capture :exit t)
+    ("A"   org-agenda :exit t)
+    ("a"   consult-org-agenda :exit t)
+    ("l s" org-store-link)
+    ("l i" org-insert-last-stored-link)
+    ("t a" (org-time-stamp nil) :exit t)
+    ("t A" (org-time-stamp t) :exit t) ; with time
+    ("t i" (org-time-stamp-inactive nil) :exit t)
+    ("t I" (org-time-stamp-inactive t) :exit t) ; with time
+    ("s t" org-sidebar-toggle)
+    ("s T" org-sidebar-tree-toggle)
+    ("s b" org-sidebar-backlinks)
+    ("H" consult-org-heading)
+    ("o"   my/org-goto-dir)
+    ("m t" hydra-org-timers/body :exit t)
+    ("m r" hydra-org-roam/body :exit t))
+
+   (hydra-org-timers
+    (:hint nil) "
+                               ^^^org timer^^^
+^^^^^^----------------------------------------------------------------------
  _t_: timer                _c_: set timer         _p_: pomodoro
  _s_: start                _I_: timer item        _P_: extend last pomodoro
  _e_: stop                 _C_: change (region)
  _i_: pause or continue
  _S_: show remaining
+
+ _SPC_: BACK
 "
-   ("t" org-timer)
-   ("c" org-timer-set-timer)
-   ("s" org-timer-start)
-   ("e" org-timer-stop)
-   ("i" org-timer-pause-or-continue)
-   ("S" org-timer-show-remaining-time)
-   ("C" org-timer-change-times-in-region)
-   ("I" org-timer-item)
-   ("p" org-pomodoro)
-   ("P" org-pomodoro-extend-last-clock))
+    ("t" org-timer)
+    ("c" org-timer-set-timer)
+    ("s" org-timer-start)
+    ("e" org-timer-stop)
+    ("i" org-timer-pause-or-continue)
+    ("S" org-timer-show-remaining-time)
+    ("C" org-timer-change-times-in-region)
+    ("I" org-timer-item)
+    ("p" org-pomodoro)
+    ("P" org-pomodoro-extend-last-clock)
+    ("SPC" hydra-org/body :exit t))
+   )
   :bind
-  (:global-map
-  ("M-6"  . hydra-org-timers/body)
-  ("<f6>" . hydra-org-timers/body) )
-  )
-
-(leaf org-roam
-  :ensure t
-  :init (setq org-roam-v2-ack t)
-  :bind
-  (("C-c n c" . org-roam-capture)
-   ("C-c n f" . org-roam-find-file)
-   ("C-c n g" . org-roam-ui-mode)
-   (:org-mode-map
-    ("C-c n n" . org-roam-node-insert)
-    ("C-c n i" . org-roam-insert)
-    ("C-c n I" . org-roam-insert-immediate)
-    ("C-c n a" . org-roam-alias-add)
-    ("C-c n A" . org-roam-alias-remove)
-    ("C-c n t" . org-roam-tag-add)
-    ("C-c n T" . org-roam-tag-remove)))
-  :custom
-  (org-roam-capture-templates . '(("d" "default" plain
-                                   "%?"
-                                   :if-new
-                                   (file+head "${slug}.org" "#+title: ${title}\n")
-                                   :immediate-finish t
-                                   :unnarrowed t)
-                                  ;; ("r" "bibliography reference" plain "%?"
-                                  ;;  :if-new
-                                  ;;  (file+head "references/${citekey}.org" "#+title: ${title}\n")
-                                  ;;  :unnarrowed t)
-                                  ;;("r" "Roam" plain (function org-roam--capture-get-point)
-                                  ;;"%?"
-                                  ;;:file-name "%<%Y%m%d%H%M%S>-${slug}.org"
-                                  ;;:head "#+title: ${title}\n"
-                                  ;;:unnarrowed t)
-                                  ))
-  :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
-  :config
-  (custom-set-variables
-   '(org-roam-directory           (file-truename "~/org/roam"))
-   '(org-roam-index-file          (file-truename "~/org/roam/Index.org"))
-   '(org-roam-db-location         (file-truename "~/.emacs.d/.cache/org-roam.db")))
-
-  (org-roam-db-autosync-mode)
-
-  (leaf org-roam-ui
-    :doc "org-roam frontend package"
-    :straight
-    (org-roam-ui :type git :host github
-                 :repo "org-roam/org-roam-ui" :branch "main"
-                 :files ("*.el" "out"))
-    :after org-roam
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+  (("C-c l" . org-store-link)
+   ("C-c c" . org-capture)
+   ("C-c a" . org-agenda)
+   ("C-c b" . org-iswitchb)
+   ("C-c C-o 0" . my/org-goto-dir)
+   ("M-6"  . hydra-org/body)
+   ("<f6>" . hydra-org/body))
   )
 
 (leaf markdown-mode

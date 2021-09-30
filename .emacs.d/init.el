@@ -397,20 +397,20 @@
     :init (setq evil-want-keybinding nil)
     :custom (evil-undo-system . 'undo-tree)
     :hydra
-    (hydra-manage-frames
+    (hydra-manage-windows
      (:hint nil)
      "
-                     ^managing frames^
-----------------------------------------------------------
-    select           move         resize          split
-----------------------------------------------------------
-       _k_         _R_⃔   _K_   ⃕_r_        _+_              _v_
-       ↑              ↑              ↑              |
-   _h_ ←   → _l_      _H_ ←   → _L_      _<_ ← _=_ → _>_      _s_ --+--
-       ↓              ↓              ↓              |
-       _j_              _J_              _-_
-   _p_revious     delete (_c_)          _n_ew
-   _a_ce window   delete other (_o_)
+                   ^^^^^^^^^^^managing windows^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^----------------------------------------------------------
+     ^^select^^        ^^^move^^^         ^^^resize^^^         ^^^split^
+^^^^^^^^^^^^^^^^^^^^----------------------------------------------------------
+       ^_k_^        _R_    _K_    _r_    ^ ^   _+_   ^ ^      ^ ^  _v_
+       ^^↑^^        ^ ^    ^↑^    ^ ^    ^ ^   ^↑^   ^ ^      ^ ^  ^|^
+   _h_ ←   → _l_     ^_H_ ←   → _L_^     _<_ ← _=_ → _>_     ^_s_ --+--^
+       ^^↓^^        ^ ^    ^↓^    ^ ^    ^ ^   ^↓^   ^ ^      ^ ^  ^|^
+       ^_j_^        ^ ^    _J_    ^ ^    ^ ^   _-_   ^ ^      ^ ^
+  ^_p_revious^      ^^_d_elete^^            ^^_n_ew^^
+  ^_a_ce window^    ^^delete _o_ther^^      ^^other _f_rame^^
 "
      ("h" evil-window-left)
      ("j" evil-window-down)
@@ -431,13 +431,15 @@
      ("v" evil-window-vsplit)
      ("s" evil-window-split)
      ("p" evil-window-mru)
-     ("c" evil-window-delete)
+     ("d" evil-window-delete)
      ("o" delete-other-windows :exit t)
-     ("n" evil-window-new))
+     ("n" evil-window-new)
+     ("f" other-frame)
+     )
     :bind
     (:global-map
-     ("<f4>" . hydra-manage-frames/body)
-     ("M-4"  . hydra-manage-frames/body))
+     ("<f4>" . hydra-manage-windows/body)
+     ("M-4"  . hydra-manage-windows/body))
     :config
     (leaf evil-surround
       :ensure t
@@ -992,19 +994,19 @@
     :hydra
     ((hydra-lsp-functions
       (:hint nil) "
-                                     ^lsp functions^
------------------------------------------------------------------------------------------------
-  act on code                    find                               signature
+                                   ^^^lsp functions^^^
+^^^^^^----------------------------------------------------------------------------------------------
+ ^act on code^                    ^find^                               ^signature^
  _r_:   rename                    _s r_: references       (ui peek)    _s j_: next
  _f_:   format buffer             _s d_: definitions      (ui peek)    _s k_: previous
  _F_:   format region             _s i_: implementation   (ui peek)    _s q_: stop
  _o_:   organize imports          _s s_: workspace symbol (ui peek)    _s d_: toggle full doc
-                                _s D_: definition                    _s a_: toggle auto activate
-  consult                       _s R_: references
- _c d_: lsp diagnostics           _s e_: declaration                    miscellaneous
- _c s_: lsp symbols                                                  _C i_: install server
-                                                                   _C D_: doctor
-  diagnos                                                          _C d_: disconnect
+ ^ ^                              _s D_: definition                    _s a_: toggle auto activate
+ ^consult^                        _s R_: references
+ _c d_: lsp diagnostics           _s e_: declaration                   ^miscellaneous^
+ _c s_: lsp symbols               ^   ^                                _C i_: install server
+ ^   ^                            ^   ^                                _C D_: doctor
+ ^diagnos^                        ^   ^                                _C d_: disconnect
  _l_:   flycheck-list (lsp-ui)    _a_:   appearance                    _C v_: version
 "
       ;; act on code
@@ -1041,15 +1043,15 @@
 
      (hydra-lsp-appearance
       (:hint nil) "
-                                     ^lsp functions (appearance)^
------------------------------------------------------------------------------------------------
-                                   len                                treemacs
-  _s_   :sideline mode              _l l_ :lens mode                     _t s_ lsp symbols
-  _m_   :imenu                      _l h_ :hide                          _t r_ lsp references
-                                  _l s_ :show                          _t e_ lsp errors list
-   lsp ui doc                                                        _t i_ lsp implementations
-  _d d_ :toggle                                                        _t t_ lsp type hierarchy
-  _d f_ :focus frame                                                   _t c_ lsp call hierarchy
+                                 ^^^lsp functions (appearance)^^^
+^^^^^^-----------------------------------------------------------------------------------------------
+  ^ ^                            ^len^                              ^treemacs^
+  _s_   :sideline mode           _l l_ :lens mode                   _t s_ lsp symbols
+  _m_   :imenu                   _l h_ :hide                        _t r_ lsp references
+  ^ ^                            _l s_ :show                        _t e_ lsp errors list
+  ^lsp ui doc^                   ^   ^                              _t i_ lsp implementations
+  _d d_ :toggle                  ^   ^                              _t t_ lsp type hierarchy
+  _d f_ :focus frame             ^   ^                              _t c_ lsp call hierarchy
   _d g_ :glance
 
   _SPC_ :BACK
@@ -1092,9 +1094,6 @@
 
 (leaf helpful-things
   :config
-  (leaf bind-key
-    :doc "move frames with function-key"
-    :bind ([f9] . other-frame))
 
   (leaf ace-window
     :ensure t
@@ -1150,14 +1149,14 @@
       (git-gutter))
     :hydra (hydra-git-gutter
             (:hint nil) "
-                          ^git gutter^
---------------------------------------------------------------------
-    move to hunk          act on hunk              etc
---------------------------------------------------------------------
+                        ^^^git gutter^^^
+^^^^^^--------------------------------------------------------------
+   ^move to hunk^        ^act on hunk^            ^etc^
+^^^^^^--------------------------------------------------------------
   _j_: next hunk       _d_: popup hunk    _r_: update all windows
   _k_: previous hunk   _v_: mark hunk     _g_: open magit mode
   _G_: end of hunk     _s_: stage hunk
-                     _x_: revert hunk
+  ^ ^                  _x_: revert hunk
 "
             ("j" git-gutter:next-hunk)
             ("k" git-gutter:previous-hunk)
