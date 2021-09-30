@@ -962,7 +962,7 @@
     :ensure t
     :doc "another lsp client"
     :preface
-    (leaf eldoc-box-mode :if (not (emacs-works-on-term-p))
+    (leaf eldoc-box :if (not (emacs-works-on-term-p))
       :doc "use eldoc-box-mode if not on term"
       :hook (eglot--managed-mode-hook . eldoc-box-hover-mode)))
   )
