@@ -289,11 +289,14 @@
      (:hint nil) "
                                ^^^org roam^^^
 ^^^^^^----------------------------------------------------------------------
- _c_: capture              _f_:   find file       _g_:   ui mode
+ _c_:   capture              _f_:   find file       _g_:   ui mode
 ^^^^^^----------------------------------------------------------------------
- _i_: insert               _a a_: alias add       _t a_: tag add
- _I_: insert immediate     _a r_: alias remove    _t r_: tag remove
- _n_: node insert
+ _i_:   insert               _I_:   insert immediate
+ ^node^                      ^alias^                ^tag^
+ _n i_: insert               _a a_: add             _t a_: add
+ _n f_: find                 _a r_: remove          _t r_: remove
+ _n v_: visit
+ _n r_: random
 
  _SPC_: BACK
 "
@@ -302,7 +305,10 @@
      ("g"   org-roam-ui-mode)
      ("i"   org-roam-insert)
      ("I"   org-roam-insert-immediate)
-     ("n"   org-roam-node-insert)
+     ("n i" org-roam-node-insert)
+     ("n f" org-roam-node-find)
+     ("n v" org-roam-node-visit)
+     ("n r" org-roam-node-random)
      ("a a" org-roam-alias-add)
      ("a r" org-roam-alias-remove)
      ("t a" org-roam-tag-add)
