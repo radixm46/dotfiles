@@ -356,18 +356,19 @@
   ((hydra-org
     (:hint nil) "
                                 ^^^org functions^^^
-^^^-------------------------------------------------------------------------------^^^
- _c_:   capture                _l s_: store link               _a_: agenda (consult)
- ^ ^                           _l i_: insert link (last)       _A_: agenda
+^^^^^^^^----------------------------------------------------------------------------------
+ _c_:   capture                _l s_: store link               _a_:  ^^agenda (consult)
+ ^ ^                           _l i_: insert link (last)       _A_:  ^^agenda
 
- ^time stamp^                  ^toggle sidebar^                ^heading^
-^^^------------------------------- (in org mode) ---------------------------------^^^
- _t a_: add active             _s t_: toggle sidebar           _H_: consult heading
- _t A_: add active (+time)     _s T_: toggle sidebar (tree)
- _t i_: add inactive           _s b_: sidebar with backlinks
- _t I_: add inactive (+time)
+ ^time stamp^                  ^sidebar^                       ^move^ ^around^
+^^^^^^^^---------------------------------- (in org mode) ---------------------------------
+ _t a_: add active             _s t_: toggle                   _h_:^ ^  heading (consult)
+ _t A_: add active (+time)     _s T_: toggle (tree)            _j_/_k_: visible heading
+ _t i_: add inactive           _s b_: with backlinks           _i_/_I_: item
+ _t I_: add inactive (+time)   ^   ^                           _b_/_B_: block
+ ^   ^                         ^   ^                           _l_/_L_: linkk
 
- _m t_: timer                  _m r_: roam                     _o_: open org dir
+ _m t_: timer                  _m r_: roam                     _o_:^ ^  open org dir
 "
     ("c"   org-capture :exit t)
     ("A"   org-agenda :exit t)
@@ -381,8 +382,16 @@
     ("s t" org-sidebar-toggle)
     ("s T" org-sidebar-tree-toggle)
     ("s b" org-sidebar-backlinks)
-    ("H" consult-org-heading)
+    ("h"   consult-org-heading)
     ("o"   my/org-goto-dir)
+    ("j"   org-next-visible-heading)
+    ("k"   org-previous-visible-heading)
+    ("i"   org-next-item)
+    ("I"   org-previous-item)
+    ("b"   org-next-block)
+    ("B"   org-previous-block)
+    ("l"   org-next-link)
+    ("L"   org-previous-link)
     ("m t" hydra-org-timers/body :exit t)
     ("m r" hydra-org-roam/body :exit t))
 
