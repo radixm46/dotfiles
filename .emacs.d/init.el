@@ -273,6 +273,10 @@
   (leaf autosave
     :doc "configure auto save files"
     :tag "builtin"
+    :preface
+    (leaf disable-auto-save-message :emacs>= "27"
+      :doc "supress auto saving message"
+      :custom (auto-save-no-message . t))
     :custom
     (auto-save-file-name-transforms . '((".*" "~/.emacs.d/.cache/autosaved" t)))
     (delete-auto-save-files . t)
