@@ -409,9 +409,9 @@
      ^^select^^        ^^^move^^^         ^^^resize^^^         ^^^split^
 ^^^^^^^^^^^^^^^^^^^^----------------------------------------------------------
        ^_k_^        _R_    _K_    _r_    ^ ^   _+_   ^ ^      ^ ^  _v_
-       ^^↑^^        ^ ^    ^↑^    ^ ^    ^ ^   ^↑^   ^ ^      ^ ^  ^|^
-   _h_ ←   → _l_     ^_H_ ←   → _L_^     _<_ ← _=_ → _>_     ^_s_ --+--^
-       ^^↓^^        ^ ^    ^↓^    ^ ^    ^ ^   ^↓^   ^ ^      ^ ^  ^|^
+       ^^↑^^        ^ ^    ^↑^    ^ ^    ^ ^   ^+^   ^ ^      ^ ^  ^|^
+   _h_ ←   → _l_     ^_H_ ←   → _L_^     _<_ - _=_ + _>_     ^_s_ --+--^
+       ^^↓^^        ^ ^    ^↓^    ^ ^    ^ ^   ^-^   ^ ^      ^ ^  ^|^
        ^_j_^        ^ ^    _J_    ^ ^    ^ ^   _-_   ^ ^      ^ ^
   ^_p_revious^      ^^_d_elete^^            ^^_n_ew^^
   ^_a_ce window^    ^^delete _o_ther^^      ^^other _f_rame^^
@@ -422,8 +422,8 @@
      ("l" evil-window-right)
      ("a" ace-window)
      ("H" evil-window-move-far-left)
-     ("J" evil-window-move-very-down)
-     ("K" evil-window-move-very-up)
+     ("J" evil-window-move-very-bottom)
+     ("K" evil-window-move-very-top)
      ("L" evil-window-move-far-right)
      ("r" evil-window-rotate-downwards)
      ("R" evil-window-rotate-upwards)
