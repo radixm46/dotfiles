@@ -534,8 +534,8 @@
  _n_:   navigation                         _i_:   miscellaneous
 ^^^^................................................................................
  ^modes^                                   ^prefix^
- _m c_: mode command                       ^[i] on / [o]ff / [l]ocal / [g]lobal^
- _m m_: minor mode menu                    ^[l]ocal / [g]lobal / [m]ajor^
+ _m c_: mode command                       ^[l]ocal / [g]lobal / [m]ajor^
+ _m m_: minor mode menu                    ^[i] on / [o]ff / [l]ocal / [g]lobal^
  ^history^
  _h h_: history                            _h c_: complex command
 "
