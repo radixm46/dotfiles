@@ -287,14 +287,15 @@
     :hydra
     (hydra-org-roam
      (:hint nil) "
-                               ^^^org roam^^^
-^^^^^^----------------------------------------------------------------------
- _c_:   capture              _f_:   find file       _g_:   ui mode
-^^^^^^----------------------------------------------------------------------
+^^^                              org roam^^^
+^^^^^^--------------------------------------------------------------------------
+ _c_:   capture              _f_:   find file            _g_:   ui mode
+^^^^^^..........................................................................
  _i_:   insert               _I_:   insert immediate
- ^node^                      ^alias^                ^tag^
- _n i_: insert               _a a_: add             _t a_: add
- _n f_: find                 _a r_: remove          _t r_: remove
+
+ ^node^                      ^alias^                     ^tag^
+ _n i_: insert               _a a_: add                  _t a_: add
+ _n f_: find                 _a r_: remove               _t r_: remove
  _n v_: visit
  _n r_: random
 
@@ -361,20 +362,21 @@
   :hydra
   ((hydra-org
     (:hint nil) "
-                                ^^^org functions^^^
-^^^^^^^^----------------------------------------------------------------------------------
- _c_:   capture                _l s_: store link               _a_:  ^^agenda (consult)
- ^ ^                           _l i_: insert link (last)       _A_:  ^^agenda
+^^^                                org functions^^^
+^^^^^^--------------------------------------------------------------------------------
+ ^ ^                         ^link^                      ^agenda^
+ _c_:   capture              _l s_: store                _a_:  ^^agenda (consult)
+ ^ ^                         _l i_: insert (last)        _A_:  ^^agenda
 
- ^time stamp^                  ^sidebar^                       ^move^ ^around^
-^^^^^^^^---------------------------------- (in org mode) ---------------------------------
- _t a_: add active             _s t_: toggle                   _h_:^ ^  heading (consult)
- _t A_: add active (+time)     _s T_: toggle (tree)            _j_/_k_: visible heading
- _t i_: add inactive           _s b_: with backlinks           _i_/_I_: item
- _t I_: add inactive (+time)   ^   ^                           _b_/_B_: block
- ^   ^                         ^   ^                           _l_/_L_: linkk
+^^^^^^............................... (in org mode) ..................................
+ ^time stamp^                ^sidebar^                   ^move^ ^around^
+ _t a_: active               _s t_: toggle               _h_:^ ^  heading (consult)
+ _t A_: active (+time)       _s T_: toggle (tree)        _j_/_k_: visible heading
+ _t i_: inactive             _s b_: with backlinks       _i_/_I_: item
+ _t I_: inactive (+time)     ^   ^                       _b_/_B_: block
+ ^   ^                       ^   ^                       _l_/_L_: link
 
- _m t_: timer                  _m r_: roam                     _o_:^ ^  open org dir
+ _m t_: timer                _m r_: roam                 _o_:^ ^  open org dir
 "
     ("c"   org-capture :exit t)
     ("A"   org-agenda :exit t)
@@ -403,11 +405,11 @@
 
    (hydra-org-timers
     (:hint nil) "
-                               ^^^org timer^^^
-^^^^^^----------------------------------------------------------------------
- _t_: timer                _c_: set timer         _p_: pomodoro
- _s_: start                _I_: timer item        _P_: extend last pomodoro
- _e_: stop                 _C_: change (region)
+^^^                               org timer^^^
+^^^^^^--------------------------------------------------------------------------------
+ _t_: timer                  _c_: set timer              _p_: pomodoro
+ _s_: start                  _I_: timer item             _P_: extend last pomodoro
+ _e_: stop                   _C_: change (region)
  _i_: pause or continue
  _S_: show remaining
 

@@ -404,17 +404,17 @@
     (hydra-manage-windows
      (:hint nil)
      "
-                   ^^^^^^^^^^^managing windows^^^^^^^^^^
-^^^^^^^^^^^^^^^^^^^^----------------------------------------------------------
-     ^^select^^        ^^^move^^^         ^^^resize^^^         ^^^split^
-^^^^^^^^^^^^^^^^^^^^----------------------------------------------------------
-       ^_k_^        _R_    _K_    _r_    ^ ^   _+_   ^ ^      ^ ^  _v_
-       ^^↑^^        ^ ^    ^↑^    ^ ^    ^ ^   ^+^   ^ ^      ^ ^  ^|^
-   _h_ ←   → _l_     ^_H_ ←   → _L_^     _<_ - _=_ + _>_     ^_s_ --+--^
-       ^^↓^^        ^ ^    ^↓^    ^ ^    ^ ^   ^-^   ^ ^      ^ ^  ^|^
-       ^_j_^        ^ ^    _J_    ^ ^    ^ ^   _-_   ^ ^      ^ ^
-  ^_p_revious^      ^^_d_elete^^            ^^_n_ew^^
-  ^_a_ce window^    ^^delete _o_ther^^      ^^other _f_rame^^
+                              ^^^^^^^^^^managing windows^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^--------------------------------------------------------------------------------
+     ^^select^^            ^^^move^^^               ^^^resize^^^               ^^^split^
+^^^^^^^^^^^^^^^^^^^--------------------------------------------------------------------------------
+       ^_k_^            _R_    _K_    _r_          ^ ^   _+_   ^ ^            ^ ^  _v_
+       ^^↑^^            ^ ^    ^↑^    ^ ^          ^ ^   ^+^   ^ ^            ^ ^  ^|^
+   _h_ ←   → _l_         ^_H_ ←   → _L_^           _<_ - _=_ + _>_           ^_s_ --+--^
+       ^^↓^^            ^ ^    ^↓^    ^ ^          ^ ^   ^-^   ^ ^            ^ ^  ^|^
+       ^_j_^            ^ ^    _J_    ^ ^          ^ ^   _-_   ^ ^            ^ ^
+     ^_p_revious^           ^^_d_elete^^              ^^_n_ew^^
+     ^_a_ce window^         ^^delete _o_ther^^        ^^other _f_rame^^
 "
      ("h" evil-window-left)
      ("j" evil-window-down)
@@ -526,12 +526,18 @@
     :hydra
     ((hydra-consult
      (:hint nil) "
-               ^^^consult functions^^^
-^^^^^^-----------------------------------------------
- virtual _b_uffers   _s_earch        _m_odes
- _e_diting           _g_rep & find
- _r_egister          _c_ompilation   m_i_scellaneous
- _n_avigation        _h_istories
+                            ^^consult functions^^
+^^^^--------------------------------------------------------------------------------
+ _b_:   virtual buffers                    _s_:   search
+ _e_:   editing                            _g_:   grep & find
+ _r_:   register                           _c_:   compilation
+ _n_:   navigation                         _i_:   miscellaneous
+^^^^................................................................................
+ ^modes^                                   ^prefix^
+ _m c_: mode command                       ^[i] on / [o]ff / [l]ocal / [g]lobal^
+ _m m_: minor mode menu                    ^[l]ocal / [g]lobal / [m]ajor^
+ ^history^
+ _h h_: history                            _h c_: complex command
 "
       ("b" hydra-consult:virtual-buffer/body :exit t)
       ("e" hydra-consult:editing/body        :exit t)
@@ -540,17 +546,19 @@
       ("s" hydra-consult:search/body         :exit t)
       ("g" hydra-consult:grep-find/body      :exit t)
       ("c" hydra-consult:compilation/body    :exit t)
-      ("h" hydra-consult:histories/body      :exit t)
-      ("m" hydra-consult:modes/body          :exit t)
       ("o" hydra-consult:org/body            :exit t)
-      ("i" hydra-consult:miscellaneous/body  :exit t))
+      ("i" hydra-consult:miscellaneous/body  :exit t)
+      ("m m" consult-minor-mode-menu)
+      ("m c" consult-mode-command)
+      ("h h" consult-history         :exit t)
+      ("h c" consult-complex-command :exit t))
 
      (hydra-consult:virtual-buffer
       (:hint nil) "
-              ^consult virtual-buffer^
-^^^^^^-----------------------------------------------
- _b_uffer            other _f_rame     _r_ecent file
- _o_ther window      _B_ookmark
+                           ^^^consult virtual-buffer^^^
+^^^^^^--------------------------------------------------------------------------------
+ _b_:   buffer               _f_:   other frame          _r_:   recent file
+ _o_:   other window         _B_:   ookmark
 
  _SPC_: BACK
 "
@@ -563,10 +571,10 @@
 
      (hydra-consult:editing
       (:hint nil) "
-                 ^consult editing^
-^^^^^^-----------------------------------------------
- _y_ank from kill ring            yank _r_eplace
- yank _p_op                       _k_macro
+                              ^^consult editing^^
+^^^^--------------------------------------------------------------------------------
+ _y_:   yank from kill ring                _r_:   yank replace
+ _p_:   yank pop                           _k_:   kmacro
 
  _SPC_: BACK
 "
@@ -578,10 +586,10 @@
 
      (hydra-consult:register
       (:hint nil) "
-                 ^consult register^
-^^^^^^-----------------------------------------------
- _r_egister        register _w_indow  register _s_tore
- register _l_oad   register _f_ormat
+                             ^^^consult register^^^
+^^^^^^--------------------------------------------------------------------------------
+ _r_:   register             _w_:   window               _s_:   store
+ _l_:   load                 _f_:   format
 
  _SPC_: BACK
 "
@@ -594,10 +602,10 @@
 
      (hydra-consult:navigation
       (:hint nil) "
-                ^consult navitation^
-^^^^^^-----------------------------------------------
- _g_oto line       global _M_ark      _i_menu
- _m_ark            _o_utline          _I_menu multi
+                             ^^^consult navitation^^^
+^^^^^^--------------------------------------------------------------------------------
+ _g_:   goto line            _m_:   makr                 _i_:   imenu
+ _o_:   outline              _M_:   global mark          _I_:   imenu multi
 
  _SPC_: BACK
 "
@@ -611,15 +619,15 @@
 
      (hydra-consult:search
       (:hint nil) "
-                  ^consult search^
-^^^^^^-----------------------------------------------
- _l_ine            i_s_earch          _k_eep lines
- line _m_ulti      _M_ulti occur      _f_ocus lines
+                             ^^^consult search^^^
+^^^^^^--------------------------------------------------------------------------------
+ _l_:   line                 _s_:   isearch              _k_:   keep lines
+ _L_:   line multi           _M_:   multi occur          _f_:   focus lines
 
  _SPC_: BACK
 "
       ("l" consult-line        :exit t)
-      ("m" consult-line-multi  :exit t)
+      ("L" consult-line-multi  :exit t)
       ("s" consult-isearch     :exit t)
       ("M" consult-multi-occur :exit t)
       ("k" consult-keep-lines  :exit t)
@@ -628,10 +636,10 @@
 
      (hydra-consult:grep-find
       (:hint nil) "
-                   ^consult find^
-^^^^^^-----------------------------------------------
- _g_rep            _G_it grep         _l_ocate
- _r_ipgrep         _f_ind
+                             ^^^consult find^^^
+^^^^^^--------------------------------------------------------------------------------
+ _g_:   grep                 _r_:   ripgrep              _f_:   find
+ _G_:   git grep             _l_:   locate
 
  _SPC_: BACK
 "
@@ -644,10 +652,10 @@
 
      (hydra-consult:compilation
       (:hint nil) "
-               ^consult compilation^
-^^^^-------------------------------------------------
- compile _e_rror       fly_m_ake             _x_ref
-         ^ ^           fly_c_heck
+                        ^^^consult compilation^^^
+^^^^^^--------------------------------------------------------------------------------
+ _e_:   compile error        _m_:   flymake              _x_:   xref
+ ^ ^                         _c_:   flycheck
 
  _SPC_: BACK
 "
@@ -657,39 +665,14 @@
       ("x" consult-xref          :exit t)
       ("SPC" hydra-consult/body :exit t))
 
-     (hydra-consult:histories
-      (:hint nil) "
-                 ^consult histories^
------------------------------------------------------
- _c_omplex command                  _h_istory
-
- _SPC_: BACK
-"
-      ("c" consult-complex-command :exit t)
-      ("h" consult-history         :exit t)
-      ("SPC" hydra-consult/body :exit t))
-
-     (hydra-consult:modes
-      (:hint nil) "
-                           ^consult modes^
-^^^^-------------------------------------------------------------------
-      _m_inor mode menu                         mode _c_ommand
-                            ^^[prefix]^^
-^[i]on/[o]ff/[l]ocal/[g]lobal^    ^[l]ocal-minor/[g]lobal-minor/[m]ajor^
-
- _SPC_: BACK
-"
-      ("m" consult-minor-mode-menu :exit t)
-      ("c" consult-mode-command    :exit t)
-      ("SPC" hydra-consult/body :exit t))
-
      (hydra-consult:miscellaneous
       (:hint nil) "
-                      ^consult miscellaneous^
----------------------------------------------------------------------
- _a_propos           _t_heme              _c_ompletion in region
- _m_an               _p_review at point   completion read _M_ultiple
- _f_ile externally
+                         ^^consult miscellaneous^^
+^^^^--------------------------------------------------------------------------------
+ _a_:   apropos                            _c_:   completion in region
+ _m_:   man                                _C_:   completion read multiple
+ _f_:   file externally                    _t_:   theme
+ _p_:   preview at point
 
  _SPC_: BACK
 "
@@ -699,7 +682,7 @@
       ("t" consult-theme                    :exit t)
       ("p" consult-preview-at-point         :exit t)
       ("c" consult-completion-in-region     :exit t)
-      ("M" consult-completion-read-multiple :exit t)
+      ("C" consult-completion-read-multiple :exit t)
       ("SPC" hydra-consult/body :exit t))
      )
 
@@ -986,20 +969,20 @@
     :hydra
     ((hydra-lsp-functions
       (:hint nil) "
-                                   ^^^lsp functions^^^
-^^^^^^----------------------------------------------------------------------------------------------
- ^act on code^                    ^find^                               ^signature^
- _r_:   rename                    _s r_: references       (ui peek)    _s j_: next
- _f_:   format buffer             _s d_: definitions      (ui peek)    _s k_: previous
- _F_:   format region             _s i_: implementation   (ui peek)    _s q_: stop
- _o_:   organize imports          _s s_: workspace symbol (ui peek)    _s d_: toggle full doc
- ^ ^                              _s D_: definition                    _s a_: toggle auto activate
- ^consult^                        _s R_: references
- _c d_: lsp diagnostics           _s e_: declaration                   ^miscellaneous^
- _c s_: lsp symbols               ^   ^                                _C i_: install server
- ^   ^                            ^   ^                                _C D_: doctor
- ^diagnos^                        ^   ^                                _C d_: disconnect
- _l_:   flycheck-list (lsp-ui)    _a_:   appearance                    _C v_: version
+                              ^^^lsp functions^^^
+^^^^^^--------------------------------------------------------------------------------
+ ^act on code^               ^find (ui peek)^            ^signature^
+ _r_:   rename               _s r_: references           _s j_: next
+ _f_:   format buffer        _s d_: definitions          _s k_: previous
+ _F_:   format region        _s i_: implementation       _s q_: stop
+ _o_:   organize imports     _s s_: workspace symbol     _s d_: toggle full doc
+ ^ ^                         ^   ^                       _s a_: toggle auto activate
+ ^consult^                   ^find^
+ _c d_: lsp diagnostics      _s D_: definition           ^miscellaneous^
+ _c s_: lsp symbols          _s R_: references           _C i_: install server
+ ^   ^                       _s e_: declaration          _C D_: doctor
+ ^diagnos (lsp-ui)^                                      _C d_: disconnect
+ _l_:   flycheck-list        _a_:   appearance           _C v_: version
 "
       ;; act on code
       ("r"   lsp-rename :exit t)
@@ -1035,18 +1018,18 @@
 
      (hydra-lsp-appearance
       (:hint nil) "
-                                 ^^^lsp functions (appearance)^^^
-^^^^^^-----------------------------------------------------------------------------------------------
-  ^ ^                            ^len^                              ^treemacs^
-  _s_   :sideline mode           _l l_ :lens mode                   _t s_ lsp symbols
-  _m_   :imenu                   _l h_ :hide                        _t r_ lsp references
-  ^ ^                            _l s_ :show                        _t e_ lsp errors list
-  ^lsp ui doc^                   ^   ^                              _t i_ lsp implementations
-  _d d_ :toggle                  ^   ^                              _t t_ lsp type hierarchy
-  _d f_ :focus frame             ^   ^                              _t c_ lsp call hierarchy
-  _d g_ :glance
+                         ^^^lsp functions (appearance)^^^
+^^^^^^--------------------------------------------------------------------------------
+ ^ ^                         ^len^                       ^treemacs^
+ _s_   :sideline mode        _l l_ :lens mode            _t s_ lsp symbols
+ _m_   :imenu                _l h_ :hide                 _t r_ lsp references
+ ^ ^                         _l s_ :show                 _t e_ lsp errors list
+ ^lsp ui doc^                ^   ^                       _t i_ lsp implementations
+ _d d_ :toggle               ^   ^                       _t t_ lsp type hierarchy
+ _d f_ :focus frame          ^   ^                       _t c_ lsp call hierarchy
+ _d g_ :glance
 
-  _SPC_ :BACK
+ _SPC_ :BACK
 "
       ;; appearance
       ("s"   lsp-ui-sideline-mode)
@@ -1141,14 +1124,14 @@
       (git-gutter))
     :hydra (hydra-git-gutter
             (:hint nil) "
-                        ^^^git gutter^^^
-^^^^^^--------------------------------------------------------------
-   ^move to hunk^        ^act on hunk^            ^etc^
-^^^^^^--------------------------------------------------------------
-  _j_: next hunk       _d_: popup hunk    _r_: update all windows
-  _k_: previous hunk   _v_: mark hunk     _g_: open magit mode
-  _G_: end of hunk     _s_: stage hunk
-  ^ ^                  _x_: revert hunk
+                               ^^^git gutter^^^
+^^^^^^--------------------------------------------------------------------------------
+ ^move to hunk^              ^act on hunk^               ^etc^
+^^^^^^................................................................................
+ _j_:   next                 _d_:   popup                _r_:   update all windows
+ _k_:   previous             _v_:   mark                 _g_:   open magit mode
+ _G_:   end of hunk          _s_:   stage
+ ^ ^                         _x_:   revert
 "
             ("j" git-gutter:next-hunk)
             ("k" git-gutter:previous-hunk)
