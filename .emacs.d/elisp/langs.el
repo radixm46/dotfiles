@@ -401,7 +401,14 @@
     ("l"   org-next-link)
     ("L"   org-previous-link)
     ("m t" hydra-org-timers/body :exit t)
-    ("m r" hydra-org-roam/body :exit t))
+    ("m r" hydra-org-roam/body :exit t)
+    ;; enable evil folding on current hydra
+    ("z a" evil-toggle-fold)
+    ("z o" evil-open-fold)
+    ("z O" evil-open-fold-rec)
+    ("z m" evil-close-folds)
+    ("z r" evil-open-folds)
+    ("z c" evil-close-fold))
 
    (hydra-org-timers
     (:hint nil) "
