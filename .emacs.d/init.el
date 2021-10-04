@@ -981,7 +981,7 @@
  _c d_: lsp diagnostics      _s D_: definition           ^miscellaneous^
  _c s_: lsp symbols          _s R_: references           _C i_: install server
  ^   ^                       _s e_: declaration          _C D_: doctor
- ^diagnos (lsp-ui)^                                      _C d_: disconnect
+ ^diagnos (lsp-ui)^          ^   ^                       _C d_: disconnect
  _l_:   flycheck-list        _a_:   appearance           _C v_: version
 "
       ;; act on code
