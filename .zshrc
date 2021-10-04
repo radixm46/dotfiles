@@ -451,6 +451,10 @@ function prompt_rdm46theme_setup() {
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 \
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}"'${vi_mode}%# '
+
+    PROMPT2="\
+%{${bg[black]}%}%{${fg[green]}%} %_ >%{${reset_color}%}\
+%{${fg[black]}%}${P_MIDTEX}%{${reset_color}%} "
 }
 
 prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
