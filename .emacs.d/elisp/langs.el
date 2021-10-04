@@ -408,7 +408,11 @@
     ("z O" evil-open-fold-rec)
     ("z m" evil-close-folds)
     ("z r" evil-open-folds)
-    ("z c" evil-close-fold))
+    ("z c" evil-close-fold)
+    ;; enable evil scroll line binding
+    ("z t" evil-scroll-line-to-top)
+    ("z z" evil-scroll-line-to-center)
+    ("z b" evil-scroll-line-to-bottom))
 
    (hydra-org-timers
     (:hint nil) "
