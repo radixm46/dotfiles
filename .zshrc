@@ -439,14 +439,17 @@ function prompt_rdm46theme_setup() {
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
+\
 %{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[red]}%} $(print_os_glyph)%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg_bold[black]}%} %m %{${reset_color}%}\
 %{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN}%{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
+\
 %{${bg[black]}%}%{${fg[green]}%} ${P_DIR}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
+\
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}"'${vi_mode}%# '
 }
 
