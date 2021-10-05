@@ -1165,7 +1165,10 @@
   (leaf neotree
     :ensure t
     ;; :bind ([f7] . neotree-toggle)
-    :custom (neo-window-fixed-size . nil)
+    :custom
+    (neo-window-fixed-size . t)
+    (neo-window-width      . 35)
+    (neo-window-position   . 'right)
     :config
     ;; keymap for using with evil mode
     (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
