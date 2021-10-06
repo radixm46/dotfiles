@@ -394,7 +394,13 @@
   (leaf yasnippet
     :ensure t
     :hook (prog-mode-hook . yas-minor-mode)
-    :config (yas-reload-all))
+    :config
+    (leaf consult-yasnippet
+      :doc "consulting yasnippet candidates"
+      :straight
+      (consult-yasnippet :type git :host github
+                         :repo "mohkale/consult-yasnippet"))
+    (yas-reload-all))
 
   (leaf evil
     :ensure t
@@ -414,7 +420,7 @@
        ^_j_^            ^ ^    _J_    ^ ^          ^ ^   _-_   ^ ^            ^ ^
 ^^^^^^^^^^^^^^^^^^^................................................................................
     ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^
-   ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^
+   ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^         _t_:  tab-bar keys
 "
      ("h" evil-window-left)
      ("j" evil-window-down)
@@ -462,6 +468,28 @@
       ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
       )
     :global-minor-mode evil-mode
+    )
+
+  (leaf tab-bar :emacs>= "27.1"
+    :tag "builtin"
+    :doc "configure tab-bar mode"
+    :hydra
+    (hydra-tab-bar
+     (:hint nil) "
+                          ^^tab-bar-mode^^
+^^^^-----------------------------------------------------------------
+ _n_:   new                       _j_:   next
+ _c_:   close                     _k_:   previous
+ ^ ^                              _s_:   select
+
+ _SPC_: BACK
+"
+     ("n"   tab-bar-new-tab)
+     ("c"   tab-bar-close-tab)
+     ("j"   tab-bar-switch-to-next-tab)
+     ("k"   tab-bar-switch-to-prev-tab)
+     ("s"   tab-bar-select-tab-by-name)
+     ("SPC" hydra-manage-windows/body :exit t))
     )
 
   (leaf quickrun :ensure t)
