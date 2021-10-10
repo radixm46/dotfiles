@@ -445,7 +445,7 @@
      ("o" delete-other-windows :exit t)
      ("n" evil-window-new)
      ("f" other-frame)
-     )
+     ("t" hydra-tab-bar/body :exit t))
     :bind
     (:global-map
      ("<f4>" . hydra-manage-windows/body)
@@ -907,6 +907,10 @@
     (lsp-auto-configure . t)
     (lsp-headerline-breadcrumb-icons-enable . nil)
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
+    :hook
+    (lsp-mode-hook . (lambda ()
+                       (eldoc-box-hover-at-point-mode -1)
+                       (flycheck-posframe-mode -1))) ; disable flycheck-posframe
     :config
     (setq lsp-prefer-flymake nil)
     (custom-set-variables
@@ -963,7 +967,6 @@
         ("C-c q"   . lsp-ui-doc-unfocus-frame)))
       :hook
       (lsp-mode-hook . lsp-ui-mode)
-      (lsp-ui-mode-hook . (lambda () (flycheck-posframe-mode -1))) ; disable flycheck-posframe
       )
 
     (leaf lsp-treemacs
