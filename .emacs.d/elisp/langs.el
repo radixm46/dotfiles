@@ -147,7 +147,7 @@
 (leaf typescript-mode
   :ensure t
   :mode ("\\.ts\\'" . typescript-mode)
-  :hook (typescript-mode . lsp)
+  :hook (typescript-mode-hook . lsp)
   :custom
   (typescript-indent-level . 2)
   :config
