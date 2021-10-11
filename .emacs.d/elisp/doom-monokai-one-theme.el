@@ -32,8 +32,8 @@ determine the exact padding."
   ((bg         '("#282c34" "black"   "black"      )) ; one theme color
    (bg-alt     '("#21242b" "black"   "black"      )) ; one theme color
    (base0      '("#1B2229" "black"   "black"      ))
-   (base1      '("#161613" "#101010" "brightblack"))
-   (base2      '("#1D1F20" "#191919" "brightblack"))
+   (base1      '("#1c1f24" "#1e1e1e" "brightblack")) ; one theme color
+   (base2      '("#202328" "#2e2e2e" "brightblack")) ; one theme color
    (base3      '("#2D2E2E" "#252525" "brightblack"))
    (base4      '("#4E4E4E" "#454545" "brightblack"))
    (base5      '("#5B6268" "#525252" "brightblack")) ; one theme color
