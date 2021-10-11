@@ -1102,9 +1102,13 @@
 (leaf helpful-things
   :config
 
-  (leaf ace-window
+  (leaf ace-window ;; TODO more visible window numbera face
     :ensure t
-    :bind ("M-o" . ace-window))
+    :bind ("M-o" . ace-window)
+    :custom (aw-keys . '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    :custom-face ;; larger leading char
+    (aw-leading-char-face . '((t (:inherit 'aw-leading-char-face :height 5.0 :width normal))))
+    )
 
   (leaf which-key
     :ensure t
