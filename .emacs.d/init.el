@@ -480,12 +480,13 @@
 ^^^^-----------------------------------------------------------------
  _n_:   new                       _j_:   next
  _c_:   close                     _k_:   previous
- ^ ^                              _s_:   select
+ _r_:   rename                    _s_:   select
 
  _SPC_: BACK
 "
      ("n"   tab-bar-new-tab)
      ("c"   tab-bar-close-tab)
+     ("r"   tab-rename)
      ("j"   tab-bar-switch-to-next-tab)
      ("k"   tab-bar-switch-to-prev-tab)
      ("s"   tab-bar-select-tab-by-name)
