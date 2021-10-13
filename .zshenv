@@ -60,12 +60,29 @@ case "$(uname)" in
         # simple timer function for tea preparation
         function ktimer() {
             local wait_min=${1:-'5'}
-            local wait_sec=${2:-'00'}
-            echo "Timer: count for ${wait_min}:${wait_sec}... (start: $(date +%Y/%m/%d_%H:%M:%S))"
-            (sleep $(echo "${wait_min}*60+${wait_sec}"|bc) && \
-                 echo "Timer: ${wait_min}:${wait_sec} passed (end: $(date +%Y/%m/%d_%H:%M:%S))" && \
-                 say --voice=Victoria "time has passed" \
-                ) 2> /dev/null
+            local wait_sec=${2:-'0'}
+            printf "Counting down %01d:%02d\n" ${wait_min} ${wait_sec}
+            local remaining=$((60 * ${wait_min} + ${wait_sec}))
+            while [ ${remaining} -gt 0 ]
+            do
+                printf "\r\033[KRemaining... %01d:%02d" $((remaining / 60)) $((remaining % 60))
+                ((remaining-=1))
+                sleep 1
+            done
+            printf "\r\033[KRemaining... done!\n"
+
+            case ${OSTYPE} in
+                darwin*)
+                    say --voice=Victoria \
+                        "$(case ${wait_min} in;  0) ;; 1) printf "1 minute" ;; *) printf "%.d minutes" ${wait_min} ;; esac)" \
+                        "$(case ${wait_sec} in; 00) ;; 1) printf "1 second" ;; *) printf "%.d seconds" ${wait_sec} ;; esac)" \
+                        "passed"
+                    ;;
+                linux*)
+                    printf "\a" # ring a terminal bell
+                    ;;
+                *);;
+            esac
         }
         ;;
 esac
