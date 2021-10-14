@@ -224,7 +224,7 @@
       prog-mode-hook
       text-mode-hook) . whitespace-mode)
     :custom
-    (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode))
+    (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode hexl-mode))
     (whitespace-line-column . 80)
     (whitespace-style . '(face ;; enable
                           trailing
