@@ -74,8 +74,8 @@ case "$(uname)" in
             case ${OSTYPE} in
                 darwin*)
                     say --voice=Victoria \
-                        "$(case ${wait_min} in;  0) ;; 1) printf "1 minute" ;; *) printf "%.d minutes" ${wait_min} ;; esac)" \
-                        "$(case ${wait_sec} in; 00) ;; 1) printf "1 second" ;; *) printf "%.d seconds" ${wait_sec} ;; esac)" \
+                        "$(case ${wait_min} in; 0) ;; 1) printf "1 minute" ;; *) printf "%.d minutes" ${wait_min} ;; esac)" \
+                        "$(case ${wait_sec} in; 0) ;; 1) printf "1 second" ;; *) printf "%.d seconds" ${wait_sec} ;; esac)" \
                         "passed"
                     ;;
                 linux*)
