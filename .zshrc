@@ -304,6 +304,7 @@ elif is_available putclip; then
     alias -g C='| putclip'
 fi
 
+alias -g TC="TERM=xterm-24bit"
 
 # ------------------------------------------------------------------------------
 # define functions
@@ -367,6 +368,16 @@ function get_weather() {
     curl -s "wttr.in/${target_loc}"\?"${days:=1n}qA&lang=${lang_:=ja}&format=${format:=}"
 }
 alias wttr='get_weather'
+
+# launch emacs magit from shell
+if is_available emacs; then
+    function tmagit() {
+        emacsclient -nw --eval "(magit-status \"$1\")"
+    }
+    function magit() {
+        emacsclient -c --eval "(magit-status \"$1\")"
+    }
+fi
 
 # ------------------------------------------------------------------------------
 # config for libvt2
