@@ -375,7 +375,7 @@ if is_available emacs; then
         emacsclient -nw --eval "(magit-status \"$1\")"
     }
     function magit() {
-        emacsclient -c --eval "(magit-status \"$1\")"
+        emacsclient -c --eval "(magit-status \"$1\")" &
     }
 fi
 
