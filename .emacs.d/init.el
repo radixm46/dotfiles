@@ -1133,6 +1133,12 @@
     (add-to-list 'evil-emacs-state-modes 'vterm-mode)
     :hook (vterm-mode-hook . (lambda () (sw-lnsp 1)))
     :bind (:vterm-mode-map ("C-u" . vterm-send-C-u)))
+
+  (leaf tramp
+    :tag "builtin"
+    :custom
+      (tramp-default-method        . "ssh")
+      (tramp-persistency-file-name . "~/.emacs.d/.cache/tramp"))
   )
 
 
