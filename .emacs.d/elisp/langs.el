@@ -467,3 +467,28 @@
   ;; modify table face to 1:2
   (set-face-attribute 'markdown-table-face nil :family font-for-tables)
   )
+
+
+(leaf docker-env
+  :doc "docker related modes"
+  :config
+  (leaf docker
+    :ensure t
+    :doc "emacs integration for Docker"
+    :url "https://github.com/Silex/docker.el")
+
+  (leaf dockerfile-mode
+    :ensure t
+    :doc "Docker file mode for emacs"
+    :url "https://github.com/spotify/dockerfile-mode")
+
+  (leaf docker-compose-mode
+    :ensure t
+    :doc "major mode for editing docker-compose files, supports context-aware completion of docker-compose keys"
+    :url "https://github.com/meqif/docker-compose-mode")
+
+  (leaf docker-tramp
+    :ensure t
+    :doc "TRAMP method for Docker containers"
+    :url "https://github.com/emacs-pe/docker-tramp.el")
+  )
