@@ -490,5 +490,6 @@
   (leaf docker-tramp
     :ensure t
     :doc "TRAMP method for Docker containers"
-    :url "https://github.com/emacs-pe/docker-tramp.el")
+    :url "https://github.com/emacs-pe/docker-tramp.el"
+    :custom (docker-tramp-use-names . t))
   )
