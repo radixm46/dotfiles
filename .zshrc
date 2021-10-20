@@ -322,15 +322,15 @@ function print_os_glyph() {
             if [[ -e '/etc/os-release' ]]; then
                 local distro_id="$(</etc/os-release|grep '^ID=')"
                 case ${distro_id#'ID='} in
-                    arch) printf $'\UF303' ;;
-                    centos) printf $'\UF304' ;;
-                    debian) printf $'\UF306' ;;
-                    fedora) printf $'\UF30A' ;;
-                    manjaro) printf $'\UF312' ;;
-                    opensuse) printf $'\UF314' ;;
-                    raspbian) printf $'\UF315' ;;
-                    sles) printf $'\UF314' ;;
-                    ubuntu) printf $'\UF31C' ;;
+                    arch*) printf $'\UF303' ;;
+                    centos*) printf $'\UF304' ;;
+                    debian*) printf $'\UF306' ;;
+                    fedora*) printf $'\UF30A' ;;
+                    manjaro*) printf $'\UF312' ;;
+                    opensuse*) printf $'\UF314' ;;
+                    raspbian*) printf $'\UF315' ;;
+                    sles*) printf $'\UF314' ;;
+                    ubuntu*) printf $'\UF31C' ;;
                     # slackware) printf $'\UF318' ;;
                     # nixos) printf $'\UF313' ;;
                     # mint) printf $'\UF30F' ;;
