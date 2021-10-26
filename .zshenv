@@ -56,34 +56,6 @@ case "$(uname)" in
             alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
             alias vi='vim'
         fi
-
-        # simple timer function for tea preparation
-        function ktimer() {
-            local wait_min=${1:-'5'}
-            local wait_sec=${2:-'0'}
-            printf "Counting down %01d:%02d\n" ${wait_min} ${wait_sec}
-            local remaining=$((60 * ${wait_min} + ${wait_sec}))
-            while [ ${remaining} -gt 0 ]
-            do
-                printf "\r\033[KRemaining... %01d:%02d" $((remaining / 60)) $((remaining % 60))
-                ((remaining-=1))
-                sleep 1
-            done
-            printf "\r\033[KRemaining... done!\n"
-
-            case ${OSTYPE} in
-                darwin*)
-                    say --voice=Victoria \
-                        "$(case ${wait_min} in; 0) ;; 1) printf "1 minute" ;; *) printf "%.d minutes" ${wait_min} ;; esac)" \
-                        "$(case ${wait_sec} in; 0) ;; 1) printf "1 second" ;; *) printf "%.d seconds" ${wait_sec} ;; esac)" \
-                        "passed"
-                    ;;
-                linux*)
-                    printf "\a" # ring a terminal bell
-                    ;;
-                *);;
-            esac
-        }
         ;;
 esac
 
@@ -113,3 +85,32 @@ if is_available 'bat'; then
 elif is_available 'nvim'; then
     export MANPAGER="nvim -c 'set ft=man' -"
 fi
+
+
+# simple timer function for tea preparation
+function ktimer() {
+    local wait_min=${1:-'5'}
+    local wait_sec=${2:-'0'}
+    printf "Counting down %01d:%02d\n" ${wait_min} ${wait_sec}
+    local remaining=$((60 * ${wait_min} + ${wait_sec}))
+    while [ ${remaining} -gt 0 ]
+    do
+        printf "\r\033[KRemaining... %01d:%02d" $((remaining / 60)) $((remaining % 60))
+        ((remaining-=1))
+        sleep 1
+    done
+    printf "\r\033[KRemaining... done!\n"
+
+    case ${OSTYPE} in
+        darwin*)
+            (say --voice=Victoria \
+                "$(case ${wait_min} in; 0) ;; 1) printf "1 minute" ;; *) printf "%.d minutes" ${wait_min} ;; esac)" \
+                "$(case ${wait_sec} in; 0) ;; 1) printf "1 second" ;; *) printf "%.d seconds" ${wait_sec} ;; esac)" \
+                "passed" &)
+            ;;
+        linux*)
+            printf "\a" # ring a terminal bell
+            ;;
+        *);;
+    esac
+}
