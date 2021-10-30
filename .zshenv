@@ -95,11 +95,17 @@ function ktimer() {
     local remaining=$((60 * ${wait_min} + ${wait_sec}))
     while [ ${remaining} -gt 0 ]
     do
-        printf "\r\033[KRemaining... %01d:%02d" $((remaining / 60)) $((remaining % 60))
+        if (( ${remaining} > 60 )); then
+            printf "\r\033[KRemaining... %01d:%02d" $((remaining / 60)) $((remaining % 60))
+        elif (( ${remaining} > 10 )); then
+            printf "\r\033[KRemaining... \033[31m%01d:%02d\033[m" $((remaining / 60)) $((remaining % 60))
+        else
+            printf "\r\033[KRemaining... \033[31m\033[1m%01d:%02d\033[m" $((remaining / 60)) $((remaining % 60))
+        fi
         ((remaining-=1))
         sleep 1
     done
-    printf "\r\033[KRemaining... done!\n"
+    printf "\r\033[KRemaining... \033[31m\033[1mdone!\033[m\n"
 
     case ${OSTYPE} in
         darwin*)
