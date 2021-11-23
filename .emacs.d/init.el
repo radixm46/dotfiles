@@ -1132,7 +1132,8 @@
     :init
     (add-to-list 'evil-emacs-state-modes 'vterm-mode)
     :hook (vterm-mode-hook . (lambda () (sw-lnsp 1)))
-    :bind (:vterm-mode-map ("C-u" . vterm-send-C-u)))
+    :bind (:vterm-mode-map ("C-u" . vterm-send-C-u)
+                           ("C-c C-[" . vterm-send-escape)))
 
   (leaf tramp
     :tag "builtin"
