@@ -493,3 +493,24 @@
     :url "https://github.com/emacs-pe/docker-tramp.el"
     :custom (docker-tramp-use-names . t))
   )
+
+(leaf powershell
+  :ensure t
+  :mode ("\\.ps1\\'"))
+
+(leaf java-mode
+  :tag "builtin"
+  :doc "java environment config"
+  :config
+  (leaf lsp-java
+    :ensure t
+    :hook (java-mode-hook . lsp)
+    ;; :custom
+    ;; (lsp-java-format-settings-url . "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
+    )
+  )
+
+(leaf elm-mode
+  :ensure t
+  :mode ("\\.elm\\'" . elm-mode)
+  :hook (elm-mode-hook . lsp))
