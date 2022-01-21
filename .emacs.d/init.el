@@ -152,7 +152,7 @@
       (toggle-buffer-ov-serif darkroom-mode))
     :hook (darkroom-mode-hook . my-darkroom-init)
     ;;(darkroom-mode . ov-clear)
-    :bind ([f8] . darkroom-mode)
+    :bind ([f9] . darkroom-mode)
     :custom (darkroom-text-scale-increase . 1)
     ;;:config
     ;;(doom-modeline t) ;TODO:enable modeline
@@ -1096,6 +1096,23 @@
     (leaf eldoc-box :if (not (emacs-works-on-term-p))
       :doc "use eldoc-box-mode if not on term"
       :hook (eglot--managed-mode-hook . eldoc-box-hover-mode)))
+
+  (leaf dap-mode
+    :ensure t
+    :after lsp-mode
+    :doc "debug adapter protocol package"
+    :require dap-hydra
+    :bind
+    (:global-map
+     ("<f8>" . dap-hydra)
+     ("M-8"  . dap-hydra))
+    :custom
+    (dap-auto-configure-features
+     '(sessions locals breakpoints expressions repl controls tooltip))
+    :config
+    (dap-mode 1)
+    (dap-auto-configure-mode 1)
+    )
   )
 
 
