@@ -933,6 +933,8 @@
       (lsp-ui-doc-max-height . 30)
       (lsp-ui-doc-use-childframe . t)
       (lsp-ui-doc-use-webkit . nil)
+      (lsp-ui-doc-show-with-mouse . t)
+      (lsp-ui-doc-show-with-cursor . t)
       ;; lsp-ui-flycheck
       (lsp-ui-flycheck-enable . t)
       ;; lsp-ui-sideline
