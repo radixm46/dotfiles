@@ -1,4 +1,5 @@
 #ignore files
 *~
 .DS_Store
+*.zwc
 config/sway/local/*
