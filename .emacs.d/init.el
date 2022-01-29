@@ -419,8 +419,8 @@
        ^^↓^^            ^ ^    ^↓^    ^ ^          ^ ^   ^-^   ^ ^            ^ ^  ^|^
        ^_j_^            ^ ^    _J_    ^ ^          ^ ^   _-_   ^ ^            ^ ^
 ^^^^^^^^^^^^^^^^^^^................................................................................
-    ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^
-   ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^         _t_:  tab-bar keys
+    ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^           ^_N_ext^ / ^_P_revious tab^
+   ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^        ^_t_:  tab-bar keys
 "
      ("h" evil-window-left)
      ("j" evil-window-down)
@@ -445,6 +445,8 @@
      ("o" delete-other-windows :exit t)
      ("n" evil-window-new)
      ("f" other-frame)
+     ("N"   tab-bar-switch-to-next-tab)
+     ("P"   tab-bar-switch-to-prev-tab)
      ("t" hydra-tab-bar/body :exit t))
     :bind
     (:global-map
