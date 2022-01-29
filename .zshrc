@@ -20,11 +20,13 @@ function _vi_remap() {
 ZINITDIR="$HOME/.zinit"
 ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 function zinit_install() {
-    echo 'Installing zdharma/zinit...'
-    echo "target dir: $ZINITDIR"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+        print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
+        command mkdir -p "$HOME/.zinit" && command chmod g-rwX ${ZINITDIR}
+        command git clone https://github.com/zdharma-continuum/zinit "${ZINITDIR}/bin" && \
+            print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+                print -P "%F{160}▓▒░ The clone has failed.%f%b"
 }
-if [ ! -d $ZINITDIR ]; then
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     zinit_install
 fi
 source "${ZINITDIR}/bin/zinit.zsh"
@@ -40,7 +42,7 @@ fi
 # load syntax-highilight, additional completions, and autosuggestions
 zinit wait lucid for \
     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-        zdharma/fast-syntax-highlighting \
+        zdharma-continuum/fast-syntax-highlighting \
     blockf \
         zsh-users/zsh-completions \
     atload"!_zsh_autosuggest_start" \
