@@ -496,6 +496,17 @@
     )
 
   (leaf quickrun :ensure t)
+
+  (leaf tree-sitter
+    :ensure t
+    :commands (tree-sitter-hl-mode)
+    :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+    :init
+    (leaf tree-sitter-langs
+      :require t
+      :ensure t)
+    :global-minor-mode global-tree-sitter-mode
+    )
   )
 
 
