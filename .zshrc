@@ -1,7 +1,51 @@
-# ------------------------------------------------------------------------------
-# keybinds
+# ----------------------------------------------------------------------------------------
+# zinit install
+# ----------------------------------------------------------------------------------------
+ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+ZINITDIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+function zinit_install() {
+    print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
+    command mkdir -p "$(dirname $ZINITDIR)" && command chmod g-rwX ${ZINITDIR}
+    command git clone https://github.com/zdharma-continuum/zinit.git "${ZINITDIR}" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+            print -P "%F{160}▓▒░ The clone has failed.%f%b"
+}
+[[ ! -d ${ZINITDIR} ]] && zinit_install
+# if failed to load zinit
+source "${ZINITDIR}/zinit.zsh"
+if [[ $(type zinit) == 'zinit not found' ]]; then
+    echo 'Failed to load zinit'
+    function zinit() { return 1; }
+else
+    autoload -Uz _zinit
+    (( ${+_comps} )) && _comps[zinit]=_zinit
+fi
+
+# load syntax-highilight, additional completions, and autosuggestions --------------------
+zinit ice depth=1 && zinit wait lucid for \
+      atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+      zdharma-continuum/fast-syntax-highlighting \
+      blockf \
+      zsh-users/zsh-completions \
+      atload"!_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions
+
+# load zsh modules -----------------------------------------------------------------------
+autoload -Uz \
+         chpwd_recent_dirs \
+         cdr \
+         add-zsh-hook \
+         vcs_info
+add-zsh-hook chpwd chpwd_recent_dirs
+
+# keybinds -------------------------------------------------------------------------------
 bindkey -v  # use vim style keybinding
+# 10ms for key sequences
 export KEYTIMEOUT=1
+
+# zvm ------------------------------------------------------------------------------------
+# init immediately after sourced
+ZVM_INIT_MODE=sourcing
 function _vi_remap() {
     bindkey -M vicmd '^R' history-incremental-pattern-search-backward
     bindkey -M viins '^F' forward-char
@@ -11,88 +55,40 @@ function _vi_remap() {
     bindkey -M viins '^D' delete-char
     bindkey -M viins '^A' beginning-of-line
     bindkey -M viins '^E' end-of-line
-    bindkey -M viins '^N' menu-complete
+    bindkey -M viins '^N' menu-expand-or-complete
     bindkey -M viins '^P' reverse-menu-complete
 }
-# ------------------------------------------------------------------------------
-# zinit install
-# ------------------------------------------------------------------------------
-ZINITDIR="$HOME/.zinit"
-ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
-function zinit_install() {
-        print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
-        command mkdir -p "$HOME/.zinit" && command chmod g-rwX ${ZINITDIR}
-        command git clone https://github.com/zdharma-continuum/zinit "${ZINITDIR}/bin" && \
-            print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-                print -P "%F{160}▓▒░ The clone has failed.%f%b"
-}
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    zinit_install
-fi
-source "${ZINITDIR}/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# if failed to load zinit
-if [[ $(type zinit) == 'zinit not found' ]]; then
-    echo 'Failed to load zinit'
-    function zinit() { return 1; }
-fi
-
-# load syntax-highilight, additional completions, and autosuggestions
-zinit wait lucid for \
-    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-        zdharma-continuum/fast-syntax-highlighting \
-    blockf \
-        zsh-users/zsh-completions \
-    atload"!_zsh_autosuggest_start" \
-        zsh-users/zsh-autosuggestions
-
-# init immediately after sourced
-ZVM_INIT_MODE=sourcing
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode
+zinit ice depth=1 && zinit light jeffreytse/zsh-vi-mode && \
+    ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK && \
+    ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK && \
+    ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST && \
+    _vi_remap # remap after zvm load
 function zvm_config() {
-    # always use block cursor
-    # (when moving around tmux pane, cursor not modified in different state shells)
     bindkey -M vicmd 'dd' zvm_kill_line
     bindkey -M vicmd 'D'  zvm_forward_kill_line
 }
-ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
-_vi_remap # remap after zvm load
 
-autoload -Uz \
-         chpwd_recent_dirs \
-         cdr \
-         add-zsh-hook \
-         vcs_info
-add-zsh-hook chpwd chpwd_recent_dirs
+# substring search -----------------------------------------------------------------------
+zinit ice depth=1 && zinit light zsh-users/zsh-history-substring-search
+bindkey -M vicmd 'N' history-substring-search-up
+bindkey -M vicmd 'n' history-substring-search-down
 
-# substring search
-zinit light zsh-users/zsh-history-substring-search
-bindkey -M vicmd 'n' history-substring-search-up
-bindkey -M vicmd 'N' history-substring-search-down
-# auto pair brackets
-zinit light hlissner/zsh-autopair && autopair-init
+# auto pair brackets ---------------------------------------------------------------------
+zinit ice depth=1 && zinit light hlissner/zsh-autopair && autopair-init
 
-# plugins depends on external commands
-if is_available 'emacs'; then
-    zinit light Flinner/zsh-emacs # alias
-fi
+# plugins depends on external commands ---------------------------------------------------
+zinit ice has'emacs' depth=1 && zinit light Flinner/zsh-emacs # alias
+zinit ice has'systemctl' depth=1 && zinit light le0me55i/zsh-systemd # alias
+
 if is_available 'git'; then
-    zinit light mdumitru/git-aliases # alias
-    zinit light paulirish/git-open # open homepage of repo
-    zinit light mollifier/cd-gitroot # move to root dir of repo
+    zinit ice depth=1 && zinit light mdumitru/git-aliases # alias
+    zinit ice depth=1 && zinit light paulirish/git-open # open homepage of repo
+    zinit ice depth=1 && zinit light mollifier/cd-gitroot # move to root dir of repo
 fi
-if is_available 'systemctl'; then
-    zinit light le0me55i/zsh-systemd # alias
-fi
-if is_available 'jq' && is_available 'fzf'; then
-    zinit light reegnz/jq-zsh-plugin
-fi
+
 if is_available 'fzf'; then
+    zinit ice has'jq' depth=1 && zinit light reegnz/jq-zsh-plugin
+
     # page-up page-down temporary binded like emacs
     export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
     function is_tmux_newer_than() { [[ 1 == $((${${$(tmux -V)#tmux}%[a-z]} >= $1)) ]]; }
@@ -106,8 +102,8 @@ if is_available 'fzf'; then
 
     # TODO: write own completion pattern -- how to works with zsh default completion?
 
-    zinit light mollifier/anyframe
-    autoload -Uz anyframe-init && anyframe-init
+    zinit ice depth=1 && zinit light mollifier/anyframe && \
+        autoload -Uz anyframe-init && anyframe-init
 
     if is_available 'tmux' && is_tmux_newer_than '3.2' && [ ! -z ${TMUX} ]; then
         alias -g F='| fzf-tmux -h60%'
@@ -138,12 +134,10 @@ if is_available 'fzf'; then
     fi
 fi
 
-## ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 # enable colors
 autoload -Uz colors && colors
 
-# 10ms for key sequences
-KEYTIMEOUT=1
 # Input/Output
 setopt no_flow_control
 setopt ignore_eof # zsh not terminate with C-d
@@ -161,15 +155,13 @@ setopt pushd_ignore_dups
 # setopt posix_cd
 
 # expansion and globbing
-setopt extended_glob
 autoload -Uz select-word-style
 
 # ZLE zsh line editor
 zstyle ':zle:*' word-chars " /=;@:{},|"
 zstyle ':zle:*' word-style unspecified
 
-# ------------------------------------------------------------------------------
-# history configure
+# history configure ----------------------------------------------------------------------
 HISTFILE="${ZDOTDIR}/.zsh_history"
 HISTSIZE=1000000
 SAVEHIST=1000000
@@ -178,8 +170,7 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_reduce_blanks
 
-# ------------------------------------------------------------------------------
-# completions config
+# completions config ---------------------------------------------------------------------
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=gray,underline' # autosuggest color
 
 # activate compinit
@@ -240,9 +231,7 @@ zstyle ':completion:*:sudo:*' \
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
-# ------------------------------------------------------------------------------
-# alias
-
+# alias ----------------------------------------------------------------------------------
 # define 'ls' default command
 function alias_ls() {
     if is_available 'exa'; then
@@ -308,7 +297,7 @@ fi
 
 alias -g TC="TERM=xterm-24bit"
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 # define functions
 # print os glyph from nerd fonts
 function print_os_glyph() {
@@ -356,15 +345,15 @@ function get_weather() {
     do
         case ${option} in
             l) local target_loc="${OPTARG}"
-                ;;
+               ;;
             d) local days="${OPTARG}"  # TODO: chack value(0-3)
-                ;;
+               ;;
             L) local lang_="${OPTARG}"
-                ;;
+               ;;
             s) local format='%l:+%c++%t++%w++%p++%P'
-                ;;
+               ;;
             f) local format=''"${OPTARG}"
-                ;;
+               ;;
         esac
     done
     curl -s "wttr.in/${target_loc}"\?"${days:=1n}qA&lang=${lang_:=ja}&format=${format:=}"
@@ -381,7 +370,7 @@ if is_available emacs; then
     }
 fi
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 # config for libvt2
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
@@ -402,7 +391,7 @@ fi
 function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a"; }
 add-zsh-hook -Uz chpwd _vterm_chpwd
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 # prompt configure
 autoload -Uz promptinit && promptinit
 setopt prompt_subst
@@ -414,7 +403,7 @@ function prompt_rdm46theme_setup() {
     _vi_nor="%{${fg[green]}%} ${_csign} %{${reset_color}%}"
     _vi_vis="%{${fg[magenta]}%} ${_csign} %{${reset_color}%}"
     _vi_rep="%{${fg[yellow]}%} ${_isign} %{${reset_color}%}"
-    # for zsh jeffreytse/zsh-vi-mode -------------------------------------------
+    # for zsh jeffreytse/zsh-vi-mode -----------------------------------------------------
     function zvm_after_select_vi_mode() {
         case $ZVM_MODE in
             $ZVM_MODE_NORMAL)
@@ -429,7 +418,7 @@ function prompt_rdm46theme_setup() {
                 vi_mode=${_vi_rep} ;;
         esac
     }
-    # for zsh builtin bindkey -v -----------------------------------------------
+    # for zsh builtin bindkey -v ---------------------------------------------------------
     # if zvm not loaded
     if [[ $(type zvm_init) == 'zvm_init not found' ]]; then
         vi_mode=${_vi_ins}
@@ -478,7 +467,7 @@ function TRAPINT() {
     return $(( 128 + $1 ))
 }
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 # vcs info TODO: include vcs prompt to theme
 function define_vcs_prompt_style {
     local P_GITBRANCH=$'\UF418'
@@ -486,11 +475,11 @@ function define_vcs_prompt_style {
     local P_ENDR=$'\UE0C7'
     local P_MIDTEXR=$'\UE0C5'
     zstyle ':vcs_info:*' formats \
-"%F{black}${P_MIDTEXR}\
+           "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
     zstyle ':vcs_info:*' actionformats \
-"%F{black}${P_MIDTEXR}\
+           "%F{black}${P_MIDTEXR}\
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
 }
@@ -502,7 +491,7 @@ function _update_vcs_info() {
 }
 add-zsh-hook precmd _update_vcs_info
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
 function is_screen_running() { [ ! -z "$STY" ]; }
