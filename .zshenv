@@ -25,13 +25,14 @@ case "$(uname)" in
         function brew_exists_at_opt() { [[ -d "${BREW_PATH_OPT}/bin" ]]; }
         # path of hoembrew on /usr/local
         BREW_PATH_LOCAL='/usr/local'
-        function brew_exists_at_local() { [[ -d "${BREW_PATH_LOCAL}/bin" ]]; }
+        function brew_exists_at_local() { [[ -d "${BREW_PATH_LOCAL}/bin/Homebrew" ]]; }
 
         # switch homebrew dir by arch
         if runs_on_macARM64 && brew_exists_at_opt; then
             path=(\
                 ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
-                ${path})
+                ${path} \
+                ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/))
             # add BREW_PATH_OPT/zsh to fpath
             fpath=(${BREW_PATH_OPT}/share/zsh/site-functions(N-/) ${fpath})
             # switch arch
