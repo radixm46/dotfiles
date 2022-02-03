@@ -1,28 +1,33 @@
 #ignorefiles
 
-.cache
-.games
+.dap-breakpoints
 .lsp-session*
+.org-id-locations
 .tmp
+/.cache/*
+/.cask/*
+/games/*
+/url/*
+/var/*
 auto-save-list
 bookmarks
+projectile-bookmarks.eld
 session.*
-transient
 tramp
-url
-var
-straight
-.cask/*
+transient
 
 # elpa packages
-/elpa/
-/elpa_*/
+/elpa/*
+/elpa_*/*
 
 # el-get
-/el-get/
+/el-get/*
+
+# straight
+/straight/*
 
 # eshell files
-/eshell/
+/eshell/*
 
 # local .el files
 custom.el
