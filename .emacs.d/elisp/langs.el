@@ -5,6 +5,7 @@
   :hook
   (emacs-lisp-mode-hook . hs-minor-mode)
   (emacs-lisp-mode-hook . flycheck-mode)
+  (emacs-lisp-mode-hook . eldoc-box-hover-at-point-mode)
   )
 
 ;; required for racer
@@ -108,6 +109,9 @@
   ;; (web-mode-enable-part-face t)
   (web-mode-enable-comment-interpolation . t)
   (web-mode-enable-heredoc-fontification . t))
+
+(leaf html-mode
+  :tag "builtin")
 
 (leaf javascript
   :doc "config javascript environment"
@@ -513,4 +517,15 @@
 (leaf elm-mode
   :ensure t
   :mode ("\\.elm\\'" . elm-mode)
+  :custom
+  (elm-indent-simple-offset . 2)
+  (elm-indent-offset . 2)
   :hook (elm-mode-hook . lsp))
+
+(leaf haskell-mode
+  :ensure t
+  :mode
+  (("\\.hs\\'"
+    "\\.lhs\\'"
+    "\\.cabal\\'") . haskell-mode)
+  )
