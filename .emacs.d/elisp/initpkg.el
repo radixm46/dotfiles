@@ -71,7 +71,11 @@
       (load bootstrap-file nil 'nomessage))
 
     ;; use straight as leaf default package management
-    :custom (leaf-alias-keyword-alist . '((:ensure . :straight))))
+    :custom
+    (leaf-alias-keyword-alist . '((:ensure . :straight)))
+    (straight-vc-git-default-clone-depth . 5)
+    (straight-disable-byte-compile . nil)
+    (straight-disable-native-compile . t))
 
   ;; optional packages for leaf keywords (under straight.el)
   (leaf hydra :ensure t)
