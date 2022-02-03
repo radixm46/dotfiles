@@ -5,7 +5,7 @@ ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 ZINITDIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 function zinit_install() {
     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
-    command mkdir -p "$(dirname $ZINITDIR)" && command chmod g-rwX ${ZINITDIR}
+    command mkdir -p "$(dirname $ZINITDIR)" && command chmod g-rwX $(dirname ${ZINITDIR})
     command git clone https://github.com/zdharma-continuum/zinit.git "${ZINITDIR}" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
             print -P "%F{160}▓▒░ The clone has failed.%f%b"
