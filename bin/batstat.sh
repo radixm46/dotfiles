@@ -1,31 +1,39 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
+pwr_conn='\UFBA3'
+pwr_discn='\UFBA4'
 # print charging battery sign from nerd fonts
 # (arg1: int(battery capacity), arg2: bool(charging status))
 function pr_batt_cap() {
     case "$2" in
         'true')
         # nerd fonts charging batt signs (20, 20, 20, 30, 40, 40, 60, 80, 90, 100)
-        local batt_signs=('\UF585' '\UF585' '\UF585' '\UF586' '\UF587' '\UF587' \
-                            '\UF588' '\UF588' '\UF589' '\UF58A' '\UF584') ;;
+            local batt_signs=(
+                '\UF585' '\UF585' '\UF585'
+                '\UF586'
+                '\UF587' '\UF587'
+                '\UF588' '\UF588'
+                '\UF589' '\UF58A'
+                '\UF584')
+                ;;
         'false')
         # nerd fonts non charging batt signs (00 to 100)
-        local batt_signs=('\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C' '\UF57D' \
-                             '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578') ;;
+            local batt_signs=(
+                '\UF58D' '\UF579' '\UF57A' '\UF57B' '\UF57C'
+                '\UF57D' '\UF57E' '\UF57F' '\UF580' '\UF581' '\UF578')
+                ;;
     esac
     local batt_idx=$(($1 / 10))
 
-    if ((0 <= ${batt_idx})) && ((${batt_idx} <= 10)); then
-        printf ${batt_signs[batt_idx]}
+    if ((0 <= batt_idx)) && ((batt_idx <= 10)); then
+        printf "${batt_signs[batt_idx]}"
     else
         printf '\UF582'
     fi
 }
-pwr_conn='\UFBA3'
-pwr_discn='\UFBA4'
 
 # printf battery glyph from nerd fonts
-
 case $(uname) in
     Darwin)
         function print_mac_batt_stat() {
@@ -71,16 +79,14 @@ case $(uname) in
                     ;;
             esac
         }
-        batpath_0='/sys/class/power_supply/BAT0'
-        batpath_1='/sys/class/power_supply/BAT1'
         # check if battery is available
-        if [[ -d ${batpath_0} ]]; then
-            print_batt_stat $(<${batpath_0}/capacity) $(<${batpath_0}/status)
-        elif [[ -d ${batpath_1} ]]; then
-            print_batt_stat $(<${batpath_1}/capacity) $(<${batpath_1}/status)
-        else
-            printf ${pwr_conn}\ '\UF590'
-        fi
+        function list_batt_stat () {
+            for bpath in '/sys/class/power_supply/'BAT*; do
+                [[ -L ${bpath} && -d ${bpath} ]] && \
+                    print_batt_stat "$(<${bpath}/capacity)" "$(<${bpath}/status)";
+            done
+        }
+        list_batt_stat || printf ${pwr_conn}\ '\UF590'
         ;;
     *)
         printf '\UF00D'

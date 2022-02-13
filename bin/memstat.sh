@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # display current memory in GB
 nerdmem="\UF85A"
 case $(uname) in
