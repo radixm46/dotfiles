@@ -255,6 +255,15 @@
     ;;  :background my/bg-color)
     :global-minor-mode global-whitespace-mode
     )
+
+  (leaf beacon
+    :ensure t
+    :custom
+    ((beacon-size . 45)
+     (beacon-color . "orange2")
+     (beacon-blink-duration . 0.20)
+     (beacon-blink-delay . 0.10))
+    :config (beacon-mode t))
   )
 
 
