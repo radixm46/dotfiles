@@ -1170,6 +1170,7 @@
 
   (leaf dashboard
     :ensure t
+    :require dashboard
     :custom
     ((dashboard-banner-logo-title . "Welcome to Emacs Dashboard") ;; Set the title
      (dashboard-startup-banner . 3) ;; Set the banner
@@ -1185,10 +1186,16 @@
                           (projects . 5)
                           (agenda . 5)
                           (registers . 5)))
-     (dashboard-show-shortcuts . t))
-    :config
-    (dashboard-setup-startup-hook)
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
+     (dashboard-show-shortcuts . t)
+     (dashboard-show-shortcuts . nil)
+     (dashboard-show-shortcuts . t)
+     (dashboard-set-heading-icons . t)
+     (dashboard-set-file-icons . t)
+     (dashboard-set-init-info . t)
+     (dashboard-set-footer . t)
+     (initial-buffer-choice . (lambda ()
+                                (dashboard-refresh-buffer)
+                                (get-buffer "*dashboard*")))))
 
   (leaf vterm
     :ensure t
