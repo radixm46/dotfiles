@@ -260,9 +260,9 @@
     :ensure t
     :custom
     ((beacon-size . 45)
-     (beacon-color . "orange2")
+     (beacon-color . "orange3")
      (beacon-blink-duration . 0.20)
-     (beacon-blink-delay . 0.10))
+     (beacon-blink-delay . 0.20))
     :config (beacon-mode t))
   )
 
