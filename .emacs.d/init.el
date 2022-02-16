@@ -1172,30 +1172,30 @@
     :ensure t
     :require dashboard
     :custom
-    ((dashboard-banner-logo-title . "Welcome to Emacs Dashboard") ;; Set the title
-     (dashboard-startup-banner . 3) ;; Set the banner
-     ;; Value can be
-     ;; 'official which displays the official emacs logo
-     ;; 'logo which displays an alternative emacs logo
-     ;; 1, 2 or 3 which displays one of the text banners
-     ;; "path/to/your/image.gif", "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever gif/image/text you would prefer
-     (dashboard-center-content . t) ;; Content is not centered by default. To center, set
-     ;; To disable shortcut "jump" indicators for each section, set
-     (dashboard-items . '((recents  . 5)
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)
-                          (registers . 5)))
-     (dashboard-show-shortcuts . t)
-     (dashboard-show-shortcuts . nil)
-     (dashboard-show-shortcuts . t)
-     (dashboard-set-heading-icons . t)
-     (dashboard-set-file-icons . t)
-     (dashboard-set-init-info . t)
-     (dashboard-set-footer . t)
-     (initial-buffer-choice . (lambda ()
-                                (dashboard-refresh-buffer)
-                                (get-buffer "*dashboard*")))))
+    (dashboard-banner-logo-title . "Welcome to Emacs Dashboard") ;; Set the title
+    (dashboard-startup-banner . 3) ;; Set the banner
+    ;; Value can be
+    ;; 'official which displays the official emacs logo
+    ;; 'logo which displays an alternative emacs logo
+    ;; 1, 2 or 3 which displays one of the text banners
+    ;; "path/to/your/image.gif", "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever gif/image/text you would prefer
+    (dashboard-center-content . t) ;; Content is not centered by default. To center, set
+    ;; To disable shortcut "jump" indicators for each section, set
+    (dashboard-show-shortcuts . t)
+    (dashboard-show-shortcuts . nil)
+    (dashboard-show-shortcuts . t)
+    (dashboard-set-heading-icons . t)
+    (dashboard-set-file-icons . t)
+    (dashboard-set-init-info . t)
+    (dashboard-set-footer . t)
+    (dashboard-items . '((recents  . 5)
+                         (bookmarks . 5)
+                         (projects . 5)
+                         (agenda . 5)
+                         (registers . 5)))
+    (initial-buffer-choice . (lambda ()
+                               (dashboard-refresh-buffer)
+                               (get-buffer "*dashboard*"))))
 
   (leaf vterm
     :ensure t
