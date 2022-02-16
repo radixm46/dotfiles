@@ -218,6 +218,24 @@
   (org-clock-clocked-in-display . 'frame-title)
   (org-image-actual-width       . nil)
   :config
+  (leaf org-config-directory :if (f-directory-p "~/org/orgfiles")
+    :custom
+    (org-directory              . "~/org/orgfiles")
+    :config
+    (custom-set-variables
+     '(org-default-notes-file   (concat org-directory "/notes.org"))
+     '(org-agenda-files         (directory-files org-directory t ".org$" t)))
+    (defvar org-todofile        (concat org-directory "/todo.org") "default org todo file path"))
+
+  (custom-set-variables
+   ;; set latex option
+   '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
+
+  (defun my/org-goto-dir ()
+    "open dir '~/org' with dired"
+    (interactive)
+    (find-file "~/org"))
+
   (leaf reconfig-org-vi-key :if (fboundp 'evil-mode)
     :config
     (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
@@ -235,20 +253,8 @@
      ("M-g M-a" . consult-org-agenda)))
 
   ;; (setq system-time-locale "C") ; dates written in eng
-  (custom-set-variables ; set directory
-   '(org-directory            "~/org/orgfiles")
-   '(org-default-notes-file   (concat org-directory "/notes.org"))
-   '(org-agenda-files         (list org-directory))
-   ;; set latex option
-   '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
-  (defvar org-todofile       (concat org-directory "/todo.org") "default org todo file path")
 
   (set-face-attribute 'org-table nil :family font-for-tables)
-
-  (defun my/org-goto-dir ()
-    "open dir '~/org' with dired"
-    (interactive)
-    (find-file "~/org"))
 
   (leaf org-bullets
     :doc "pretty looking bullet list"
