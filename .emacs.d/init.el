@@ -53,10 +53,11 @@
   (leaf font-configure
     :doc "font configure"
     :config
-    (setq default-frame-alist (append (list '(font . "HackGen35Nerd Console-13.5")
-                                            '(width . 80)
-                                            '(height . 55)) default-frame-alist))
-    (setq font-for-tables "HackGenNerd Console"))
+    (custom-set-variables
+     '(default-frame-alist (append (list '(font . "HackGen35Nerd Console-12.0")
+                                         '(width . 80)
+                                         '(height . 55)) default-frame-alist)))
+    (defcustom font-for-tables "HackGenNerd Console" "1:2 width font for table"))
 
   (leaf set-linespacing
     :doc "control line spacing"
