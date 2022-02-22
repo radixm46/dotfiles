@@ -14,7 +14,9 @@
   :hook (rust-mode-hook . lsp)
   :custom (rust-format-on-save . t)
   :config
-  (leaf cargo :ensure t)
+  (leaf cargo
+    :ensure t
+    :hook (rust-mode-hook . cargo-minor-mode))
   )
 
 (leaf python-config
