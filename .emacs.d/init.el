@@ -1265,7 +1265,13 @@
   (leaf magit
     :ensure t
     ;:custom (magit-completing-read-function . 'magit-ido-completing-read)
-    :config (add-hook 'magit-section-mode-hook #'(lambda () (whitespace-mode -1))))
+    :hook (magit-section-mode-hook . (lambda () (whitespace-mode -1)))
+    :config
+    (leaf magit-todos
+      :ensure t
+      :hook (magit-section-mode-hook . magit-todos-mode)))
+
+  (leaf git-timemachine :ensure t)
   )
 
 
