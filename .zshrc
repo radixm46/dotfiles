@@ -261,16 +261,7 @@ alias ...='cd ../..'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-
 alias mkdir='mkdir -p'
-
-if is_available 'fd'; then
-    alias find='fd --color=auto'
-fi
-
-if is_available 'rg'; then
-    alias grep='rg --color=auto'
-fi
 
 # glob aliases
 alias -g L='| less'
@@ -278,12 +269,16 @@ alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
 
-if is_available 'bat'; then
+is_available 'fd' &&\
+    alias find='fd --color=auto'
+is_available 'bat' &&\
     alias -g B='| bat'
-fi
-
-if is_available 'duf'; then
+is_available 'duf' &&\
     alias duf='duf -all -style=unicode -theme=dark'
+
+if is_available 'rg'; then
+    alias grep='rg --color=auto'
+    alias -g R='| rg'
 fi
 
 # clipboard manager
