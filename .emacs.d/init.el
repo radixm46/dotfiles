@@ -1247,9 +1247,9 @@
  ^move to hunk^              ^act on hunk^               ^etc^
 ^^^^^^................................................................................
  _j_:   next                 _d_:   popup                _r_:   update all windows
- _k_:   previous             _v_:   mark                 _g_:   open magit mode
- _G_:   end of hunk          _s_:   stage
- ^ ^                         _x_:   revert
+ _k_:   previous             _v_:   mark
+ _G_:   end of hunk          _s_:   stage                _h_:   open git timemachine
+ ^ ^                         _x_:   revert               _g_:   open magit mode
 "
             ("j" git-gutter:next-hunk)
             ("k" git-gutter:previous-hunk)
@@ -1259,6 +1259,7 @@
             ("x" git-gutter:revert-hunk)
             ("s" git-gutter:stage-hunk)
             ("r" git-gutter:update-all-windows)
+            ("h" git-timemachine :exit t)
             ("g" magit :exit t))
     :bind
     (:global-map
