@@ -100,7 +100,8 @@
       fundamental-mode-hook
       outline-mode-hook
       prog-mode-hook
-      text-mode-hook) . display-line-numbers-mode)
+      text-mode-hook
+      git-timemachine-mode-hook) . display-line-numbers-mode)
     )
 
   (leaf display-fill-column-indicator
@@ -193,7 +194,8 @@
     ((conf-mode-hook
       outline-mode-hook
       prog-mode-hook
-      text-mode-hook) . highlight-indent-guides-mode)
+      text-mode-hook
+      git-timemachine-mode-hook) . highlight-indent-guides-mode)
     :custom
     ;;(if (not (display-graphic-p))
     ;;    (progn
@@ -215,7 +217,8 @@
     :ensure t
     :hook
     ((conf-mode-hook
-      prog-mode-hook) . rainbow-delimiters-mode))
+      prog-mode-hook
+      git-timemachine-mode-hook) . rainbow-delimiters-mode))
 
   (leaf whitespace
     :doc "configure whitespace"
@@ -223,7 +226,8 @@
     ((conf-mode-hook
       outline-mode-hook
       prog-mode-hook
-      text-mode-hook) . whitespace-mode)
+      text-mode-hook
+      git-timemachine-mode-hook) . whitespace-mode)
     :custom
     (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode hexl-mode))
     (whitespace-line-column . 80)
