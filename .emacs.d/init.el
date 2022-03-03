@@ -1213,8 +1213,8 @@
   (leaf tramp
     :tag "builtin"
     :custom
-      (tramp-default-method        . "ssh")
-      (tramp-persistency-file-name . "~/.emacs.d/.cache/tramp"))
+    (tramp-default-method        . "ssh")
+    (tramp-persistency-file-name . "~/.emacs.d/.cache/tramp"))
   )
 
 
@@ -1424,17 +1424,17 @@
   :doc "switch appearance when on gui or term"
   :require treemacs doom-modeline
   :config
+  (load-theme 'doom-monokai-one t)
+
   (defun emacs-on-term ()
     "switch emacs appearance for term with doom-spacegrey"
     (interactive)
-    (load-theme 'doom-monokai-one t)
     (custom-set-variables '(doom-modeline-icon nil))
     (treemacs-load-theme "Default"))
 
   (defun emacs-on-gui ()
     "switch emacs appearance for gui with doom-molokai and modeline icons"
     (interactive)
-    (load-theme 'doom-monokai-one t)
     (custom-set-variables '(doom-modeline-icon t))
     (treemacs-load-theme "all-the-icons"))
 
