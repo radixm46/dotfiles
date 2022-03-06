@@ -1274,7 +1274,12 @@
     :config
     (leaf magit-todos
       :ensure t
-      :hook (magit-section-mode-hook . magit-todos-mode)))
+      :hook (magit-section-mode-hook . magit-todos-mode)
+      :custom
+      (magit-todos-max-items     . 15)
+      (magit-todos-ignore-case   . nil)
+      (magit-todos-rg-extra-args . '("--hidden" "--no-config"))
+      (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))))
 
   (leaf git-timemachine :ensure t)
   )
