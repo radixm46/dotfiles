@@ -1148,7 +1148,7 @@
 (leaf helpful-things
   :config
 
-  (leaf ace-window ;; TODO more visible window numbera face
+  (leaf ace-window
     :ensure t
     :bind ("M-o" . ace-window)
     :custom (aw-keys . '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
