@@ -61,16 +61,16 @@
 
   (leaf set-linespacing
     :doc "control line spacing"
+    :custom (line-spacing . 0.40)
     :config
-    (setq-default line-spacing 0.40)
     (defun sw-lnsp (wdth)
       "switch line spacing"
       (interactive "nset line spacing: ")
-      (setq line-spacing wdth))
+      (custom-set-variables '(line-spacing wdth)))
     (defun dbl-lnsp ()
       "switch line spacing to double"
       (interactive)
-      (setq line-spacing 2.0))
+      (custom-set-variables '(line-spacing 2.0)))
     )
 
   (leaf paren
@@ -374,17 +374,18 @@
 
 
 (leaf editor-functions
-  :init
-  (setq-default tab-width 4
-                indent-tabs-mode nil
-                truncate-lines t)
+  :custom
+  (eol-mnemonic-dos . "(CRLF)")
+  (eol-mnemonic-mac . "(CR)")
+  (eol-mnemonic-unix . "(LF)")
+  (find-file-visit-truename . t)
   ;; configure indent tab to false as default
-  (setq eol-mnemonic-dos "(CRLF)")
-  (setq eol-mnemonic-mac "(CR)")
-  (setq eol-mnemonic-unix "(LF)")
-  (setq find-file-visit-truename t)
   ;; (setq line-move-visual t)
   ;; (setq word-wrap t)
+  (tab-width . 4)
+  (indent-tabs-mode . nil)
+  (truncate-lines . t)
+  :init
 
   (leaf visual-line-mode
     :doc "visual line mode enables word wrap"
@@ -925,10 +926,9 @@
   (leaf lsp-mode
     :doc "configure lsp"
     :ensure t
-    :init (setq lsp-keymap-prefix "C-c C-l")
-    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
     :commands (lsp lsp-deferred)
     :custom
+    (lsp-keymap-prefix . "C-c C-l") ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
     (lsp-document-sync-method . nil) ;; always send incremental document
     (lsp-response-timeout . 5)
     (lsp-eldoc-enable-hover . nil)
@@ -1274,12 +1274,13 @@
     :config
     (leaf magit-todos
       :ensure t
-      :hook (magit-section-mode-hook . magit-todos-mode)
-      :custom
+      :custom ;; TODO: add grouping via category
       (magit-todos-max-items     . 15)
       (magit-todos-ignore-case   . nil)
       (magit-todos-rg-extra-args . '("--hidden" "--no-config"))
-      (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))))
+      (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))
+      :hook (magit-section-mode-hook . magit-todos-mode))
+    )
 
   (leaf git-timemachine :ensure t)
   )
