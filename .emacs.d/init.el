@@ -870,7 +870,7 @@
     :ensure t
     :tag "builtin"
     :config
-    (leaf eldoc-box :if (not (emacs-works-on-term-p))
+    (leaf eldoc-box :unless (emacs-works-on-term-p)
       :ensure t
       :hook (eldoc-mode-hook . eldoc-box-hover-at-point-mode)
       :config
@@ -1122,7 +1122,7 @@
     :ensure t
     :doc "another lsp client"
     :preface
-    (leaf eldoc-box :if (not (emacs-works-on-term-p))
+    (leaf eldoc-box :unless (emacs-works-on-term-p)
       :doc "use eldoc-box-mode if not on term"
       :hook (eglot--managed-mode-hook . eldoc-box-hover-mode)))
 
