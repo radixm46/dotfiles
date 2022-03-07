@@ -1291,7 +1291,9 @@
   :config
   (leaf dired
     :tag "builtin"
-    :config (put 'dired-find-alternate-file 'disabled nil))
+    :config
+    (ffap-bindings)
+    (put 'dired-find-alternate-file 'disabled nil))
 
   (leaf neotree
     :ensure t
