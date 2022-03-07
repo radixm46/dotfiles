@@ -363,6 +363,12 @@ if is_available emacs; then
     function magit() {
         emacsclient -c --eval "(magit-status \"$1\")" &
     }
+    function tdired() {
+        emacsclient -nw --eval "(dired \"$1\")"
+    }
+    function dired() {
+        emacsclient -c --eval "(dired \"$1\")" &
+    }
 fi
 
 # ----------------------------------------------------------------------------------------
