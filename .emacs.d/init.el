@@ -1449,6 +1449,11 @@
 
   (if (emacs-works-on-term-p)
       (emacs-on-term) (emacs-on-gui))
+
+  (add-hook 'server-after-make-frame-hook
+            '(lambda () (if (display-graphic-p)
+                            (emacs-on-gui)
+                          (emacs-on-term))))
   )
 
 

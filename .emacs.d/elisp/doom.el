@@ -12,7 +12,7 @@
   ;; Whether display icons in the mode-line. Respects `all-the-icons-color-icons'.
   ;; While using the server mode in GUI, should set the value explicitly.
   ;(setq doom-modeline-icon (display-graphic-p))
-  (doom-modeline-icon . t)
+  (doom-modeline-icon . nil)
 
   ;(defun doom-frame-init-func (&optional frame)
   ;  "frame init on doom-modeline"
