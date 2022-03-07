@@ -39,7 +39,7 @@
   (inhibit-splash-screen . t)
   (ring-bell-function . 'ignore)
   :config
-  (if (not (emacs-works-on-term-p))
+  (unless (emacs-works-on-term-p)
       (progn
         (tool-bar-mode -1)
         (scroll-bar-mode -1)))
@@ -279,9 +279,9 @@
     :config
     (let ((my/autosave-dir "~/.emacs.d/.cache/autosaved")
           (my/hist-dir "~/.emacs.d/.cache/hist"))
-      (if (not (file-directory-p my/autosave-dir))
+      (unless (file-directory-p my/autosave-dir)
           (make-directory my/autosave-dir t))
-      (if (not (file-directory-p my/hist-dir))
+      (unless (file-directory-p my/hist-dir)
           (make-directory my/hist-dir t))))
 
   (leaf autosave
@@ -816,6 +816,7 @@
       :doc "consult embark binding package"
       :after (embark consult)
       ;; :demand t ; only necessary if you have the hook below
+      :leaf-defer nil
       ;; if you want to have consult previews as you move around an
       ;; auto-updating embark collect buffer
       :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
