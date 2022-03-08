@@ -277,16 +277,16 @@ is_available 'duf' &&\
     alias duf='duf -all -style=unicode -theme=dark'
 
 if is_available 'rg'; then
-    alias grep='rg --color=auto'
-    alias -g R='| rg'
+    alias rg='rg --color=auto'
+    alias -g R='| rg --color=auto'
 fi
 
 # clipboard manager
-if is_available pbcopy; then
+if is_available 'pbcopy'; then
     alias -g C='| pbcopy'
-elif is_available xsel; then
+elif is_available 'xsel'; then
     alias -g C='| xsel --input --clipboard'
-elif is_available putclip; then
+elif is_available 'putclip'; then
     alias -g C='| putclip'
 fi
 
