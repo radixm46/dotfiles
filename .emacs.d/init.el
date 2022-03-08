@@ -396,6 +396,15 @@
     ;; (global-visual-line-mode nil)
     )
 
+  (leaf ediff
+    :ensure t
+    :tag "builtin"
+    :custom (ediff-window-setup-function . #'ediff-setup-windows-plain)
+    :config
+    (defun ediff-window-display-p ()
+       "overwritten ediff builtin function, for not generate new frame" nil)
+    )
+
   (leaf editorconfig
     :doc "load editorconfig"
     :ensure t
