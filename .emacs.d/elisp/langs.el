@@ -19,7 +19,7 @@
     :hook (rust-mode-hook . cargo-minor-mode))
   )
 
-(leaf python-config
+(leaf *python-config
   :doc "python related configuration"
   :config
   (leaf poetry
@@ -52,7 +52,7 @@
      (hy-mode-hook . poetry-tracking-mode)
      (hy-mode-hook . eldoc-box-hover-at-point-mode))
     :init
-    (leaf eglot-hyls-config :disabled t
+    (leaf *eglot-hyls-config :disabled t
       :doc "enable hy-lang language server with eglot"
       :require eglot
       :config
@@ -86,7 +86,7 @@
     "\\.jsx\\'") . web-mode)
   :hook (web-mode-hook . lsp)
   :preface
-  (leaf flycheck-use-tidy :disabled t
+  (leaf *flycheck-use-tidy :disabled t
     :if (executable-find "tidy")
     :doc "enable flycheck with html-tidy on web-mode"
     :config (add-hook 'lsp-after-initialize-hook
@@ -177,7 +177,7 @@
     :doc "format code on save"
     :ensure t
     :hook (sh-mode-hook . shfmt-on-save-mode))
-  (leaf flycheck-by-shellcheck :if (executable-find "shellcheck")
+  (leaf *flycheck-by-shellcheck :if (executable-find "shellcheck")
     :doc "use shellcheck for flychecker with lsp"
     :hook (lsp-after-initialize-hook . (lambda () (flycheck-add-next-checker 'lsp 'sh-shellcheck))))
   )
@@ -220,7 +220,7 @@
   (org-clock-clocked-in-display . 'frame-title)
   (org-image-actual-width       . nil)
   :config
-  (leaf org-config-directory :if (f-directory-p "~/org/orgfiles")
+  (leaf *org-config-directory :if (f-directory-p "~/org/orgfiles")
     :custom
     (org-directory              . "~/org/orgfiles")
     :config
@@ -238,14 +238,14 @@
     (interactive)
     (find-file "~/org"))
 
-  (leaf reconfig-org-vi-key :if (fboundp 'evil-mode)
+  (leaf *reconfig-org-vi-key :if (fboundp 'evil-mode)
     :config
     (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
     (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
     (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
     (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line))
 
-  (leaf reconfig-org-consult-key :if (fboundp 'consult-buffer)
+  (leaf *reconfig-org-consult-key :if (fboundp 'consult-buffer)
     :doc "bind consult functions if available"
     :bind
     (:org-mode-map
@@ -481,7 +481,7 @@
   )
 
 
-(leaf docker-env
+(leaf *docker-env
   :doc "docker related modes"
   :config
   (leaf docker

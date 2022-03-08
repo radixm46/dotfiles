@@ -9,7 +9,7 @@
 (load "~/.emacs.d/elisp/initpkg.el")
 
 
-(leaf startup
+(leaf *startup
   :config
   ;; mouse support on terminal
   (unless window-system
@@ -27,14 +27,14 @@
     :custom (exec-path-from-shell-arguments . '("-l"))
     :config (when (daemonp) (exec-path-from-shell-initialize)))
 
-  (leaf supress-cl-warning :emacs>= "27"
+  (leaf *supress-cl-warning :emacs>= "27"
     :doc "supress cl warning"
     :config
     (setq byte-compile-warnings '(not cl-functions obsolete)))
   )
 
 
-(leaf conf-appearance
+(leaf *conf-appearance
   :custom
   (inhibit-splash-screen . t)
   (ring-bell-function . 'ignore)
@@ -50,7 +50,7 @@
   (which-function-mode 1)
   (transient-mark-mode 1)
 
-  (leaf font-configure
+  (leaf *font-configure
     :doc "font configure"
     :config
     (custom-set-variables
@@ -59,7 +59,7 @@
                                          '(height . 55)) default-frame-alist)))
     (defcustom font-for-tables "HackGenNerd Console" "1:2 width font for table"))
 
-  (leaf set-linespacing
+  (leaf *set-linespacing
     :doc "control line spacing"
     :custom (line-spacing . 0.40)
     :config
@@ -181,10 +181,10 @@
      (evil-normal-state-exit-hook . nyan-xit))
     :global-minor-mode nyan-mode)
 
-  (leaf config-doom-modeline
+  (leaf *config-doom-modeline
     :config (load "~/.emacs.d/elisp/doom.el"))
 
-  (leaf config-custom-thems-path
+  (leaf *config-custom-thems-path
     :doc "load custom theme from elisp dir"
     :custom (custom-theme-directory . "~/.emacs.d/elisp/"))
 
@@ -272,9 +272,9 @@
   )
 
 
-(leaf conf-cache-history
+(leaf *conf-cache-history
   :config
-  (leaf set-cache-path
+  (leaf *set-cache-path
     :doc "check directory and set target"
     :config
     (let ((my/autosave-dir "~/.emacs.d/.cache/autosaved")
@@ -288,7 +288,7 @@
     :doc "configure auto save files"
     :tag "builtin"
     :preface
-    (leaf disable-auto-save-message :emacs>= "27"
+    (leaf *disable-auto-save-message :emacs>= "27"
       :doc "supress auto saving message"
       :custom (auto-save-no-message . t))
     :custom
@@ -299,7 +299,7 @@
     (auto-save-interval . 120)
     (auto-save-list-file-prefix . nil))
 
-  (leaf backup-files
+  (leaf *backup-files
     :doc "make backup files"
     :tag "builtin"
     :custom
@@ -348,7 +348,7 @@
   )
 
 
-(leaf lang-locales
+(leaf *lang-locales
   :doc "locale and encoding"
   :custom
   (default-buffer-file-coding-system . 'utf-8)
@@ -373,7 +373,7 @@
           skk-init-file "~/.emacs.d/elisp/initskk.el")))
 
 
-(leaf editor-functions
+(leaf *editor-functions
   :custom
   (eol-mnemonic-dos . "(CRLF)")
   (eol-mnemonic-mac . "(CR)")
@@ -574,7 +574,7 @@
   )
 
 
-(leaf minibuffer-extentions
+(leaf *minibuffer-extentions
   :doc "extend minibuffer functions"
   :config
   (leaf consult
@@ -765,10 +765,10 @@
      ("M-5"     . hydra-consult/body)
      ("<f5>"    . hydra-consult/body))
     :init
-    (leaf consult-use-fd :if (executable-find "fd")
+    (leaf *consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
       :custom (consult-find-command . "fd --color=never --full-path ARG OPTS"))
-    (leaf consult-use-rigrep :if (executable-find "rg")
+    (leaf *consult-use-rigrep :if (executable-find "rg")
       :doc "use ripgrep for grep if avalable"
       :custom (consult-grep-command . '(concat "rg --null --color=ansi"
                                                "--max-columns=250"
@@ -839,7 +839,7 @@
       (cons (concat "[CRM] " (car args)) (cdr args)))
     (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-    (leaf hide-commads-unnecessary :emacs>= "28"
+    (leaf *hide-commads-unnecessary :emacs>= "28"
       :doc
       "Emacs 28: Hide commands in M-x which do not work in the current mode.
        Vertico commands are hidden in normal buffers."
@@ -858,7 +858,7 @@
   )
 
 
-(leaf competion-linting
+(leaf *competion-linting
   :doc "completion and linting packages"
   :config
   (leaf auto-completion
@@ -1146,7 +1146,7 @@
   )
 
 
-(leaf helpful-things
+(leaf *helpful-things
   :config
 
   (leaf ace-window
@@ -1217,7 +1217,7 @@
     (tramp-default-method        . "ssh")
     (tramp-persistency-file-name . "~/.emacs.d/.cache/tramp"))
 
-  (leaf darwin-dictionary-integration :if (equal system-type 'darwin)
+  (leaf *darwin-dictionary-integration :if (equal system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
     (defun macos-dict-lookup (word)
@@ -1234,7 +1234,7 @@
       (string-match-p "jp.monokakido.Dictionaries"
                       (shell-command-to-string "lsappinfo info jp.monokakido.Dictionaries")))
 
-    (leaf monokakido-dict :if (monokakido-app-installed-p)
+    (leaf *monokakido-dict :if (monokakido-app-installed-p)
       :doc "use Disctionaries.app by monokakido (based on gist url)"
       :url "https://gist.github.com/skoji/aad5f66cbffc370e29888671e0801c6d"
       :config
@@ -1251,7 +1251,7 @@
         (kbd "C-w f") 'monokakido-lookup-word
         (kbd "C-w F") 'macos-dict-lookup-word))
 
-    (leaf bind-macos-dict :unless (monokakido-app-installed-p)
+    (leaf *bind-macos-dict :unless (monokakido-app-installed-p)
       :doc "bind macos-dict-lookup-word to key with dictionary.app by apple"
       :config
       (evil-define-key '(normal visual) 'global
@@ -1259,7 +1259,7 @@
   )
 
 
-(leaf git-related-packages
+(leaf *git-related-packages
   :config
   (leaf git-gutter
     :ensure t
@@ -1327,7 +1327,7 @@
   )
 
 
-(leaf file-manage
+(leaf *file-manage
   :doc "file management related config"
   :config
   (leaf dired
@@ -1374,7 +1374,7 @@
      ("C-x t C-t" . treemacs-find-file)
      ("C-x t M-t" . treemacs-find-tag))
     :config
-    (leaf treemacs-custom :after treemacs
+    (leaf *treemacs-custom :after treemacs
       :doc "eval after treemacs load"
       :custom
       (treemacs-deferred-git-apply-delay      . 0.5)
@@ -1470,7 +1470,7 @@
   )
 
 
-(leaf conf-appearance-on-state
+(leaf *conf-appearance-on-state
   :doc "switch appearance when on gui or term"
   :require treemacs doom-modeline
   :config
@@ -1498,11 +1498,11 @@
   )
 
 
-(leaf load-lang-settings
+(leaf *load-lang-settings
   :config (load "~/.emacs.d/elisp/langs.el"))
 
 
-(leaf load-local-conf
+(leaf *load-local-conf
   :config (if (file-exists-p "~/.emacs.d/elisp/local.el")
               (load "~/.emacs.d/elisp/local.el")
               ;; create elisp/local.el if not exists
