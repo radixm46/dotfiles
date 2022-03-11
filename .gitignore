@@ -1,5 +1,6 @@
 #ignore files
+*.zwc
 *~
 .DS_Store
-*.zwc
 config/sway/local/*
+workspace
