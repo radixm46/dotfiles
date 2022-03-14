@@ -54,7 +54,7 @@
     :config
     (feather-mode))
 
-  (leaf straight-setup :if (executable-find "git")
+  (leaf *straight-setup :if (executable-find "git")
     :doc "setup straight.el (require git)"
     :config
     (defvar bootstrap-version)
