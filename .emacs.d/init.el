@@ -66,11 +66,11 @@
     (defun sw-lnsp (wdth)
       "switch line spacing"
       (interactive "nset line spacing: ")
-      (custom-set-variables '(line-spacing wdth)))
+      (setq-local line-spacing wdth))
     (defun dbl-lnsp ()
       "switch line spacing to double"
       (interactive)
-      (custom-set-variables '(line-spacing 2.0)))
+      (setq-local line-spacing 2.0))
     )
 
   (leaf paren
