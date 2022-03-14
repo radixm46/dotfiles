@@ -1214,11 +1214,45 @@
 
   (leaf vterm
     :ensure t
-    :init
-    (add-to-list 'evil-emacs-state-modes 'vterm-mode)
+    :preface ; release keys for binding
+    (global-unset-key [f2])
+    (global-unset-key "\M-2")
     :hook (vterm-mode-hook . (lambda () (sw-lnsp 1)))
-    :bind (:vterm-mode-map ("C-u" . vterm-send-C-u)
-                           ("C-c C-[" . vterm-send-escape)))
+    :custom
+    (vterm-max-scrollback . 10000)
+    (vterm-buffer-name-string . "vterm: %s")
+    :config
+    (evil-set-initial-state 'vterm-mode 'emacs)
+    (defun my/vterm-new-buffer-in-current-window()
+      "new vterm on current wondow"
+      (interactive)
+      (let ((display-buffer-alist nil)) (vterm)))
+    (leaf vterm-toggle
+      :ensure t
+      :custom
+      (vterm-toggle-fullscreen-p . nil)
+      (vterm-toggle-scope-p . 'project)
+      :config
+      (add-to-list 'display-buffer-alist
+                   '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                     (display-buffer-reuse-window display-buffer-at-bottom)
+                     ;;(display-buffer-reuse-window display-buffer-in-direction)
+                     ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                     (direction . bottom)
+                     (lambda() (if (version<= "27" emacs-version) (dedicated . t)))
+                     ;;(dedicated . t) ;dedicated is supported in emacs27
+                     (reusable-frames . visible)
+                     (window-height . 0.25))))
+    :bind
+    (("M-2" . vterm-toggle)
+     ("<f2>" . vterm-toggle)
+     ("M-@" . my/vterm-new-buffer-in-current-window))
+    (:vterm-mode-map
+     ("C-u" . vterm-send-C-u)
+     ("C-c C-[" . vterm-send-escape)
+     ("M-2" . vterm-toggle)
+     ("<f2>" . vterm-toggle))
+    )
 
   (leaf tramp
     :tag "builtin"
