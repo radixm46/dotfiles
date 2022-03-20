@@ -70,6 +70,13 @@
           (eval-print-last-sexp)))
       (load bootstrap-file nil 'nomessage))
 
+    (defun my/straight-freeze-upgrade ()
+      "freeze versions then upgrade all"
+      (interactive)
+      (progn (straight-freeze-versions)
+             (straight-pull-all)
+             (straight-rebuild-all)))
+
     ;; use straight as leaf default package management
     :custom
     (leaf-alias-keyword-alist . '((:ensure . :straight)))
