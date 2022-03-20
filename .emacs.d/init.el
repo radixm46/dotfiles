@@ -367,10 +367,11 @@
   ;; skk config(use
   (leaf skk
     :ensure ddskk
-    :init
-    (setq default-input-method "japanese-skk"
-          skk-user-directory "~/.emacs.d/.cache/skk"
-          skk-init-file "~/.emacs.d/elisp/initskk.el")))
+    :custom
+    (default-input-method . "japanese-skk")
+    (skk-user-directory . "~/.emacs.d/.cache/skk")
+    (skk-init-file . "~/.emacs.d/elisp/initskk.el"))
+)
 
 
 (leaf *editor-functions
