@@ -6,6 +6,7 @@
 .tmp
 /.cache/*
 /.cask/*
+/eln-cache/*
 /games/*
 /url/*
 /var/*
