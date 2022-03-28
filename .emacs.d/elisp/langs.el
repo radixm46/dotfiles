@@ -240,10 +240,11 @@
 
   (leaf *reconfig-org-vi-key :if (fboundp 'evil-mode)
     :config
-    (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
-    (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
-    (evil-define-key 'normal org-mode-map "gj" 'evil-next-line)
-    (evil-define-key 'normal org-mode-map "gk" 'evil-previous-line))
+    (evil-define-key 'normal org-mode-map
+      "j" 'evil-next-visual-line
+      "k" 'evil-previous-visual-line
+      "gj" 'evil-next-line
+      "gk" 'evil-previous-line))
 
   (leaf *reconfig-org-consult-key :if (fboundp 'consult-buffer)
     :doc "bind consult functions if available"
@@ -472,10 +473,11 @@
     "\\.markdown\\'") . markdown-mode)
   :custom (markdown-command . "multimarkdown")
   :config
-  (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
-  (evil-define-key 'normal markdown-mode-map "gj" 'evil-next-line)
-  (evil-define-key 'normal markdown-mode-map "gk" 'evil-previous-line)
+  (evil-define-key 'normal markdown-mode-map
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line
+    "gj" 'evil-next-line
+    "gk" 'evil-previous-line)
   ;; modify table face to 1:2
   (set-face-attribute 'markdown-table-face nil :family font-for-tables)
   )
