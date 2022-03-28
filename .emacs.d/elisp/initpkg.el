@@ -22,7 +22,7 @@
   (package-install 'leaf))
 (require 'leaf)
 
-(leaf leaf
+(leaf *leaf-configure
   :doc "configure leaf related packages"
   :config
   (leaf leaf-keywords
