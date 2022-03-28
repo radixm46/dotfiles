@@ -1168,6 +1168,12 @@
     (aw-leading-char-face . '((t (:inherit 'aw-leading-char-face :height 5.0 :width normal))))
     )
 
+  (leaf ace-link
+    :ensure t
+    :doc "keybinding?"
+    :config
+    (ace-link-setup-default))
+
   (leaf which-key
     :ensure t
     :config
