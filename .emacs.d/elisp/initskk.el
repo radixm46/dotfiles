@@ -15,7 +15,7 @@
  '(skk-henkan-strict-okuri-precedence t)
  '(skk-henkan-number-to-display-candidates 7)
  '(skk-dcomp-activate t)
- '(skk-dcomp-multiple-activate t)
+ '(skk-dcomp-multiple-activate nil)
  '(skk-dcomp-multiple-rows 10)
  ;; '(skk-henkan-show-candidates-rows          2) ;; obsolete
  '(skk-japanese-message-and-error t)
