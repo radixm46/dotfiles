@@ -284,6 +284,8 @@
 
   ;; (use-package ox-bibtex)
 
+  (leaf org-ref :ensure t)
+
   (leaf org-roam
     :ensure t
     :init (setq org-roam-v2-ack t)
