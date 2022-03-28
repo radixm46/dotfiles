@@ -790,6 +790,7 @@
                                                "--with-filename "
                                                ;; defaults
                                                "-e ARG OPTS")))
+    (evil-ex-define-cmd "ls" 'consult-buffer)
     (leaf consult-dir :ensure t))
 
   (leaf orderless
