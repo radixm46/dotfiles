@@ -541,3 +541,76 @@
     "\\.lhs\\'"
     "\\.cabal\\'") . haskell-mode)
   )
+
+(leaf elfeed :if (file-exists-p "~/.config/elfeed")
+  :ensure t
+  :url "https://github.com/skeeto/elfeed"
+  :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
+  :custom
+  (elfeed-db-directory .  "~/.config/elfeed/.db")
+  (elfeed-enclosure-default-dir .  elfeed-dir-path)
+  (elfeed-search-filter . "@1-months-ago +unread")
+  (elfeed-search-title-max-width . 95)
+  (elfeed-search-date-format . '("%Y-%m-%d %k:%M" 16 :left))
+  :init
+  (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
+    :ensure t
+    :url "https://github.com/remyhonig/elfeed-org"
+    :init (elfeed-org)
+    :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" elfeed-dir-path))))
+
+  :config
+  (dolist (face '(elfeed-search-tag-face
+                  elfeed-search-date-face
+                  elfeed-search-feed-face
+                  elfeed-search-title-face
+                  elfeed-search-unread-title-face))
+    (set-face-attribute face nil :family font-for-tables :weight 'normal :height 1.0))
+
+  (leaf *elfeed-func
+    :doc "custom defined func"
+    :config
+    (defun my/elfeed-search-toggle-star ()
+      "add/remove star tag on elfeed entry"
+      (interactive)
+      (apply 'elfeed-search-toggle-all '(star)))
+
+    (defun my/elfeed-search-toggle-later ()
+      "add/remove star tag on elfeed entry"
+      (interactive)
+      (apply 'elfeed-search-toggle-all '(later)))
+
+    (defun my/elfeed-show-entry-share (&optional use-generic-p)
+      "Copy the entry title and URL as org link to the clipboard."
+      (interactive "P")
+      (let* ((link (elfeed-entry-link elfeed-show-entry))
+             (title (elfeed-entry-title elfeed-show-entry))
+             (feed-info (concat title "\n" link)))
+        (when feed-info
+          (kill-new feed-info)
+          (x-set-selection 'PRIMARY feed-info)
+          (message "Yanked: %s" feed-info))))
+
+    (defun my/elfeed-show-eww-open (&optional use-generic-p)
+      "open with eww"
+      (interactive "P")
+      (let ((browse-url-browser-function #'eww-browse-url))
+        (elfeed-show-visit use-generic-p)))
+
+    (defun my/elfeed-search-eww-open (&optional use-generic-p)
+      "open with eww"
+      (interactive "P")
+      (let ((browse-url-browser-function #'eww-browse-url))
+        (elfeed-search-browse-url use-generic-p)))
+
+    (evil-define-key 'normal elfeed-search-mode-map
+      "m" 'my/elfeed-search-toggle-star
+      "l" 'my/elfeed-search-toggle-later
+      "b" 'my/elfeed-search-eww-open)
+    (evil-define-key 'normal elfeed-show-mode-map
+      "b" 'my/elfeed-show-eww-open
+      "Y" 'my/elfeed-show-entry-share))
+
+  :hook
+  (elfeed-show-mode-hook . darkroom-mode)
+  (elfeed-show-mode-hook . toggle-truncate-lines))
