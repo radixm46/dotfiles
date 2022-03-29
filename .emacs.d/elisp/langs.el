@@ -233,7 +233,7 @@
    ;; set latex option
    '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
 
-  (defun my/org-goto-dir ()
+  (defun rdm/org-goto-dir ()
     "open dir '~/org' with dired"
     (interactive)
     (find-file "~/org"))
@@ -408,7 +408,7 @@
     ("s T" org-sidebar-tree-toggle)
     ("s b" org-sidebar-backlinks)
     ("h"   consult-org-heading)
-    ("o"   my/org-goto-dir)
+    ("o"   rdm/org-goto-dir)
     ("j"   org-next-visible-heading)
     ("k"   org-previous-visible-heading)
     ("i"   org-next-item)
@@ -460,7 +460,7 @@
    ("C-c c" . org-capture)
    ("C-c a" . org-agenda)
    ("C-c b" . org-iswitchb)
-   ("C-c C-o 0" . my/org-goto-dir)
+   ("C-c C-o 0" . rdm/org-goto-dir)
    ("M-6"  . hydra-org/body)
    ("<f6>" . hydra-org/body))
   )
@@ -546,12 +546,6 @@
   :ensure t
   :url "https://github.com/skeeto/elfeed"
   :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
-  :custom
-  (elfeed-db-directory .  "~/.config/elfeed/.db")
-  (elfeed-enclosure-default-dir .  elfeed-dir-path)
-  (elfeed-search-filter . "@1-months-ago +unread")
-  (elfeed-search-title-max-width . 95)
-  (elfeed-search-date-format . '("%Y-%m-%d %k:%M" 16 :left))
   :init
   (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
     :ensure t
@@ -570,17 +564,17 @@
   (leaf *elfeed-func
     :doc "custom defined func"
     :config
-    (defun my/elfeed-search-toggle-star ()
+    (defun rdm/elfeed-search-toggle-star ()
       "add/remove star tag on elfeed entry"
       (interactive)
       (apply 'elfeed-search-toggle-all '(star)))
 
-    (defun my/elfeed-search-toggle-later ()
+    (defun rdm/elfeed-search-toggle-later ()
       "add/remove star tag on elfeed entry"
       (interactive)
       (apply 'elfeed-search-toggle-all '(later)))
 
-    (defun my/elfeed-show-entry-share (&optional use-generic-p)
+    (defun rdm/elfeed-show-entry-share (&optional use-generic-p)
       "Copy the entry title and URL as org link to the clipboard."
       (interactive "P")
       (let* ((link (elfeed-entry-link elfeed-show-entry))
@@ -591,25 +585,33 @@
           (x-set-selection 'PRIMARY feed-info)
           (message "Yanked: %s" feed-info))))
 
-    (defun my/elfeed-show-eww-open (&optional use-generic-p)
+    (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
       "open with eww"
       (interactive "P")
       (let ((browse-url-browser-function #'eww-browse-url))
         (elfeed-show-visit use-generic-p)))
 
-    (defun my/elfeed-search-eww-open (&optional use-generic-p)
+    (defun rdm/elfeed-search-eww-open (&optional use-generic-p)
       "open with eww"
       (interactive "P")
       (let ((browse-url-browser-function #'eww-browse-url))
         (elfeed-search-browse-url use-generic-p)))
 
     (evil-define-key 'normal elfeed-search-mode-map
-      "m" 'my/elfeed-search-toggle-star
-      "l" 'my/elfeed-search-toggle-later
-      "b" 'my/elfeed-search-eww-open)
+      "m" 'rdm/elfeed-search-toggle-star
+      "l" 'rdm/elfeed-search-toggle-later
+      "b" 'rdm/elfeed-search-eww-open
     (evil-define-key 'normal elfeed-show-mode-map
-      "b" 'my/elfeed-show-eww-open
-      "Y" 'my/elfeed-show-entry-share))
+      "b" 'rdm/elfeed-show-eww-open
+      "Y" 'rdm/elfeed-show-entry-share))
+
+  :custom
+  (elfeed-db-directory .  "~/.config/elfeed/.db")
+  (elfeed-enclosure-default-dir .  elfeed-dir-path)
+  (elfeed-search-filter . "@1-months-ago +unread -later")
+  (elfeed-search-title-max-width . 95)
+  (elfeed-search-date-format . '("%Y-%m-%d (%a) %k:%M" 22 :left))
+  (elfeed-show-entry-switch . #'rdm/elfeed-display-buffer)
 
   :hook
   (elfeed-show-mode-hook . darkroom-mode)
