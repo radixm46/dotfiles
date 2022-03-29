@@ -553,14 +553,6 @@
     :init (elfeed-org)
     :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" elfeed-dir-path))))
 
-  :config
-  (dolist (face '(elfeed-search-tag-face
-                  elfeed-search-date-face
-                  elfeed-search-feed-face
-                  elfeed-search-title-face
-                  elfeed-search-unread-title-face))
-    (set-face-attribute face nil :family font-for-tables :weight 'normal :height 1.0))
-
   (leaf *elfeed-func
     :doc "custom defined func"
     :config
@@ -612,10 +604,27 @@
   (elfeed-search-title-max-width . 95)
   (elfeed-search-date-format . '("%Y-%m-%d (%a) %k:%M" 22 :left))
   (elfeed-show-entry-switch . #'rdm/elfeed-display-buffer)
+  :hydra
+  (hydra-elfeed-search-filter (nil nil)
+                              "elfeed filters"
+                              ("U" (elfeed-search-set-filter "+unread")        "all unread")
+                              ("A" (elfeed-search-set-filter "")               "all entries")
+                              ("n" (elfeed-search-set-filter "+news +unread -later") "news")
+                              ("N" (elfeed-search-set-filter "+news")          "news(all)")
+                              ("l" (elfeed-search-set-filter "+later +unread") "later")
+                              ("L" (elfeed-search-set-filter "+later -unread") "later(read)")
+                              ("s" (elfeed-search-set-filter "+star")          "starred"))
 
-  :hook
-  (elfeed-show-mode-hook . darkroom-mode)
-  (elfeed-show-mode-hook . toggle-truncate-lines))
+  :config
+  (dolist (face '(elfeed-search-tag-face
+                  elfeed-search-date-face
+                  elfeed-search-feed-face
+                  elfeed-search-title-face
+                  elfeed-search-unread-title-face))
+    (set-face-attribute face nil :family font-for-tables :weight 'normal :height 1.0))
+
+  ;; :hook (elfeed-show-mode-hook . darkroom-mode)
+  )
 (leaf eww
   :tag "builtin"
   :doc "text base web browser"
