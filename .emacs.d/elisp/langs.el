@@ -589,10 +589,20 @@
       (let ((browse-url-browser-function #'eww-browse-url))
         (elfeed-search-browse-url use-generic-p)))
 
+    (defun rdm/elfeed-search-untag-later-unread (entry)
+      "Remove the 'unread' and 'later' tag from entry.
+based on elfeed-search-show-entry"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (elfeed-untag entry 'unread 'later)
+        (elfeed-search-update-entry entry)
+        (unless elfeed-search-remain-on-entry (forward-line))))
+
     (evil-define-key 'normal elfeed-search-mode-map
       "m" 'rdm/elfeed-search-toggle-star
       "l" 'rdm/elfeed-search-toggle-later
       "b" 'rdm/elfeed-search-eww-open
+      "u" 'rdm/elfeed-search-untag-later-unread
       "ta" 'elfeed-search-tag-all
       "tr" 'elfeed-search-untag-all
     (evil-define-key 'normal elfeed-show-mode-map
