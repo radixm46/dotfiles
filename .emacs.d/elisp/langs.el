@@ -614,3 +614,14 @@
   :hook
   (elfeed-show-mode-hook . darkroom-mode)
   (elfeed-show-mode-hook . toggle-truncate-lines))
+(leaf eww
+  :tag "builtin"
+  :doc "text base web browser"
+  :custom
+  (shr-width . 70)
+  (shr-indentation . 4)
+  (shr-use-fonts . t)
+  (shr-use-colors . t)
+  (shr-bullet . "* ")
+  (eww-search-prefix . "https://www.google.com/search?q=")
+  )
