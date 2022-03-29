@@ -615,7 +615,7 @@ based on elfeed-search-show-entry"
   (elfeed-search-filter . "@1-months-ago +unread -later")
   (elfeed-search-title-max-width . 95)
   (elfeed-search-date-format . '("%Y-%m-%d (%a) %k:%M" 22 :left))
-  (elfeed-show-entry-switch . #'rdm/elfeed-display-buffer)
+
   :hydra
   (hydra-elfeed-search-filter (nil nil)
                               "elfeed filters"
