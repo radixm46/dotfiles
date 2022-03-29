@@ -593,6 +593,8 @@
       "m" 'rdm/elfeed-search-toggle-star
       "l" 'rdm/elfeed-search-toggle-later
       "b" 'rdm/elfeed-search-eww-open
+      "ta" 'elfeed-search-tag-all
+      "tr" 'elfeed-search-untag-all
     (evil-define-key 'normal elfeed-show-mode-map
       "b" 'rdm/elfeed-show-eww-open
       "Y" 'rdm/elfeed-show-entry-share))
