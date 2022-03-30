@@ -566,6 +566,15 @@
       (interactive)
       (apply 'elfeed-search-toggle-all '(later)))
 
+    (defun rdm/elfeed-search-tag-junk (entry)
+      "add/remove junk tag on elfeed entry"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (elfeed-untag entry 'unread)
+        (elfeed-tag entry 'junk)
+        (elfeed-search-update-entry entry)
+        (unless elfeed-search-remain-on-entry (forward-line))))
+
     (defun rdm/elfeed-show-entry-share (&optional use-generic-p)
       "Copy the entry title and URL as org link to the clipboard."
       (interactive "P")
@@ -576,6 +585,18 @@
           (kill-new feed-info)
           (x-set-selection 'PRIMARY feed-info)
           (message "Yanked: %s" feed-info))))
+
+    (defun rdm/elfeed-search-entry-share (entry)
+      "Copy the entry title and URL as org link to the clipboard."
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (let* ((link (elfeed-entry-link entry))
+               (title (elfeed-entry-title entry))
+               (feed-info (concat title "\n" link)))
+          (when feed-info
+            (kill-new feed-info)
+            (x-set-selection 'PRIMARY feed-info)
+            (message "Yanked: %s" feed-info)))))
 
     (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
       "open with eww"
@@ -598,16 +619,74 @@ based on elfeed-search-show-entry"
         (elfeed-search-update-entry entry)
         (unless elfeed-search-remain-on-entry (forward-line))))
 
+    (defun rdm/elfeed-search-untag-unread (entry)
+      "Remove the 'unread' tag from entry and recenter.
+based on elfeed-search-show-entry"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (elfeed-untag entry 'unread 'later)
+        (elfeed-search-update-entry entry)
+        (forward-line) (recenter)))
+
+    (defun rdm/elfeed-search-show-entry (entry)
+      "Display the currently selected item in a buffer.
+based on elfeed-search-show-entry"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (elfeed-untag entry 'unread)
+        (elfeed-search-update-entry entry)
+        (forward-line) (recenter)
+        (elfeed-show-entry entry)))
+
+    (defun rdm/elfeed-search-browse-url (&optional use-generic-p)
+      "open with browser, untag unread and later.
+based on elfeed-search-browse-url"
+      (interactive "P")
+      (let ((buffer (current-buffer))
+            (entries (elfeed-search-selected)))
+        (cl-loop for entry in entries
+                 do (elfeed-untag entry 'unread 'later)
+                 when (elfeed-entry-link entry)
+                 do (if use-generic-p
+                        (browse-url-generic it)
+                      (browse-url it)))
+        ;; `browse-url' could have switched to another buffer if eww or another
+        ;; internal browser is used, but the remainder of the functions needs to
+        ;; run in the elfeed buffer.
+        (with-current-buffer buffer
+          (mapc #'elfeed-search-update-entry entries)
+          (unless (or elfeed-search-remain-on-entry (use-region-p))
+            (forward-line)))))
+
+    (defun rdm/elfeed-search-filter-feed-name (entry)
+      "filter via highlighted feed address"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (let* ((meta (elfeed-entry-feed entry))
+               (filter-str (concat "=" (elfeed-meta meta :title))))
+          (when filter-str
+            (elfeed-search-set-filter filter-str)))))
+
     (evil-define-key 'normal elfeed-search-mode-map
-      "m" 'rdm/elfeed-search-toggle-star
-      "l" 'rdm/elfeed-search-toggle-later
-      "b" 'rdm/elfeed-search-eww-open
-      "u" 'rdm/elfeed-search-untag-later-unread
+      "m"  'rdm/elfeed-search-toggle-star
+      "l"  'rdm/elfeed-search-toggle-later
+      "b"  'rdm/elfeed-search-eww-open
+      "u"  'rdm/elfeed-search-untag-later-unread
+      "Y"  'rdm/elfeed-search-entry-share
+      "F"  'rdm/elfeed-search-filter-feed-name
       "ta" 'elfeed-search-tag-all
       "tr" 'elfeed-search-untag-all
+      "tj" 'rdm/elfeed-search-tag-junk
+      "go" 'rdm/elfeed-search-browse-url
+      (kbd "RET") 'rdm/elfeed-search-show-entry
+      (kbd "SPC") 'rdm/elfeed-search-untag-unread
+      (kbd "S-SPC") 'evil-previous-line)
+
     (evil-define-key 'normal elfeed-show-mode-map
-      "b" 'rdm/elfeed-show-eww-open
-      "Y" 'rdm/elfeed-show-entry-share))
+      "b"  'rdm/elfeed-show-eww-open
+      "Y"  'rdm/elfeed-show-entry-share
+      "ta" 'elfeed-show-tag
+      "tr" 'elfeed-show-untag))
 
   :custom
   (elfeed-db-directory .  "~/.config/elfeed/.db")
