@@ -663,7 +663,9 @@ based on elfeed-search-browse-url"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
         (let* ((meta (elfeed-entry-feed entry))
-               (filter-str (concat "=" (elfeed-meta meta :title))))
+               (title (elfeed-meta meta :title))
+               (title-esc (replace-regexp-in-string " " "\\s-" title t t))
+               (filter-str (concat "=" title-esc)))
           (when filter-str
             (elfeed-search-set-filter filter-str)))))
 
