@@ -1273,7 +1273,7 @@
     :config
     (defun macos-dict-lookup (word)
       "Lookup word with dictionary.app by apple."
-      (call-process "open" nil 0 nil (concat "dict://" word)))
+      (call-process "open" nil 0 nil (concat "dict://" word) "-g"))
 
     (defun macos-dict-lookup-word ()
       "Lookup the word at point with dictionary.app by apple."
@@ -1283,7 +1283,8 @@
     (defun monokakido-app-installed-p ()
       "if monokakido Dictionaries.app available, returns t"
       (string-match-p "jp.monokakido.Dictionaries"
-                      (shell-command-to-string "lsappinfo info jp.monokakido.Dictionaries")))
+                      (shell-command-to-string
+                       "mdls '/Applications/Dictionaries.app' -name 'kMDItemCFBundleIdentifier'")))
 
     (leaf *monokakido-dict :if (monokakido-app-installed-p)
       :doc "use Disctionaries.app by monokakido (based on gist url)"
@@ -1291,7 +1292,7 @@
       :config
       (defun monokakido-lookup (word)
         "Lookup word with Dictionaries.app by Monokakido."
-        (call-process "open" nil 0 nil (concat "mkdictionaries:///?text=" word)))
+        (call-process "open" nil 0 nil (concat "mkdictionaries:///?text=" word) "-g"))
 
       (defun monokakido-lookup-word ()
         "Lookup the word at point with Dictionaries.app by Monokakido."
