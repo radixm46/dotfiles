@@ -561,10 +561,13 @@
       (interactive)
       (apply 'elfeed-search-toggle-all '(star)))
 
-    (defun rdm/elfeed-search-toggle-later ()
-      "add/remove star tag on elfeed entry"
-      (interactive)
-      (apply 'elfeed-search-toggle-all '(later)))
+    (defun rdm/elfeed-search-tag-later-unread (entry)
+      "add later and unread tag on elfeed entry"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (elfeed-tag entry 'unread 'later)
+        (elfeed-search-update-entry entry)
+        (unless elfeed-search-remain-on-entry (forward-line))))
 
     (defun rdm/elfeed-search-tag-junk (entry)
       "add/remove junk tag on elfeed entry"
@@ -624,7 +627,7 @@ based on elfeed-search-show-entry"
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
-        (elfeed-untag entry 'unread 'later)
+        (elfeed-untag entry 'unread)
         (elfeed-search-update-entry entry)
         (forward-line) (recenter)))
 
@@ -633,7 +636,7 @@ based on elfeed-search-show-entry"
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
-        (elfeed-untag entry 'unread)
+        (elfeed-untag entry 'unread 'later)
         (elfeed-search-update-entry entry)
         (forward-line) (recenter)
         (elfeed-show-entry entry)))
@@ -671,7 +674,7 @@ based on elfeed-search-browse-url"
 
     (evil-define-key 'normal elfeed-search-mode-map
       "m"  'rdm/elfeed-search-toggle-star
-      "l"  'rdm/elfeed-search-toggle-later
+      "l"  'rdm/elfeed-search-tag-later-unread
       "b"  'rdm/elfeed-search-eww-open
       "u"  'rdm/elfeed-search-untag-later-unread
       "Y"  'rdm/elfeed-search-entry-share
@@ -693,17 +696,17 @@ based on elfeed-search-browse-url"
   :custom
   (elfeed-db-directory .  "~/.config/elfeed/.db")
   (elfeed-enclosure-default-dir .  elfeed-dir-path)
-  (elfeed-search-filter . "@1-months-ago +unread -later")
+  (elfeed-search-filter . "@1-months-ago +unread -later -junk")
   (elfeed-search-title-max-width . 95)
   (elfeed-search-date-format . '("%Y-%m-%d (%a) %k:%M" 22 :left))
 
   :hydra
   (hydra-elfeed-search-filter (nil nil)
                               "elfeed filters"
-                              ("U" (elfeed-search-set-filter "+unread")        "all unread")
-                              ("A" (elfeed-search-set-filter "")               "all entries")
-                              ("n" (elfeed-search-set-filter "+news +unread -later") "news")
-                              ("N" (elfeed-search-set-filter "+news")          "news(all)")
+                              ("u" (elfeed-search-set-filter "+unread -junk")        "all unread")
+                              ("a" (elfeed-search-set-filter " -junk")               "all entries")
+                              ("n" (elfeed-search-set-filter "+news +unread -later -junk") "news")
+                              ("N" (elfeed-search-set-filter "+news -junk")          "news(all)")
                               ("l" (elfeed-search-set-filter "+later +unread") "later")
                               ("L" (elfeed-search-set-filter "+later -unread") "later(read)")
                               ("s" (elfeed-search-set-filter "+star")          "starred"))
