@@ -872,7 +872,7 @@
 (leaf *competion-linting
   :doc "completion and linting packages"
   :config
-  (leaf auto-completion
+  (leaf auto-complete
     :tag "builtin"
     :config
     (setq-default ac-sources '(ac-source-filename
