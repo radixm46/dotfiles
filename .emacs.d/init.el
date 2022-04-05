@@ -929,6 +929,8 @@
     (company-idle-delay . 0)
     (company-selection-wrap-around . t)
     (completion-ignore-case . t)
+    (company-minimum-prefix-length . 2)
+    (company-transformers . '(company-sort-by-backend-importance))
     :config
     (leaf company-box
       :ensure t
