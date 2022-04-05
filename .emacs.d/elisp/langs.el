@@ -553,6 +553,30 @@
     :init (elfeed-org)
     :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" elfeed-dir-path))))
 
+  (leaf *elfeed-patch-entry-switch
+    :doc "patch entry-switch behavior"
+    :custom
+    (elfeed-show-entry-switch . #'display-buffer)
+    :config
+    (defun rdm/elfeed-show-next ()
+      (interactive)
+      (let ((elfeed-show-entry-switch #'switch-to-buffer))
+        (elfeed-show-next)))
+
+    (defun rdm/elfeed-show-prev ()
+      (interactive)
+      (let ((elfeed-show-entry-switch #'switch-to-buffer))
+        (elfeed-show-prev)))
+
+    (evil-define-key 'normal elfeed-show-mode-map
+      (kbd "C-j") 'rdm/elfeed-show-next
+      "]]"        'rdm/elfeed-show-next
+      "gj"        'rdm/elfeed-show-next
+      (kbd "C-k") 'rdm/elfeed-show-prev
+      "[["        'rdm/elfeed-show-prev
+      "gk"        'rdm/elfeed-show-prev)
+   )
+
   (leaf *elfeed-func
     :doc "custom defined func"
     :config
