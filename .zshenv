@@ -59,10 +59,16 @@ case "$(uname)" in
         ;;
 esac
 
-# check stack installed and add path
-if is_available 'stack'; then
-    path=($(stack path --local-bin)(N-/) ${path})
-fi
+# check ghcup/stack installed and add path
+function haskell_env () {
+    local ghcup_path="${HOME}/.ghcup/bin"
+    if [[ -d ${ghcup_path} ]]; then
+        path=("${ghcup_path}"(N-/) ${path})
+    elif is_available 'stack'; then
+        path=($(stack path --local-bin)(N-/) ${path})
+    fi
+}
+haskell_env
 
 # check rust environment
 path=("${HOME}/.cargo/bin"(N-/) ${path})
