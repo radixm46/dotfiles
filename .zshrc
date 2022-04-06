@@ -493,6 +493,14 @@ function _update_vcs_info() {
 }
 add-zsh-hook precmd _update_vcs_info
 
+
+# change tmux sessison default directory
+function t-cd() {
+    tmux command-prompt -I "${${1}:-${PWD}}"\
+        -p "Session dir to:"\
+        "attach-session -t . -c %1"
+ }
+
 # ----------------------------------------------------------------------------------------
 #http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
