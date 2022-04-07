@@ -102,6 +102,14 @@
       prog-mode-hook
       text-mode-hook
       git-timemachine-mode-hook) . display-line-numbers-mode)
+    :config
+    (defun rdm/display-line-numbers-toggle-rel ()
+      "toggle relative"
+      (interactive)
+      (if (eq display-line-numbers-type 'relative)
+          (custom-set-variables '(display-line-numbers-type  't))
+        (custom-set-variables '(display-line-numbers-type  'relative)))
+      (display-line-numbers--turn-on)) ;; read config
     )
 
   (leaf display-fill-column-indicator
