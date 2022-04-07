@@ -1195,7 +1195,10 @@
 
   (leaf undo-tree
     :ensure t
-    :custom (undo-tree-visualizer-timestamps . t)
+    :custom
+    (undo-tree-visualizer-timestamps . t)
+    (undo-tree-auto-save-history . t)
+    (undo-tree-history-directory-alist . '(("." . "~/.emacs.d/.cache/undo-tree")))
     :global-minor-mode (global-undo-tree-mode))
 
   (leaf dashboard
