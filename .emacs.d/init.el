@@ -63,11 +63,11 @@
     :doc "control line spacing"
     :custom (line-spacing . 0.40)
     :config
-    (defun sw-lnsp (wdth)
+    (defun rdm/sw-lnsp (wdth)
       "switch line spacing"
       (interactive "nset line spacing: ")
       (setq-local line-spacing wdth))
-    (defun dbl-lnsp ()
+    (defun rdm/dbl-lnsp ()
       "switch line spacing to double"
       (interactive)
       (setq-local line-spacing 2.0))
@@ -127,32 +127,29 @@
 
   (leaf ov
     :ensure t
+    :preface
+    (defun rdm/serif-available-p()
+      "returns t if Noto Serif font available"
+      (member "Noto Serif CJK JP" (font-family-list)))
     :init
-    (defun check-serif-available()
-      "check Noto Serif font available"
-      (if (member "Noto Serif CJK JP" (font-family-list))
-          (setq serif-available-p t)
-        (setq serif-available-p nil)))
-    (setq ov-serif nil)
-    (defun toggle-buffer-ov-serif (trigger-state-p)
+    (defvar rdm/ov-serif nil "overlay with serif font")
+    (defun rdm/toggle-buffer-ov-serif (trigger-state-p)
       "temporary make buffer to serif, ov-clear if ov available at buffer"
-      (interactive)
-      (if serif-available-p
-          (if trigger-state-p
-              (progn (sw-lnsp 0.8)
-                     (setq ov-serif
-                           (ov (point-min) (point-max) 'face '(:family "Noto Serif CJK JP"))))
-              (progn (sw-lnsp 0.25)
-                     (ov-reset ov-serif)))))
-    :hook (server-after-make-frame-hook . check-serif-available)
+      (if (and (rdm/serif-available-p) trigger-state-p)
+          (progn (rdm/sw-lnsp 0.8)
+                 (setq rdm/ov-serif
+                       (ov (point-min)
+                           (point-max)
+                           'face '(:family "Noto Serif CJK JP"))))
+          (progn (rdm/sw-lnsp 0.25) (ov-reset rdm/ov-serif))))
     :commands (ov-reset ov-clear ov))
 
   (leaf darkroom
     :ensure t
     :init
-    (defun my-darkroom-init ()
-      (toggle-buffer-ov-serif darkroom-mode))
-    :hook (darkroom-mode-hook . my-darkroom-init)
+    (defun rdm/darkroom-init ()
+      (rdm/toggle-buffer-ov-serif darkroom-mode))
+    :hook (darkroom-mode-hook . rdm/darkroom-init)
     ;;(darkroom-mode . ov-clear)
     :bind ([f9] . darkroom-mode)
     :custom (darkroom-text-scale-increase . 1)
@@ -253,11 +250,11 @@
     ;;  :background nil
     ;;  :underline nil)
     ;;(set-face-attribute 'whitespace-space nil
-    ;;  :background my/bg-color
+    ;;  :background rdm/bg-color
     ;;  :foreground "GreenYellow"
     ;;  :weight 'bold)
     ;;(set-face-attribute 'whitespace-empty nil
-    ;;  :background my/bg-color)
+    ;;  :background rdm/bg-color)
     :global-minor-mode global-whitespace-mode
     )
 
@@ -277,12 +274,12 @@
   (leaf *set-cache-path
     :doc "check directory and set target"
     :config
-    (let ((my/autosave-dir "~/.emacs.d/.cache/autosaved")
-          (my/hist-dir "~/.emacs.d/.cache/hist"))
-      (unless (file-directory-p my/autosave-dir)
-          (make-directory my/autosave-dir t))
-      (unless (file-directory-p my/hist-dir)
-          (make-directory my/hist-dir t))))
+    (let ((rdm/autosave-dir "~/.emacs.d/.cache/autosaved")
+          (rdm/hist-dir "~/.emacs.d/.cache/hist"))
+      (unless (file-directory-p rdm/autosave-dir)
+          (make-directory rdm/autosave-dir t))
+      (unless (file-directory-p rdm/hist-dir)
+          (make-directory rdm/hist-dir t))))
 
   (leaf autosave
     :doc "configure auto save files"
@@ -577,7 +574,7 @@
     :ensure t
     :config (ido-complete-space-or-hyphen-mode t))
 
-  (defun my/ido-recentf ()
+  (defun rdm/ido-recentf ()
     "works with recentf-mode"
     (interactive)
     (find-file (ido-completing-read "Find from recent: " recentf-list)))
@@ -1227,14 +1224,14 @@
     :preface ; release keys for binding
     (global-unset-key [f2])
     (global-unset-key "\M-2")
-    :hook (vterm-mode-hook . (lambda () (sw-lnsp 1)))
+    :hook (vterm-mode-hook . (lambda () (rdm/sw-lnsp 1)))
     :custom
     (vterm-max-scrollback . 10000)
     (vterm-buffer-name-string . "vterm: %s")
     :config
     (evil-set-initial-state 'vterm-mode 'emacs)
-    (defun my/vterm-new-buffer-in-current-window()
-      "new vterm on current wondow"
+    (defun rdm/vterm-new-buffer-in-current-window()
+      "new vterm on current window"
       (interactive)
       (let ((display-buffer-alist nil)) (vterm)))
     (leaf vterm-toggle
@@ -1256,7 +1253,7 @@
     :bind
     (("M-2" . vterm-toggle)
      ("<f2>" . vterm-toggle)
-     ("M-@" . my/vterm-new-buffer-in-current-window))
+     ("M-@" . rdm/vterm-new-buffer-in-current-window))
     (:vterm-mode-map
      ("C-u" . vterm-send-C-u)
      ("C-c C-[" . vterm-send-escape)
