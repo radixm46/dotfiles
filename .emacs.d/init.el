@@ -475,8 +475,8 @@
      ("o" delete-other-windows :exit t)
      ("n" evil-window-new)
      ("f" other-frame)
-     ("N"   tab-bar-switch-to-next-tab)
-     ("P"   tab-bar-switch-to-prev-tab)
+     ("N" tab-bar-switch-to-next-tab)
+     ("P" tab-bar-switch-to-prev-tab)
      ("t" hydra-tab-bar/body :exit t))
     :bind
     (:global-map
