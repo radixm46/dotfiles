@@ -229,6 +229,12 @@
      '(org-agenda-files         (directory-files org-directory t ".org$" t)))
     (defvar org-todofile        (concat org-directory "/todo.org") "default org todo file path"))
 
+  (leaf *org-latex-preview :if (executable-find "dvisvgm")
+    :doc "if dvisvgm available, startup with latex preview"
+    :custom
+    (org-preview-latex-default-process . 'dvisvgm)
+    (org-startup-with-latex-preview    . t))
+
   (custom-set-variables
    ;; set latex option
    '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
