@@ -546,6 +546,14 @@
   (("\\.hs\\'"
     "\\.lhs\\'"
     "\\.cabal\\'") . haskell-mode)
+  :config
+  (leaf lsp-haskell :if (executable-find "haskell-language-server-wrapper")
+    :ensure t
+    :doc "if haskell-language-server available in PATH, enable lsp-haskell"
+    :hook
+    ((haskell-mode-hook
+      haskell-literate-mode-hook) . lsp)
+    )
   )
 
 (leaf elfeed :if (file-exists-p "~/.config/elfeed")
