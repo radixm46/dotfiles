@@ -71,6 +71,10 @@
       "switch line spacing to double"
       (interactive)
       (setq-local line-spacing 2.0))
+    (defun rdm/lnsp-default ()
+      "remove local line-spacing"
+      (interactive)
+      (kill-local-variable 'line-spacing))
     )
 
   (leaf paren
