@@ -140,20 +140,24 @@
   (leaf ov
     :ensure t
     :preface
-    (defun rdm/serif-available-p()
-      "returns t if Noto Serif font available"
-      (member "Noto Serif CJK JP" (font-family-list)))
+    (defun rdm/available-serif-font()
+      "returns serif font family if available"
+      (flet ((font-available (font) (member font (font-family-list))))
+        (let ((serif-fonts '("Hiragino Mincho ProN"
+                             "Noto Serif CJK JP")))
+          (catch 'found
+            (dolist (font serif-fonts)
+              (if (font-available font) (throw 'found font)))))))
     :init
     (defvar rdm/ov-serif nil "overlay with serif font")
     (defun rdm/toggle-buffer-ov-serif (trigger-state-p)
       "temporary make buffer to serif, ov-clear if ov available at buffer"
-      (if (and (rdm/serif-available-p) trigger-state-p)
-          (progn (rdm/sw-lnsp 0.8)
-                 (setq rdm/ov-serif
-                       (ov (point-min)
-                           (point-max)
-                           'face '(:family "Noto Serif CJK JP"))))
-          (progn (rdm/sw-lnsp 0.25) (ov-reset rdm/ov-serif))))
+      (let ((serif-fnt (rdm/available-serif-font)))
+        (if (and serif-fnt trigger-state-p)
+            (progn (rdm/sw-lnsp 0.8)
+                   (setq-local rdm/ov-serif
+                         (ov (point-min) (point-max) 'face `(:family ,serif-fnt))))
+          (progn (rdm/lnsp-default) (ov-reset rdm/ov-serif)))))
     :commands (ov-reset ov-clear ov))
 
   (leaf darkroom
