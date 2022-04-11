@@ -1196,6 +1196,10 @@
 (leaf *helpful-things
   :config
 
+  (leaf rainbow-mode
+    :ensure t
+    :doc "preview colors from hex values")
+
   (leaf ace-window
     :ensure t
     :bind ("M-o" . ace-window)
