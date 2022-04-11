@@ -34,257 +34,6 @@
   )
 
 
-(leaf *conf-appearance
-  :custom
-  (inhibit-splash-screen . t)
-  (ring-bell-function . 'ignore)
-  :config
-  (unless (emacs-works-on-term-p)
-      (progn
-        (tool-bar-mode -1)
-        (scroll-bar-mode -1)))
-  (menu-bar-mode -1)
-  (display-time)
-  (column-number-mode t)
-  (blink-cursor-mode 0)
-  (which-function-mode 1)
-  (transient-mark-mode 1)
-
-  (leaf *font-configure
-    :doc "font configure"
-    :config
-    (custom-set-variables
-     '(default-frame-alist (append (list '(font . "HackGen35Nerd Console-12.0")
-                                         '(width . 80)
-                                         '(height . 55)) default-frame-alist)))
-    (defcustom font-for-tables "HackGenNerd Console" "1:2 width font for table"))
-
-  (leaf *set-linespacing
-    :doc "control line spacing"
-    :custom (line-spacing . 0.40)
-    :config
-    (defun rdm/sw-lnsp (wdth)
-      "switch line spacing"
-      (interactive "nset line spacing: ")
-      (setq-local line-spacing wdth))
-    (defun rdm/dbl-lnsp ()
-      "switch line spacing to double"
-      (interactive)
-      (setq-local line-spacing 2.0))
-    (defun rdm/lnsp-default ()
-      "remove local line-spacing"
-      (interactive)
-      (kill-local-variable 'line-spacing))
-    )
-
-  (leaf paren
-    :doc "configure show-paren-mode"
-    :tag "builtin"
-    ;; :custom-face
-    ;; (show-paren-match  . '((nil (:background "SpringGreen2"))))
-    :global-minor-mode show-paren-mode)
-
-  (leaf electric-pair-mode
-    :doc "automatic pares parenthesis"
-    :tag "builtin"
-    :emacs>= "24"
-    :hook
-    ((conf-mode-hook
-      prog-mode-hook) . electric-pair-mode))
-
-  (leaf display-line-numbers
-    :tag "builtin"
-    :emacs>= "26"
-    :custom
-    (display-line-numbers-type . 'relative)
-    ;; preserve width
-    (display-line-numbers-width . 4)
-    :hook
-    ((conf-mode-hook
-      fundamental-mode-hook
-      outline-mode-hook
-      prog-mode-hook
-      text-mode-hook
-      git-timemachine-mode-hook) . display-line-numbers-mode)
-    :config
-    (defun rdm/display-line-numbers-toggle-rel ()
-      "toggle relative"
-      (interactive)
-      (if (eq display-line-numbers-type 'relative)
-          (custom-set-variables '(display-line-numbers-type  't))
-        (custom-set-variables '(display-line-numbers-type  'relative)))
-      (display-line-numbers--turn-on)) ;; read config
-    )
-
-  (leaf display-fill-column-indicator
-    :tag "builtin"
-    :emacs>= "27"
-    :custom
-    (display-fill-column-indicator-column . 90)
-    (display-fill-column-indicator-character . ?\N{U+22C5}) ; use '⋅' as indicator
-    :custom-face
-    (fill-column-indicator . '((t (:foreground "DeepSkyBlue3"))))
-    :hook
-    ((conf-mode-hook
-      fundamental-mode-hook
-      outline-mode-hook
-      prog-mode-hook
-      text-mode-hook) . display-fill-column-indicator-mode)
-    )
-
-  (leaf hl-todo
-    :ensure t
-    :hook
-    (prog-mode-hook . hl-todo-mode))
-
-  (leaf ov
-    :ensure t
-    :preface
-    (defun rdm/available-serif-font()
-      "returns serif font family if available"
-      (flet ((font-available (font) (member font (font-family-list))))
-        (let ((serif-fonts '("Hiragino Mincho ProN"
-                             "Noto Serif CJK JP")))
-          (catch 'found
-            (dolist (font serif-fonts)
-              (if (font-available font) (throw 'found font)))))))
-    :init
-    (defvar rdm/ov-serif nil "overlay with serif font")
-    (defun rdm/toggle-buffer-ov-serif (trigger-state-p)
-      "temporary make buffer to serif, ov-clear if ov available at buffer"
-      (let ((serif-fnt (rdm/available-serif-font)))
-        (if (and serif-fnt trigger-state-p)
-            (progn (rdm/sw-lnsp 0.8)
-                   (setq-local rdm/ov-serif
-                         (ov (point-min) (point-max) 'face `(:family ,serif-fnt))))
-          (progn (rdm/lnsp-default) (ov-reset rdm/ov-serif)))))
-    :commands (ov-reset ov-clear ov))
-
-  (leaf darkroom
-    :ensure t
-    :init
-    (defun rdm/darkroom-init ()
-      (rdm/toggle-buffer-ov-serif darkroom-mode))
-    :hook (darkroom-mode-hook . rdm/darkroom-init)
-    ;;(darkroom-mode . ov-clear)
-    :bind ([f9] . darkroom-mode)
-    :custom (darkroom-text-scale-increase . 1)
-    ;;:config
-    ;;(doom-modeline t) ;TODO:enable modeline
-    )
-
-  (leaf all-the-icons :ensure t) ; need installation by all-the-icons-install-fonts
-
-  (leaf unicode-fonts
-    :ensure t
-    :config (unicode-fonts-setup))
-
-  (leaf nyan-mode
-    :ensure t
-    :config
-    (defun nyan-try ()
-      (nyan-stop-animation)
-      (setq nyan-wavy-trail nil))
-    (defun nyan-xit ()
-      (nyan-start-animation)
-      (setq nyan-wavy-trail t))
-    (nyan-xit)
-    :hook
-    ((evil-normal-state-entry-hook . nyan-try)
-     (evil-normal-state-exit-hook . nyan-xit))
-    :global-minor-mode nyan-mode)
-
-  (leaf *config-doom-modeline
-    :config (load "~/.emacs.d/elisp/doom.el"))
-
-  (leaf *config-custom-thems-path
-    :doc "load custom theme from elisp dir"
-    :custom (custom-theme-directory . "~/.emacs.d/elisp/"))
-
-  (leaf highlight-indent-guides
-    :ensure t
-    :hook
-    ((conf-mode-hook
-      outline-mode-hook
-      prog-mode-hook
-      text-mode-hook
-      git-timemachine-mode-hook) . highlight-indent-guides-mode)
-    :custom
-    ;;(if (not (display-graphic-p))
-    ;;    (progn
-    ;;      (setq highlight-indent-guides-auto-enabled nil)
-    ;;      (set-face-background 'highlight-indent-guides-odd-face "black")
-    ;;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
-    ;;      (set-face-background 'highlight-indent-guides-even-face "black")
-    ;;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
-    ;;    (setq highlight-indent-guides-auto-enabled t)
-    ;;  )
-    (highlight-indent-guides-method . 'column)
-    (highlight-indent-guides-auto-odd-face-perc . 10)
-    (highlight-indent-guides-auto-even-face-perc . 10)
-    ;;(setq highlight-indent-guides-auto-character-face-perc 20)
-    (highlight-indent-guides-responsive . 'top)
-    (highlight-indent-guides-delay . 0))
-
-  (leaf rainbow-delimiters
-    :ensure t
-    :hook
-    ((conf-mode-hook
-      prog-mode-hook
-      git-timemachine-mode-hook) . rainbow-delimiters-mode))
-
-  (leaf whitespace
-    :doc "configure whitespace"
-    :hook
-    ((conf-mode-hook
-      outline-mode-hook
-      prog-mode-hook
-      text-mode-hook
-      git-timemachine-mode-hook) . whitespace-mode)
-    :custom
-    (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode hexl-mode))
-    (whitespace-line-column . 80)
-    (whitespace-style . '(face ;; enable
-                          trailing
-                          space-mark
-                          newline newline-mark
-                          ;;tab-mark tabs ;; conflicts highlight indent mode
-                          ;;empty  ; empty line
-                          ;;lines-tail
-                          ;;spaces
-                          ))
-    (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-                                     (newline-mark ?\n [?\x21B2 ?\n])
-                                     ))
-    :custom-face
-    ;; fix color
-    (whitespace-trailing . '((nil (:inherit 'default :foreground "DeepPink" :underline (:style wave)))))
-    (whitespace-tab      . '((t (:inherit 'shadow))))
-    (whitespace-newline  . '((nil (:inherit 'shadow))))
-    ;;(set-face-attribute 'whitespace-newline nil
-    ;;  :foreground "SlateGray"
-    ;;  :background nil
-    ;;  :underline nil)
-    ;;(set-face-attribute 'whitespace-space nil
-    ;;  :background rdm/bg-color
-    ;;  :foreground "GreenYellow"
-    ;;  :weight 'bold)
-    ;;(set-face-attribute 'whitespace-empty nil
-    ;;  :background rdm/bg-color)
-    :global-minor-mode global-whitespace-mode
-    )
-
-  (leaf beacon
-    :ensure t
-    :custom
-    ((beacon-size . 45)
-     (beacon-color . "orange3")
-     (beacon-blink-duration . 0.20)
-     (beacon-blink-delay . 0.20))
-    :config (beacon-mode t))
-  )
-
-
 (leaf *conf-cache-history
   :config
   (leaf *set-cache-path
@@ -416,7 +165,7 @@
     :custom (ediff-window-setup-function . #'ediff-setup-windows-plain)
     :config
     (defun ediff-window-display-p ()
-       "overwritten ediff builtin function, for not generate new frame" nil)
+      "overwritten ediff builtin function, for not generate new frame" nil)
     )
 
   (leaf editorconfig
@@ -544,6 +293,278 @@
       :require t
       :ensure t)
     :global-minor-mode global-tree-sitter-mode
+    )
+  )
+
+
+(leaf *conf-appearance
+  :custom
+  (inhibit-splash-screen . t)
+  (ring-bell-function . 'ignore)
+  :config
+  (unless (emacs-works-on-term-p)
+    (progn
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)))
+  (menu-bar-mode -1)
+  (display-time)
+  (column-number-mode t)
+  (blink-cursor-mode 0)
+  (which-function-mode 1)
+  (transient-mark-mode 1)
+
+  (leaf *font-configure
+    :doc "font configure"
+    :config
+    (custom-set-variables
+     '(default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
+                                         '(width . 80)
+                                         '(height . 45)) default-frame-alist)))
+    (defvar font-for-tables "UDEV Gothic" "1:2 width font for table")
+
+    (defun rdm/set-variable-pitch (fonts)
+      "modify variable pitch face to available font in list"
+      (let ((font-available (lambda (font) (member font (font-family-list)))))
+        (catch 'found
+          (dolist (font fonts)
+            (if (funcall font-available font)
+                (progn (custom-set-faces `(variable-pitch  ((t (:family ,font)))))
+                       (message "init.el: vp-font set!")
+                       (throw 'found font)))))))
+    )
+
+  (leaf *set-linespacing
+    :doc "control line spacing"
+    :custom (line-spacing . 0.40)
+    :config
+    (defun rdm/sw-lnsp (wdth)
+      "switch line spacing"
+      (interactive "nset line spacing: ")
+      (setq-local line-spacing wdth))
+    (defun rdm/dbl-lnsp ()
+      "switch line spacing to double"
+      (interactive)
+      (setq-local line-spacing 2.0))
+    (defun rdm/lnsp-default ()
+      "remove local line-spacing"
+      (interactive)
+      (kill-local-variable 'line-spacing))
+    )
+
+  (leaf *config-custom-themes-path
+    :doc "load custom theme from elisp dir"
+    :custom (custom-theme-directory . "~/.emacs.d/elisp/"))
+
+  (leaf *config-doom-modeline
+    :config (load "~/.emacs.d/elisp/doom.el"))
+
+
+  (leaf paren
+    :doc "configure show-paren-mode"
+    :tag "builtin"
+    :config
+    (custom-set-faces
+     `(show-paren-match  ((t (:background ,(doom-color 'green)))))
+     )
+    :global-minor-mode show-paren-mode)
+
+  (leaf electric-pair-mode
+    :doc "automatic pares parenthesis"
+    :tag "builtin"
+    :emacs>= "24"
+    :hook
+    ((conf-mode-hook
+      prog-mode-hook) . electric-pair-mode))
+
+  (leaf display-line-numbers
+    :tag "builtin"
+    :emacs>= "26"
+    :custom
+    (display-line-numbers-type . 'relative)
+    ;; preserve width
+    (display-line-numbers-width . 4)
+    :hook
+    ((conf-mode-hook
+      fundamental-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook
+      git-timemachine-mode-hook) . display-line-numbers-mode)
+    :config
+    (defun rdm/display-line-numbers-toggle-rel ()
+      "toggle relative"
+      (interactive)
+      (if (eq display-line-numbers-type 'relative)
+          (custom-set-variables '(display-line-numbers-type  't))
+        (custom-set-variables '(display-line-numbers-type  'relative)))
+      (display-line-numbers--turn-on)) ;; read config
+    )
+
+  (leaf display-fill-column-indicator
+    :tag "builtin"
+    :emacs>= "27"
+    :custom
+    (display-fill-column-indicator-column . 90)
+    (display-fill-column-indicator-character . ?\N{U+FF65}) ;; ·
+    :config
+    (custom-set-faces ;; modify bg to eldoc-box-body
+     `(fill-column-indicator ((t (:foreground ,(doom-color 'blue))))))
+    :hook
+    ((conf-mode-hook
+      fundamental-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook) . display-fill-column-indicator-mode)
+    )
+
+  (leaf hl-todo
+    :ensure t
+    :hook
+    (prog-mode-hook . hl-todo-mode))
+
+  (leaf ov
+    :ensure t
+    :preface
+    (defun rdm/available-serif-font()
+      "returns serif font family if available"
+      (let ((font-available (lambda (font) (member font (font-family-list))))
+            (serif-fonts '("Hiragino Mincho ProN"
+                           "Noto Serif CJK JP")))
+          (catch 'found
+            (dolist (font serif-fonts)
+              (if (funcall font-available font) (throw 'found font))))))
+    :init
+    (defvar rdm/ov-serif nil "overlay with serif font")
+    (defun rdm/toggle-buffer-ov-serif (trigger-state-p)
+      "temporary make buffer to serif, ov-clear if ov available at buffer"
+      (let ((serif-fnt (rdm/available-serif-font)))
+        (if (and serif-fnt trigger-state-p)
+            (progn (rdm/sw-lnsp 0.8)
+                   (setq-local rdm/ov-serif
+                         (ov (point-min) (point-max) 'face `(:family ,serif-fnt))))
+          (progn (rdm/lnsp-default) (ov-reset rdm/ov-serif)))))
+    :commands (ov-reset ov-clear ov))
+
+  (leaf darkroom
+    :ensure t
+    :init
+    (defun rdm/darkroom-init ()
+      (rdm/toggle-buffer-ov-serif darkroom-mode))
+    :hook (darkroom-mode-hook . rdm/darkroom-init)
+    ;;(darkroom-mode . ov-clear)
+    :bind ([f9] . darkroom-mode)
+    :custom (darkroom-text-scale-increase . 1)
+    ;;:config
+    ;;(doom-modeline t) ;TODO:enable modeline
+    )
+
+  (leaf all-the-icons :ensure t) ; need installation by all-the-icons-install-fonts
+
+  (leaf unicode-fonts
+    :ensure t
+    :config (unicode-fonts-setup))
+
+  (leaf nyan-mode
+    :ensure t
+    :config
+    (defun nyan-try ()
+      (nyan-stop-animation)
+      (setq nyan-wavy-trail nil))
+    (defun nyan-xit ()
+      (nyan-start-animation)
+      (setq nyan-wavy-trail t))
+    (nyan-xit)
+    :hook
+    ((evil-normal-state-entry-hook . nyan-try)
+     (evil-normal-state-exit-hook . nyan-xit))
+    :global-minor-mode nyan-mode)
+
+  (leaf highlight-indent-guides
+    :ensure t
+    :hook
+    ((conf-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook
+      git-timemachine-mode-hook) . highlight-indent-guides-mode)
+    :custom
+    ;;(if (not (display-graphic-p))
+    ;;    (progn
+    ;;      (setq highlight-indent-guides-auto-enabled nil)
+    ;;      (set-face-background 'highlight-indent-guides-odd-face "black")
+    ;;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
+    ;;      (set-face-background 'highlight-indent-guides-even-face "black")
+    ;;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
+    ;;    (setq highlight-indent-guides-auto-enabled t)
+    ;;  )
+    (highlight-indent-guides-method . 'column)
+    (highlight-indent-guides-auto-odd-face-perc . 10)
+    (highlight-indent-guides-auto-even-face-perc . 10)
+    ;;(setq highlight-indent-guides-auto-character-face-perc 20)
+    (highlight-indent-guides-responsive . 'top)
+    (highlight-indent-guides-delay . 0))
+
+  (leaf rainbow-delimiters
+    :ensure t
+    :hook
+    ((conf-mode-hook
+      prog-mode-hook
+      git-timemachine-mode-hook) . rainbow-delimiters-mode))
+
+  (leaf whitespace
+    :doc "configure whitespace"
+    :hook
+    ((conf-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook
+      git-timemachine-mode-hook) . whitespace-mode)
+    :custom
+    (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode hexl-mode))
+    (whitespace-line-column . 80)
+    (whitespace-style . '(face ;; enable
+                          trailing
+                          space-mark
+                          newline newline-mark
+                          ;;tab-mark tabs ;; conflicts highlight indent mode
+                          ;;empty  ; empty line
+                          ;;lines-tail
+                          ;;spaces
+                          ))
+    (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+                                     (newline-mark ?\n [?\x21B2 ?\n])
+                                     ))
+    :custom-face
+    (whitespace-tab      . '((t (:inherit 'shadow))))
+    (whitespace-newline  . '((nil (:inherit 'shadow))))
+    ;;(set-face-attribute 'whitespace-newline nil
+    ;;  :foreground "SlateGray"
+    ;;  :background nil
+    ;;  :underline nil)
+    ;;(set-face-attribute 'whitespace-space nil
+    ;;  :background rdm/bg-color
+    ;;  :foreground "GreenYellow"
+    ;;  :weight 'bold)
+    ;;(set-face-attribute 'whitespace-empty nil
+    ;;  :background rdm/bg-color)
+    :config
+    (custom-set-faces
+     `(whitespace-trailing ((nil (:inherit 'default :foreground ,(doom-color 'magenta) :underline (:style wave)))))
+     )
+    :global-minor-mode global-whitespace-mode
+    )
+
+  (leaf beacon
+    :ensure t
+    :custom
+    ((beacon-size . 45)
+     (beacon-color . "orange3")
+     (beacon-blink-duration . 0.20)
+     (beacon-blink-delay . 0.20))
+    :config
+    (beacon-mode t)
+    (eval-after-load 'Evil
+      (evil-define-key 'normal 'global (kbd "SPC") 'beacon-blink))
     )
   )
 
@@ -1333,19 +1354,17 @@
   :config
   (leaf git-gutter
     :ensure t
-    :hook (prog-mode-hook . git-gutter-fix-init)
     :custom
-    (git-gutter:modified-sign . " ")
+    (git-gutter:modified-sign . "=")
     (git-gutter:added-sign    . "+")
     (git-gutter:deleted-sign  . "▶")
     (git-gutter:ask-p         . nil)
-    :custom-face
-    (git-gutter:modified . '((t (:foreground "DodgerBlue2"
-                                 :background "DodgerBlue2"))))
-    (git-gutter:added    . '((t (:foreground "dark slate"
-                                 :background "SpringGreen2"))))
-    (git-gutter:deleted  . '((t (:foreground  "tomato2"))))
     :config
+    (custom-set-faces ;; modify bg fg
+     `(git-gutter:modified ((t (:foreground ,(doom-color 'blue)  :background ,(doom-color 'blue)))))
+     `(git-gutter:added    ((t (:foreground ,(doom-color 'base4) :background ,(doom-color 'green)))))
+     `(git-gutter:deleted  ((t (:foreground ,(doom-color 'red))))))
+
     (defun git-gutter-fix-init ()
       (interactive)
       (if (eq git-gutter-mode nil)
@@ -1541,12 +1560,13 @@
   )
 
 
+(leaf *load-lang-settings
+  :config (load "~/.emacs.d/elisp/langs.el"))
+
+
 (leaf *conf-appearance-on-state
   :doc "switch appearance when on gui or term"
-  :require treemacs doom-modeline
   :config
-  (load-theme 'doom-monokai-one t)
-
   (defun emacs-on-term ()
     "switch emacs appearance for term with doom-spacegrey"
     (interactive)
@@ -1557,7 +1577,10 @@
     "switch emacs appearance for gui with doom-molokai and modeline icons"
     (interactive)
     (custom-set-variables '(doom-modeline-icon t))
-    (treemacs-load-theme "all-the-icons"))
+    (treemacs-load-theme "all-the-icons")
+    (rdm/set-variable-pitch '("Hiragino Sans"
+                              "BIZ UDP Gothic"
+                              "Noto Sans CJK JP")))
 
   (if (emacs-works-on-term-p)
       (emacs-on-term) (emacs-on-gui))
@@ -1567,10 +1590,6 @@
                             (emacs-on-gui)
                           (emacs-on-term))))
   )
-
-
-(leaf *load-lang-settings
-  :config (load "~/.emacs.d/elisp/langs.el"))
 
 
 (leaf *load-local-conf
