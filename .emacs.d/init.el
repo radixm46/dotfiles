@@ -1261,7 +1261,8 @@
                          (registers . 5)))
     (initial-buffer-choice . (lambda ()
                                (dashboard-refresh-buffer)
-                               (get-buffer "*dashboard*"))))
+                               (get-buffer "*dashboard*")))
+    :bind ("<f12>" . dashboard-refresh-buffer))
 
   (leaf vterm
     :ensure t
