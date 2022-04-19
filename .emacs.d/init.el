@@ -1468,6 +1468,7 @@
 
   (leaf treemacs
     :ensure t
+    :require t
     ;; :defer t
     ;; :require treemacs
     :init
