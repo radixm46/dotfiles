@@ -23,13 +23,12 @@ case "$(uname)" in
         # path of hoembrew on /opt/homebrew
         BREW_PATH_OPT='/opt/homebrew'
         function brew_exists_at_opt() { [[ -d "${BREW_PATH_OPT}/bin" ]]; }
-        # path of hoembrew on /usr/local
-        BREW_PATH_LOCAL='/usr/local'
-        function brew_exists_at_local() { [[ -d "${BREW_PATH_LOCAL}/bin/Homebrew" ]]; }
+        # path of hoembrew on /usr/local/Homebrew
+        function brew_exists_at_local() { [[ -d '/usr/local/Homebrew' ]]; }
 
         # path add BREW_PATH_OPT/zsh to fpath
         path=(${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
-              ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
+              /usr/local/bin(N-/) /usr/local/sbin(N-/) \
               ${path})
         # switch homebrew dir by arch
         if runs_on_macARM64 && brew_exists_at_opt; then
@@ -39,16 +38,15 @@ case "$(uname)" in
             function arm() { arch -arm64 $@; }
             # launch zsh on rosetta2
             function zsh_ovrst2() {
-                if [[ -e "${BREW_PATH_LOCAL}/bin/zsh" ]]; then
-                    x86 "${BREW_PATH_LOCAL}/bin/zsh"
+                if [[ -e '/usr/local/bin/zsh' ]]; then
+                    x86 '/usr/local/bin/zsh'
                 else
                     x86 '/bin/zsh'
                 fi
             }
         elif runs_on_macX86_64 && brew_exists_at_local; then
-            path=(\
-                ${BREW_PATH_LOCAL}/bin(N-/) ${BREW_PATH_LOCAL}/sbin(N-/) \
-                ${path})
+            path=(/usr/local/bin(N-/) /usr/local/sbin(N-/) \
+                  ${path})
         fi
 
         # if macvim available, alias vim to macvim
