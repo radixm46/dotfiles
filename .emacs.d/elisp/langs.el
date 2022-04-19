@@ -210,7 +210,7 @@
   (org-priority-default         . 3)
   ;; keywords
   (org-refile-targets           . '((org-agenda-files :maxlevel . 3)))
-  (org-todo-keywords            . '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "PROJ(p)" "|"
+  (org-todo-keywords            . '((sequence "NEXT(n)" "TODO(t)" "STARTED(s)" "WAITING(w)" "PROJ(p)" "|"
                                               "DONE(d)" "CANCELLED(c)")))
   (org-capture-templates        . '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
                                      "** TODO %?\n  %U\n  %a") ; %u->%t
