@@ -246,6 +246,7 @@
 
   (leaf *reconfig-org-vi-key :if (fboundp 'evil-mode)
     :config
+    (evil-set-initial-state 'org-agenda-mode 'insert)
     (evil-define-key 'normal org-mode-map
       "j" 'evil-next-visual-line
       "k" 'evil-previous-visual-line
