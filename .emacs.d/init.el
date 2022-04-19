@@ -463,7 +463,12 @@
     ;;(doom-modeline t) ;TODO:enable modeline
     )
 
-  (leaf all-the-icons :ensure t) ; need installation by all-the-icons-install-fonts
+  (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
+    :ensure t
+    :config
+    (add-to-list
+     'all-the-icons-extension-icon-alist
+     '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)))
 
   (leaf unicode-fonts
     :ensure t
