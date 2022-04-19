@@ -575,6 +575,8 @@
     (beacon-mode t)
     (eval-after-load 'Evil
       (evil-define-key 'normal 'global (kbd "SPC") 'beacon-blink))
+    (add-to-list 'beacon-dont-blink-predicates
+                 (lambda () (eq major-mode 'eww-mode)))
     )
   )
 
