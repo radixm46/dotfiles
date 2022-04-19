@@ -322,15 +322,29 @@
                                          '(height . 45)) default-frame-alist)))
     (defvar font-for-tables "UDEV Gothic" "1:2 width font for table")
 
-    (defun rdm/set-variable-pitch (fonts)
-      "modify variable pitch face to available font in list"
+    (defun rdm/apply-func-in-fonts (fonts func)
+      "apply func to available font in list"
       (let ((font-available (lambda (font) (member font (font-family-list)))))
         (catch 'found
           (dolist (font fonts)
             (if (funcall font-available font)
-                (progn (custom-set-faces `(variable-pitch  ((t (:family ,font)))))
-                       (message "init.el: vp-font set!")
+                (progn (funcall func font)
                        (throw 'found font)))))))
+
+    (defun rdm/set-variable-pitch ()
+      "modify variable pitch face to available font in list"
+      (rdm/apply-func-in-fonts '("Hiragino Sans"
+                                 "BIZ UDP Gothic"
+                                 "Noto Sans CJK JP")
+                               (lambda (f)
+                                 (custom-set-faces `(variable-pitch  ((t (:family ,f))))))))
+
+    (defun rdm/available-serif-font()
+      "returns serif font family available in list"
+      (rdm/apply-func-in-fonts '("Hiragino Mincho ProN"
+                                 "BIZ UDP Mincho"
+                                 "Noto Serif CJK JP")
+                               (lambda (f) '())))
     )
 
   (leaf *set-linespacing
@@ -424,15 +438,6 @@
 
   (leaf ov
     :ensure t
-    :preface
-    (defun rdm/available-serif-font()
-      "returns serif font family if available"
-      (let ((font-available (lambda (font) (member font (font-family-list))))
-            (serif-fonts '("Hiragino Mincho ProN"
-                           "Noto Serif CJK JP")))
-          (catch 'found
-            (dolist (font serif-fonts)
-              (if (funcall font-available font) (throw 'found font))))))
     :init
     (defvar rdm/ov-serif nil "overlay with serif font")
     (defun rdm/toggle-buffer-ov-serif (trigger-state-p)
@@ -1583,9 +1588,7 @@
     (interactive)
     (custom-set-variables '(doom-modeline-icon t))
     (treemacs-load-theme "all-the-icons")
-    (rdm/set-variable-pitch '("Hiragino Sans"
-                              "BIZ UDP Gothic"
-                              "Noto Sans CJK JP")))
+    (rdm/set-variable-pitch))
 
   (if (emacs-works-on-term-p)
       (emacs-on-term) (emacs-on-gui))
