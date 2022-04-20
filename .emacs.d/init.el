@@ -11,6 +11,11 @@
 
 (leaf *startup
   :config
+  (leaf *gc-config
+    :config
+    (setq gc-cons-threshold (* 128 1024 1024)) ;; 128MB
+    (setq garbage-collection-messages t)
+    )
   ;; mouse support on terminal
   (unless window-system
     (require 'mouse)
