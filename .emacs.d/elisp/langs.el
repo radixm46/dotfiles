@@ -6,6 +6,31 @@
   (emacs-lisp-mode-hook . hs-minor-mode)
   (emacs-lisp-mode-hook . flycheck-mode)
   (emacs-lisp-mode-hook . eldoc-box-hover-at-point-mode)
+  :init
+  (leaf highlight-defined
+    :ensure t
+    :preface
+    (defun rdm/highlight-defined-patch-face ()
+      "patch face color from font-lock-face"
+      (custom-set-faces
+       `(highlight-defined-function-name-face
+         ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+       `(highlight-defined-builtin-function-name-face
+         ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+       `(highlight-defined-special-form-name-face
+         ((nil (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
+       `(highlight-defined-macro-name-face
+         ((nil (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
+       ;; `(highlight-defined-face-name-face
+       ;;   ((nil (:foreground ,(doom-color 'fg) :background ,(doom-color 'dark-cyan)))))
+       `(highlight-defined-variable-name-face
+         ((nil (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
+       ))
+    :hook
+     (emacs-lisp-mode-hook . highlight-defined-mode)
+     (highlight-defined-mode-hook . rdm/highlight-defined-patch-face)
+    :custom (highlight-defined-face-use-itself . t)
+    )
   )
 
 ;; required for racer
