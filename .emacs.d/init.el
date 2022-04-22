@@ -1351,6 +1351,13 @@
     (tramp-default-method        . "ssh")
     (tramp-persistency-file-name . "~/.emacs.d/.cache/tramp"))
 
+  (leaf epa :emacs>="27"
+    :tag "builtin"
+    :doc "gpg pinentry mode"
+    :custom
+    (epa-pinentry-mode . 'loopback)
+    )
+
   (leaf *darwin-dictionary-integration :if (equal system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
