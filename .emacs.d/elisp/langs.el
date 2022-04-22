@@ -777,7 +777,8 @@ based on elfeed-search-browse-url"
                               ("N" (elfeed-search-set-filter "+news -junk")          "news(all)")
                               ("l" (elfeed-search-set-filter "+later +unread") "later")
                               ("L" (elfeed-search-set-filter "+later -unread") "later(read)")
-                              ("s" (elfeed-search-set-filter "+star")          "starred"))
+                              ("s" (elfeed-search-set-filter "+star")          "starred")
+                              )
 
   :config
   (dolist (face '(elfeed-search-tag-face
@@ -789,6 +790,7 @@ based on elfeed-search-browse-url"
 
   ;; :hook (elfeed-show-mode-hook . darkroom-mode)
   )
+
 (leaf eww
   :tag "builtin"
   :doc "text base web browser"

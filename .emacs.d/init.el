@@ -72,7 +72,7 @@
     :doc "make backup files"
     :tag "builtin"
     :custom
-    (backup-directory-alist . '((".*" .  "~/.emacs.d/.cache/hist")))
+    (backup-directory-alist . '(("." .  "~/.emacs.d/.cache/hist")))
     (make-backup-files . t)
     (version-control . t) ;; enable version control
     (kept-new-versions . 5)
@@ -645,7 +645,7 @@
     :doc "Useful search and navigation commands"
     :hydra
     ((hydra-consult
-     (:hint nil) "
+      (:hint nil) "
                             ^^consult functions^^
 ^^^^--------------------------------------------------------------------------------
  _b_:   virtual buffers                    _s_:   search
@@ -939,7 +939,7 @@
       :ensure t
       :hook (eldoc-mode-hook . eldoc-box-hover-at-point-mode)
       :config
-      (custom-set-faces ;; modify bg og eldoc-box-body
+      (custom-set-faces ;; modify bg to eldoc-box-body
        `(eldoc-box-body ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))))
     )
 
@@ -973,7 +973,8 @@
       :bind
       (:flycheck-mode-map
        :package flycheck
-       ("C-M-l" . consult-flycheck))))
+       ("C-M-l" . consult-flycheck)))
+    )
 
   (leaf company
     ;; company completion framework
