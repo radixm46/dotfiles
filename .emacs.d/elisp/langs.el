@@ -588,7 +588,7 @@
   :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
   :hook
   (elfeed-search-mode-hook . (lambda () (rdm/sw-lnsp 0.55)
-                               (face-remap-add-relative 'hl-line '(:background "#253554"))))
+                               (face-remap-add-relative 'hl-line `(:background ,(doom-color 'base3)))))
   :init
   (add-to-list 'beacon-dont-blink-major-modes 'elfeed-search-mode)
   (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
