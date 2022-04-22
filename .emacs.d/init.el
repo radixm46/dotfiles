@@ -1283,6 +1283,26 @@
                                (get-buffer "*dashboard*")))
     :bind ("<f12>" . dashboard-refresh-buffer))
 
+  (leaf calendar
+    :tag "builtin"
+    :custom
+    (
+     (calendar-month-name-array   . ["01" "02" "03" "04" "05" "06"
+                                     "07" "08" "09" "10" "11" "12" ])
+     (calendar-week-start-day     . 0)
+     (calendar-mark-holidays-flag . t)
+     )
+    :hook
+    (calendar-today-visible-hook   . calendar-mark-today)
+    :config
+    (custom-set-faces
+     `(holiday
+       ((nil (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
+     `(calendar-today
+       ((nil (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))
+     )
+    )
+
   (leaf vterm
     :ensure t
     :preface ; release keys for binding
