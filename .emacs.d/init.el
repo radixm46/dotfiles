@@ -1358,6 +1358,9 @@
     (epa-pinentry-mode . 'loopback)
     )
 
+  (leaf emacs-w3m :if (executable-find "w3m")
+    :ensure t)
+
   (leaf *darwin-dictionary-integration :if (equal system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
