@@ -6,8 +6,10 @@
 ;; load custom.el if exists
 ;; (when (file-exists-p custom-file) (load custom-file))
 
+(setq package-archives (append '(("melpa"        . "https://melpa.org/packages/")
                                  ("melpa-stable" . "https://stable.melpa.org/packages/")
-                                 ("org" . "http://orgmode.org/elpa/")) package-archives))
+                                 ("org"          . "https://orgmode.org/elpa/"))
+                               package-archives))
 (setq load-prefer-newer t)
 
 ;; auto load use-package package
@@ -67,6 +69,11 @@
       (advice-add #'straight--build-autoloads :around
                   #'rdm/patch-package-find-file-visit-truename)
       )
+    ;; NOTE: straight.el configures straight-disable-native-compile with straight--native-comp-available
+    :custom
+    ;; use straight as leaf default package management
+    ((leaf-alias-keyword-alist . '((:ensure . :straight)))
+     (straight-vc-git-default-clone-depth . 1))
     :config
     (defvar bootstrap-version)
     (let ((bootstrap-file
@@ -81,26 +88,19 @@
           (eval-print-last-sexp)))
       (load bootstrap-file nil 'nomessage))
 
-    (defun my/straight-freeze-upgrade ()
+    (defun rdm/straight-freeze-upgrade ()
       "freeze versions then upgrade all"
       (interactive)
       (progn (straight-freeze-versions)
              (straight-pull-all)
              (straight-rebuild-all)))
-
-    ;; use straight as leaf default package management
-    :custom
-    (leaf-alias-keyword-alist . '((:ensure . :straight)))
-    (straight-vc-git-default-clone-depth . 5)
-    (straight-disable-byte-compile . nil)
-    (straight-disable-native-compile . t))
-
-  ;; optional packages for leaf keywords (under straight.el)
-  (leaf hydra :ensure t)
-
-  (leaf blackout :disabled t
-    :ensure t)
+    )
   )
+
+;; optional packages for leaf keywords (under straight.el)
+(leaf hydra :ensure t)
+(leaf blackout :disabled t
+  :ensure t)
 
 (leaf paradox
   :doc "modernized emacs package menu"
