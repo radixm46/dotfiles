@@ -56,6 +56,17 @@
 
   (leaf *straight-setup :if (executable-find "git")
     :doc "setup straight.el (require git)"
+    :preface
+    (leaf *straight-patch-alias-resolve :emacs>= "28"
+      :doc "workaround for emacs28"
+      :url "https://github.com/raxod502/straight.el/issues/701"
+      :config
+      (defun rdm/patch-package-find-file-visit-truename (oldfun &rest r)
+        (let ((find-file-visit-truename nil))
+          (apply oldfun r)))
+      (advice-add #'straight--build-autoloads :around
+                  #'rdm/patch-package-find-file-visit-truename)
+      )
     :config
     (defvar bootstrap-version)
     (let ((bootstrap-file
