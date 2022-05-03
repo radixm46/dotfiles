@@ -3,9 +3,9 @@
 
 ;; use custom.el for package-selected-packages
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
-(setq package-archives (append '(("melpa" . "https://melpa.org/packages/")
+;; load custom.el if exists
+;; (when (file-exists-p custom-file) (load custom-file))
+
                                  ("melpa-stable" . "https://stable.melpa.org/packages/")
                                  ("org" . "http://orgmode.org/elpa/")) package-archives))
 (setq load-prefer-newer t)
