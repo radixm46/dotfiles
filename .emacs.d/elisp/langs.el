@@ -225,25 +225,41 @@
 (leaf org
   :doc "org-mode config"
   :ensure t
+  :require t
   :mode ("\\.org\\'" . org-mode)
   :custom
-  (org-startup-truncated        . t)
-  (org-startup-folded           . nil)
   ;; priority
   (org-priority-highest         . 1)
   (org-priority-lowest          . 4)
   (org-priority-default         . 3)
   ;; keywords
   (org-refile-targets           . '((org-agenda-files :maxlevel . 3)))
-  (org-todo-keywords            . '((sequence "NEXT(n)" "TODO(t)" "STARTED(s)" "WAITING(w)" "PROJ(p)" "|"
-                                              "DONE(d)" "CANCELLED(c)")))
-  (org-capture-templates        . '(("t" "Task to Inbox" entry (file+headline org-todofile "Inbox")
-                                     "** TODO %?\n  %U\n  %a") ; %u->%t
-                                    ("n" "Note to Inbox" entry (file+headline "" "Inbox")
-                                     "** %?\nEntered on %U\n %i\n %a")))
+  (org-todo-keywords            . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
+                                              "DONE(d!)" "CANCELLED(c@)")))
+  (org-capture-templates        . '( ;; NOTE: require material icons
+                                    ("t" ,(format  "%s Task to Inbox" (all-the-icons-material "check"))
+                                     entry (file+headline org-todofile "Inbox")
+                                     "** TODO %?\n  %U\n  %a"
+                                     :empty-lines-before 1) ; %u->%t
+                                    ("n" ,(format  "%s Note to Inbox" (all-the-icons-material "note"))
+                                     entry (file+headline "" "Inbox")
+                                     "** %?\nEntered on %U\n %i\n %a"
+                                     :empty-lines-before 1)
+                                    ))
   (org-log-done                 . 'time)
   (org-clock-clocked-in-display . 'frame-title)
-  (org-image-actual-width       . nil)
+  ;; for org src
+  (org-src-preserve-indentation . t)
+  ;; Edit settings
+  (org-auto-align-tags . t)
+  (org-tags-column . 75)
+  (org-catch-invisible-edits . 'show-and-error)
+  (org-special-ctrl-a/e . nil)
+  (org-insert-heading-respect-content . nil)
+  ;; agenda filter preset
+  (org-agenda-tag-filter-preset . '("-agenda_ignore"))
+  (org-agenda-include-diary     . t)
+
   :config
   (leaf *org-config-directory :if (f-directory-p "~/org/orgfiles")
     :custom
@@ -254,20 +270,89 @@
      '(org-agenda-files         (directory-files org-directory t ".org$" t)))
     (defvar org-todofile        (concat org-directory "/todo.org") "default org todo file path"))
 
-  (leaf *org-latex-preview :if (executable-find "dvisvgm")
-    :doc "if dvisvgm available, startup with latex preview"
-    :custom
-    (org-preview-latex-default-process . 'dvisvgm)
-    (org-startup-with-latex-preview    . t))
-
-  (custom-set-variables
-   ;; set latex option
-   '(org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
-
   (defun rdm/org-goto-dir ()
     "open dir '~/org' with dired"
     (interactive)
     (find-file "~/org"))
+
+  (leaf *org-appearance
+    :custom
+    '(
+      (org-startup-truncated     . t)
+      (org-startup-folded        . nil)
+      (org-image-actual-width    . nil)
+      (org-hide-emphasis-markers . t)
+      (org-pretty-entities       . nil)
+      (org-ellipsis              . "…")
+      )
+    (org-agenda-block-separator . ?─)
+    (org-agenda-time-grid . '((daily today require-timed)
+                              (800 1000 1200 1400 1600 1800 2000)
+                              " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+    (org-agenda-current-time-string . "⭠ now ─────────────────────────────────────────────────")
+    :config
+    (leaf *org-latex-preview-svg :if (executable-find "dvisvgm") :disabled t
+      :doc "if dvisvgm available, startup with latex preview"
+      :custom
+      (org-preview-latex-default-process . 'dvisvgm)
+      (org-startup-with-latex-preview    . nil)
+      :config
+      (custom-set-variables
+       '(org-format-latex-options (plist-put org-format-latex-options :scale 1.4)))
+      )
+
+    (leaf *org-latex-preview-imagemagick
+      :doc "use imagemagick for latex preview"
+      :require ob-latex
+      :after org
+      :custom
+      (org-latex-create-formula-image-program . 'imagemagick)
+      (org-startup-with-latex-preview    . nil)
+      :config
+      (custom-set-variables
+       '(org-format-latex-options (plist-put org-format-latex-options :scale 1.6)))
+      (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
+      )
+
+    (custom-set-faces
+     `(org-hide ((nil (:foreground ,(face-attribute 'default :background))))) ; force load bg-color
+     `(org-table ((nil :family ,font-for-tables))) ;; use 1:2 font for table
+     )
+
+    (leaf org-bullets :disabled t
+      :ensure t
+      :doc "pretty looking bullet list"
+      :hook (org-mode-hook . org-bullets-mode))
+
+    (leaf org-modern
+      :straight
+      (org-modern :type git :host github
+                  :repo "minad/org-modern" :branch "main")
+      :doc "better looking org mode"
+      :preface
+      ;; NOTE: do not use org-modern-todo
+      (let ((bg-c (doom-color 'bg))
+            (box-p '(:line-width (0 . -4))))
+        (custom-set-variables
+         '(org-modern-todo  nil)
+         '(org-todo-keyword-faces
+           `(
+             ("TODO"    . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'green)))))
+             ("NEXT"    . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'blue)))))
+             ("STARTED" . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'cyan)))))
+             ("WAITING" . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'yellow)))))
+             ("PROJ"    . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'magenta)))))
+             )))
+        )
+      :hook
+      (org-mode-hook . org-modern-mode)
+      :custom
+      ;;org-modern custom
+      (org-modern-label-border . 4)
+      (org-modern-table . nil)
+      (org-modern-horizontal-rule . nil)
+      )
+    )
 
   (leaf *reconfig-org-vi-key :if (fboundp 'evil-mode)
     :config
@@ -289,16 +374,15 @@
 
   ;; (setq system-time-locale "C") ; dates written in eng
 
-  (set-face-attribute 'org-table nil :family font-for-tables)
-
-  (leaf org-bullets
-    :doc "pretty looking bullet list"
-    :ensure t
-    :hook (org-mode-hook . org-bullets-mode))
-
   (leaf org-pomodoro
     :doc "configure org-pomodoro"
-    :ensure t)
+    :ensure t
+    :custom
+    (org-pomodoro-ask-upon-killing   . t)
+    (org-pomodoro-format             . "🍅 %s")
+    (org-pomodoro-short-break-format . "☕ %s")
+    (org-pomodoro-long-break-format  . "🥞 %s")
+    )
 
   (leaf org-sidebar
     :doc "sidebar for org-mode"
@@ -405,7 +489,7 @@
     )
 
   :hook
-  (org-mode-hook . org-mode-reftex-setup)
+  ;; (org-mode-hook . org-mode-reftex-setup)
   (org-mode-hook . org-indent-mode)
 
   :hydra
