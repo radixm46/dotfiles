@@ -236,7 +236,7 @@
   (org-refile-targets           . '((org-agenda-files :maxlevel . 3)))
   (org-todo-keywords            . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
                                               "DONE(d!)" "CANCELLED(c@)")))
-  (org-capture-templates        . '( ;; NOTE: require material icons
+  (org-capture-templates        . `( ;; NOTE: require material icons
                                     ("t" ,(format  "%s Task to Inbox" (all-the-icons-material "check"))
                                      entry (file+headline org-todofile "Inbox")
                                      "** TODO %?\n  %U\n  %a"
