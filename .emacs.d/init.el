@@ -487,6 +487,18 @@
     :ensure t
     :config (unicode-fonts-setup))
 
+  (leaf emojify
+    :ensure t
+    :custom
+    (emojify-emojis-dir . "~/.emacs.d/.cache/emojis")
+    (emojify-display-style . 'unicode)
+    (emojify-composed-text-p . nil)
+    :config
+    (leaf *emojify-init :emacs< "28"
+      :custom (emojify-display-style . 'ascii)
+      :hook (after-init-hook . global-emojify-mode))
+    )
+
   (leaf nyan-mode
     :ensure t
     :config
