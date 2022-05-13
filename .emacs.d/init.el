@@ -328,7 +328,7 @@
      '(default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
                                          '(width . 80)
                                          '(height . 45)) default-frame-alist)))
-    (defvar font-for-tables "UDEV Gothic" "1:2 width font for table")
+    (defvar font-for-tables "UDEV Gothic NF" "1:2 width font for table")
 
     (defun rdm/apply-func-in-fonts (fonts func)
       "apply func to available font in list"
@@ -1460,6 +1460,7 @@
 
   (leaf magit
     :ensure t
+    :require t
     ;:custom (magit-completing-read-function . 'magit-ido-completing-read)
     :hook (magit-section-mode-hook . (lambda () (whitespace-mode -1)))
     :config
