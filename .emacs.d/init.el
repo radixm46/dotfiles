@@ -380,6 +380,11 @@
   (leaf *config-doom-modeline
     :config (load "~/.emacs.d/elisp/doom.el"))
 
+  (leaf *config-childframe :emacs> "28"
+    :config
+    (custom-set-faces
+     `(child-frame-border  ((nil (:foreground ,(doom-color 'bg)))))
+     ))
 
   (leaf paren
     :doc "configure show-paren-mode"
