@@ -269,6 +269,7 @@
   (leaf tab-bar :emacs>= "27.1"
     :tag "builtin"
     :doc "configure tab-bar mode"
+    :custom (tab-bar-show . 1)
     :hydra
     (hydra-tab-bar
      (:hint nil) "
