@@ -5,7 +5,7 @@
   :hook
   (emacs-lisp-mode-hook . hs-minor-mode)
   (emacs-lisp-mode-hook . flycheck-mode)
-  (emacs-lisp-mode-hook . eldoc-box-hover-at-point-mode)
+  (emacs-lisp-mode-hook . eldoc-box-hover-mode)
   :init
   (leaf highlight-defined
     :ensure t
