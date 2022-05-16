@@ -885,4 +885,15 @@ based on elfeed-search-browse-url"
   (shr-use-colors . t)
   (shr-bullet . "* ")
   (eww-search-prefix . "https://www.google.com/search?q=")
+  :hook
+  (eww-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
+  :config
+  (leaf *eww-bind-all-the-icons :if (fboundp 'all-the-icons-insert)
+    :custom
+    `(
+      (shr-bullet                        . ,(format "%s " (all-the-icons-faicon "caret-right")))
+      (eww-form-checkbox-symbol          . ,(all-the-icons-faicon "square-o"))
+      (eww-form-checkbox-selected-symbol . ,(all-the-icons-faicon "check-square-o"))
+      )
+    )
   )
