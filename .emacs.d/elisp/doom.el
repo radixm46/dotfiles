@@ -136,4 +136,4 @@
   (doom-themes-neotree-config)
 )
 
-(load-theme 'doom-monokai-one t)
+(load-theme 'doom-solarized-dark t)
