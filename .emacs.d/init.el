@@ -589,7 +589,7 @@
     :global-minor-mode global-whitespace-mode
     )
 
-  (leaf beacon
+  (leaf beacon :disabled t
     :ensure t
     :custom
     ((beacon-size . 45)
@@ -602,6 +602,60 @@
       (evil-define-key 'normal 'global (kbd "SPC") 'beacon-blink))
     (add-to-list 'beacon-dont-blink-predicates
                  (lambda () (eq major-mode 'eww-mode)))
+    )
+
+  (leaf pulsar
+    :ensure t
+    :custom
+    (pulsar-pulse                  . t)
+    (pulsar-face                   . 'pulsar-magenta)
+    (pulsar-highlight-face         . 'pulsar-yellow)
+    (pulsar-delay                  . 0.040)
+    (pulsar-iterations             . 10)
+    (pulsar-pulse-on-window-change . t)
+    (pulsar-pulse-functions        . '(
+                                       ;; recenter-top-bottom
+                                       ;; move-to-window-line-top-bottom
+                                       reposition-window
+                                       ;; forward-page
+                                       ;; backward-page
+                                       ;; scroll-up-command
+                                       ;; scroll-down-command
+                                       org-next-visible-heading
+                                       org-previous-visible-heading
+                                       org-forward-heading-same-level
+                                       org-backward-heading-same-level
+                                       outline-backward-same-level
+                                       outline-forward-same-level
+                                       outline-next-visible-heading
+                                       outline-previous-visible-heading
+                                       outline-up-heading
+                                       ))
+    :hook
+    ((
+      prog-mode-hook
+      conf-mode-hook
+      ) . pulsar-mode)
+    :config
+    ;; (pulsar-global-mode 1)
+    (leaf *patch-pulsar-color :after doom-themes
+      :config
+      (custom-set-faces
+       `(pulsar-magenta ((nil (:background ,(doom-color 'magenta)))))
+       `(pulsar-yellow  ((nil (:background ,(doom-color 'yellow)))))
+       `(pulsar-red     ((nil (:background ,(doom-color 'red)))))
+       `(pulsar-blue    ((nil (:background ,(doom-color 'blue)))))
+       `(pulsar-cyan    ((nil (:background ,(doom-color 'cyan)))))
+       `(pulsar-green   ((nil (:background ,(doom-color 'green)))))
+       )
+      )
+
+    ;; bind to evil layer
+    (eval-after-load 'Evil
+      (evil-define-key 'normal 'global
+        (kbd "SPC") 'pulsar-pulse-line
+        (kbd "S-SPC") 'pulsar-highlight-line)
+      )
     )
   )
 
