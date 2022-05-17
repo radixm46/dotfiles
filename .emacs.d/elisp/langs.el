@@ -237,11 +237,11 @@
   (org-todo-keywords            . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
                                               "DONE(d!)" "CANCELLED(c@)")))
   (org-capture-templates        . `( ;; NOTE: require material icons
-                                    ("t" ,(format  "%s Task to Inbox" (all-the-icons-faicon "check"))
+                                    ("t" ,(format  "%s Task to Inbox" (all-the-icons-faicon "check" :v-adjust 0.0))
                                      entry (file+headline org-todofile "Inbox")
                                      "** TODO %?\n  %U\n  %a"
                                      :empty-lines-before 1) ; %u->%t
-                                    ("n" ,(format  "%s Note to Inbox" (all-the-icons-faicon "sticky-note"))
+                                    ("n" ,(format  "%s Note to Inbox" (all-the-icons-faicon "sticky-note" :v-adjust 0.0))
                                      entry (file+headline "" "Inbox")
                                      "** %?\nEntered on %U\n %i\n %a"
                                      :empty-lines-before 1)
@@ -896,7 +896,7 @@ based on elfeed-search-browse-url"
   (leaf *eww-bind-all-the-icons :if (fboundp 'all-the-icons-insert)
     :custom
     `(
-      (shr-bullet                        . ,(format "%s " (all-the-icons-faicon "caret-right")))
+      (shr-bullet                        . ,(format "%s " (all-the-icons-faicon "caret-right" :v-adjust -0.05)))
       (eww-form-checkbox-symbol          . ,(all-the-icons-faicon "square-o"))
       (eww-form-checkbox-selected-symbol . ,(all-the-icons-faicon "check-square-o"))
       )
