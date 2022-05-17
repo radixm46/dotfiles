@@ -881,12 +881,18 @@ based on elfeed-search-browse-url"
   (shr-width . 70)
   (shr-indentation . 4)
   (shr-use-fonts . t)
-  (shr-use-colors . t)
   (shr-bullet . "* ")
   (eww-search-prefix . "https://www.google.com/search?q=")
   :hook
   (eww-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
   :config
+  (leaf *eww-patch-faces :after doom-themes
+    :config
+    (custom-set-faces
+     `(eww-form-text ((t :background ,(doom-color 'bg-alt))))
+     )
+    )
+
   (leaf *eww-bind-all-the-icons :if (fboundp 'all-the-icons-insert)
     :custom
     `(
@@ -895,4 +901,25 @@ based on elfeed-search-browse-url"
       (eww-form-checkbox-selected-symbol . ,(all-the-icons-faicon "check-square-o"))
       )
     )
-  )
+
+  (leaf *eww-toggle-inhibit-images :emacs>= "28.1"
+    :doc "disable image by default"
+    :custom
+    (shr-inhibit-images . t)
+    :config
+    (evil-define-key 'normal eww-mode-map
+      "i" 'eww-toggle-images
+      "I" 'eww-toggle-images)
+    )
+
+
+  (leaf *eww-use-color-config
+    :doc "config colors in eww"
+    :custom
+    (shr-use-colors . nil)
+    :config
+    (evil-define-key 'normal eww-mode-map
+      "c" 'eww-toggle-colors
+      "C" 'eww-toggle-colors)
+    )
+)
