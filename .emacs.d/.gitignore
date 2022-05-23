@@ -30,6 +30,9 @@ transient
 # eshell files
 /eshell/*
 
+# native compiled dir
+/eln-cache/*
+
 # local .el files
 custom.el
 local.el
