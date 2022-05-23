@@ -1044,7 +1044,15 @@
       (flycheck-posframe-position       . 'window-bottom-right-corner)
       (flycheck-posframe-info-prefix    . "\x2139 ")
       (flycheck-posframe-warning-prefix . "\x26a0 ")
-      (flycheck-posframe-error-prefix   . "\x274c "))
+      (flycheck-posframe-error-prefix   . "\x274c ")
+      :config
+      (leaf *posframe-sign-use-faicon :if (fboundp 'all-the-icons-faicon)
+        :custom
+        (flycheck-posframe-info-prefix    . "\xF129 ") ;; faicon info
+        (flycheck-posframe-warning-prefix . "\xF071 ") ;; faicon exclamation-triangle
+        (flycheck-posframe-error-prefix   . "\xF06A ") ;; faicon exclamation-circle
+        )
+      )
 
     (leaf consult-flycheck
       :ensure t
