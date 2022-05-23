@@ -1013,7 +1013,7 @@
       (eldoc-box-only-multi-line    . nil)
       (eldoc-box-fringe-use-same-bg . t)
       (eldoc-box-clear-with-C-g     . t)
-      (eldoc-box-cleanup-interval   . 0)
+      (eldoc-box-cleanup-interval   . 0.5)
       :config
       (custom-set-faces ;; modify bg to eldoc-box-body
        `(eldoc-box-body   ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))
