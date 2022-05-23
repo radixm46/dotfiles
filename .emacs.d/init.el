@@ -1004,15 +1004,21 @@
                                ac-source-words-in-all-buffer)))
 
   (leaf eldoc
-    :ensure t
     :tag "builtin"
     :config
     (leaf eldoc-box :unless (emacs-works-on-term-p)
       :ensure t
-      :hook (eldoc-mode-hook . eldoc-box-hover-at-point-mode)
+      :hook (eldoc-mode-hook . eldoc-box-hover-mode)
+      :custom
+      (eldoc-box-only-multi-line    . nil)
+      (eldoc-box-fringe-use-same-bg . t)
+      (eldoc-box-clear-with-C-g     . t)
+      (eldoc-box-cleanup-interval   . 0)
       :config
       (custom-set-faces ;; modify bg to eldoc-box-body
-       `(eldoc-box-body ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))))
+       `(eldoc-box-body   ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))
+       `(eldoc-box-border ((nil (:background ,(doom-color 'bg)))))
+       ))
     )
 
   (leaf flymake :disabled t
