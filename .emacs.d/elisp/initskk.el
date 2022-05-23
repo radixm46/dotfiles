@@ -20,7 +20,9 @@
  ;; '(skk-henkan-show-candidates-rows          2) ;; obsolete
  '(skk-japanese-message-and-error t)
  '(skk-delete-implies-kakutei nil)
- '(skk-use-look t))
+ '(skk-use-look t)
+ '(skk-auto-insert-paren t)
+ )
 
 ;;(define-key skk-j-mode-map (kbd "M-n"))
 
