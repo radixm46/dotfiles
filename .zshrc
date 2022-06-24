@@ -11,8 +11,8 @@ function zinit_install() {
             print -P "%F{160}▓▒░ The clone has failed.%f%b"
 }
 [[ ! -d ${ZINITDIR} ]] && zinit_install
-# if failed to load zinit
 source "${ZINITDIR}/zinit.zsh"
+# if failed to load zinit
 if [[ $(type zinit) == 'zinit not found' ]]; then
     echo 'Failed to load zinit'
     function zinit() { return 1; }
@@ -439,6 +439,7 @@ function prompt_rdm46theme_setup() {
     local P_MIDTEX=$'\UE0C4'
     local P_END=$'\UE0C6'
     local P_DIR=$'\UF07C'
+    local P_CLOCK=$'\UF017'
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
@@ -449,6 +450,8 @@ function prompt_rdm46theme_setup() {
 %{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN}%{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 \
+%{${bg[black]}%}%{${fg[green]}%} ${P_CLOCK}%{${reset_color}%}\
+%{${bg[black]}%}%{${fg[brblack]}%} %D %T%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[green]}%} ${P_DIR}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
