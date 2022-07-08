@@ -61,7 +61,7 @@ function _vi_remap() {
 zinit ice depth=1 && zinit light jeffreytse/zsh-vi-mode && \
     ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK && \
     ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK && \
-    ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST && \
+    ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT && \
     _vi_remap # remap after zvm load
 function zvm_config() {
     bindkey -M vicmd 'dd' zvm_kill_line
