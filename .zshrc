@@ -79,6 +79,7 @@ zinit ice depth=1 && zinit light hlissner/zsh-autopair && autopair-init
 # plugins depends on external commands ---------------------------------------------------
 zinit ice has'emacs' depth=1 && zinit light Flinner/zsh-emacs # alias
 zinit ice has'systemctl' depth=1 && zinit light le0me55i/zsh-systemd # alias
+zinit ice has'docker' depth=1 && zinit light akarzim/zsh-docker-aliases #alias
 
 if is_available 'git'; then
     zinit ice depth=1 && zinit light mdumitru/git-aliases # alias
@@ -289,6 +290,8 @@ elif is_available 'xsel'; then
 elif is_available 'putclip'; then
     alias -g C='| putclip'
 fi
+
+[[ ${OSTYPE} == linux* ]] && is_available 'ip' && alias ip='ip -color'
 
 alias -g TC="TERM=xterm-24bit"
 
