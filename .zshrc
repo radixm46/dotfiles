@@ -306,8 +306,10 @@ function print_os_glyph() {
             ;;
         Linux*)
             if [[ -e '/etc/os-release' ]]; then
-                local distro_id="$(</etc/os-release|grep '^ID=')"
-                case ${distro_id#'ID='} in
+                local distro_id=$(for l in $(<'/etc/os-release'); \
+                                  do [[ "${l}" == ID* ]] && echo "${${l#'ID='}:Q:l}" \
+                                         && break; done)
+                case "${distro_id}" in
                     arch*) printf $'\UF303' ;;
                     centos*) printf $'\UF304' ;;
                     debian*) printf $'\UF306' ;;
@@ -322,6 +324,7 @@ function print_os_glyph() {
                     # mint) printf $'\UF30F' ;;
                     # alpine) printf $'\UF300' ;;
                     # redhat) printf $'\UF316' ;;
+                    *) printf $'\UF83C' ;;
                 esac
             else
                 printf $'\UF83C'
