@@ -446,13 +446,17 @@ function prompt_rdm46theme_setup() {
     local P_END=$'\UE0C6'
     local P_DIR=$'\UF07C'
     local P_CLOCK=$'\UF017'
+    local P_CONN=$'\UF438'
+    [ ! -z ${SSH_CONNECTION} ] && \
+        local P_CONN_ST="${fg[red]}${P_CONN}[${fg[black]}${SSH_CONNECTION/\ */}${fg[red]}] "
+
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
 \
 %{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[red]}%} $(print_os_glyph)%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg_bold[black]}%} %m %{${reset_color}%}\
+%{${bg[blue]}%}%{${fg_bold[black]}%} %m ${P_CONN_ST:=}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN}%{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 \
