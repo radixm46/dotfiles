@@ -448,7 +448,7 @@ function prompt_rdm46theme_setup() {
     local P_CLOCK=$'\UF017'
     local P_CONN=$'\UF438'
     [ ! -z ${SSH_CONNECTION} ] && \
-        local P_CONN_ST="${fg[red]}${P_CONN}[${fg[black]}${SSH_CONNECTION/\ */}${fg[red]}] "
+        local P_CONN_ST="${fg[red]}${P_CONN}[${fg[black]}${${SSH_CONNECTION%%\ *}/\%/@}${fg[red]}] "
 
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
