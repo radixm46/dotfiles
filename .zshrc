@@ -363,12 +363,6 @@ alias wttr='get_weather'
 
 # launch emacs magit from shell
 if is_available emacs; then
-    function tmagit() {
-        emacsclient -nw --eval "(magit-status \"$1\")"
-    }
-    function magit() {
-        emacsclient -c --eval "(magit-status \"$1\")" &
-    }
     function tdired() {
         emacsclient -nw --eval "(dired \"$1\")"
     }
