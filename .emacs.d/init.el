@@ -604,6 +604,7 @@
     (:global-map
      ("<f4>" . hydra-manage-windows/body)
      ("M-4"  . hydra-manage-windows/body))
+    :global-minor-mode evil-mode
     :config
     (leaf evil-surround
       :ensure t
@@ -621,7 +622,38 @@
       ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
       ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
       )
-    :global-minor-mode evil-mode
+    (leaf evil-commentary :ensure t
+      :doc "make easy to comment out."
+      :url "https://github.com/linktohack/evil-commentary"
+      :config (evil-commentary-mode))
+    (leaf evil-goggles :ensure t
+      :doc "visual hints on edit."
+      :url "https://github.com/edkolev/evil-goggles"
+      :custom
+      (evil-goggles-pulse             . nil)
+      (evil-goggles-duration          . 0.10)
+      (evil-goggles-async-duration    . nil)
+      (evil-goggles-blocking-duration . nil)
+      :config
+      (evil-goggles-mode)
+      (evil-goggles-use-diff-faces)
+      )
+    (leaf evil-lion :ensure t
+      :doc "Evil align operator."
+      :url "https://github.com/edkolev/evil-lion"
+      :config (evil-lion-mode))
+    (leaf evil-matchit :ensure t
+      :doc "Vim matchit.vim by Benji Fisher is ported into Emacs."
+      :url "https://github.com/redguardtoo/evil-matchit"
+      :global-minor-mode global-evil-matchit-mode)
+    (leaf evil-numbers :ensure t
+      :doc "Increment / Decrement binary, octal, decimal and hex literals"
+      :url "https://github.com/cofi/evil-numbers"
+      :config
+      (evil-define-key 'motion 'global
+        (kbd "C-c +") 'evil-numbers/inc-at-pt
+        (kbd "C-c -") 'evil-numbers/dec-at-pt
+        ))
     )
 
   (leaf tab-bar :emacs>= "27.1"
