@@ -177,6 +177,11 @@
                 (progn (funcall func font)
                        (throw 'found font)))))))
 
+    (leaf *hide-nobreak-whitespace :emacs>= "28"
+      :doc "hack to disable face for double byte space"
+      :config
+      (setq nobreak-char-display nil))
+
     (defun rdm/set-variable-pitch ()
       "modify variable pitch face to available font in list"
       (rdm/apply-func-in-fonts '("Hiragino Sans"
