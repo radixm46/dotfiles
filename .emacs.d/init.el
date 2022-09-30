@@ -366,21 +366,23 @@
       text-mode-hook
       git-timemachine-mode-hook) . highlight-indent-guides-mode)
     :custom
-    ;;(if (not (display-graphic-p))
-    ;;    (progn
-    ;;      (setq highlight-indent-guides-auto-enabled nil)
-    ;;      (set-face-background 'highlight-indent-guides-odd-face "black")
-    ;;      (set-face-background 'highlight-indent-guides-top-odd-face "green")
-    ;;      (set-face-background 'highlight-indent-guides-even-face "black")
-    ;;      (set-face-background 'highlight-indent-guides-top-even-face "green"))
-    ;;    (setq highlight-indent-guides-auto-enabled t)
-    ;;  )
+    (highlight-indent-guides-auto-enabled . nil)
     (highlight-indent-guides-method . 'column)
     (highlight-indent-guides-auto-odd-face-perc . 10)
     (highlight-indent-guides-auto-even-face-perc . 10)
     ;;(setq highlight-indent-guides-auto-character-face-perc 20)
     (highlight-indent-guides-responsive . 'top)
-    (highlight-indent-guides-delay . 0))
+    (highlight-indent-guides-delay . 0)
+    :config
+    (leaf *patch-indent-guides-color
+      :config
+      (custom-set-faces
+       `(highlight-indent-guides-odd-face      ((nil (:background ,(doom-color 'dark-cyan)))))
+       `(highlight-indent-guides-top-odd-face  ((nil (:background ,(doom-color 'dark-blue)))))
+       `(highlight-indent-guides-even-face     ((nil (:background ,(doom-color 'dark-cyan)))))
+       `(highlight-indent-guides-top-even-face ((nil (:background ,(doom-color 'dark-blue)))))
+       ))
+    )
 
   (leaf rainbow-delimiters
     :ensure t
