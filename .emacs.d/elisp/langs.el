@@ -230,6 +230,8 @@
 
 (leaf systemd :ensure t)
 
+(leaf lua-mode :ensure t)
+
 (leaf org
   :doc "org-mode config"
   :ensure t
