@@ -940,6 +940,8 @@
      ("M-g M-c" . consult-minor-mode-menu)
      ("M-g C"   . consult-mode-command) ; narrowing with l/g/m
      ("M-g M-C" . consult-mode-command)
+     ("M-g b"   . consult-bookmark)
+     ("M-g M-b" . consult-bookmark)
      ("M-y"     . consult-yank-from-kill-ring)
      ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
      ("M-5"     . hydra-consult/body)
