@@ -225,7 +225,8 @@
 
 (leaf yaml-mode
   :ensure t
-  :mode ("\\.yml\\'" . yaml-mode))
+  :mode ("\\.yml\\'" . yaml-mode)
+  :hook (yaml-mode-hook . hl-todo-mode))
 
 (leaf systemd :ensure t)
 
