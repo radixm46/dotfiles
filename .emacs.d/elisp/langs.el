@@ -684,6 +684,7 @@
   (elfeed-search-mode-hook . (lambda () (rdm/sw-lnsp 0.55)
                                (face-remap-add-relative 'hl-line `(:background ,(doom-color 'base3)))))
   :init
+  (add-to-list 'undo-tree-incompatible-major-modes 'elfeed-search-mode)
   (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
     :ensure t
     :url "https://github.com/remyhonig/elfeed-org"
@@ -802,6 +803,16 @@ based on elfeed-search-show-entry"
         (forward-line) (recenter)
         (elfeed-show-entry entry)))
 
+    (defun rdm/elfeed-search-show-prev-entry (entry)
+      "Display currently selected item in buffer.
+based on elfeed-search-show-entry"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (when (elfeed-entry-p entry)
+        (elfeed-untag entry 'unread 'later)
+        (elfeed-search-update-entry entry)
+        (forward-line -1) (recenter)
+        (elfeed-show-entry entry)))
+
     (defun rdm/elfeed-search-browse-url (&optional use-generic-p)
       "open with browser, untag unread and later.
 based on elfeed-search-browse-url"
@@ -823,7 +834,7 @@ based on elfeed-search-browse-url"
             (forward-line)))))
 
     (defun rdm/elfeed-search-filter-feed-name (entry)
-      "filter via highlighted feed address"
+      "filter unread via highlighted feed address"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
         (let* ((meta (elfeed-entry-feed entry))
@@ -831,7 +842,7 @@ based on elfeed-search-browse-url"
                (title-esc (replace-regexp-in-string " " "\\s-" title t t))
                (filter-str (concat "=" title-esc)))
           (when filter-str
-            (elfeed-search-set-filter filter-str)))))
+            (elfeed-search-set-filter (concat filter-str " +unread -later"))))))
 
     (evil-define-key 'normal elfeed-search-mode-map
       "m"  'rdm/elfeed-search-toggle-star
@@ -840,13 +851,24 @@ based on elfeed-search-browse-url"
       "u"  'rdm/elfeed-search-untag-later-unread
       "Y"  'rdm/elfeed-search-entry-share
       "F"  'rdm/elfeed-search-filter-feed-name
+      "f"  'hydra-elfeed-search-filter/body
       "ta" 'elfeed-search-tag-all
       "tr" 'elfeed-search-untag-all
       "tj" 'rdm/elfeed-search-tag-junk
       "go" 'rdm/elfeed-search-browse-url
-      (kbd "RET") 'rdm/elfeed-search-show-entry
+      "oo" 'rdm/elfeed-search-show-entry
+      (kbd "RET") 'rdm/elfeed-search-untag-unread
       (kbd "SPC") 'rdm/elfeed-search-untag-unread
-      (kbd "S-SPC") 'evil-previous-line)
+      (kbd "S-SPC") 'evil-previous-line
+      (kbd "C-j") 'rdm/elfeed-search-show-entry
+      (kbd "M-j") 'rdm/elfeed-search-show-entry
+      "]]"        'rdm/elfeed-search-show-entry
+      "gj"        'rdm/elfeed-search-show-entry
+      (kbd "C-k") 'rdm/elfeed-search-show-prev-entry
+      (kbd "M-k") 'rdm/elfeed-search-show-prev-entry
+      "[["        'rdm/elfeed-search-show-prev-entry
+      "gk"        'rdm/elfeed-search-show-prev-entry
+      )
 
     (evil-define-key 'normal elfeed-show-mode-map
       "b"  'rdm/elfeed-show-eww-open
@@ -874,12 +896,15 @@ based on elfeed-search-browse-url"
                               )
 
   :config
-  (dolist (face '(elfeed-search-tag-face
-                  elfeed-search-date-face
-                  elfeed-search-feed-face
-                  elfeed-search-title-face
-                  elfeed-search-unread-title-face))
-    (set-face-attribute face nil :family font-for-tables :weight 'normal :height 1.0))
+  (leaf *patch-elfeed-list-face
+    :config
+    (dolist (face '(elfeed-search-tag-face
+                    elfeed-search-date-face
+                    elfeed-search-feed-face
+                    elfeed-search-title-face
+                    elfeed-search-unread-title-face))
+      (set-face-attribute face nil :family font-for-tables :weight 'normal :height 1.0))
+    )
 
   ;; :hook (elfeed-show-mode-hook . darkroom-mode)
   )
