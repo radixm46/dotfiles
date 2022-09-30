@@ -34,6 +34,12 @@
     )
   )
 
+(leaf conf-mode
+  :tag "builtin"
+  :hook (conf-mode-hook . hl-todo-mode)
+  :mode ("\\.env\\'" . conf-mode)
+)
+
 ;; required for racer
 (leaf rust-mode
   :ensure t
