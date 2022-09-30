@@ -1115,15 +1115,23 @@
     )
 
   (leaf company
-    ;; company completion framework
+    :doc "company completion framework"
     :ensure t
     :custom
     (company-idle-delay . 0)
     (company-selection-wrap-around . t)
     (completion-ignore-case . t)
-    (company-minimum-prefix-length . 2)
-    (company-transformers . '(company-sort-by-backend-importance))
+    (company-minimum-prefix-length . 1)
+    (company-transformers . '(
+                              company-sort-by-occurrence
+                              company-sort-by-backend-importance
+                              company-sort-prefer-same-case-prefix
+                              ))
     :config
+    (leaf *add-yasnippet-backend
+      :after yasnippet
+      :config
+      (add-to-list 'company-backends 'company-yasnippet))
     (leaf company-box
       :ensure t
       :hook (company-mode-hook . company-box-mode))
