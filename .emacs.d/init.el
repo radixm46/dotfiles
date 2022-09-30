@@ -692,6 +692,16 @@
       :ensure t)
     :global-minor-mode global-tree-sitter-mode
     )
+
+  (leaf highlight-symbol
+    :ensure t
+    :doc "automatic and manual symbol highlighting for Emacs"
+    :config
+    (custom-set-faces
+     `(highlight-symbol-face  ((t (
+                                   :background ,(doom-color 'dark-cyan)
+                                   )))))
+    )
   )
 
 
