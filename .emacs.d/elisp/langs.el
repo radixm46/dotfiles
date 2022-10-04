@@ -147,7 +147,7 @@
 (leaf html-mode
   :tag "builtin")
 
-(leaf javascript
+(leaf *javascript-conig
   :doc "config javascript environment"
   :config
   (leaf js-mode :emacs>= "27"

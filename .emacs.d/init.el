@@ -302,7 +302,7 @@
         (if (and serif-fnt trigger-state-p)
             (progn (rdm/sw-lnsp 0.8)
                    (setq-local rdm/ov-serif
-                         (ov (point-min) (point-max) 'face `(:family ,serif-fnt))))
+                               (ov (point-min) (point-max) 'face `(:family ,serif-fnt))))
           (progn (rdm/lnsp-default) (ov-reset rdm/ov-serif)))))
     :commands (ov-reset ov-clear ov))
 
@@ -1326,13 +1326,13 @@
       ("t i" lsp-treemacs-implementations :exit t)
 
       ("SPC" hydra-lsp-functions/body :exit t))
-    )
+     )
 
     :bind
     (:global-map
      ("<f7>" . hydra-lsp-functions/body)
      ("M-7"  . hydra-lsp-functions/body))
-  )
+    )
 
   (leaf eglot
     :ensure t
