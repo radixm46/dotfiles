@@ -703,6 +703,8 @@
   (leaf highlight-symbol
     :ensure t
     :doc "automatic and manual symbol highlighting for Emacs"
+    :custom
+    (highlight-symbol-idle-delay . 1.0)
     :config
     (custom-set-faces
      `(highlight-symbol-face  ((t (
