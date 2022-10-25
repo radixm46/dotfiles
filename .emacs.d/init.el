@@ -1625,9 +1625,19 @@
   :config
   (leaf dired
     :tag "builtin"
+    :custom
+    `(
+      (dired-listing-switches    . "-l")
+      (dired-dwim-target         . t)
+      (delete-by-moving-to-trash . t)
+      ;; NOTE: on macOS, require full disk access to use trash bin
+      (trash-directory           . ,(if (equal system-type 'darwin) "~/.Trash"))
+      )
     :config
     (ffap-bindings)
-    (put 'dired-find-alternate-file 'disabled nil))
+    ;; by selecting directory, do not creaete new dired buffer
+    (put 'dired-find-alternate-file 'disabled nil)
+    )
 
   (leaf neotree
     :ensure t
