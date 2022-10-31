@@ -468,7 +468,15 @@ function prompt_rdm46theme_setup() {
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%} "
 }
 
-prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
+case "$TERM" in
+    dumb | emacs)
+        PROMPT="%m:%~> "
+        unsetopt zle
+        ;;
+    *) # if $TERM seems not emacs, use theme
+        prompt_themes+=( rdm46theme ) &&  prompt rdm46theme
+        ;;
+esac
 
 # fix prompt when C-c in normal state (does not work if included in theme function)
 function TRAPINT() {
