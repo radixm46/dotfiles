@@ -135,5 +135,3 @@
   (doom-themes-treemacs-config)
   (doom-themes-neotree-config)
 )
-
-(load-theme 'doom-solarized-dark t)

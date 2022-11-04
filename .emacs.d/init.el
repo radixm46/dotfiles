@@ -1804,6 +1804,8 @@
             '(lambda () (if (display-graphic-p)
                             (emacs-on-gui)
                           (emacs-on-term))))
+
+  (load-theme 'doom-solarized-dark t)
   )
 
 
