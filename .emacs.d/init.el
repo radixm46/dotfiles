@@ -222,6 +222,16 @@
 
   (leaf *config-doom-modeline
     :config (load "~/.emacs.d/elisp/doom.el"))
+  (leaf *conf-theme-hook
+    :doc "configure face color after `load-theme' fired"
+    :url "https://emacs.stackexchange.com/a/28947"
+    :config
+    (defvar after-load-theme-hook nil
+      "Hook run after color theme is loaded using `load-theme'.")
+    (defadvice load-theme (after run-after-load-theme-hook activate)
+      "Run `after-load-theme-hook'."
+      (run-hooks 'after-load-theme-hook))
+    )
 
   (leaf *config-childframe :emacs> "28"
     :config
