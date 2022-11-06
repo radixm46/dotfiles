@@ -24,9 +24,15 @@
     (xterm-mouse-mode t)
     (defun track-mouse (e))
     (setq mouse-sel-mode t))
+
   (defun emacs-works-on-term-p ()
     "returns t if emacs seems running on term"
     (not (or (daemonp) (display-graphic-p))))
+
+  (leaf cl-lib
+    :tag "builtin"
+    :require t
+    :doc "load cl-lib")
 
   (leaf exec-path-from-shell
     :doc "load path from shell at startup"
@@ -220,10 +226,8 @@
     :doc "load custom theme from elisp dir"
     :custom (custom-theme-directory . "~/.emacs.d/elisp/"))
 
-  (leaf *config-doom-modeline
-    :config (load "~/.emacs.d/elisp/doom.el"))
   (leaf *conf-theme-hook
-    :doc "configure face color after `load-theme' fired"
+    :doc "reconfigure appearance after `load-theme' fired"
     :url "https://emacs.stackexchange.com/a/28947"
     :config
     (defvar after-load-theme-hook nil
@@ -233,19 +237,39 @@
       (run-hooks 'after-load-theme-hook))
     )
 
-  (leaf *config-childframe :emacs> "28"
+  (leaf *config-doom-modeline
     :config
-    (custom-set-faces
-     `(child-frame-border  ((nil (:foreground ,(doom-color 'bg)))))
-     ))
+    (load "~/.emacs.d/elisp/doom.el")
+
+    (leaf *patch-color-with-doom-themes :emacs>= "28.1"
+      :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces
+                                  `(help-key-binding  ((t (
+                                                           :foreground ,(doom-color 'cyan)
+                                                           :background ,(doom-color 'bg-alt)
+                                                           :box (:line-width (1 . -1) :color ,(doom-color 'fg))
+                                                           ))))
+                                  ))))
+    )
+
+  (leaf *patch-childframe :emacs> "28" :after doom-themes
+    :hook
+    (after-load-theme-hook . (lambda ()
+                               (custom-set-faces
+                                `(child-frame-border  ((t (:foreground ,(doom-color 'bg))))))))
+    )
 
   (leaf paren
     :doc "configure show-paren-mode"
     :tag "builtin"
     :config
-    (custom-set-faces
-     `(show-paren-match  ((t (:background ,(doom-color 'green)))))
-     )
+    (leaf *patch-paren-face
+      :hook (after-load-theme-hook . (lambda ()
+                                       (custom-set-faces
+                                        `(show-paren-match  ((t (:background ,(doom-color 'green))))))))
+      )
     :global-minor-mode show-paren-mode)
 
   (leaf electric-pair-mode
@@ -286,15 +310,20 @@
     :custom
     (display-fill-column-indicator-column . 90)
     (display-fill-column-indicator-character . ?\N{U+FF65}) ;; ·
-    :config
-    (custom-set-faces ;; modify bg to eldoc-box-body
-     `(fill-column-indicator ((t (:foreground ,(doom-color 'blue))))))
     :hook
     ((conf-mode-hook
       fundamental-mode-hook
       outline-mode-hook
       prog-mode-hook
       text-mode-hook) . display-fill-column-indicator-mode)
+    :config
+    (leaf *patch-fill-column-indicator :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces ;; modify bg to eldoc-box-body
+                                  `(fill-column-indicator ((t (:foreground ,(doom-color 'blue))))))
+                                 ))
+      )
     )
 
   (leaf hl-todo
@@ -369,6 +398,7 @@
 
   (leaf highlight-indent-guides
     :ensure t
+    :require t
     :hook
     ((conf-mode-hook
       outline-mode-hook
@@ -384,14 +414,25 @@
     (highlight-indent-guides-responsive . 'top)
     (highlight-indent-guides-delay . 0)
     :config
-    (leaf *patch-indent-guides-color
-      :config
-      (custom-set-faces
-       `(highlight-indent-guides-odd-face      ((nil (:background ,(doom-color 'dark-cyan)))))
-       `(highlight-indent-guides-top-odd-face  ((nil (:background ,(doom-color 'dark-blue)))))
-       `(highlight-indent-guides-even-face     ((nil (:background ,(doom-color 'dark-cyan)))))
-       `(highlight-indent-guides-top-even-face ((nil (:background ,(doom-color 'dark-blue)))))
-       ))
+    (leaf *patch-highlight-indent-guides-color :after doom-themes cl-lib
+      :doc "patch `indent-guides-color'"
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (let* ((mix-colors #'(lambda (x y)
+                                                        (apply #'color-rgb-to-hex
+                                                               (cl-mapcar #'(lambda (a b) (/ (+ a b) 2.2))
+                                                                        (color-name-to-rgb x)
+                                                                        (color-name-to-rgb y)))))
+                                        (dimmc (funcall mix-colors
+                                                        (doom-color 'bg) (doom-color 'dark-cyan)))
+                                        (activec  (doom-color 'dark-blue)))
+                                   (custom-set-faces
+                                    `(highlight-indent-guides-odd-face      ((nil (:background ,dimmc))))
+                                    `(highlight-indent-guides-top-odd-face  ((nil (:background ,activec))))
+                                    `(highlight-indent-guides-even-face     ((nil (:background ,dimmc))))
+                                    `(highlight-indent-guides-top-even-face ((nil (:background ,activec))))
+                                    ))))
+      )
     )
 
   (leaf rainbow-delimiters
@@ -438,9 +479,14 @@
     ;;(set-face-attribute 'whitespace-empty nil
     ;;  :background rdm/bg-color)
     :config
-    (custom-set-faces
-     `(whitespace-trailing ((nil (:inherit 'default :foreground ,(doom-color 'magenta) :underline (:style wave)))))
-     )
+    (leaf *patch-whitespace-face :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda () (custom-set-faces
+                                           `(whitespace-trailing ((nil (:background ,(doom-color 'bg) ;:inherit 'default
+                                                                                    :foreground ,(doom-color 'magenta)
+                                                                                    :underline (:style wave)))))
+                                           )))
+      )
     :global-minor-mode global-whitespace-mode
     )
 
@@ -461,6 +507,7 @@
 
   (leaf pulsar
     :ensure t
+    :require t
     :custom
     (pulsar-pulse                  . t)
     (pulsar-face                   . 'pulsar-magenta)
@@ -494,15 +541,16 @@
     :config
     ;; (pulsar-global-mode 1)
     (leaf *patch-pulsar-color :after doom-themes
-      :config
-      (custom-set-faces
-       `(pulsar-magenta ((nil (:background ,(doom-color 'magenta)))))
-       `(pulsar-yellow  ((nil (:background ,(doom-color 'yellow)))))
-       `(pulsar-red     ((nil (:background ,(doom-color 'red)))))
-       `(pulsar-blue    ((nil (:background ,(doom-color 'blue)))))
-       `(pulsar-cyan    ((nil (:background ,(doom-color 'cyan)))))
-       `(pulsar-green   ((nil (:background ,(doom-color 'green)))))
-       )
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces
+                                  `(pulsar-magenta ((nil (:background ,(doom-color 'magenta)))))
+                                  `(pulsar-yellow  ((nil (:background ,(doom-color 'yellow)))))
+                                  `(pulsar-red     ((nil (:background ,(doom-color 'red)))))
+                                  `(pulsar-blue    ((nil (:background ,(doom-color 'blue)))))
+                                  `(pulsar-cyan    ((nil (:background ,(doom-color 'cyan)))))
+                                  `(pulsar-green   ((nil (:background ,(doom-color 'green)))))
+                                  )))
       )
 
     ;; bind to evil layer
@@ -716,10 +764,12 @@
     :custom
     (highlight-symbol-idle-delay . 1.0)
     :config
-    (custom-set-faces
-     `(highlight-symbol-face  ((t (
-                                   :background ,(doom-color 'dark-cyan)
-                                   )))))
+    (leaf *patch-highlight-symbol :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces
+                                  `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan))))))))
+      )
     )
   )
 
@@ -1081,10 +1131,14 @@
       (eldoc-box-clear-with-C-g     . t)
       (eldoc-box-cleanup-interval   . 0.5)
       :config
-      (custom-set-faces ;; modify bg to eldoc-box-body
-       `(eldoc-box-body   ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))
-       `(eldoc-box-border ((nil (:background ,(doom-color 'bg)))))
-       ))
+      (leaf *patch-eldoc-box-faces :after doom-themes
+        :hook
+        (after-load-theme-hook . (lambda ()
+                                   (custom-set-faces ;; modify bg to eldoc-box-body
+                                    `(eldoc-box-body   ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))
+                                    `(eldoc-box-border ((nil (:background ,(doom-color 'bg)))))
+       ))))
+      )
     )
 
   (leaf flymake :disabled t
@@ -1103,6 +1157,18 @@
     (:flycheck-mode-map ("M-j" . flycheck-next-error)
                         ("M-k" . flycheck-previous-error))
     :config
+    (leaf *patch-flycheck-faces :after doom-themes
+      :doc "on doom themes loaded"
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces
+                                  `(flycheck-warning ((t (:background ,(doom-color 'bg)))))
+                                  `(flycheck-info    ((t (:background ,(doom-color 'bg)))))
+                                  `(flycheck-error   ((t (:background ,(doom-color 'bg)))))
+                                  )))
+      )
+
+
     (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
       :ensure t
       :hook (flycheck-mode-hook . flycheck-posframe-mode)
@@ -1400,7 +1466,15 @@
     (leaf which-key-posframe
       :ensure t
       :custom
-      (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner))
+      (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner)
+      :config
+      (leaf *patch-which-key-posframe-faces :after doom-themes
+        :hook
+        (after-load-theme-hook . (lambda ()
+                                   (custom-set-faces
+                                    `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))
+                                    ))))
+      )
     (which-key-mode)
     (if (emacs-works-on-term-p)
 	    (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
@@ -1456,12 +1530,15 @@
     :hook
     (calendar-today-visible-hook   . calendar-mark-today)
     :config
-    (custom-set-faces
-     `(holiday
-       ((nil (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
-     `(calendar-today
-       ((nil (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))
-     )
+    (leaf *patch-calendar-faces :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces
+                                  `(holiday
+                                    ((nil (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
+                                  `(calendar-today
+                                    ((nil (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))
+                                  ))))
     )
 
   (leaf vterm
@@ -1575,10 +1652,14 @@
     (git-gutter:deleted-sign  . "▶")
     (git-gutter:ask-p         . nil)
     :config
-    (custom-set-faces ;; modify bg fg
-     `(git-gutter:modified ((t (:foreground ,(doom-color 'blue)  :background ,(doom-color 'blue)))))
-     `(git-gutter:added    ((t (:foreground ,(doom-color 'base4) :background ,(doom-color 'green)))))
-     `(git-gutter:deleted  ((t (:foreground ,(doom-color 'red))))))
+    (leaf *patch-git-gutter-color :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces ;; modify bg fg
+                                  `(git-gutter:modified ((t (:foreground ,(doom-color 'blue)  :background ,(doom-color 'blue)))))
+                                  `(git-gutter:added    ((t (:foreground ,(doom-color 'base4) :background ,(doom-color 'green)))))
+                                  `(git-gutter:deleted  ((t (:foreground ,(doom-color 'red))))))))
+      )
 
     (defun git-gutter-fix-init ()
       (interactive)
@@ -1793,7 +1874,7 @@
 
 (leaf *conf-appearance-on-state
   :doc "switch appearance when on gui or term"
-  :config
+  :preface
   (defun emacs-on-term ()
     "switch emacs appearance for term with doom-spacegrey"
     (interactive)
@@ -1810,12 +1891,10 @@
   (if (emacs-works-on-term-p)
       (emacs-on-term) (emacs-on-gui))
 
-  (add-hook 'server-after-make-frame-hook
-            '(lambda () (if (display-graphic-p)
-                            (emacs-on-gui)
-                          (emacs-on-term))))
-
-  (load-theme 'doom-solarized-dark t)
+  :hook
+  (server-after-make-frame-hook . (lambda ()
+                                    (if (display-graphic-p)
+                                        (emacs-on-gui) (emacs-on-term))))
   )
 
 

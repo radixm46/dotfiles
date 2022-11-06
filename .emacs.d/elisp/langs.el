@@ -10,26 +10,26 @@
   :init
   (leaf highlight-defined
     :ensure t
-    :preface
-    (defun rdm/highlight-defined-patch-face ()
-      "patch face color from font-lock-face"
-      (custom-set-faces
-       `(highlight-defined-function-name-face
-         ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
-       `(highlight-defined-builtin-function-name-face
-         ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
-       `(highlight-defined-special-form-name-face
-         ((nil (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
-       `(highlight-defined-macro-name-face
-         ((nil (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
-       ;; `(highlight-defined-face-name-face
-       ;;   ((nil (:foreground ,(doom-color 'fg) :background ,(doom-color 'dark-cyan)))))
-       `(highlight-defined-variable-name-face
-         ((nil (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
-       ))
-    :hook
-     (emacs-lisp-mode-hook . highlight-defined-mode)
-     (highlight-defined-mode-hook . rdm/highlight-defined-patch-face)
+    :config
+    (leaf *patch-highlight-defined-faces :after doom-themes
+      :doc "patch face color from font-lock-face"
+      :hook
+      ((highlight-defined-mode-hook
+        after-load-theme-hook) . (lambda ()
+        (custom-set-faces
+         `(highlight-defined-function-name-face
+           ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+         `(highlight-defined-builtin-function-name-face
+           ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+         `(highlight-defined-special-form-name-face
+           ((nil (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
+         `(highlight-defined-macro-name-face
+           ((nil (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
+         `(highlight-defined-variable-name-face
+           ((nil (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
+         )))
+      )
+    :hook (emacs-lisp-mode-hook . highlight-defined-mode)
     :custom (highlight-defined-face-use-itself . t)
     )
   )
@@ -324,40 +324,63 @@
       (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
       )
 
-    (custom-set-faces
-     `(org-hide ((nil (:foreground ,(face-attribute 'default :background))))) ; force load bg-color
-     `(org-table ((nil :family ,font-for-tables))) ;; use 1:2 font for table
-     )
+     (leaf *org-mode-patch-face :after doom-themes
+       :hook ;; without `doom-color': (face-attribute 'default :background)
+       ((after-load-theme-hook
+         org-mode-hook) . (lambda ()
+                                  (custom-set-faces
+                                   `(org-hide             ((nil (:foreground ,(doom-color 'bg))))) ; org-hide
+                                   `(org-table             ((nil :family ,font-for-tables))) ;; use 1:2 font for table
+                                   `(org-ellipsis         ((t (:background ,(doom-color 'bg)))))
+                                   `(org-block-begin-line ((t (:background ,(doom-color 'bg)))))
+                                   `(org-block-end-line   ((t (:background ,(doom-color 'bg)))))
+                                   )))
+       )
+
+     (leaf *org-mode-header-size
+       :doc "set larger face for org-level-1 to 5"
+       :hook
+       (after-load-theme-hook . (lambda ()
+                                  (set-face-attribute 'org-document-title nil :height 2.0)
+                                  (set-face-attribute 'org-level-1 nil :height 1.75)
+                                  (set-face-attribute 'org-level-2 nil :height 1.50)
+                                  (set-face-attribute 'org-level-3 nil :height 1.25)
+                                  (set-face-attribute 'org-level-4 nil :height 1.1)
+                                  (set-face-attribute 'org-level-5 nil :height 1.0)
+                                  ))
+       )
 
     (leaf org-bullets :disabled t
       :ensure t
       :doc "pretty looking bullet list"
       :hook (org-mode-hook . org-bullets-mode))
 
+    (leaf *patch-org-todo-faces :after doom-themes
+      :doc  "prettify todo keywords"
+      :hook
+      (after-load-theme-hook . (lambda ()
+        (custom-set-variables
+         '(org-todo-keyword-faces
+           `(
+             ("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
+             ("NEXT"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))))
+             ("STARTED" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'cyan)))))
+             ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
+             ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta)))))
+             ))
+         )))
+      )
+
     (leaf org-modern
       :straight
       (org-modern :type git :host github
                   :repo "minad/org-modern" :branch "main")
       :doc "better looking org mode"
-      :preface
-      ;; NOTE: do not use org-modern-todo
-      (let ((bg-c (doom-color 'bg))
-            (box-p '(:line-width (0 . -4))))
-        (custom-set-variables
-         '(org-modern-todo  nil)
-         '(org-todo-keyword-faces
-           `(
-             ("TODO"    . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'green)))))
-             ("NEXT"    . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'blue)))))
-             ("STARTED" . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'cyan)))))
-             ("WAITING" . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'yellow)))))
-             ("PROJ"    . ((t (:foreground ,bg-c :box ,box-p :background ,(doom-color 'magenta)))))
-             )))
-        )
       :hook
       (org-mode-hook . org-modern-mode)
       :custom
       ;;org-modern custom
+      (org-modern-todo . nil)
       (org-modern-label-border . 4)
       (org-modern-table . nil)
       (org-modern-horizontal-rule . nil)
@@ -922,10 +945,11 @@ based on elfeed-search-browse-url"
   (eww-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
   :config
   (leaf *eww-patch-faces :after doom-themes
-    :config
-    (custom-set-faces
-     `(eww-form-text ((t :background ,(doom-color 'bg-alt))))
-     )
+    :hook
+    ((after-load-theme-hook
+      eww-mode-hook) . (lambda ()
+                               (custom-set-faces
+                                `(eww-form-text ((t :background ,(doom-color 'bg-alt)))))))
     )
 
   (leaf *eww-bind-all-the-icons :if (fboundp 'all-the-icons-insert)
@@ -956,5 +980,15 @@ based on elfeed-search-browse-url"
     (evil-define-key 'normal eww-mode-map
       "c" 'eww-toggle-colors
       "C" 'eww-toggle-colors)
+    )
+
+  (leaf *patch-eww-heading-size
+    :hook
+    (after-load-theme-hook . (lambda ()
+                               (set-face-attribute 'shr-h1 nil :height 1.4)
+                               (set-face-attribute 'shr-h2 nil :height 1.2)
+                               (set-face-attribute 'shr-h3 nil :height 1.1)
+                               (set-face-attribute 'shr-h4 nil :height 1.0)
+                               ))
     )
 )
