@@ -843,12 +843,9 @@ argument `name' could be directory or filename"
                                   )))
       )
 
-    ;; bind to evil layer
-    (eval-after-load 'Evil
-      (evil-define-key 'normal 'global
-        (kbd "SPC") 'pulsar-pulse-line
-        (kbd "S-SPC") 'pulsar-highlight-line)
-      )
+    (evil-define-key 'normal 'global
+      (kbd "SPC") 'pulsar-pulse-line
+      (kbd "S-SPC") 'pulsar-highlight-line)
     )
   )
 
