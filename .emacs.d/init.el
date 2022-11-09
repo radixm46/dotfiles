@@ -659,9 +659,11 @@ argument `name' could be directory or filename"
   (leaf emojify
     :ensure t
     :custom
-    (emojify-emojis-dir . "~/.emacs.d/.cache/emojis")
-    (emojify-display-style . 'unicode)
-    (emojify-composed-text-p . nil)
+    `(
+      (emojify-emojis-dir . ,(cache-sub-dir "emojis"))
+      (emojify-display-style . 'unicode)
+      (emojify-composed-text-p . nil)
+      )
     :config
     (leaf *emojify-init :emacs< "28"
       :custom (emojify-display-style . 'ascii)
