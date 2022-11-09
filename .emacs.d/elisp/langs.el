@@ -626,7 +626,12 @@
   (("README\\.md\\'"  . gfm-mode)
    ("\\.md\\'"
     "\\.markdown\\'") . markdown-mode)
-  :custom (markdown-command . "multimarkdown")
+  :custom
+  (markdown-command . "multimarkdown")
+  (markdown-hide-markup . t)
+  (markdown-header-scaling . t)
+  (markdown-enable-highlighting-syntax . t)
+  (markdown-enable-math . t)
   :config
   (evil-define-key 'normal markdown-mode-map
     "j" 'evil-next-visual-line
