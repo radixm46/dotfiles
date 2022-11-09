@@ -445,12 +445,12 @@ argument `name' could be directory or filename"
 
     (defun rdm/apply-func-in-fonts (fonts func)
       "apply func to available font in list"
-      (let ((font-available (lambda (font) (member font (font-family-list)))))
+      (let ((fonts-available (font-family-list)))
         (catch 'found
-          (dolist (font fonts)
-            (if (funcall font-available font)
-                (progn (funcall func font)
-                       (throw 'found font)))))))
+          (dolist (f fonts)
+            (if (member f fonts-available)
+                (progn (funcall func f)
+                       (throw 'found f)))))))
 
     (leaf *hide-nobreak-whitespace :emacs>= "28"
       :doc "hack to disable face for double byte space"
@@ -634,11 +634,12 @@ argument `name' could be directory or filename"
     :ensure t
     :config
     ;; if not all fonts available, install requirements
-    (unless (let ((fonts-p t))
+    (unless (let ((fonts-p t)
+                  (fonts-available (font-family-list)))
               (dolist (font '("Material Icons" "Weather Icons"
                               "github-octicons" "FontAwesome"
                               "file-icons" "all-the-icons"))
-                (setq fonts-p (and fonts-p (member font (font-family-list)))))
+                (setq fonts-p (and fonts-p (member font fonts-available))))
               fonts-p)
       (all-the-icons-install-fonts t))
 
