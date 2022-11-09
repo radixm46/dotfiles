@@ -162,7 +162,7 @@ argument `name' could be directory or filename"
       (let ((message-log-max nil))
         `(with-temp-message (or (current-message) "") ,@body)))
     (setq recentf-auto-save-timer
-          (run-with-idle-timer 30 t '(lambda ()
+          (run-with-idle-timer 30 t #'(lambda ()
                                        (with-suppressed-message (recentf-save-list)))))
     :global-minor-mode recentf-mode
     )

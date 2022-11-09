@@ -39,6 +39,7 @@
         "gp" 'highlight-symbol-prev
         "gN" 'highlight-symbol-next-in-defun
         "gP" 'highlight-symbol-prev-in-defun))
+
     :hook (emacs-lisp-mode-hook . highlight-defined-mode)
     :custom (highlight-defined-face-use-itself . t)
     )
@@ -995,7 +996,6 @@ based on elfeed-search-browse-url"
       "i" 'eww-toggle-images
       "I" 'eww-toggle-images)
     )
-
 
   (leaf *eww-use-color-config
     :doc "config colors in eww"
