@@ -114,24 +114,28 @@ argument `name' could be directory or filename"
       :doc "supress auto saving message"
       :custom (auto-save-no-message . t))
     :custom
-    (auto-save-file-name-transforms . '((".*" "~/.emacs.d/.cache/autosaved" t)))
-    (delete-auto-save-files . t)
-    (auto-save-default . t)
-    (auto-save-timeout . 15)
-    (auto-save-interval . 120)
-    (auto-save-list-file-prefix . nil))
+    `(
+      (auto-save-file-name-transforms . `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,(cache-sub-dir "autosaved") t)))
+      (delete-auto-save-files . t)
+      (auto-save-default . t)
+      (auto-save-timeout . 15)
+      (auto-save-interval . 120)
+      (auto-save-list-file-prefix . nil)
+      ))
 
   (leaf *backup-files
     :doc "make backup files"
     :tag "builtin"
     :custom
-    (backup-directory-alist . '(("." .  "~/.emacs.d/.cache/hist")))
-    (make-backup-files . t)
-    (version-control . t) ;; enable version control
-    (kept-new-versions . 5)
-    (kept-old-versions . 1)
-    (delete-old-versions . t)
-    (create-lockfiles . nil))
+    `(
+      (backup-directory-alist . `(("." .  ,(cache-sub-dir "hist"))))
+      (make-backup-files . t)
+      (version-control . t) ;; enable version control
+      (kept-new-versions . 5)
+      (kept-old-versions . 1)
+      (delete-old-versions . t)
+      (create-lockfiles . nil)
+      ))
 
   (leaf history
     :doc "configure history, log"
@@ -144,11 +148,13 @@ argument `name' could be directory or filename"
   (leaf recentf
     :tag "builtin"
     :custom
-    (recentf-save-file . "~/.emacs.d/.cache/recentf")
-    (recentf-max-saved-items . 2000)
-    (recentf-auto-cleanup . 'never)
-    (recentf-exclude . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
-                         "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
+    `(
+      (recentf-save-file . ,(cache-sub-file "recentf"))
+      (recentf-max-saved-items . 2000)
+      (recentf-auto-cleanup . 'never)
+      (recentf-exclude . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
+                           "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
+      )
     :init
     (defmacro with-suppressed-message (&rest body)
       "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
@@ -163,9 +169,9 @@ argument `name' could be directory or filename"
 
   (leaf bookmark
     :tag "builtin"
-    :config
-    (custom-set-variables
-     '(bookmark-default-file  (file-truename "~/.emacs.d/.cache/bookmarks")))
+    :require bookmark
+    :custom
+    `((bookmark-default-file . ,(cache-sub-file "bookmarks")))
     )
   )
 
@@ -187,13 +193,18 @@ argument `name' could be directory or filename"
   (prefer-coding-system 'utf-8)
 
   ;; skk config(use
-  (leaf skk
-    :ensure ddskk
+  (leaf ddskk
+    :doc "setup ddsk"
+    :ensure t
     :custom
-    (default-input-method . "japanese-skk")
-    (skk-user-directory . "~/.emacs.d/.cache/skk")
-    (skk-init-file . "~/.emacs.d/elisp/initskk.el"))
-)
+    `(
+      (skk-use-azik . t)
+      (default-input-method . "japanese-skk")
+      (skk-user-directory   . ,(cache-sub-dir "skk"))
+      (skk-init-file        . ,(expand-file-name "elisp/initskk.el" user-emacs-directory))
+      )
+    )
+  )
 
 
 (leaf *conf-appearance
@@ -1132,7 +1143,7 @@ argument `name' could be directory or filename"
     (leaf savehist
       :tag "builtin"
       :doc "Persist history over Emacs restarts. Vertico sorts by history position."
-      :custom (savehist-file . "~/.emacs.d/.cache/history")
+      :custom `((savehist-file . ,(cache-sub-file "history")))
       :init (savehist-mode))
 
     ;; Add prompt indicator to `completing-read-multiple'.
