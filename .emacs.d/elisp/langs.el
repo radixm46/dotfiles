@@ -503,9 +503,9 @@
                                       ;;:head "#+title: ${title}\n"
                                       ;;:unnarrowed t)
                                       ))
-      (org-roam-directory         . ,(expand-file-rec  '("org" "roam") (getenv "HOME")))
-      (org-roam-index-file        . ,(expand-file-name "Index.org" org-roam-directory))
-      (org-roam-db-location       . ,(cache-sub-file   "org-roam.db"))
+      (org-roam-directory         . ,(expand-file-rec '("org" "roam") (getenv "HOME")))
+      (org-roam-index-file        . ,(expand-file-rec '("org" "roam" "Index.org") (getenv "HOME")))
+      (org-roam-db-location       . ,(cache-sub-file  "org-roam.db"))
       )
     :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
     :config
