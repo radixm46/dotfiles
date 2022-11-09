@@ -422,11 +422,26 @@ argument `name' could be directory or filename"
   (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
     :ensure t
     :config
-    (add-to-list
-     'all-the-icons-extension-icon-alist
-     '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)))
+    ;; if not all fonts available, install requirements
+    (unless (let ((fonts-p t))
+              (dolist (font '("Material Icons" "Weather Icons"
+                              "github-octicons" "FontAwesome"
+                              "file-icons" "all-the-icons"))
+                (setq fonts-p (and fonts-p (member font (font-family-list)))))
+              fonts-p)
+      (all-the-icons-install-fonts t))
+
+    ;; use org icon to org_archive extension
+    (leaf *patch-all-the-icons-fileicon
+      :after all-the-icons
+      :config
+      (push
+       '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)
+       all-the-icons-extension-icon-alist))
 
   (leaf unicode-fonts
+    )
+
     :ensure t
     :config (unicode-fonts-setup))
 
