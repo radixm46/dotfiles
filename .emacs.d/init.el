@@ -207,6 +207,217 @@ argument `name' could be directory or filename"
   )
 
 
+(leaf *editor-functions
+  :custom
+  (eol-mnemonic-dos . "(CRLF)")
+  (eol-mnemonic-mac . "(CR)")
+  (eol-mnemonic-unix . "(LF)")
+  (find-file-visit-truename . t)
+  ;; configure indent tab to false as default
+  ;; (setq line-move-visual t)
+  ;; (setq word-wrap t)
+  (tab-width . 4)
+  (indent-tabs-mode . nil)
+  (truncate-lines . t)
+  :init
+  (leaf visual-line-mode
+    :doc "visual line mode enables word wrap"
+    :tag "builtin"
+    :hook
+    ((org-mode-hook
+      markdown-mode-hook) . visual-line-mode)
+    ;; (global-visual-line-mode nil)
+    )
+
+  (leaf ediff
+    :ensure t
+    :tag "builtin"
+    :custom (ediff-window-setup-function . #'ediff-setup-windows-plain)
+    :config
+    (defun ediff-window-display-p ()
+      "overwritten ediff builtin function, for not generate new frame" nil)
+    )
+
+  (leaf evil
+    :ensure t
+    :init (setq evil-want-keybinding nil)
+    :custom (evil-undo-system . 'undo-tree)
+    :hydra
+    (hydra-manage-windows
+     (:hint nil)
+     "
+                              ^^^^^^^^^^managing windows^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^--------------------------------------------------------------------------------
+     ^^select^^            ^^^move^^^               ^^^resize^^^               ^^^split^
+       ^_k_^            _R_    _K_    _r_          ^ ^   _+_   ^ ^            ^ ^  _v_
+       ^^↑^^            ^ ^    ^↑^    ^ ^          ^ ^   ^+^   ^ ^            ^ ^  ^|^
+   _h_ ←   → _l_         ^_H_ ←   → _L_^           _<_ - _=_ + _>_           ^_s_ --+--^
+       ^^↓^^            ^ ^    ^↓^    ^ ^          ^ ^   ^-^   ^ ^            ^ ^  ^|^
+       ^_j_^            ^ ^    _J_    ^ ^          ^ ^   _-_   ^ ^            ^ ^
+^^^^^^^^^^^^^^^^^^^................................................................................
+    ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^           ^_N_ext^ / ^_P_revious tab^
+   ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^        ^_t_:  tab-bar keys
+"
+     ("h" evil-window-left)
+     ("j" evil-window-down)
+     ("k" evil-window-up)
+     ("l" evil-window-right)
+     ("a" ace-window)
+     ("H" evil-window-move-far-left)
+     ("J" evil-window-move-very-bottom)
+     ("K" evil-window-move-very-top)
+     ("L" evil-window-move-far-right)
+     ("r" evil-window-rotate-downwards)
+     ("R" evil-window-rotate-upwards)
+     ("+" (evil-window-increase-height 5))
+     ("-" (evil-window-decrease-height 5))
+     (">" (evil-window-increase-width 5))
+     ("<" (evil-window-decrease-width 5))
+     ("=" balance-windows)
+     ("v" evil-window-vsplit)
+     ("s" evil-window-split)
+     ("p" evil-window-mru)
+     ("d" evil-window-delete)
+     ("o" delete-other-windows :exit t)
+     ("n" evil-window-new)
+     ("f" other-frame)
+     ("N" tab-bar-switch-to-next-tab)
+     ("P" tab-bar-switch-to-prev-tab)
+     ("t" hydra-tab-bar/body :exit t))
+
+
+    :bind
+    (:global-map
+     ("<f4>" . hydra-manage-windows/body)
+     ("M-4"  . hydra-manage-windows/body))
+    :global-minor-mode evil-mode
+    :config
+    (leaf evil-surround
+      :ensure t
+      :global-minor-mode global-evil-surround-mode)
+    (leaf evil-collection
+      :after evil
+      :ensure t
+      :config
+      (evil-collection-init)
+      (define-key evil-normal-state-map (kbd "C-u") 'scroll-down-command)
+      ;; enable emacs cursor movement in insert mode
+      (define-key evil-insert-state-map (kbd "C-h") 'delete-backward-char)
+      (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+      (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
+      ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+      ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+      )
+    (leaf evil-commentary :ensure t
+      :doc "make easy to comment out."
+      :url "https://github.com/linktohack/evil-commentary"
+      :config (evil-commentary-mode))
+    (leaf evil-goggles :ensure t
+      :doc "visual hints on edit."
+      :url "https://github.com/edkolev/evil-goggles"
+      :custom
+      (evil-goggles-pulse             . nil)
+      (evil-goggles-duration          . 0.10)
+      (evil-goggles-async-duration    . nil)
+      (evil-goggles-blocking-duration . nil)
+      :config
+      (evil-goggles-mode)
+      (evil-goggles-use-diff-faces)
+      )
+    (leaf evil-lion :ensure t
+      :doc "Evil align operator."
+      :url "https://github.com/edkolev/evil-lion"
+      :config (evil-lion-mode))
+    (leaf evil-matchit :ensure t
+      :doc "Vim matchit.vim by Benji Fisher is ported into Emacs."
+      :url "https://github.com/redguardtoo/evil-matchit"
+      :global-minor-mode global-evil-matchit-mode)
+    (leaf evil-numbers :ensure t
+      :doc "Increment / Decrement binary, octal, decimal and hex literals"
+      :url "https://github.com/cofi/evil-numbers"
+      :config
+      (evil-define-key 'motion 'global
+        (kbd "C-c +") 'evil-numbers/inc-at-pt
+        (kbd "C-c -") 'evil-numbers/dec-at-pt
+        ))
+    )
+
+  (leaf editorconfig
+    :doc "load editorconfig"
+    :ensure t
+    :config (editorconfig-mode))
+
+  (leaf origami
+    :doc "folding blocks"
+    :ensure t
+    :hook (prog-mode-hook . origami-mode))
+
+  (leaf yasnippet
+    :ensure t
+    :hook (prog-mode-hook . yas-minor-mode)
+    :config
+    (leaf yasnippet-snippets :ensure t)
+
+    (leaf consult-yasnippet
+      :doc "consulting yasnippet candidates"
+      :straight
+      (consult-yasnippet :type git :host github
+                         :repo "mohkale/consult-yasnippet"))
+    (yas-reload-all))
+
+  (leaf tab-bar :emacs>= "27.1"
+    :tag "builtin"
+    :doc "configure tab-bar mode"
+    :custom (tab-bar-show . 1)
+    :hydra
+    (hydra-tab-bar
+     (:hint nil) "
+                          ^^tab-bar-mode^^
+^^^^-----------------------------------------------------------------
+ _n_:   new                       _j_:   next
+ _c_:   close                     _k_:   previous
+ _r_:   rename                    _s_:   select
+
+ _SPC_: BACK
+"
+     ("n"   tab-bar-new-tab)
+     ("c"   tab-bar-close-tab)
+     ("r"   tab-rename)
+     ("j"   tab-bar-switch-to-next-tab)
+     ("k"   tab-bar-switch-to-prev-tab)
+     ("s"   tab-bar-select-tab-by-name)
+     ("SPC" hydra-manage-windows/body :exit t))
+    )
+
+  (leaf quickrun :ensure t)
+
+  (leaf tree-sitter
+    :ensure t
+    :commands (tree-sitter-hl-mode)
+    :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+    :init
+    (leaf tree-sitter-langs
+      :require t
+      :ensure t)
+    :global-minor-mode global-tree-sitter-mode
+    )
+
+  (leaf highlight-symbol
+    :ensure t
+    :doc "automatic and manual symbol highlighting for Emacs"
+    :custom
+    (highlight-symbol-idle-delay . 1.0)
+    :config
+    (leaf *patch-highlight-symbol :after doom-themes
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (custom-set-faces
+                                  `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan))))))))
+      )
+    )
+  )
+
+
 (leaf *conf-appearance
   :custom
   (inhibit-splash-screen . t)
@@ -634,217 +845,6 @@ argument `name' could be directory or filename"
       (evil-define-key 'normal 'global
         (kbd "SPC") 'pulsar-pulse-line
         (kbd "S-SPC") 'pulsar-highlight-line)
-      )
-    )
-  )
-
-
-(leaf *editor-functions
-  :custom
-  (eol-mnemonic-dos . "(CRLF)")
-  (eol-mnemonic-mac . "(CR)")
-  (eol-mnemonic-unix . "(LF)")
-  (find-file-visit-truename . t)
-  ;; configure indent tab to false as default
-  ;; (setq line-move-visual t)
-  ;; (setq word-wrap t)
-  (tab-width . 4)
-  (indent-tabs-mode . nil)
-  (truncate-lines . t)
-  :init
-  (leaf visual-line-mode
-    :doc "visual line mode enables word wrap"
-    :tag "builtin"
-    :hook
-    ((org-mode-hook
-      markdown-mode-hook) . visual-line-mode)
-    ;; (global-visual-line-mode nil)
-    )
-
-  (leaf ediff
-    :ensure t
-    :tag "builtin"
-    :custom (ediff-window-setup-function . #'ediff-setup-windows-plain)
-    :config
-    (defun ediff-window-display-p ()
-      "overwritten ediff builtin function, for not generate new frame" nil)
-    )
-
-  (leaf editorconfig
-    :doc "load editorconfig"
-    :ensure t
-    :config (editorconfig-mode))
-
-  (leaf origami
-    :doc "folding blocks"
-    :ensure t
-    :hook (prog-mode-hook . origami-mode))
-
-  (leaf yasnippet
-    :ensure t
-    :hook (prog-mode-hook . yas-minor-mode)
-    :config
-    (leaf yasnippet-snippets :ensure t)
-
-    (leaf consult-yasnippet
-      :doc "consulting yasnippet candidates"
-      :straight
-      (consult-yasnippet :type git :host github
-                         :repo "mohkale/consult-yasnippet"))
-    (yas-reload-all))
-
-  (leaf evil
-    :ensure t
-    :init (setq evil-want-keybinding nil)
-    :custom (evil-undo-system . 'undo-tree)
-    :hydra
-    (hydra-manage-windows
-     (:hint nil)
-     "
-                              ^^^^^^^^^^managing windows^^^^^^^^^^
-^^^^^^^^^^^^^^^^^^^--------------------------------------------------------------------------------
-     ^^select^^            ^^^move^^^               ^^^resize^^^               ^^^split^
-       ^_k_^            _R_    _K_    _r_          ^ ^   _+_   ^ ^            ^ ^  _v_
-       ^^↑^^            ^ ^    ^↑^    ^ ^          ^ ^   ^+^   ^ ^            ^ ^  ^|^
-   _h_ ←   → _l_         ^_H_ ←   → _L_^           _<_ - _=_ + _>_           ^_s_ --+--^
-       ^^↓^^            ^ ^    ^↓^    ^ ^          ^ ^   ^-^   ^ ^            ^ ^  ^|^
-       ^_j_^            ^ ^    _J_    ^ ^          ^ ^   _-_   ^ ^            ^ ^
-^^^^^^^^^^^^^^^^^^^................................................................................
-    ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^           ^_N_ext^ / ^_P_revious tab^
-   ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^        ^_t_:  tab-bar keys
-"
-     ("h" evil-window-left)
-     ("j" evil-window-down)
-     ("k" evil-window-up)
-     ("l" evil-window-right)
-     ("a" ace-window)
-     ("H" evil-window-move-far-left)
-     ("J" evil-window-move-very-bottom)
-     ("K" evil-window-move-very-top)
-     ("L" evil-window-move-far-right)
-     ("r" evil-window-rotate-downwards)
-     ("R" evil-window-rotate-upwards)
-     ("+" (evil-window-increase-height 5))
-     ("-" (evil-window-decrease-height 5))
-     (">" (evil-window-increase-width 5))
-     ("<" (evil-window-decrease-width 5))
-     ("=" balance-windows)
-     ("v" evil-window-vsplit)
-     ("s" evil-window-split)
-     ("p" evil-window-mru)
-     ("d" evil-window-delete)
-     ("o" delete-other-windows :exit t)
-     ("n" evil-window-new)
-     ("f" other-frame)
-     ("N" tab-bar-switch-to-next-tab)
-     ("P" tab-bar-switch-to-prev-tab)
-     ("t" hydra-tab-bar/body :exit t))
-
-
-    :bind
-    (:global-map
-     ("<f4>" . hydra-manage-windows/body)
-     ("M-4"  . hydra-manage-windows/body))
-    :global-minor-mode evil-mode
-    :config
-    (leaf evil-surround
-      :ensure t
-      :global-minor-mode global-evil-surround-mode)
-    (leaf evil-collection
-      :after evil
-      :ensure t
-      :config
-      (evil-collection-init)
-      (define-key evil-normal-state-map (kbd "C-u") 'scroll-down-command)
-      ;; enable emacs cursor movement in insert mode
-      (define-key evil-insert-state-map (kbd "C-h") 'delete-backward-char)
-      (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
-      (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
-      ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-      ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
-      )
-    (leaf evil-commentary :ensure t
-      :doc "make easy to comment out."
-      :url "https://github.com/linktohack/evil-commentary"
-      :config (evil-commentary-mode))
-    (leaf evil-goggles :ensure t
-      :doc "visual hints on edit."
-      :url "https://github.com/edkolev/evil-goggles"
-      :custom
-      (evil-goggles-pulse             . nil)
-      (evil-goggles-duration          . 0.10)
-      (evil-goggles-async-duration    . nil)
-      (evil-goggles-blocking-duration . nil)
-      :config
-      (evil-goggles-mode)
-      (evil-goggles-use-diff-faces)
-      )
-    (leaf evil-lion :ensure t
-      :doc "Evil align operator."
-      :url "https://github.com/edkolev/evil-lion"
-      :config (evil-lion-mode))
-    (leaf evil-matchit :ensure t
-      :doc "Vim matchit.vim by Benji Fisher is ported into Emacs."
-      :url "https://github.com/redguardtoo/evil-matchit"
-      :global-minor-mode global-evil-matchit-mode)
-    (leaf evil-numbers :ensure t
-      :doc "Increment / Decrement binary, octal, decimal and hex literals"
-      :url "https://github.com/cofi/evil-numbers"
-      :config
-      (evil-define-key 'motion 'global
-        (kbd "C-c +") 'evil-numbers/inc-at-pt
-        (kbd "C-c -") 'evil-numbers/dec-at-pt
-        ))
-    )
-
-  (leaf tab-bar :emacs>= "27.1"
-    :tag "builtin"
-    :doc "configure tab-bar mode"
-    :custom (tab-bar-show . 1)
-    :hydra
-    (hydra-tab-bar
-     (:hint nil) "
-                          ^^tab-bar-mode^^
-^^^^-----------------------------------------------------------------
- _n_:   new                       _j_:   next
- _c_:   close                     _k_:   previous
- _r_:   rename                    _s_:   select
-
- _SPC_: BACK
-"
-     ("n"   tab-bar-new-tab)
-     ("c"   tab-bar-close-tab)
-     ("r"   tab-rename)
-     ("j"   tab-bar-switch-to-next-tab)
-     ("k"   tab-bar-switch-to-prev-tab)
-     ("s"   tab-bar-select-tab-by-name)
-     ("SPC" hydra-manage-windows/body :exit t))
-    )
-
-  (leaf quickrun :ensure t)
-
-  (leaf tree-sitter
-    :ensure t
-    :commands (tree-sitter-hl-mode)
-    :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
-    :init
-    (leaf tree-sitter-langs
-      :require t
-      :ensure t)
-    :global-minor-mode global-tree-sitter-mode
-    )
-
-  (leaf highlight-symbol
-    :ensure t
-    :doc "automatic and manual symbol highlighting for Emacs"
-    :custom
-    (highlight-symbol-idle-delay . 1.0)
-    :config
-    (leaf *patch-highlight-symbol :after doom-themes
-      :hook
-      (after-load-theme-hook . (lambda ()
-                                 (custom-set-faces
-                                  `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan))))))))
       )
     )
   )
