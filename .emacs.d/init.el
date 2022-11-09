@@ -50,6 +50,47 @@
       (message "switch to gui")
       (run-hooks 'conf-on-gui-hook))
     )
+
+  (leaf *cache-directory-conf
+    :doc "configure emacs cache directory path (default: ~/.cache/emacs)"
+    :config
+    (defun expand-file-rec (path basedir)
+      "generate full path from basedir with given list
+
+example:
+  (expand-file-rec '(\"foo\" \"bar\" \"baz\") \"~\")
+  => \"/home/user/foo/bar/buzz\""
+      (cond
+       ((length= path 1)
+        (expand-file-name (car path) basedir))
+       ((length> path 1)
+        (expand-file-rec
+         (cdr path) (expand-file-name (car path) basedir)))
+       (t
+        (message "invalid path value"))
+       ))
+
+    (defvar emacs-cache-root-dir
+      (expand-file-rec '(".cache" "emacs") (getenv "HOME"))
+      "emacs cache directory path (default: $HOME/.cache)")
+
+    (defun cache-sub-dir (&optional name)
+      "check directory path (create if not exists), and returns full path to dir.
+if argument is not given, returns `emacs-cache-root-dir'"
+      (let ((lpath (if (eq name nil)
+                      (expand-file-name emacs-cache-root-dir)
+                    (expand-file-name name emacs-cache-root-dir))))
+        (if (not (file-directory-p lpath))
+            (progn (make-directory lpath t) lpath)
+          lpath)))
+
+    (defun cache-sub-file (name &optional subdir )
+      "returns file path like 'emacs-cache-root-dir/subdir/name'
+if name is not given, returns 'emacs-cache-root-dir/name'
+argument `name' could be directory or filename"
+      (expand-file-name name (cache-sub-dir subdir)))
+    )
+
   (leaf exec-path-from-shell
     :doc "load path from shell at startup"
     :ensure t
@@ -65,16 +106,6 @@
 
 (leaf *conf-cache-history
   :config
-  (leaf *set-cache-path
-    :doc "check directory and set target"
-    :config
-    (let ((rdm/autosave-dir "~/.emacs.d/.cache/autosaved")
-          (rdm/hist-dir "~/.emacs.d/.cache/hist"))
-      (unless (file-directory-p rdm/autosave-dir)
-          (make-directory rdm/autosave-dir t))
-      (unless (file-directory-p rdm/hist-dir)
-          (make-directory rdm/hist-dir t))))
-
   (leaf autosave
     :doc "configure auto save files"
     :tag "builtin"
@@ -1241,12 +1272,16 @@
     :ensure t
     :commands (lsp lsp-deferred)
     :custom
-    (lsp-keymap-prefix . "C-c C-l") ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
-    (lsp-document-sync-method . nil) ;; always send incremental document
-    (lsp-response-timeout . 5)
-    (lsp-eldoc-enable-hover . nil)
-    (lsp-auto-configure . t)
-    (lsp-headerline-breadcrumb-icons-enable . nil)
+    `(
+      (lsp-keymap-prefix . "C-c C-l") ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
+      (lsp-document-sync-method . nil) ;; always send incremental document
+      (lsp-response-timeout . 5)
+      (lsp-eldoc-enable-hover . nil)
+      (lsp-auto-configure . t)
+      (lsp-headerline-breadcrumb-icons-enable . nil)
+      (lsp-session-file . ,(cache-sub-file ".lsp-session-v1"))
+      (lsp-server-install-dir . ,(cache-sub-dir "lsp")) ;; server install target path
+      )
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
     :hook
     (lsp-mode-hook . (lambda ()
@@ -1254,9 +1289,6 @@
                        (flycheck-posframe-mode -1))) ; disable flycheck-posframe
     :config
     (setq lsp-prefer-flymake nil)
-    (custom-set-variables
-     '(lsp-session-file
-       (expand-file-name ".cache/.lsp-session-v1" user-emacs-directory)))
 
     (leaf lsp-ui
       :doc "LSP UI tools"
@@ -1502,9 +1534,11 @@
   (leaf undo-tree
     :ensure t
     :custom
-    (undo-tree-visualizer-timestamps . t)
-    (undo-tree-auto-save-history . t)
-    (undo-tree-history-directory-alist . '(("." . "~/.emacs.d/.cache/undo-tree")))
+    `(
+      (undo-tree-visualizer-timestamps . t)
+      (undo-tree-auto-save-history . t)
+      (undo-tree-history-directory-alist . `(("." . ,(cache-sub-dir "undo-tree"))))
+      )
     :global-minor-mode (global-undo-tree-mode))
 
   (leaf dashboard
@@ -1605,10 +1639,20 @@
   (leaf tramp
     :tag "builtin"
     :custom
-    (tramp-default-method        . "ssh")
-    (tramp-persistency-file-name . "~/.emacs.d/.cache/tramp"))
+    `(
+      (tramp-default-method        . "ssh")
+      (tramp-persistency-file-name . ,(cache-sub-file "tramp"))
+      (tramp-verbose               . 2)
+      ;; (tramp-chunksize             . 2000)
+      )
+    :config
+    (leaf *tramp-customize :emacs>= "28"
+      :custom
+      (tramp-use-ssh-controlmaster-options . nil))
 
-  (leaf epa :emacs>="27"
+    )
+
+  (leaf epa :emacs>= "27"
     :tag "builtin"
     :doc "gpg pinentry mode"
     :custom
@@ -1794,47 +1838,47 @@
     (leaf *treemacs-custom :after treemacs
       :doc "eval after treemacs load"
       :custom
-      (treemacs-deferred-git-apply-delay      . 0.5)
-      (treemacs-directory-name-transformer    . #'identity)
-      (treemacs-display-in-side-window        . t)
-      (treemacs-eldoc-display                 . t)
-      (treemacs-file-event-delay              . 5000)
-      (treemacs-file-extension-regex          . treemacs-last-period-regex-value)
-      (treemacs-file-follow-delay             . 0.2)
-      (treemacs-file-name-transformer         . #'identity)
-      (treemacs-follow-after-init             . t)
-      (treemacs-git-command-pipe              . "")
-      (treemacs-goto-tag-strategy             . 'refetch-index)
-      (treemacs-indentation                   . 2)
-      (treemacs-indentation-string            . " ")
-      (treemacs-is-never-other-window         . nil)
-      (treemacs-max-git-entries               . 5000)
-      (treemacs-missing-project-action        . 'ask)
-      (treemacs-move-forward-on-expand        . nil)
-      (treemacs-no-png-images                 . nil)
-      (treemacs-no-delete-other-windows       . t)
-      (treemacs-project-follow-cleanup        . nil)
-      (treemacs-position                      . 'left)
-      (treemacs-recenter-distance             . 0.1)
-      (treemacs-recenter-after-file-follow    . nil)
-      (treemacs-recenter-after-tag-follow     . nil)
-      (treemacs-recenter-after-project-jump   . 'always)
-      (treemacs-recenter-after-project-expand . 'on-distance)
-      (treemacs-show-cursor                   . nil)
-      (treemacs-show-hidden-files             . t)
-      (treemacs-silent-filewatch              . nil)
-      (treemacs-silent-refresh                . nil)
-      (treemacs-sorting                       . 'alphabetic-asc)
-      (treemacs-space-between-root-nodes      . t)
-      (treemacs-tag-follow-cleanup            . t)
-      (treemacs-tag-follow-delay              . 1.5)
-      (treemacs-user-mode-line-format         . nil)
-      (treemacs-user-header-line-format       . nil)
-      (treemacs-width                         . 35)
-      :config ;; use expression to set variables
-      (custom-set-variables
-       '(treemacs-collapse-dirs                 (if treemacs-python-executable 3 0))
-       '(treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory))))
+      `(
+        (treemacs-deferred-git-apply-delay      . 0.5)
+        (treemacs-directory-name-transformer    . #'identity)
+        (treemacs-display-in-side-window        . t)
+        (treemacs-eldoc-display                 . t)
+        (treemacs-file-event-delay              . 5000)
+        (treemacs-file-extension-regex          . treemacs-last-period-regex-value)
+        (treemacs-file-follow-delay             . 0.2)
+        (treemacs-file-name-transformer         . #'identity)
+        (treemacs-follow-after-init             . t)
+        (treemacs-git-command-pipe              . "")
+        (treemacs-goto-tag-strategy             . 'refetch-index)
+        (treemacs-indentation                   . 2)
+        (treemacs-indentation-string            . " ")
+        (treemacs-is-never-other-window         . nil)
+        (treemacs-max-git-entries               . 5000)
+        (treemacs-missing-project-action        . 'ask)
+        (treemacs-move-forward-on-expand        . nil)
+        (treemacs-no-png-images                 . nil)
+        (treemacs-no-delete-other-windows       . t)
+        (treemacs-project-follow-cleanup        . nil)
+        (treemacs-position                      . 'left)
+        (treemacs-recenter-distance             . 0.1)
+        (treemacs-recenter-after-file-follow    . nil)
+        (treemacs-recenter-after-tag-follow     . nil)
+        (treemacs-recenter-after-project-jump   . 'always)
+        (treemacs-recenter-after-project-expand . 'on-distance)
+        (treemacs-show-cursor                   . nil)
+        (treemacs-show-hidden-files             . t)
+        (treemacs-silent-filewatch              . nil)
+        (treemacs-silent-refresh                . nil)
+        (treemacs-sorting                       . 'alphabetic-asc)
+        (treemacs-space-between-root-nodes      . t)
+        (treemacs-tag-follow-cleanup            . t)
+        (treemacs-tag-follow-delay              . 1.5)
+        (treemacs-user-mode-line-format         . nil)
+        (treemacs-user-header-line-format       . nil)
+        (treemacs-width                         . 35)
+        (treemacs-collapse-dirs                 . ,(if treemacs-python-executable 3 0))
+        (treemacs-persist-file                  . ,(cache-sub-file "treemacs-persist"))
+        ))
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
     ;;(treemacs-resize-icons 44)
@@ -1862,13 +1906,11 @@
     (leaf treemacs-projectile
       :after treemacs projectile
       :ensure t
-      :init
-      (custom-set-variables
-       '(projectile-cache-file
-         (expand-file-name ".cache/projectile.cache" user-emacs-directory))
-       '(projectile-known-projects-file
-         (expand-file-name ".cache/projectile-known-projects.eld" user-emacs-directory))
-       ))
+      :custom
+      `(
+        (projectile-cache-file          . ,(cache-sub-file "projectile.cache" "projectile"))
+        (projectile-known-projects-file . ,(cache-sub-file "projectile-known-projects.eld" "projectile"))
+        ))
 
     (leaf treemacs-all-the-icons
       :after treemacs all-the-icons
@@ -1914,7 +1956,11 @@
 
 
 (leaf *load-local-conf
-  :config (if (file-exists-p "~/.emacs.d/elisp/local.el")
-              (load "~/.emacs.d/elisp/local.el")
-              ;; create elisp/local.el if not exists
-              (with-temp-file "~/.emacs.d/elisp/local.el" nil)))
+  :config
+  (let
+      ((local-conf (expand-file-rec '("elisp" "local.el") user-emacs-directory)))
+    (if (file-exists-p local-conf)
+        (load local-conf)
+      ;; create elisp/local.el if not exists
+      (with-temp-file local-conf nil))
+    ))

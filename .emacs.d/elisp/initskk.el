@@ -1,12 +1,12 @@
 ;; skk init file
-(setq skk-get-jisyo-directory "~/.emacs.d/.cache/skk/dict")
+(setq skk-get-jisyo-directory (cache-sub-file "dict" "skk"))
 
-(unless (file-directory-p skk-get-jisyo-directory)
+(if (or (directory-empty-p skk-get-jisyo-directory)
+        (not (file-directory-p skk-get-jisyo-directory)))
   (skk-get skk-get-jisyo-directory))
 
 (custom-set-variables
- '(skk-large-jisyo "~/.emacs.d/.cache/skk/dict/SKK-JISYO.L")
- '(skk-use-azik t)
+ `(skk-large-jisyo ,(expand-file-name "SKK-JISYO.L" skk-get-jisyo-directory))
  '(skk-azik-keyboard-type 'us101)
  '(skk-show-japanese-menu t)
  '(skk-show-inline t)

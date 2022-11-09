@@ -271,14 +271,18 @@
   (org-agenda-include-diary     . t)
 
   :config
-  (leaf *org-config-directory :if (f-directory-p "~/org/orgfiles")
+  (leaf *org-config-directory
+    :if (f-directory-p (expand-file-rec '("org" "orgfiles") (getenv "HOME")))
     :custom
-    (org-directory              . "~/org/orgfiles")
+    `(
+      (org-directory              . ,(expand-file-rec '("org" "orgfiles") (getenv "HOME")))
+      (org-default-notes-file     . ,(expand-file-name "notes.org" org-directory))
+      (org-agenda-files           . `,(directory-files org-directory t ".org$" t))
+      )
     :config
-    (custom-set-variables
-     '(org-default-notes-file   (concat org-directory "/notes.org"))
-     '(org-agenda-files         (directory-files org-directory t ".org$" t)))
-    (defvar org-todofile        (concat org-directory "/todo.org") "default org todo file path"))
+    (defvar org-todofile
+      (expand-file-name "todo.org" org-directory)
+      "default org todo file path"))
 
   (defun rdm/org-goto-dir ()
     "open dir '~/org' with dired"
@@ -482,29 +486,29 @@
      ("t r" org-roam-tag-remove)
      ("SPC" hydra-org/body :exit t))
     :custom
-    (org-roam-capture-templates . '(("d" "default" plain
-                                     "%?"
-                                     :if-new
-                                     (file+head "${slug}.org" "#+title: ${title}\n")
-                                     :immediate-finish t
-                                     :unnarrowed t)
-                                    ;; ("r" "bibliography reference" plain "%?"
-                                    ;;  :if-new
-                                    ;;  (file+head "references/${citekey}.org" "#+title: ${title}\n")
-                                    ;;  :unnarrowed t)
-                                    ;;("r" "Roam" plain (function org-roam--capture-get-point)
-                                    ;;"%?"
-                                    ;;:file-name "%<%Y%m%d%H%M%S>-${slug}.org"
-                                    ;;:head "#+title: ${title}\n"
-                                    ;;:unnarrowed t)
-                                    ))
+    `(
+      (org-roam-capture-templates . '(("d" "default" plain
+                                       "%?"
+                                       :if-new
+                                       (file+head "${slug}.org" "#+title: ${title}\n")
+                                       :immediate-finish t
+                                       :unnarrowed t)
+                                      ;; ("r" "bibliography reference" plain "%?"
+                                      ;;  :if-new
+                                      ;;  (file+head "references/${citekey}.org" "#+title: ${title}\n")
+                                      ;;  :unnarrowed t)
+                                      ;;("r" "Roam" plain (function org-roam--capture-get-point)
+                                      ;;"%?"
+                                      ;;:file-name "%<%Y%m%d%H%M%S>-${slug}.org"
+                                      ;;:head "#+title: ${title}\n"
+                                      ;;:unnarrowed t)
+                                      ))
+      (org-roam-directory         . ,(expand-file-rec  '("org" "roam") (getenv "HOME")))
+      (org-roam-index-file        . ,(expand-file-name "Index.org" org-roam-directory))
+      (org-roam-db-location       . ,(cache-sub-file   "org-roam.db"))
+      )
     :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
     :config
-    (custom-set-variables
-     '(org-roam-directory           (file-truename "~/org/roam"))
-     '(org-roam-index-file          (file-truename "~/org/roam/Index.org"))
-     '(org-roam-db-location         (file-truename "~/.emacs.d/.cache/org-roam.db")))
-
     (org-roam-db-autosync-mode)
 
     (leaf org-roam-ui
