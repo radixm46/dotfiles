@@ -1809,7 +1809,13 @@ argument `name' could be directory or filename"
     :tag "builtin"
     :custom
     `(
-      (dired-listing-switches    . "-l")
+      ;; use gnu-ls if available on macOS
+      (insert-directory-program . ,(if (and (equal system-type 'darwin)
+                                             (not (executable-find "gls")))
+                                       "ls" "gls"))
+      (dired-listing-switches    . ,(if (and (equal system-type 'darwin)
+                                             (not (executable-find "gls")))
+                                        "-l" "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group"))
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
       ;; NOTE: on macOS, require full disk access to use trash bin
