@@ -34,6 +34,22 @@
     :require t
     :doc "load cl-lib")
 
+  (leaf *conf-on-state
+    :config
+    (defvar conf-on-term-hook nil "Hook run by conf-on-term.")
+    (defun conf-on-term ()
+      "fire hooked functions for swtitch appearance on tui frame"
+      (interactive)
+      (message "switch to term")
+      (run-hooks 'conf-on-term-hook))
+
+    (defvar conf-on-gui-hook nil  "Hook run by conf-on-gui.")
+    (defun conf-on-gui ()
+      "fire hooked functions for swtitch appearance on gui frame"
+      (interactive)
+      (message "switch to gui")
+      (run-hooks 'conf-on-gui-hook))
+    )
   (leaf exec-path-from-shell
     :doc "load path from shell at startup"
     :ensure t
@@ -188,13 +204,16 @@
       :config
       (setq nobreak-char-display nil))
 
-    (defun rdm/set-variable-pitch ()
-      "modify variable pitch face to available font in list"
-      (rdm/apply-func-in-fonts '("Hiragino Sans"
-                                 "BIZ UDP Gothic"
-                                 "Noto Sans CJK JP")
-                               (lambda (f)
-                                 (custom-set-faces `(variable-pitch  ((t (:family ,f))))))))
+    (leaf *set-variable-pitch-on-gui
+      :doc "modify variable pitch face to available font in list"
+      :hook
+      (conf-on-gui-hook . (lambda ()
+                            (rdm/apply-func-in-fonts
+                             '("Hiragino Sans"
+                               "BIZ UDP Gothic"
+                               "Noto Sans CJK JP")
+                             (lambda (f) (custom-set-faces `(variable-pitch  ((t (:family ,f))))))
+                             ))))
 
     (defun rdm/available-serif-font()
       "returns serif font family available in list"
@@ -1864,6 +1883,13 @@
     ;;  :after treemacs persp-mode ;;or perspective vs. persp-mode
     ;;  :ensure t
     ;;  :config (treemacs-set-scope-type 'Perspectives))
+
+    (leaf *treemacs-patch-on-frame-type
+      :hook
+      (conf-on-term-hook . (lambda () (treemacs-load-theme "Default")))
+      (conf-on-gui-hook .  (lambda () (if (fboundp 'all-the-icons-install-fonts)
+                                          (treemacs-load-theme "all-the-icons"))))
+      )
     )
   )
 
@@ -1874,27 +1900,16 @@
 
 (leaf *conf-appearance-on-state
   :doc "switch appearance when on gui or term"
-  :preface
-  (defun emacs-on-term ()
-    "switch emacs appearance for term with doom-spacegrey"
-    (interactive)
-    (custom-set-variables '(doom-modeline-icon nil))
-    (treemacs-load-theme "Default"))
-
-  (defun emacs-on-gui ()
-    "switch emacs appearance for gui with doom-molokai and modeline icons"
-    (interactive)
-    (custom-set-variables '(doom-modeline-icon t))
-    (treemacs-load-theme "all-the-icons")
-    (rdm/set-variable-pitch))
-
-  (if (emacs-works-on-term-p)
-      (emacs-on-term) (emacs-on-gui))
-
   :hook
   (server-after-make-frame-hook . (lambda ()
                                     (if (display-graphic-p)
-                                        (emacs-on-gui) (emacs-on-term))))
+                                        (conf-on-gui) (conf-on-term))
+                                    (load-theme 'doom-nord-aurora t)))
+  ;; NOTE: `load-theme' must be here, frame parameters required by `highlight-indent-guides' color config
+  :preface
+  (if (emacs-works-on-term-p)
+      (conf-on-term) (conf-on-gui))
+  (unless (daemonp) (load-theme 'doom-nord-aurora t))
   )
 
 
