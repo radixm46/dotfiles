@@ -714,6 +714,12 @@
     :init (elfeed-org)
     :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" elfeed-dir-path))))
 
+  (leaf *elfeed-patch-faces :after doom-themes
+    :hook
+    (elfeed-search-update-hook . (lambda ()
+                                   (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt))))
+                               ))
+
   (leaf *elfeed-patch-entry-switch
     :doc "patch entry-switch behavior"
     :custom
