@@ -29,6 +29,16 @@
            ((nil (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
          )))
       )
+
+    (leaf *highlight-symbol-evil-bind
+      :config
+      (evil-define-key 'normal emacs-lisp-mode-map
+        (kbd "M-n") 'highlight-symbol-next
+        (kbd "M-p") 'highlight-symbol-prev
+        "gn" 'highlight-symbol-next
+        "gp" 'highlight-symbol-prev
+        "gN" 'highlight-symbol-next-in-defun
+        "gP" 'highlight-symbol-prev-in-defun))
     :hook (emacs-lisp-mode-hook . highlight-defined-mode)
     :custom (highlight-defined-face-use-itself . t)
     )
