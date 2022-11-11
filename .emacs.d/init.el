@@ -17,6 +17,12 @@
      (gc-cons-threshold  . ,(* 128 1024 1024)) ;; 128MB
      (garbage-collection-messages . t)
      )
+    :config
+    (leaf gcmh
+      :doc "Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
+      :ensure t
+      :config
+      (gcmh-mode 1))
     )
   ;; mouse support on terminal
   (unless window-system
