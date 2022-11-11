@@ -213,6 +213,81 @@ argument `name' could be directory or filename"
   )
 
 
+(leaf *font-configure
+  :doc "font configure"
+  :config
+  (custom-set-variables
+   '(default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
+                                       '(width . 80)
+                                       '(height . 45)) default-frame-alist)))
+  (defvar font-for-tables "UDEV Gothic NF" "1:2 width font for table")
+
+  (leaf nerd-fonts
+    :doc "Emacs nerd-fonts utilities."
+    :straight
+    (nerd-fonts :type git :host github
+                :repo "twlz0ne/nerd-fonts.el")
+    :require t)
+
+  (defun rdm/apply-func-in-fonts (fonts func)
+    "apply func to available font in list"
+    (let ((fonts-available (font-family-list)))
+      (catch 'found
+        (dolist (f fonts)
+          (if (member f fonts-available)
+              (progn (funcall func f)
+                     (throw 'found f)))))))
+
+  (leaf *hide-nobreak-whitespace :emacs>= "28"
+    :doc "hack to disable face for double byte space"
+    :config
+    (setq nobreak-char-display nil))
+
+  (leaf *set-variable-pitch-on-gui
+    :doc "modify variable pitch face to available font in list"
+    :hook
+    (conf-on-gui-hook . (lambda ()
+                          (rdm/apply-func-in-fonts
+                           '("Hiragino Sans"
+                             "BIZ UDP Gothic"
+                             "Noto Sans CJK JP")
+                           (lambda (f) (custom-set-faces `(variable-pitch  ((t (:family ,f))))))
+                           ))))
+
+  (defun rdm/available-serif-font()
+    "returns serif font family available in list"
+    (rdm/apply-func-in-fonts '("Hiragino Mincho ProN"
+                               "BIZ UDP Mincho"
+                               "Noto Serif CJK JP")
+                             (lambda (f) '())))
+
+  (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
+    :ensure t
+    :config
+    (leaf *patch-all-the-icons-fileicon
+      :doc "use org icon to org_archive extension"
+      :after all-the-icons
+      :config
+      (push
+       '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)
+       all-the-icons-extension-icon-alist))
+    )
+  (leaf emojify
+    :ensure t
+    :custom
+    `(
+      (emojify-emojis-dir . ,(cache-sub-dir "emojis"))
+      (emojify-display-style . 'unicode)
+      (emojify-composed-text-p . nil)
+      )
+    :config
+    (leaf *emojify-init :emacs< "28"
+      :custom (emojify-display-style . 'ascii)
+      :hook (after-init-hook . global-emojify-mode))
+    )
+  )
+
+
 (leaf *editor-functions
   :custom
   (eol-mnemonic-dos . "(CRLF)")
@@ -440,48 +515,6 @@ argument `name' could be directory or filename"
   (which-function-mode 1)
   (transient-mark-mode 1)
 
-  (leaf *font-configure
-    :doc "font configure"
-    :config
-    (custom-set-variables
-     '(default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
-                                         '(width . 80)
-                                         '(height . 45)) default-frame-alist)))
-    (defvar font-for-tables "UDEV Gothic NF" "1:2 width font for table")
-
-    (defun rdm/apply-func-in-fonts (fonts func)
-      "apply func to available font in list"
-      (let ((fonts-available (font-family-list)))
-        (catch 'found
-          (dolist (f fonts)
-            (if (member f fonts-available)
-                (progn (funcall func f)
-                       (throw 'found f)))))))
-
-    (leaf *hide-nobreak-whitespace :emacs>= "28"
-      :doc "hack to disable face for double byte space"
-      :config
-      (setq nobreak-char-display nil))
-
-    (leaf *set-variable-pitch-on-gui
-      :doc "modify variable pitch face to available font in list"
-      :hook
-      (conf-on-gui-hook . (lambda ()
-                            (rdm/apply-func-in-fonts
-                             '("Hiragino Sans"
-                               "BIZ UDP Gothic"
-                               "Noto Sans CJK JP")
-                             (lambda (f) (custom-set-faces `(variable-pitch  ((t (:family ,f))))))
-                             ))))
-
-    (defun rdm/available-serif-font()
-      "returns serif font family available in list"
-      (rdm/apply-func-in-fonts '("Hiragino Mincho ProN"
-                                 "BIZ UDP Mincho"
-                                 "Noto Serif CJK JP")
-                               (lambda (f) '())))
-    )
-
   (leaf *set-linespacing
     :doc "control line spacing"
     :custom (line-spacing . 0.40)
@@ -636,46 +669,6 @@ argument `name' could be directory or filename"
     ;;(doom-modeline t) ;TODO:enable modeline
     )
 
-  (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
-    :ensure t
-    :config
-    ;; if not all fonts available, install requirements
-    (unless (let ((fonts-p t)
-                  (fonts-available (font-family-list)))
-              (dolist (font '("Material Icons" "Weather Icons"
-                              "github-octicons" "FontAwesome"
-                              "file-icons" "all-the-icons"))
-                (setq fonts-p (and fonts-p (member font fonts-available))))
-              fonts-p)
-      (all-the-icons-install-fonts t))
-
-    (leaf *patch-all-the-icons-fileicon
-      :doc "use org icon to org_archive extension"
-      :after all-the-icons
-      :config
-      (push
-       '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)
-       all-the-icons-extension-icon-alist))
-
-  (leaf unicode-fonts
-    )
-
-    :ensure t
-    :config (unicode-fonts-setup))
-
-  (leaf emojify
-    :ensure t
-    :custom
-    `(
-      (emojify-emojis-dir . ,(cache-sub-dir "emojis"))
-      (emojify-display-style . 'unicode)
-      (emojify-composed-text-p . nil)
-      )
-    :config
-    (leaf *emojify-init :emacs< "28"
-      :custom (emojify-display-style . 'ascii)
-      :hook (after-init-hook . global-emojify-mode))
-    )
 
   (leaf nyan-mode
     :ensure t
@@ -1968,8 +1961,7 @@ argument `name' could be directory or filename"
     (leaf *treemacs-patch-on-frame-type
       :hook
       (conf-on-term-hook . (lambda () (treemacs-load-theme "Default")))
-      (conf-on-gui-hook .  (lambda () (if (fboundp 'all-the-icons-install-fonts)
-                                          (treemacs-load-theme "all-the-icons"))))
+      (conf-on-gui-hook .  (lambda () (treemacs-load-theme "all-the-icons")))
       )
     )
   )
