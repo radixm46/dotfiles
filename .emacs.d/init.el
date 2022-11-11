@@ -25,10 +25,6 @@
     (defun track-mouse (e))
     (setq mouse-sel-mode t))
 
-  (defun emacs-works-on-term-p ()
-    "returns t if emacs seems running on term"
-    (not (or (daemonp) (display-graphic-p))))
-
   (leaf cl-lib
     :tag "builtin"
     :require t
@@ -36,6 +32,10 @@
 
   (leaf *conf-on-state
     :config
+    (defun emacs-works-on-term-p ()
+      "returns t if emacs seems running on term"
+      (not (or (daemonp) (display-graphic-p))))
+
     (defvar conf-on-term-hook nil "Hook run by conf-on-term.")
     (defun conf-on-term ()
       "fire hooked functions for swtitch appearance on tui frame"
