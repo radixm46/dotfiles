@@ -1528,7 +1528,8 @@ argument `name' could be directory or filename"
     :bind ("M-o" . ace-window)
     :custom (aw-keys . '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :custom-face ;; larger leading char
-    (aw-leading-char-face . '((t (:inherit 'aw-leading-char-face :height 5.0 :width normal))))
+    (aw-leading-char-face .
+                          '((t (:inherit 'highlight :height 5.0 :width normal :underline t))))
     )
 
   (leaf ace-link
