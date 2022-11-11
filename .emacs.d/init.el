@@ -649,8 +649,8 @@ argument `name' could be directory or filename"
               fonts-p)
       (all-the-icons-install-fonts t))
 
-    ;; use org icon to org_archive extension
     (leaf *patch-all-the-icons-fileicon
+      :doc "use org icon to org_archive extension"
       :after all-the-icons
       :config
       (push
