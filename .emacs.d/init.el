@@ -1191,6 +1191,15 @@ argument `name' could be directory or filename"
     ;; Do not allow the cursor in the minibuffer prompt
     (minibuffer-prompt-properties . '(read-only t cursor-intangible t face minibuffer-prompt))
     :hook (minibuffer-setup-hook . cursor-intangible-mode))
+
+  (leaf all-the-icons-completion :emacs>= "26.1"
+    :after all-the-icons marginalia
+    :doc "Add icons to completion candidates using the built in completion metadata functions."
+    :ensure t
+    :hook
+    (conf-on-term-hook . (lambda () (all-the-icons-completion-mode 0)))
+    (conf-on-gui-hook . (lambda () (all-the-icons-completion-mode +1)))
+    )
   )
 
 
