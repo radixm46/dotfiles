@@ -267,10 +267,9 @@ argument `name' could be directory or filename"
     (leaf *patch-all-the-icons-fileicon
       :doc "use org icon to org_archive extension"
       :after all-the-icons
-      :config
-      (push
-       '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)
-       all-the-icons-extension-icon-alist))
+      :push
+      ((all-the-icons-extension-icon-alist . '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)))
+      )
     )
   (leaf emojify
     :ensure t
