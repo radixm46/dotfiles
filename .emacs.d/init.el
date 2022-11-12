@@ -1845,6 +1845,106 @@ argument `name' could be directory or filename"
     (put 'dired-find-alternate-file 'disabled nil)
     )
 
+  (leaf dirvish
+    :unless (and (equal system-type 'darwin)
+                 (not (executable-find "gls")))
+    :ensure t
+    :after transient
+    :custom
+    `(
+      ;; kill all session buffers on quit
+      (dirvish-reuse-ssession       . nil)
+      ;; cache
+      (dirvish-cache-dir                  . ,(cache-sub-dir "dirvish"))
+      (dirvish-media-auto-cache-threshold . '(500 . 4))
+      ;; appearance
+      (dirvish-default-layout       . '(0 0.2 0.8)) ;; no preview
+      (dirvish-header-line-position . 'default)
+      (dirvish-header-line-height   . '(25 . 25))
+      (dirvish-header-line-format   . '(:left  (path)
+                                        :right (free-space)))
+      (dirvish-mode-line-position   . 'default)
+      (dirvish-mode-line-format     . '(:left  (sort file-time " " file-size symlink)
+                                        :right (omit yank index)))
+      ;; bookmarks TODO: add config for windows
+      (dirvish-quick-access-entries . `(("h" ,(getenv "HOME")   "Home")
+                                        ("d" ,(expand-file-name "Dowwnloads" (getenv "HOME")) "Downloads")
+                                        ("D" ,(expand-file-name "Documents"  (getenv "HOME")) "Documents")
+                                        ("e" ,(expand-file-name ".emacs.d"   (getenv "HOME")) "Emacs directory")
+                                        ("m" ,(cond ((equal system-type 'darwin)    "/Volumes/")
+                                                    ((equal system-type 'gnu/linux) "/mnt/")
+                                                    (t "(not available)")) "Drives")
+                                        ("t" ,(cond ((equal system-type 'darwin)    "~/.Trash")
+                                                    ((equal system-type 'gnu/linux) "~/.local/share/Trash/files/")
+                                                    (t "(not available)")) "TrashCan")))
+      )
+
+    :preface
+    (leaf *dirvish-on-term :if (emacs-works-on-term-p)
+      :doc "not use `all-the-icons'"
+      :custom
+      (dirvish-attributes           . '(collapse git-msg file-size))
+      (dirvish-side-attributes      . '(collapse git-msg file-size))
+      )
+    (leaf *dirvish-on-gui :unless (emacs-works-on-term-p)
+      :doc "minimize state on term" ;; remove subtree-state
+      :custom
+      (dirvish-attributes           . '(vc-state all-the-icons collapse git-msg file-size))
+      (dirvish-side-attributes      . '(vc-state all-the-icons collapse git-msg file-size))
+      )
+
+    :init
+    ;; Let Dirvish take over Dired globally
+    (dirvish-override-dired-mode)
+    (add-to-list 'undo-tree-incompatible-major-modes 'dirvish-mode)
+
+    :config
+    (leaf *dirvish-preview-config
+      :doc "configure dirvish preview dispathcer"
+      :preface
+      (dirvish-define-preview exa (file)
+        "Use `exa' to generate directory preview."
+        :require ("exa") ; tell Dirvish to check if we have the executable
+        (when (file-directory-p file) ; we only interest in directories here
+          `(shell . ("exa" "--color=always" "--icons" "--git" "--group-directories-first" "-al" ,file))))
+      :custom
+      (dirvish-preview-dispatchers  . '(exa image gif video audio epub archive pdf))
+      )
+
+    (evil-define-key 'normal dirvish-mode-map
+      (kbd "TAB") 'dirvish-subtree-toggle
+      (kbd "Q")   'dirvish-quit
+      (kbd "q")   'dirvish-quick-access
+      (kbd "l")   'dirvish-subtree-toggle
+      (kbd "h")   'dirvish-subtree-menu
+      ;; dirvish fd
+      (kbd "ff")  'dirvish-fd
+      (kbd "fj")  'dirvish-fd-jump
+      (kbd "fr")  'dirvish-fd-roam
+      (kbd "fk")  'dirvish-fd-kill
+      (kbd ";")   'dirvish-layout-toggle
+      ;; dirvish menus
+      (kbd "Mf")  'dirvish-fd-switches-menu
+
+      (kbd "MM")  'dirvish-chxxx-menu
+      (kbd "MO")  'dirvish-chxxx-menu
+
+      (kbd "Me")  'dirvish-emerge-menu
+      (kbd "Mh")  'dirvish-dispatch
+      (kbd "Mi")  'dirvish-file-info-menu
+      (kbd "Ml")  'dirvish-ls-switches-menu
+      (kbd "Mm")  'dirvish-mark-menu
+      (kbd "Ms")  'dirvish-setup-menu
+      (kbd "My")  'dirvish-yank-menu
+      (kbd "MH")  'dirvish-history-menu
+
+      (kbd "Md")  'dirvish-subdir-menu ;; dirvish subdir-menu
+      (kbd "Mv")  'dirvish-vc-menu ;; dirvish vc-menu
+      (kbd "Mg")  'dirvish-epa-dired-menu ;; dirvish epa-dired-menu
+      (kbd "Mr")  'dirvish-renaming-menu ;; dirvish renaming-menu
+      )
+    )
+
   (leaf neotree
     :ensure t
     ;; :bind ([f7] . neotree-toggle)
