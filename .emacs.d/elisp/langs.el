@@ -751,7 +751,8 @@
     :ensure t
     :url "https://github.com/remyhonig/elfeed-org"
     :init (elfeed-org)
-    :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" elfeed-dir-path))))
+    :custom
+    `((rmh-elfeed-org-files . `,(list (expand-file-name "elfeed.org" elfeed-dir-path)))))
 
   (leaf *elfeed-patch-faces :after doom-themes
     :hook
