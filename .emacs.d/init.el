@@ -1217,7 +1217,8 @@ argument `name' could be directory or filename"
     :config
     (leaf eldoc-box :unless (emacs-works-on-term-p)
       :ensure t
-      :hook (eldoc-mode-hook . eldoc-box-hover-mode)
+      :hook (eldoc-mode-hook . (lambda () (unless (emacs-works-on-term-p)
+                                            eldoc-box-hover-mode)))
       :custom
       (eldoc-box-only-multi-line    . nil)
       (eldoc-box-fringe-use-same-bg . t)
