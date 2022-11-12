@@ -52,7 +52,7 @@
 
   (doom-modeline-buffer-encoding . t)
 
-  (doom-modeline-indent-info . nil)
+  (doom-modeline-indent-info . t)
 
   (doom-modeline-checker-simple-format . t)
 
