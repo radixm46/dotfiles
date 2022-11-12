@@ -258,11 +258,11 @@
   (org-todo-keywords            . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
                                               "DONE(d!)" "CANCELLED(c@)")))
   (org-capture-templates        . `( ;; NOTE: require material icons
-                                    ("t" ,(format  "%s Task to Inbox" (all-the-icons-faicon "check" :v-adjust 0.0))
+                                    ("t" ,(format  "%s Task to Inbox" (nerd-fonts "fa-check"))
                                      entry (file+headline org-todofile "Inbox")
                                      "** TODO %?\n  %U\n  %a"
                                      :empty-lines-before 1) ; %u->%t
-                                    ("n" ,(format  "%s Note to Inbox" (all-the-icons-faicon "sticky-note" :v-adjust 0.0))
+                                    ("n" ,(format  "%s Note to Inbox" (nerd-fonts "fa-sticky-note"))
                                      entry (file+headline "" "Inbox")
                                      "** %?\nEntered on %U\n %i\n %a"
                                      :empty-lines-before 1)
@@ -467,8 +467,9 @@
       ("C-c n T" . org-roam-tag-remove)))
     :hydra
     (hydra-org-roam
-     (:hint nil) "
-^^^                              org roam^^^
+     (:hint nil)
+     (format "\
+^^^                           %s org roam^^^
 ^^^^^^--------------------------------------------------------------------------
  _c_:   capture              _f_:   find file            _g_:   ui mode
 ^^^^^^..........................................................................
@@ -481,7 +482,7 @@
  _n r_: random
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-file-text-o"))
      ("c"   org-roam-capture)
      ("f"   org-roam-find-file)
      ("g"   org-roam-ui-mode)
@@ -542,8 +543,9 @@
 
   :hydra
   ((hydra-org
-    (:hint nil) "
-^^^                                org functions^^^
+    (:hint nil)
+    (format "\
+^^^                              %s org functions^^^
 ^^^^^^--------------------------------------------------------------------------------
  ^ ^                         ^link^                      ^agenda^
  _c_:   capture              _l s_: store                _a_:  ^^agenda (consult)
@@ -558,7 +560,7 @@
  ^   ^                       ^   ^                       _l_/_L_: link
 
  _m t_: timer                _m r_: roam                 _o_:^ ^  open org dir
-"
+" (nerd-fonts "fa-file-text-o"))
     ("c"   org-capture :exit t)
     ("A"   org-agenda :exit t)
     ("a"   consult-org-agenda :exit t)
@@ -978,12 +980,12 @@ based on elfeed-search-browse-url"
                                 `(eww-form-text ((t :background ,(doom-color 'bg-alt)))))))
     )
 
-  (leaf *eww-bind-all-the-icons :if (fboundp 'all-the-icons-insert)
+  (leaf *eww-bind-nerd-icons
     :custom
     `(
-      (shr-bullet                        . ,(format "%s " (all-the-icons-faicon "caret-right" :v-adjust -0.05)))
-      (eww-form-checkbox-symbol          . ,(all-the-icons-faicon "square-o"))
-      (eww-form-checkbox-selected-symbol . ,(all-the-icons-faicon "check-square-o"))
+      (shr-bullet                        . ,(format "%s " (nerd-fonts "oct-primitive-square")))
+      (eww-form-checkbox-symbol          . ,(nerd-fonts "fa-square-o"))
+      (eww-form-checkbox-selected-symbol . ,(nerd-fonts "fa-check-square-o"))
       )
     )
 

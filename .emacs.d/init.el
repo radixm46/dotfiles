@@ -326,8 +326,8 @@ argument `name' could be directory or filename"
     :hydra
     (hydra-manage-windows
      (:hint nil)
-     "
-                              ^^^^^^^^^^managing windows^^^^^^^^^^
+     (format "\
+                              ^^^^^^^%s managing windows^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^--------------------------------------------------------------------------------
      ^^select^^            ^^^move^^^               ^^^resize^^^               ^^^split^
        ^_k_^            _R_    _K_    _r_          ^ ^   _+_   ^ ^            ^ ^  _v_
@@ -452,15 +452,16 @@ argument `name' could be directory or filename"
     :custom (tab-bar-show . 1)
     :hydra
     (hydra-tab-bar
-     (:hint nil) "
-                          ^^tab-bar-mode^^
+     (:hint nil)
+     (format "\
+                       ^^%s tab-bar-mode^^
 ^^^^-----------------------------------------------------------------
  _n_:   new                       _j_:   next
  _c_:   close                     _k_:   previous
  _r_:   rename                    _s_:   select
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-window-maximize"))
      ("n"   tab-bar-new-tab)
      ("c"   tab-bar-close-tab)
      ("r"   tab-rename)
@@ -906,8 +907,9 @@ argument `name' could be directory or filename"
     :doc "Useful search and navigation commands"
     :hydra
     ((hydra-consult
-      (:hint nil) "
-                            ^^consult functions^^
+      (:hint nil)
+      (format "\
+                           ^^%s consult functions^^
 ^^^^--------------------------------------------------------------------------------
  _b_:   virtual buffers                    _s_:   search
  _e_:   editing                            _g_:   grep & find
@@ -919,7 +921,7 @@ argument `name' could be directory or filename"
  _m m_: minor mode menu                    ^[i] on / [o]ff / [l]ocal / [g]lobal^
  ^history^
  _h h_: history                            _h c_: complex command
-"
+"  (nerd-fonts "fa-list-ul"))
       ("b" hydra-consult:virtual-buffer/body :exit t)
       ("e" hydra-consult:editing/body        :exit t)
       ("r" hydra-consult:register/body       :exit t)
@@ -935,14 +937,15 @@ argument `name' could be directory or filename"
       ("h c" consult-complex-command :exit t))
 
      (hydra-consult:virtual-buffer
-      (:hint nil) "
-                           ^^^consult virtual-buffer^^^
+      (:hint nil)
+      (message "\
+                       ^^^%s consult virtual-buffer^^^
 ^^^^^^--------------------------------------------------------------------------------
  _b_:   buffer               _f_:   other frame          _r_:   recent file
  _o_:   other window         _B_:   ookmark
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("b" consult-buffer       :exit t)
       ("o" consult-other-window :exit t)
       ("f" consult-other-frame  :exit t)
@@ -951,14 +954,15 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:editing
-      (:hint nil) "
-                              ^^consult editing^^
+      (:hint nil)
+      (message "\
+                           ^^%s consult editing^^
 ^^^^--------------------------------------------------------------------------------
  _y_:   yank from kill ring                _r_:   yank replace
  _p_:   yank pop                           _k_:   kmacro
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("y" consult-yank-from-kill-ring :exit t)
       ("p" consult-yank-pop            :exit t)
       ("r" consult-yank-replace        :exit t)
@@ -966,14 +970,15 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:register
-      (:hint nil) "
-                             ^^^consult register^^^
+      (:hint nil)
+      (message "\
+                          ^^%s consult register^^^
 ^^^^^^--------------------------------------------------------------------------------
  _r_:   register             _w_:   window               _s_:   store
  _l_:   load                 _f_:   format
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("r" consult-register        :exit t)
       ("l" consult-register-load   :exit t)
       ("w" consult-register-window :exit t)
@@ -982,14 +987,15 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:navigation
-      (:hint nil) "
-                             ^^^consult navitation^^^
+      (:hint nil)
+      (message "\
+                           ^^%s consult navitation^^^
 ^^^^^^--------------------------------------------------------------------------------
  _g_:   goto line            _m_:   makr                 _i_:   imenu
  _o_:   outline              _M_:   global mark          _I_:   imenu multi
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("g" consult-goto-line   :exit t)
       ("m" consult-mark        :exit t)
       ("M" consult-global-mark :exit t)
@@ -999,14 +1005,15 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:search
-      (:hint nil) "
-                             ^^^consult search^^^
+      (:hint nil)
+      (message "\
+                          ^^^%s consult search^^^
 ^^^^^^--------------------------------------------------------------------------------
  _l_:   line                 _s_:   isearch              _k_:   keep lines
  _L_:   line multi           _M_:   multi occur          _f_:   focus lines
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("l" consult-line        :exit t)
       ("L" consult-line-multi  :exit t)
       ("s" consult-isearch     :exit t)
@@ -1016,14 +1023,15 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:grep-find
-      (:hint nil) "
-                             ^^^consult find^^^
+      (:hint nil)
+      (message "\
+                          ^^^%s consult find^^^
 ^^^^^^--------------------------------------------------------------------------------
  _g_:   grep                 _r_:   ripgrep              _f_:   find
  _G_:   git grep             _l_:   locate
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("g" consult-grep     :exit t)
       ("r" consult-ripgrep  :exit t)
       ("G" consult-git-grep :exit t)
@@ -1032,14 +1040,15 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:compilation
-      (:hint nil) "
-                        ^^^consult compilation^^^
+      (:hint nil)
+      (message "\
+                     ^^^%s consult compilation^^^
 ^^^^^^--------------------------------------------------------------------------------
  _e_:   compile error        _m_:   flymake              _x_:   xref
  ^ ^                         _c_:   flycheck
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("e" consult-compile-error :exit t)
       ("m" consult-flymake       :exit t)
       ("c" consult-flycheck      :exit t)
@@ -1047,8 +1056,9 @@ argument `name' could be directory or filename"
       ("SPC" hydra-consult/body :exit t))
 
      (hydra-consult:miscellaneous
-      (:hint nil) "
-                         ^^consult miscellaneous^^
+      (:hint nil)
+      (message "\
+                      ^^%s consult miscellaneous^^
 ^^^^--------------------------------------------------------------------------------
  _a_:   apropos                            _c_:   completion in region
  _m_:   man                                _C_:   completion read multiple
@@ -1056,7 +1066,7 @@ argument `name' could be directory or filename"
  _p_:   preview at point
 
  _SPC_: BACK
-"
+" (nerd-fonts "fa-list-ul"))
       ("a" consult-apropos                  :exit t)
       ("m" consult-man                      :exit t)
       ("f" consult-file-externally          :exit t)
@@ -1399,8 +1409,9 @@ argument `name' could be directory or filename"
     ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
     :hydra
     ((hydra-lsp-functions
-      (:hint nil) "
-                              ^^^lsp functions^^^
+      (:hint nil)
+      (format "\
+                            ^^^%s lsp functions^^^
 ^^^^^^--------------------------------------------------------------------------------
  ^act on code^               ^find (ui peek)^            ^signature^
  _r_:   rename               _s r_: references           _s j_: next
@@ -1414,7 +1425,7 @@ argument `name' could be directory or filename"
  ^   ^                       _s e_: declaration          _C D_: doctor
  ^diagnos (lsp-ui)^          ^   ^                       _C d_: disconnect
  _l_:   flycheck-list        _a_:   appearance           _C v_: version
-"
+" (nerd-fonts "fa-code"))
       ;; act on code
       ("r"   lsp-rename :exit t)
       ("f"   lsp-format-buffer :exit t)
@@ -1448,8 +1459,9 @@ argument `name' could be directory or filename"
       ("C v" lsp-version))
 
      (hydra-lsp-appearance
-      (:hint nil) "
-                         ^^^lsp functions (appearance)^^^
+      (:hint nil)
+      (format "\
+                            ^^^%s lsp functions^^^
 ^^^^^^--------------------------------------------------------------------------------
  ^ ^                         ^len^                       ^treemacs^
  _s_   :sideline mode        _l l_ :lens mode            _t s_ lsp symbols
@@ -1461,7 +1473,7 @@ argument `name' could be directory or filename"
  _d g_ :glance
 
  _SPC_ :BACK
-"
+" (nerd-fonts "fa-code"))
       ;; appearance
       ("s"   lsp-ui-sideline-mode)
       ("m"   lsp-ui-imenu)
@@ -1736,10 +1748,12 @@ argument `name' could be directory or filename"
   (leaf git-gutter
     :ensure t
     :custom
-    (git-gutter:modified-sign . "=")
-    (git-gutter:added-sign    . "+")
-    (git-gutter:deleted-sign  . "▶")
-    (git-gutter:ask-p         . nil)
+    `(
+      (git-gutter:modified-sign . "=")
+      (git-gutter:added-sign    . "+")
+      (git-gutter:deleted-sign  . ,(nerd-fonts "fa-minus"))
+      (git-gutter:ask-p         . nil)
+      )
     :config
     (leaf *patch-git-gutter-color :after doom-themes
       :hook
@@ -1755,9 +1769,12 @@ argument `name' could be directory or filename"
       (if (eq git-gutter-mode nil)
           (git-gutter))
       (git-gutter))
-    :hydra (hydra-git-gutter
-            (:hint nil) "
-                               ^^^git gutter^^^
+
+    :hydra
+    (hydra-git-gutter
+     (:hint nil)
+     (format "\
+                            ^^^%s git gutter^^^
 ^^^^^^--------------------------------------------------------------------------------
  ^move to hunk^              ^act on hunk^               ^etc^
 ^^^^^^................................................................................
@@ -1765,17 +1782,18 @@ argument `name' could be directory or filename"
  _k_:   previous             _v_:   mark
  _G_:   end of hunk          _s_:   stage                _h_:   open git timemachine
  ^ ^                         _x_:   revert               _g_:   open magit mode
-"
-            ("j" git-gutter:next-hunk)
-            ("k" git-gutter:previous-hunk)
-            ("G" git-gutter:end-of-hunk)
-            ("d" git-gutter:popup-hunk)
-            ("v" git-gutter:mark-hunk)
-            ("x" git-gutter:revert-hunk)
-            ("s" git-gutter:stage-hunk)
-            ("r" git-gutter:update-all-windows)
-            ("h" git-timemachine :exit t)
-            ("g" magit :exit t))
+" (nerd-fonts "fa-git"))
+     ("j" git-gutter:next-hunk)
+     ("k" git-gutter:previous-hunk)
+     ("G" git-gutter:end-of-hunk)
+     ("d" git-gutter:popup-hunk)
+     ("v" git-gutter:mark-hunk)
+     ("x" git-gutter:revert-hunk)
+     ("s" git-gutter:stage-hunk)
+     ("r" git-gutter:update-all-windows)
+     ("h" git-timemachine :exit t)
+     ("g" magit :exit t))
+
     :bind
     (:global-map
      ("<f3>" . hydra-git-gutter/body)
