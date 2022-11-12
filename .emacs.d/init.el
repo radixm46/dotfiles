@@ -1573,6 +1573,17 @@ argument `name' could be directory or filename"
       :custom
       (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner)
       :config
+      (leaf *which-key-display-hook-on-state
+        :doc "prefer posframe on gui"
+        :hook
+        (conf-on-term-hook . (lambda ()
+                               (which-key-posframe-mode -1)
+                               (which-key-setup-side-window-right-bottom)))
+        (conf-on-gui-hook  . (lambda ()
+                               (which-key-setup-minibuffer)
+                               (which-key-posframe-mode +1)))
+        )
+
       (leaf *patch-which-key-posframe-faces :after doom-themes
         :hook
         (after-load-theme-hook . (lambda ()
@@ -1581,8 +1592,6 @@ argument `name' could be directory or filename"
                                     ))))
       )
     (which-key-mode)
-    (if (emacs-works-on-term-p)
-	    (which-key-setup-side-window-right-bottom)(which-key-posframe-mode))
     )
 
   (leaf undo-tree
