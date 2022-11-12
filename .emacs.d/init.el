@@ -24,12 +24,14 @@
       :config
       (gcmh-mode 1))
     )
-  ;; mouse support on terminal
-  (unless window-system
+
+  (leaf *mouse-support-on-term :unless (window-system)
+    :doc "mouse support on terminal"
+    :setq (mouse-sel-mode . t)
+    :config
     (require 'mouse)
     (xterm-mouse-mode t)
-    (defun track-mouse (e))
-    (setq mouse-sel-mode t))
+    (defun track-mouse (e)))
 
   (leaf cl-lib
     :tag "builtin"
@@ -105,8 +107,7 @@ argument `name' could be directory or filename"
 
   (leaf *supress-cl-warning :emacs>= "27"
     :doc "supress cl warning"
-    :config
-    (setq byte-compile-warnings '(not cl-functions obsolete)))
+    :setq (byte-compile-warnings . '(not cl-functions obsolete)))
   )
 
 
@@ -240,8 +241,7 @@ argument `name' could be directory or filename"
 
   (leaf *hide-nobreak-whitespace :emacs>= "28"
     :doc "hack to disable face for double byte space"
-    :config
-    (setq nobreak-char-display nil))
+    :setq (nobreak-char-display . nil))
 
   (leaf *set-variable-pitch-on-gui
     :doc "modify variable pitch face to available font in list"
@@ -333,7 +333,7 @@ argument `name' could be directory or filename"
 
   (leaf evil
     :ensure t
-    :init (setq evil-want-keybinding nil)
+    :pre-setq (evil-want-keybinding . nil)
     :custom (evil-undo-system . 'undo-tree)
     :hydra
     (hydra-manage-windows
@@ -1150,9 +1150,9 @@ argument `name' could be directory or filename"
     (("C-." . embark-act)         ; pick some comfortable binding
      ("C-;" . embark-dwim)        ; good alternative: M-.
      ("C-h B" . embark-bindings)) ; alternative for `describe-bindings'
-    :init
     ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
+    :pre-setq (prefix-help-command . #'embark-prefix-help-command)
+    :init
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -1191,9 +1191,8 @@ argument `name' could be directory or filename"
       :doc
       "Emacs 28: Hide commands in M-x which do not work in the current mode.
        Vertico commands are hidden in normal buffers."
-      :config
-      (setq read-extended-command-predicate
-            #'command-completion-default-include-p))
+      :setq
+      (read-extended-command-predicate . #'command-completion-default-include-p))
 
     :custom
     (vertico-count . 15)
@@ -1220,9 +1219,9 @@ argument `name' could be directory or filename"
   :config
   (leaf auto-complete
     :tag "builtin"
-    :config
-    (setq-default ac-sources '(ac-source-filename
-                               ac-source-words-in-all-buffer)))
+    :setq-default
+    (ac-sources  . '(ac-source-filename
+                     ac-source-words-in-all-buffer)))
 
   (leaf eldoc
     :tag "builtin"
