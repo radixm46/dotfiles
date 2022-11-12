@@ -338,7 +338,7 @@ argument `name' could be directory or filename"
 ^^^^^^^^^^^^^^^^^^^................................................................................
     ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^           ^_N_ext^ / ^_P_revious tab^
    ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^        ^_t_:  tab-bar keys
-"
+" (nerd-fonts "fa-window-maximize"))
      ("h" evil-window-left)
      ("j" evil-window-down)
      ("k" evil-window-up)
@@ -365,7 +365,6 @@ argument `name' could be directory or filename"
      ("N" tab-bar-switch-to-next-tab)
      ("P" tab-bar-switch-to-prev-tab)
      ("t" hydra-tab-bar/body :exit t))
-
 
     :bind
     (:global-map
@@ -938,7 +937,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:virtual-buffer
       (:hint nil)
-      (message "\
+      (format "\
                        ^^^%s consult virtual-buffer^^^
 ^^^^^^--------------------------------------------------------------------------------
  _b_:   buffer               _f_:   other frame          _r_:   recent file
@@ -955,7 +954,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:editing
       (:hint nil)
-      (message "\
+      (format "\
                            ^^%s consult editing^^
 ^^^^--------------------------------------------------------------------------------
  _y_:   yank from kill ring                _r_:   yank replace
@@ -971,7 +970,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:register
       (:hint nil)
-      (message "\
+      (format "\
                           ^^%s consult register^^^
 ^^^^^^--------------------------------------------------------------------------------
  _r_:   register             _w_:   window               _s_:   store
@@ -988,7 +987,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:navigation
       (:hint nil)
-      (message "\
+      (format "\
                            ^^%s consult navitation^^^
 ^^^^^^--------------------------------------------------------------------------------
  _g_:   goto line            _m_:   makr                 _i_:   imenu
@@ -1006,7 +1005,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:search
       (:hint nil)
-      (message "\
+      (format "\
                           ^^^%s consult search^^^
 ^^^^^^--------------------------------------------------------------------------------
  _l_:   line                 _s_:   isearch              _k_:   keep lines
@@ -1024,7 +1023,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:grep-find
       (:hint nil)
-      (message "\
+      (format "\
                           ^^^%s consult find^^^
 ^^^^^^--------------------------------------------------------------------------------
  _g_:   grep                 _r_:   ripgrep              _f_:   find
@@ -1041,7 +1040,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:compilation
       (:hint nil)
-      (message "\
+      (format "\
                      ^^^%s consult compilation^^^
 ^^^^^^--------------------------------------------------------------------------------
  _e_:   compile error        _m_:   flymake              _x_:   xref
@@ -1057,7 +1056,7 @@ argument `name' could be directory or filename"
 
      (hydra-consult:miscellaneous
       (:hint nil)
-      (message "\
+      (format "\
                       ^^%s consult miscellaneous^^
 ^^^^--------------------------------------------------------------------------------
  _a_:   apropos                            _c_:   completion in region
