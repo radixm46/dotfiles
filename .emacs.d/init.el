@@ -1561,7 +1561,8 @@ argument `name' could be directory or filename"
 
   (leaf ace-link
     :ensure t
-    :doc "keybinding?"
+    :doc "quickly follow links"
+    :bind ("M-O" . ace-link)
     :config
     (ace-link-setup-default))
 
