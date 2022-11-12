@@ -142,20 +142,20 @@
   ;; highlights
   (web-mode-enable-current-element-highlight . t)
   ;; configure indent
-  (web-mode-markup-indent-offset . 2)
-  (web-mode-css-indent-offset . 2)
-  (web-mode-code-indent-offset . 2)
+  (web-mode-markup-indent-offset             . 2)
+  (web-mode-css-indent-offset                . 2)
+  (web-mode-code-indent-offset               . 2)
   ;; auto close tags
-  (web-mode-enable-auto-pairing . t)
-  (web-mode-enable-auto-closing . t)
-  (web-mode-auto-close-style . 2)
-  (web-mode-tag-auto-close-style . 2)
+  (web-mode-enable-auto-pairing              . t)
+  (web-mode-enable-auto-closing              . t)
+  (web-mode-auto-close-style                 . 2)
+  (web-mode-tag-auto-close-style             . 2)
   ;; auto colorize css
-  (web-mode-enable-css-colorization . t)
-  (web-mode-enable-block-face . t)
+  (web-mode-enable-css-colorization          . t)
+  (web-mode-enable-block-face                . t)
   ;; (web-mode-enable-part-face t)
-  (web-mode-enable-comment-interpolation . t)
-  (web-mode-enable-heredoc-fontification . t))
+  (web-mode-enable-comment-interpolation     . t)
+  (web-mode-enable-heredoc-fontification     . t))
 
 (leaf html-mode
   :tag "builtin")
@@ -397,9 +397,9 @@
       (org-mode-hook . org-modern-mode)
       :custom
       ;;org-modern custom
-      (org-modern-todo . nil)
-      (org-modern-label-border . 4)
-      (org-modern-table . nil)
+      (org-modern-todo            . nil)
+      (org-modern-label-border    . 4)
+      (org-modern-table           . nil)
       (org-modern-horizontal-rule . nil)
       )
     )
@@ -624,13 +624,13 @@
     ("SPC" hydra-org/body :exit t))
    )
   :bind
-  (("C-c l" . org-store-link)
-   ("C-c c" . org-capture)
-   ("C-c a" . org-agenda)
-   ("C-c b" . org-iswitchb)
+  (("C-c l"     . org-store-link)
+   ("C-c c"     . org-capture)
+   ("C-c a"     . org-agenda)
+   ("C-c b"     . org-iswitchb)
    ("C-c C-o 0" . rdm/org-goto-dir)
-   ("M-6"  . hydra-org/body)
-   ("<f6>" . hydra-org/body))
+   ("M-6"       . hydra-org/body)
+   ("<f6>"      . hydra-org/body))
   )
 
 
@@ -668,7 +668,7 @@
     :hook
     ((org-mode-hook
       markdown-mode-hook) . valign-mode)
-    (conf-on-gui-hook . (lambda () (setq valign-fancy-bar t)))
+    (conf-on-gui-hook  . (lambda () (setq valign-fancy-bar t)))
     (conf-on-term-hook . (lambda () (setq valign-fancy-bar nil)))
     )
   )

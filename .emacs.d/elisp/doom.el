@@ -95,29 +95,29 @@
   (doom-modeline-irc-stylize . 'identity)
 
   ;; Whether display the environment version.
-  (doom-modeline-env-version . t)
+  (doom-modeline-env-version       . t)
   ;; Or for individual languages
   (doom-modeline-env-enable-python . t)
-  (doom-modeline-env-enable-ruby . t)
-  (doom-modeline-env-enable-perl . t)
-  (doom-modeline-env-enable-go . t)
+  (doom-modeline-env-enable-ruby   . t)
+  (doom-modeline-env-enable-perl   . t)
+  (doom-modeline-env-enable-go     . t)
   (doom-modeline-env-enable-elixir . t)
-  (doom-modeline-env-enable-rust . t)
+  (doom-modeline-env-enable-rust   . t)
 
   ;; Change the executables to use for the language version string
   (doom-modeline-env-python-executable . "python") ; or `python-shell-interpreter'
-  (doom-modeline-env-ruby-executable . "ruby")
-  (doom-modeline-env-perl-executable . "perl")
-  (doom-modeline-env-go-executable . "go")
+  (doom-modeline-env-ruby-executable   . "ruby")
+  (doom-modeline-env-perl-executable   . "perl")
+  (doom-modeline-env-go-executable     . "go")
   (doom-modeline-env-elixir-executable . "iex")
-  (doom-modeline-env-rust-executable . "rustc")
+  (doom-modeline-env-rust-executable   . "rustc")
 
   ;; What to dispaly as the version while a new one is being loaded
   (doom-modeline-env-load-string . "...")
 
   ;; Hooks that run before/after the modeline version string is updated
   (doom-modeline-before-update-env-hook . nil)
-  (doom-modeline-after-update-env-hook . nil)
+  (doom-modeline-after-update-env-hook  . nil)
 
   :config
   (doom-modeline-mode 1)
@@ -126,8 +126,8 @@
 (leaf doom-themes
   :ensure t
   :custom
-  (doom-themes-enable-bold . t)
-  (doom-themes-enable-italic . t)
+  (doom-themes-enable-bold        . t)
+  (doom-themes-enable-italic      . t)
   (doom-themes-neotree-file-icons . t)
   :config
   (doom-themes-visual-bell-config)

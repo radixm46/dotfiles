@@ -156,11 +156,11 @@ argument `name' could be directory or filename"
     :tag "builtin"
     :custom
     `(
-      (recentf-save-file . ,(cache-sub-file "recentf"))
+      (recentf-save-file       . ,(cache-sub-file "recentf"))
       (recentf-max-saved-items . 2000)
-      (recentf-auto-cleanup . 'never)
-      (recentf-exclude . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
-                           "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
+      (recentf-auto-cleanup    . 'never)
+      (recentf-exclude         . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
+                                   "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
       )
     :init
     (defmacro with-suppressed-message (&rest body)
@@ -1210,7 +1210,7 @@ argument `name' could be directory or filename"
     :ensure t
     :hook
     (conf-on-term-hook . (lambda () (all-the-icons-completion-mode 0)))
-    (conf-on-gui-hook . (lambda () (all-the-icons-completion-mode +1)))
+    (conf-on-gui-hook  . (lambda () (all-the-icons-completion-mode +1)))
     )
   )
 
@@ -1324,14 +1324,15 @@ argument `name' could be directory or filename"
     :commands (lsp lsp-deferred)
     :custom
     `(
-      (lsp-keymap-prefix . "C-c C-l") ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
-      (lsp-document-sync-method . nil) ;; always send incremental document
-      (lsp-response-timeout . 5)
-      (lsp-eldoc-enable-hover . nil)
-      (lsp-auto-configure . t)
+      (lsp-keymap-prefix                      . "C-c C-l") ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l", "s-l" )
+      (lsp-document-sync-method               . nil) ;; always send incremental document
+      (lsp-response-timeout                   . 5)
+      (lsp-eldoc-enable-hover                 . nil)
+      (lsp-auto-configure                     . t)
       (lsp-headerline-breadcrumb-icons-enable . nil)
-      (lsp-session-file . ,(cache-sub-file ".lsp-session-v1"))
-      (lsp-server-install-dir . ,(cache-sub-dir "lsp")) ;; server install target path
+      (lsp-session-file                       . ,(cache-sub-file ".lsp-session-v1"))
+      (lsp-server-install-dir                 . ,(cache-sub-dir "lsp")) ;; server install target path
+      (lsp-completion-provider                . ,(if (fboundp 'company-mode) :capf :none))
       )
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
     :hook
@@ -1346,33 +1347,33 @@ argument `name' could be directory or filename"
       :ensure t
       :custom
       ;; lsp-ui-doc
-      (lsp-ui-doc-enable . t)
-      (lsp-ui-doc-header . t)
-      (lsp-ui-doc-include-signature . t)
-      (lsp-ui-doc-position . 'top) ;; top, bottom, or at-point
-      (lsp-ui-doc-max-width . 150)
-      (lsp-ui-doc-max-height . 30)
-      (lsp-ui-doc-use-childframe . t)
-      (lsp-ui-doc-use-webkit . nil)
-      (lsp-ui-doc-show-with-mouse . t)
-      (lsp-ui-doc-show-with-cursor . t)
+      (lsp-ui-doc-enable                 . t)
+      (lsp-ui-doc-header                 . t)
+      (lsp-ui-doc-include-signature      . t)
+      (lsp-ui-doc-position               . 'top) ;; top, bottom, or at-point
+      (lsp-ui-doc-max-width              . 150)
+      (lsp-ui-doc-max-height             . 30)
+      (lsp-ui-doc-use-childframe         . t)
+      (lsp-ui-doc-use-webkit             . nil)
+      (lsp-ui-doc-show-with-mouse        . t)
+      (lsp-ui-doc-show-with-cursor       . t)
       ;; lsp-ui-flycheck
-      (lsp-ui-flycheck-enable . t)
+      (lsp-ui-flycheck-enable            . t)
       ;; lsp-ui-sideline
-      (lsp-ui-sideline-enable . t)
-      (lsp-ui-sideline-ignore-duplicate . t)
-      (lsp-ui-sideline-show-symbol . t)
-      (lsp-ui-sideline-show-hover . t)
-      (lsp-ui-sideline-show-diagnostics . t)
+      (lsp-ui-sideline-enable            . t)
+      (lsp-ui-sideline-ignore-duplicate  . t)
+      (lsp-ui-sideline-show-symbol       . t)
+      (lsp-ui-sideline-show-hover        . t)
+      (lsp-ui-sideline-show-diagnostics  . t)
       (lsp-ui-sideline-show-code-actions . t)
       ;; lsp-ui-imenu
-      (lsp-ui-imenu-enable . nil)
-      (lsp-ui-imenu-kind-position . 'top)
+      (lsp-ui-imenu-enable               . nil)
+      (lsp-ui-imenu-kind-position        . 'top)
       ;; lsp-ui-peek
-      (lsp-ui-peek-enable . t)
-      (lsp-ui-peek-peek-height . 20)
-      (lsp-ui-peek-list-width . 50)
-      (lsp-ui-peek-fontify . 'on-demand) ;; never, on-demand, or always
+      (lsp-ui-peek-enable                . t)
+      (lsp-ui-peek-peek-height           . 20)
+      (lsp-ui-peek-list-width            . 50)
+      (lsp-ui-peek-fontify               . 'on-demand) ;; never, on-demand, or always
       :preface
       (defun ladicle/toggle-lsp-ui-doc ()
         (interactive)
