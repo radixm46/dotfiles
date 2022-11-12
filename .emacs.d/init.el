@@ -1091,6 +1091,8 @@ argument `name' could be directory or filename"
     :bind
     (("M-g g"   . consult-line)
      ("M-g M-g" . consult-line) ;; replace native goto-line
+     ("M-g l"   . consult-goto-line)
+     ("M-g M-l" . consult-goto-line)
      ("M-g o"   . consult-outline)
      ("M-g M-o" . consult-outline)
      ("M-g i"   . consult-imenu)
