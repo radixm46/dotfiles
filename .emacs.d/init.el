@@ -310,6 +310,18 @@ argument `name' could be directory or filename"
     ;; (global-visual-line-mode nil)
     )
 
+  (leaf rg
+    :doc "Use ripgrep in Emacs. (binaries included)"
+    :ensure t
+    :config
+    (rg-enable-default-bindings))
+
+  (leaf ctrlf
+    :doc "an intuitive and efficient solution for single-buffer text search in Emacs"
+    :ensure t
+    :config
+    (ctrlf-mode +1))
+
   (leaf ediff
     :ensure t
     :tag "builtin"
