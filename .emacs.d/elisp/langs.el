@@ -631,30 +631,45 @@
    ("<f6>" . hydra-org/body))
   )
 
-(leaf markdown-mode
-  :ensure t
-  ;; :hook (markdown-mode . visual-line-mode)
-  :commands (markdown-mode gfm-mode)
-  :mode
-  (("README\\.md\\'"  . gfm-mode)
-   ("\\.md\\'"
-    "\\.markdown\\'") . markdown-mode)
-  :custom
-  (markdown-command . "multimarkdown")
-  (markdown-hide-markup . t)
-  (markdown-header-scaling . t)
-  (markdown-enable-highlighting-syntax . t)
-  (markdown-enable-math . t)
-  :config
-  (evil-define-key 'normal markdown-mode-map
-    "j" 'evil-next-visual-line
-    "k" 'evil-previous-visual-line
-    "gj" 'evil-next-line
-    "gk" 'evil-previous-line)
-  ;; modify table face to 1:2
-  (set-face-attribute 'markdown-table-face nil :family font-for-tables)
-  )
 
+(leaf *lml-modes
+  :doc "lightweight markup languages"
+  :config
+  (leaf markdown-mode
+    :ensure t
+    ;; :hook (markdown-mode . visual-line-mode)
+    :commands (markdown-mode gfm-mode)
+    :mode
+    (("README\\.md\\'"  . gfm-mode)
+     ("\\.md\\'"
+      "\\.markdown\\'") . markdown-mode)
+    :custom
+    (markdown-command . "multimarkdown")
+    (markdown-hide-markup . t)
+    (markdown-header-scaling . t)
+    (markdown-header-scaling-values . '(1.75 1.5 1.25 1.1 1.0 1.0))
+    (markdown-enable-highlighting-syntax . t)
+    (markdown-enable-math . t)
+    :config
+    (evil-define-key 'normal markdown-mode-map
+      "j" 'evil-next-visual-line
+      "k" 'evil-previous-visual-line
+      "gj" 'evil-next-line
+      "gk" 'evil-previous-line)
+    ;; modify table face to 1:2
+    (set-face-attribute 'markdown-table-face nil :family font-for-tables)
+    )
+
+  (leaf valign
+    :doc "CJK supported table vertical alignment (on graphical environment)"
+    :ensure t
+    :hook
+    ((org-mode-hook
+      markdown-mode-hook) . valign-mode)
+    (conf-on-gui-hook . (lambda () (setq valign-fancy-bar t)))
+    (conf-on-term-hook . (lambda () (setq valign-fancy-bar nil)))
+    )
+  )
 
 (leaf *docker-env
   :doc "docker related modes"
