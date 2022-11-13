@@ -642,7 +642,7 @@ argument `name' could be directory or filename"
     (leaf *patch-fill-column-indicator :after doom-themes
       :hook
       (after-load-theme-hook . (lambda ()
-                                 (custom-set-faces ;; modify bg to eldoc-box-body
+                                 (custom-set-faces
                                   `(fill-column-indicator ((t (:foreground ,(doom-color 'blue))))))
                                  ))
       )
