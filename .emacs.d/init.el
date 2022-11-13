@@ -1579,7 +1579,7 @@ argument `name' could be directory or filename"
         :doc "prefer posframe on gui"
         :hook
         (conf-on-term-hook . (lambda ()
-                               (which-key-posframe-mode -1)
+                               (if which-key-posframe-mode (which-key-posframe-mode -1))
                                (which-key-setup-side-window-right-bottom)))
         (conf-on-gui-hook  . (lambda ()
                                (which-key-setup-minibuffer)
