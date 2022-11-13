@@ -1138,8 +1138,8 @@ argument `name' could be directory or filename"
     :ensure t
     :doc "Advanced completion style"
     :custom
-    (completion-styles . '(orderless))
-    (completion-category-defaults . nil)
+    (completion-styles             . '(orderless))
+    (completion-category-defaults  . nil)
     (completion-category-overrides . '((file (style partial-completion)))))
 
   (leaf marginalia
