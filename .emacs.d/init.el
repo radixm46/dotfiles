@@ -453,7 +453,10 @@ argument `name' could be directory or filename"
       :doc "consulting yasnippet candidates"
       :straight
       (consult-yasnippet :type git :host github
-                         :repo "mohkale/consult-yasnippet"))
+                         :repo "mohkale/consult-yasnippet")
+      :bind
+      (("M-g s"   . consult-yasnippet)
+       ("M-g M-s" . consult-yasnippet)))
     (yas-reload-all))
 
   (leaf tab-bar :emacs>= "27.1"
