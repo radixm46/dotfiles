@@ -1524,9 +1524,13 @@ argument `name' could be directory or filename"
     :ensure t
     :doc "another lsp client"
     :preface
-    (leaf *eglot-with-eldoc-box :if (fboundp 'eldoc-box-hover-mode)
+    (leaf *eglot-with-eldoc-box
       :doc "use eldoc-box-mode if available"
-      :hook (eglot--managed-mode-hook . eldoc-box-hover-mode)))
+      :hook
+      (eglot-managed-mode-hook . (lambda ()
+                                   (if (fboundp 'eldoc-box-hover-mode)
+                                       (eldoc-box-hover-mode)))))
+    )
 
   (leaf dap-mode
     :ensure t
