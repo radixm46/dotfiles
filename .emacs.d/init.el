@@ -14,9 +14,9 @@
   (leaf *gc-config
     :custom
     `(
-     (gc-cons-threshold  . ,(* 128 1024 1024)) ;; 128MB
-     (garbage-collection-messages . t)
-     )
+      (garbage-collection-messages . t)
+      (gc-cons-threshold           . ,(* 128 1024 1024)) ;; 128MB
+      )
     :config
     (leaf gcmh
       :doc "Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
@@ -123,11 +123,11 @@ argument `name' could be directory or filename"
     :custom
     `(
       (auto-save-file-name-transforms . `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,(cache-sub-dir "autosaved") t)))
-      (delete-auto-save-files . t)
-      (auto-save-default . t)
-      (auto-save-timeout . 15)
-      (auto-save-interval . 120)
-      (auto-save-list-file-prefix . nil)
+      (delete-auto-save-files         . t)
+      (auto-save-default              . t)
+      (auto-save-timeout              . 15)
+      (auto-save-interval             . 120)
+      (auto-save-list-file-prefix     . nil)
       ))
 
   (leaf *backup-files
@@ -136,12 +136,12 @@ argument `name' could be directory or filename"
     :custom
     `(
       (backup-directory-alist . `(("." .  ,(cache-sub-dir "hist"))))
-      (make-backup-files . t)
-      (version-control . t) ;; enable version control
-      (kept-new-versions . 5)
-      (kept-old-versions . 1)
-      (delete-old-versions . t)
-      (create-lockfiles . nil)
+      (make-backup-files      . t)
+      (version-control        . t) ;; enable version control
+      (kept-new-versions      . 5)
+      (kept-old-versions      . 1)
+      (delete-old-versions    . t)
+      (create-lockfiles       . nil)
       ))
 
   (leaf history
@@ -205,7 +205,7 @@ argument `name' could be directory or filename"
     :ensure t
     :custom
     `(
-      (skk-use-azik . t)
+      (skk-use-azik         . t)
       (default-input-method . "japanese-skk")
       (skk-user-directory   . ,(cache-sub-dir "skk"))
       (skk-init-file        . ,(expand-file-name "elisp/initskk.el" user-emacs-directory))
@@ -289,16 +289,16 @@ argument `name' could be directory or filename"
 
 (leaf *editor-functions
   :custom
-  (eol-mnemonic-dos . "(CRLF)")
-  (eol-mnemonic-mac . "(CR)")
-  (eol-mnemonic-unix . "(LF)")
+  (eol-mnemonic-dos         . "(CRLF)")
+  (eol-mnemonic-mac         . "(CR)")
+  (eol-mnemonic-unix        . "(LF)")
   (find-file-visit-truename . t)
+  (tab-width                . 4)
+  (indent-tabs-mode         . nil)
+  (truncate-lines           . t)
   ;; configure indent tab to false as default
   ;; (setq line-move-visual t)
   ;; (setq word-wrap t)
-  (tab-width . 4)
-  (indent-tabs-mode . nil)
-  (truncate-lines . t)
   :init
   (leaf visual-line-mode
     :doc "visual line mode enables word wrap"
@@ -709,13 +709,13 @@ argument `name' could be directory or filename"
       text-mode-hook
       git-timemachine-mode-hook) . highlight-indent-guides-mode)
     :custom
-    (highlight-indent-guides-auto-enabled . nil)
-    (highlight-indent-guides-method . 'column)
-    (highlight-indent-guides-auto-odd-face-perc . 10)
-    (highlight-indent-guides-auto-even-face-perc . 10)
-    ;;(setq highlight-indent-guides-auto-character-face-perc 20)
-    (highlight-indent-guides-responsive . 'top)
-    (highlight-indent-guides-delay . 0)
+    (highlight-indent-guides-auto-enabled             . nil)
+    (highlight-indent-guides-method                   . 'column)
+    (highlight-indent-guides-auto-odd-face-perc       . 10)
+    (highlight-indent-guides-auto-even-face-perc      . 10)
+    (highlight-indent-guides-responsive               . 'top)
+    (highlight-indent-guides-delay                    . 0)
+    ;; (highlight-indent-guides-auto-character-face-perc . 90)
     :config
     (leaf *patch-highlight-indent-guides-color :after doom-themes cl-lib
       :doc "patch `indent-guides-color'"
