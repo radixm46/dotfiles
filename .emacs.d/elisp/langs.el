@@ -876,9 +876,9 @@ based on elfeed-search-show-entry"
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
+        (forward-line) (recenter)
         (elfeed-untag entry 'unread 'later)
         (elfeed-search-update-entry entry)
-        (forward-line) (recenter)
         (elfeed-show-entry entry)))
 
     (defun rdm/elfeed-search-show-prev-entry (entry)
@@ -886,9 +886,9 @@ based on elfeed-search-show-entry"
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
+        (forward-line -1) (recenter)
         (elfeed-untag entry 'unread 'later)
         (elfeed-search-update-entry entry)
-        (forward-line -1) (recenter)
         (elfeed-show-entry entry)))
 
     (defun rdm/elfeed-search-browse-url (&optional use-generic-p)
