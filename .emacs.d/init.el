@@ -1804,13 +1804,6 @@ argument `name' could be directory or filename"
                                   `(git-gutter:added    ((t (:foreground ,(doom-color 'base4) :background ,(doom-color 'green)))))
                                   `(git-gutter:deleted  ((t (:foreground ,(doom-color 'red))))))))
       )
-
-    (defun git-gutter-fix-init ()
-      (interactive)
-      (if (eq git-gutter-mode nil)
-          (git-gutter))
-      (git-gutter))
-
     :hydra
     (hydra-git-gutter
      (:hint nil)
@@ -1823,7 +1816,7 @@ argument `name' could be directory or filename"
  _k_:   previous             _v_:   mark
  _G_:   end of hunk          _s_:   stage                _h_:   open git timemachine
  ^ ^                         _x_:   revert               _g_:   open magit mode
-" (nerd-fonts "fa-git"))
+" (nerd-fonts "fa-code-fork"))
      ("j" git-gutter:next-hunk)
      ("k" git-gutter:previous-hunk)
      ("G" git-gutter:end-of-hunk)
@@ -1855,6 +1848,18 @@ argument `name' could be directory or filename"
       (magit-todos-rg-extra-args . '("--hidden" "--no-config"))
       (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))
       :hook (magit-section-mode-hook . magit-todos-mode))
+
+    (leaf *magit-git-gutter-integration :if (fboundp 'git-gutter)
+      :doc "refresh git-gutter on magit operation"
+      :url "https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit"
+      :hook
+      (magit-post-refresh-hook . (lambda () ;; update visible buffer
+                                   (dolist (buff (buffer-list))
+                                     (with-current-buffer buff
+                                       (when (and git-gutter-mode
+                                                  (get-buffer-window buff))
+                                         (git-gutter-mode t))))))
+      )
     )
 
   (leaf git-timemachine :ensure t)
