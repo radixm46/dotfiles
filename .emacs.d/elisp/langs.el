@@ -831,6 +831,16 @@
             (x-set-selection 'PRIMARY feed-info)
             (message "Yanked: %s" feed-info)))))
 
+    (defun rdm/elfeed-show-default-open (&optional use-generic-p)
+      "open with default browser"
+      (interactive "P")
+      (elfeed-show-visit use-generic-p))
+
+    (defun rdm/elfeed-search-default-open (&optional use-generic-p)
+      "open with default browser"
+      (interactive "P")
+      (elfeed-search-browse-url use-generic-p))
+
     (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
       "open with eww"
       (interactive "P")
@@ -915,7 +925,7 @@ based on elfeed-search-browse-url"
     (evil-define-key 'normal elfeed-search-mode-map
       "m"  'rdm/elfeed-search-toggle-star
       "l"  'rdm/elfeed-search-tag-later-unread
-      "b"  'rdm/elfeed-search-eww-open
+      "b"  'rdm/elfeed-search-default-open
       "u"  'rdm/elfeed-search-untag-later-unread
       "Y"  'rdm/elfeed-search-entry-share
       "F"  'rdm/elfeed-search-filter-feed-name
@@ -939,7 +949,7 @@ based on elfeed-search-browse-url"
       )
 
     (evil-define-key 'normal elfeed-show-mode-map
-      "b"  'rdm/elfeed-show-eww-open
+      "b"  'rdm/elfeed-show-default-open
       "Y"  'rdm/elfeed-show-entry-share
       "ta" 'elfeed-show-tag
       "tr" 'elfeed-show-untag))
