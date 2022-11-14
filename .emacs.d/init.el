@@ -2112,7 +2112,7 @@ argument `name' could be directory or filename"
       :after treemacs all-the-icons
       :ensure t :require t)
 
-    (leaf treemacs-icons-dired
+    (leaf treemacs-icons-dired :disabled t
       :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
       :after treemacs dired
       :ensure t
