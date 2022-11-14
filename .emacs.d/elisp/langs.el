@@ -260,13 +260,13 @@
   (org-todo-keywords            . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
                                               "DONE(d!)" "CANCELLED(c@)")))
   (org-capture-templates        . `( ;; NOTE: require material icons
-                                    ("t" ,(format  "%s Task to Inbox" (nerd-fonts "fa-check"))
+                                    ("t" ,(format "%s  Task to Inbox" (nerd-fonts "fa-check"))
                                      entry (file+headline org-todofile "Inbox")
-                                     "** TODO %?\n  %U\n  %a"
+                                     "** TODO %?\nEntered on %U\n%a"
                                      :empty-lines-before 1) ; %u->%t
-                                    ("n" ,(format  "%s Note to Inbox" (nerd-fonts "fa-sticky-note"))
+                                    ("n" ,(format "%s  Note to Inbox" (nerd-fonts "fa-sticky-note"))
                                      entry (file+headline "" "Inbox")
-                                     "** %?\nEntered on %U\n %i\n %a"
+                                     "** %?\nEntered on %U\n %i\n%a"
                                      :empty-lines-before 1)
                                     ))
   (org-log-done                 . 'time)
