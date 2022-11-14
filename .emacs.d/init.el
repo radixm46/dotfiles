@@ -1227,6 +1227,13 @@ argument `name' could be directory or filename"
     (ac-sources  . '(ac-source-filename
                      ac-source-words-in-all-buffer)))
 
+  (leaf ispell :if (executable-find "aspell")
+    :tag "builtin"
+    :setq-default
+    (ispell-program-name     . "aspell")
+    (ispell-local-dictionary . "en_US")
+    )
+
   (leaf eldoc
     :tag "builtin"
     :config
