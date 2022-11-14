@@ -79,10 +79,10 @@
     :init
     (defun python-pipenv-init ()
       "init python environment on python-mode"
-      (if (not pipenv-mode)
-          (pipenv-mode))
-      (if (eq python-shell-virtualenv-root nil)
-          (pipenv-activate))))
+      (when (not pipenv-mode)
+        (pipenv-mode))
+      (when (eq python-shell-virtualenv-root nil)
+        (pipenv-activate))))
 
   (leaf python-mode
     :tag "builtin" :ensure t

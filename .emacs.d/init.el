@@ -1593,7 +1593,7 @@ argument `name' could be directory or filename"
         :doc "prefer posframe on gui"
         :hook
         (conf-on-term-hook . (lambda ()
-                               (if which-key-posframe-mode (which-key-posframe-mode -1))
+                               (when which-key-posframe-mode (which-key-posframe-mode -1))
                                (which-key-setup-side-window-right-bottom)))
         (conf-on-gui-hook  . (lambda ()
                                (which-key-setup-minibuffer)
@@ -1700,7 +1700,7 @@ argument `name' could be directory or filename"
                      ;;(display-buffer-reuse-window display-buffer-in-direction)
                      ;;display-buffer-in-direction/direction/dedicated is added in emacs27
                      (direction . bottom)
-                     (lambda() (if (version<= "27" emacs-version) (dedicated . t)))
+                     (lambda() (when (version<= "27" emacs-version) (dedicated . t)))
                      ;;(dedicated . t) ;dedicated is supported in emacs27
                      (reusable-frames . visible)
                      (window-height . 0.25))))
@@ -1883,7 +1883,7 @@ argument `name' could be directory or filename"
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
       ;; NOTE: on macOS, require full disk access to use trash bin
-      (trash-directory           . ,(if (equal system-type 'darwin) "~/.Trash"))
+      (trash-directory           . ,(when (equal system-type 'darwin) "~/.Trash"))
       )
     :config
     (ffap-bindings)
