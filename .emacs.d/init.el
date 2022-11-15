@@ -135,7 +135,7 @@ argument `name' could be directory or filename"
     :tag "builtin"
     :custom
     `(
-      (backup-directory-alist . `(("." .  ,(cache-sub-dir "hist"))))
+      (backup-directory-alist . `(("." .  ,(cache-sub-dir "backup"))))
       (make-backup-files      . t)
       (version-control        . t) ;; enable version control
       (kept-new-versions      . 5)
@@ -955,7 +955,7 @@ argument `name' could be directory or filename"
                        ^^^%s consult virtual-buffer^^^
 ^^^^^^--------------------------------------------------------------------------------
  _b_:   buffer               _f_:   other frame          _r_:   recent file
- _o_:   other window         _B_:   ookmark
+ _o_:   other window         _B_:   bookmark
 
  _SPC_: BACK
 " (nerd-fonts "fa-list-ul"))
