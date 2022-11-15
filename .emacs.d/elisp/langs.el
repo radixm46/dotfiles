@@ -743,7 +743,15 @@
   :url "https://github.com/skeeto/elfeed"
   :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
   :hook
-  (elfeed-search-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
+  (elfeed-search-mode-hook . (lambda ()
+                               (rdm/sw-lnsp 0.75)
+                               (dolist (face '(elfeed-search-tag-face
+                                               elfeed-search-date-face
+                                               elfeed-search-feed-face
+                                               elfeed-search-title-face
+                                               elfeed-search-unread-title-face))
+                                 (set-face-attribute
+                                  face nil :family font-for-tables :weight 'normal :height 1.0))))
   :init
   (add-to-list 'undo-tree-incompatible-major-modes 'elfeed-search-mode)
   (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
@@ -756,8 +764,8 @@
   (leaf *elfeed-patch-faces :after doom-themes
     :hook
     (elfeed-search-update-hook . (lambda ()
-                                   (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt))))
-                               ))
+                                   (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt)))
+                                   (set-face-attribute face nil :foreground ,(doom-color 'green)))))
 
   (leaf *elfeed-patch-entry-switch
     :doc "patch entry-switch behavior"
@@ -853,13 +861,30 @@
       (let ((browse-url-browser-function #'eww-browse-url))
         (elfeed-search-browse-url use-generic-p)))
 
+    (defun rdm/elfeed-unread-p (entry)
+      "returns t if selected entry has unread tag"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (elfeed-tagged-p 'unread entry))
+
+    (defun rdm/elfeed-search-mark-read (entry)
+      "mark entry read and remove later tag, then update elfeed-search"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (elfeed-untag entry 'unread 'later)
+      (elfeed-search-update-entry entry))
+
+    (defun rdm/elfeed-search-mark-read-show (entry)
+      "Mark entry as read and show"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (elfeed-show-entry entry)
+      (rdm/elfeed-search-mark-read entry)
+      )
+
     (defun rdm/elfeed-search-untag-later-unread (entry)
       "Remove the 'unread' and 'later' tag from entry.
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
-        (elfeed-untag entry 'unread 'later)
-        (elfeed-search-update-entry entry)
+        (rdm/elfeed-search-mark-read entry)
         (unless elfeed-search-remain-on-entry (forward-line))))
 
     (defun rdm/elfeed-search-untag-unread (entry)
@@ -867,29 +892,29 @@ based on elfeed-search-show-entry"
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
-        (elfeed-untag entry 'unread)
-        (elfeed-search-update-entry entry)
-        (forward-line) (recenter)))
+        (rdm/elfeed-search-mark-read entry)
+        (forward-line) (recenter))
+      )
 
-    (defun rdm/elfeed-search-show-entry (entry)
+    (defun rdm/elfeed-search-show-read-entry ()
       "Display the currently selected item in a buffer.
-based on elfeed-search-show-entry"
-      (interactive (list (elfeed-search-selected :ignore-region)))
-      (when (elfeed-entry-p entry)
-        (forward-line) (recenter)
-        (elfeed-untag entry 'unread 'later)
-        (elfeed-search-update-entry entry)
-        (elfeed-show-entry entry)))
+based on elfeed-search-show-entry.
+  open first line if unread, if not show next and mark unrerad.
+"
+      (interactive)
+      (if (and (eq (line-number-at-pos (point)) 1)
+               (call-interactively #'rdm/elfeed-unread-p))
+          (call-interactively #'rdm/elfeed-search-mark-read-show)
+        (progn (forward-line) (recenter)
+               (call-interactively #'rdm/elfeed-search-mark-read-show))
+        ))
 
-    (defun rdm/elfeed-search-show-prev-entry (entry)
+    (defun rdm/elfeed-search-show-read-prev-entry ()
       "Display currently selected item in buffer.
 based on elfeed-search-show-entry"
-      (interactive (list (elfeed-search-selected :ignore-region)))
-      (when (elfeed-entry-p entry)
-        (forward-line -1) (recenter)
-        (elfeed-untag entry 'unread 'later)
-        (elfeed-search-update-entry entry)
-        (elfeed-show-entry entry)))
+      (interactive)
+      (forward-line -1) (recenter)
+      (call-interactively #'rdm/elfeed-search-mark-read-show))
 
     (defun rdm/elfeed-search-browse-url (&optional use-generic-p)
       "open with browser, untag unread and later.
@@ -934,18 +959,18 @@ based on elfeed-search-browse-url"
       "tr" 'elfeed-search-untag-all
       "tj" 'rdm/elfeed-search-tag-junk
       "go" 'rdm/elfeed-search-browse-url
-      "oo" 'rdm/elfeed-search-show-entry
-      (kbd "RET") 'rdm/elfeed-search-untag-unread
-      (kbd "SPC") 'rdm/elfeed-search-untag-unread
+      "oo" 'rdm/elfeed-search-mark-read-show
+      (kbd "RET") 'rdm/elfeed-search-show-read-entry
+      (kbd "SPC") 'rdm/elfeed-search-show-read-prev-entry
       (kbd "S-SPC") 'evil-previous-line
-      (kbd "C-j") 'rdm/elfeed-search-show-entry
-      (kbd "M-j") 'rdm/elfeed-search-show-entry
-      "]]"        'rdm/elfeed-search-show-entry
-      "gj"        'rdm/elfeed-search-show-entry
-      (kbd "C-k") 'rdm/elfeed-search-show-prev-entry
-      (kbd "M-k") 'rdm/elfeed-search-show-prev-entry
-      "[["        'rdm/elfeed-search-show-prev-entry
-      "gk"        'rdm/elfeed-search-show-prev-entry
+      (kbd "C-j") 'rdm/elfeed-search-show-read-entry
+      (kbd "M-j") 'rdm/elfeed-search-show-read-entry
+      "]]"        'rdm/elfeed-search-show-read-entry
+      "gj"        'rdm/elfeed-search-show-read-entry
+      (kbd "C-k") 'rdm/elfeed-search-show-read-prev-entry
+      (kbd "M-k") 'rdm/elfeed-search-show-read-prev-entry
+      "[["        'rdm/elfeed-search-show-read-prev-entry
+      "gk"        'rdm/elfeed-search-show-read-prev-entry
       )
 
     (evil-define-key 'normal elfeed-show-mode-map
@@ -972,19 +997,6 @@ based on elfeed-search-browse-url"
                               ("L" (elfeed-search-set-filter "+later -unread") "later(read)")
                               ("s" (elfeed-search-set-filter "+star")          "starred")
                               )
-
-  :config
-  (leaf *patch-elfeed-list-face
-    :config
-    (dolist (face '(elfeed-search-tag-face
-                    elfeed-search-date-face
-                    elfeed-search-feed-face
-                    elfeed-search-title-face
-                    elfeed-search-unread-title-face))
-      (set-face-attribute face nil :family font-for-tables :weight 'normal :height 1.0))
-    )
-
-  ;; :hook (elfeed-show-mode-hook . darkroom-mode)
   )
 
 (leaf eww
