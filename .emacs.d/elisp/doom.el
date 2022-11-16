@@ -121,6 +121,12 @@
 
   :config
   (doom-modeline-mode 1)
+
+  (leaf *doom-modeline-patch-on-frame-type
+    :hook
+    (conf-on-term-hook . (lambda () (custom-set-variables '(doom-modeline-icon nil))))
+    (conf-on-gui-hook .  (lambda () (custom-set-variables '(doom-modeline-icon t))))
+    )
 )
 
 (leaf doom-themes
@@ -135,9 +141,3 @@
   (doom-themes-treemacs-config)
   (doom-themes-neotree-config)
 )
-
-(leaf *doom-modeline-patch-on-frame-type
-  :hook
-  (conf-on-term-hook . (lambda () (custom-set-variables '(doom-modeline-icon nil))))
-  (conf-on-gui-hook .  (lambda () (custom-set-variables '(doom-modeline-icon t))))
-  )

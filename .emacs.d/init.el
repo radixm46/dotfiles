@@ -710,9 +710,9 @@ argument `name' could be directory or filename"
       git-timemachine-mode-hook) . highlight-indent-guides-mode)
     :custom
     (highlight-indent-guides-auto-enabled             . nil)
-    (highlight-indent-guides-method                   . 'column)
     (highlight-indent-guides-auto-odd-face-perc       . 10)
     (highlight-indent-guides-auto-even-face-perc      . 10)
+    (highlight-indent-guides-method                   . 'column)
     (highlight-indent-guides-responsive               . 'top)
     (highlight-indent-guides-delay                    . 0)
     ;; (highlight-indent-guides-auto-character-face-perc . 90)
@@ -728,7 +728,7 @@ argument `name' could be directory or filename"
                                                                         (color-name-to-rgb y)))))
                                         (dimmc (funcall mix-colors
                                                         (doom-color 'bg) (doom-color 'dark-cyan)))
-                                        (activec  (doom-color 'dark-blue)))
+                                        (activec (doom-color 'dark-blue)))
                                    (custom-set-faces
                                     `(highlight-indent-guides-odd-face      ((nil (:background ,dimmc))))
                                     `(highlight-indent-guides-top-odd-face  ((nil (:background ,activec))))
@@ -954,14 +954,12 @@ argument `name' could be directory or filename"
       (format "\
                        ^^^%s consult virtual-buffer^^^
 ^^^^^^--------------------------------------------------------------------------------
- _b_:   buffer               _f_:   other frame          _r_:   recent file
- _o_:   other window         _B_:   bookmark
+ _b_:   buffer                                           _r_:   recent file
+                             _B_:   bookmark
 
  _SPC_: BACK
 " (nerd-fonts "fa-list-ul"))
       ("b" consult-buffer       :exit t)
-      ("o" consult-other-window :exit t)
-      ("f" consult-other-frame  :exit t)
       ("B" consult-bookmark     :exit t)
       ("r" consult-recent-file  :exit t)
       ("SPC" hydra-consult/body :exit t))
@@ -987,15 +985,13 @@ argument `name' could be directory or filename"
       (format "\
                           ^^%s consult register^^^
 ^^^^^^--------------------------------------------------------------------------------
- _r_:   register             _w_:   window               _s_:   store
- _l_:   load                 _f_:   format
+ _r_:   register                                         _s_:   store
+ _l_:   load
 
  _SPC_: BACK
 " (nerd-fonts "fa-list-ul"))
       ("r" consult-register        :exit t)
       ("l" consult-register-load   :exit t)
-      ("w" consult-register-window :exit t)
-      ("f" consult-register-format :exit t)
       ("s" consult-register-store  :exit t)
       ("SPC" hydra-consult/body :exit t))
 
@@ -1022,14 +1018,13 @@ argument `name' could be directory or filename"
       (format "\
                           ^^^%s consult search^^^
 ^^^^^^--------------------------------------------------------------------------------
- _l_:   line                 _s_:   isearch              _k_:   keep lines
+ _l_:   line                                             _k_:   keep lines
  _L_:   line multi           _M_:   multi occur          _f_:   focus lines
 
  _SPC_: BACK
 " (nerd-fonts "fa-list-ul"))
       ("l" consult-line        :exit t)
       ("L" consult-line-multi  :exit t)
-      ("s" consult-isearch     :exit t)
       ("M" consult-multi-occur :exit t)
       ("k" consult-keep-lines  :exit t)
       ("f" consult-focus-lines :exit t)
@@ -1073,8 +1068,8 @@ argument `name' could be directory or filename"
       (format "\
                       ^^%s consult miscellaneous^^
 ^^^^--------------------------------------------------------------------------------
- _a_:   apropos                            _c_:   completion in region
- _m_:   man                                _C_:   completion read multiple
+ _a_:   apropos
+ _m_:   man
  _f_:   file externally                    _t_:   theme
  _p_:   preview at point
 
@@ -1085,8 +1080,6 @@ argument `name' could be directory or filename"
       ("f" consult-file-externally          :exit t)
       ("t" consult-theme                    :exit t)
       ("p" consult-preview-at-point         :exit t)
-      ("c" consult-completion-in-region     :exit t)
-      ("C" consult-completion-read-multiple :exit t)
       ("SPC" hydra-consult/body :exit t))
      )
 
