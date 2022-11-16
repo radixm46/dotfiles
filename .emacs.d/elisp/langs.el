@@ -539,6 +539,16 @@
       (org-roam-ui-open-on-start . t))
     )
 
+  (leaf org-pdftools :after pdf-tools
+    :doc "org mode for pdf-tools integration (contains org-noter)"
+    :ensure t
+    :hook (org-mode-hook . org-pdftools-setup-link)
+    :custom
+    `(
+      (org-noter-notes-search-path . `(,(expand-file-rec '("org" "roam" "noter") (getenv "HOME"))))
+      )
+    )
+
   :hook
   ;; (org-mode-hook . org-mode-reftex-setup)
   (org-mode-hook . org-indent-mode)

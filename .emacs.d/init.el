@@ -1742,6 +1742,42 @@ argument `name' could be directory or filename"
   (leaf emacs-w3m :if (executable-find "w3m")
     :ensure t)
 
+  (leaf pdf-tools
+    :doc "require to execute `pdf-tools-install'"
+    :ensure t
+    :mode ("\\.pdf\\'" . pdf-view-mode)
+    :bind (:pdf-view-mode-map ("C-s" . ctrlf-forward-default))
+    :setq-default (pdf-view-display-size . 'fit-page)
+    :hook
+    (pdf-view-mode-hook . (lambda() (line-number-mode -1)))
+    (pdf-view-mode-hook . pdf-links-minor-mode)
+    (pdf-view-mode-hook . pdf-annot-minor-mode)
+    :init
+    (leaf *switch-pdf-view-dark :after doom-themes
+      :doc "detect whether doom-theme bg color seems dark (to avoid crush)"
+      :preface
+      (defun theme-seems-dark-p ()
+        "Check `(doom-theme 'bg)'. If theme seems to be dark, returns t"
+        (< (apply '+ (color-name-to-rgb (doom-color 'bg))) 1.5))
+      :hook
+      (pdf-view-mode-hook    . (lambda ()
+                                 (if (theme-seems-dark-p)
+                                     (pdf-view-dark-minor-mode +1)
+                                   (pdf-view-dark-minor-mode -1))))
+      (after-load-theme-hook . (lambda ()
+                                 (dolist (buff (buffer-list))
+                                   (with-current-buffer buff
+                                     (when (eq major-mode #'pdf-view-mode)
+                                       (if (theme-seems-dark-p)
+                                           (pdf-view-dark-minor-mode +1)
+                                         (pdf-view-dark-minor-mode -1)))))))
+      )
+    :config
+    ;; setup package if not ready
+    (pdf-tools-install)
+    (pdf-loader-install)
+    )
+
   (leaf *darwin-dictionary-integration :if (equal system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
