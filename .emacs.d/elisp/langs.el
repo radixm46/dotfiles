@@ -765,7 +765,7 @@
     :hook
     (elfeed-search-update-hook . (lambda ()
                                    (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt)))
-                                   (set-face-attribute face nil :foreground ,(doom-color 'green)))))
+                                   (set-face-attribute 'elfeed-search-tag-face nil :foreground `,(doom-color 'green)))))
 
   (leaf *elfeed-patch-entry-switch
     :doc "patch entry-switch behavior"
