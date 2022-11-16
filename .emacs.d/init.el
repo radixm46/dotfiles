@@ -1674,6 +1674,14 @@ argument `name' could be directory or filename"
                                   ))))
     )
 
+  (leaf eshell
+    :tag "builtin"
+    :custom
+    `((eshell-history-file-name . ,(expand-file-name
+                                    "history"
+                                    (cache-sub-dir "eshell"))))
+    )
+
   (leaf vterm
     :ensure t
     :preface ; release keys for binding
