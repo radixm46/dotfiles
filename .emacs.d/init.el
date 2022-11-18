@@ -27,9 +27,9 @@
 
   (leaf *mouse-support-on-term :unless (window-system)
     :doc "mouse support on terminal"
+    :require mouse
     :setq (mouse-sel-mode . t)
     :config
-    (require 'mouse)
     (xterm-mouse-mode t)
     (defun track-mouse (e)))
 
@@ -176,7 +176,6 @@ argument `name' could be directory or filename"
 
   (leaf bookmark
     :tag "builtin"
-    :require bookmark
     :custom
     `((bookmark-default-file . ,(cache-sub-file "bookmarks")))
     )
@@ -492,7 +491,6 @@ argument `name' could be directory or filename"
     :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
     :init
     (leaf tree-sitter-langs
-      :require t
       :ensure t)
     :global-minor-mode global-tree-sitter-mode
     )
@@ -810,7 +808,6 @@ argument `name' could be directory or filename"
 
   (leaf pulsar
     :ensure t
-    :require t
     :custom
     (pulsar-pulse                  . t)
     (pulsar-face                   . 'pulsar-magenta)
@@ -845,7 +842,8 @@ argument `name' could be directory or filename"
     ;; (pulsar-global-mode 1)
     (leaf *patch-pulsar-color :after doom-themes
       :hook
-      (after-load-theme-hook . (lambda ()
+      ((after-load-theme-hook
+        pulsar-mode-hook) . (lambda ()
                                  (custom-set-faces
                                   `(pulsar-magenta ((nil (:background ,(doom-color 'magenta)))))
                                   `(pulsar-yellow  ((nil (:background ,(doom-color 'yellow)))))
@@ -1417,7 +1415,7 @@ argument `name' could be directory or filename"
 
     (leaf consult-lsp
       :ensure t
-      :require t
+      :after lsp-mode
       :bind (:lsp-mode-map ("C-M-l" . consult-lsp-diagnostics)))
     ;; optionally
     ;; if you are helm user
@@ -1615,14 +1613,12 @@ argument `name' could be directory or filename"
 
   (leaf dashboard
     :ensure t
-    :require dashboard
     :custom
     `(
       (dashboard-banner-logo-title . ,(format "Welcome to Emacs %s! [on %s (%s)]"
                                               emacs-version
                                               system-name
                                               system-type)) ;; Set the title
-     ;; (dashboard-banner-logo-title  . "Welcome to Emacs!")
      (dashboard-startup-banner     . ,(let ((banner-img "~/.emacs.d/banner.png"))
                                         (if (and (f-file-p banner-img)
                                                  (not (emacs-works-on-term-p))) banner-img 3)))
@@ -1874,7 +1870,6 @@ argument `name' could be directory or filename"
 
   (leaf magit
     :ensure t
-    :require t
     ;:custom (magit-completing-read-function . 'magit-ido-completing-read)
     :hook (magit-section-mode-hook . (lambda () (whitespace-mode -1)))
     :config

@@ -436,7 +436,7 @@
 
   (leaf org-sidebar
     :doc "sidebar for org-mode"
-    :ensure t :require org-sidebar ; explicitly require
+    :ensure t
     )
 
   ;; configure bibtex
