@@ -289,8 +289,10 @@
     :custom
     `(
       (org-directory              . ,(expand-file-rec '("org" "orgfiles") (getenv "HOME")))
-      (org-default-notes-file     . ,(expand-file-name "notes.org" org-directory))
-      (org-agenda-files           . `,(directory-files org-directory t ".org$" t))
+      (org-default-notes-file     . ,(expand-file-name
+                                      "notes.org" (expand-file-rec '("org" "orgfiles") (getenv "HOME"))))
+      (org-agenda-files           . `,(directory-files
+                                       (expand-file-rec '("org" "orgfiles") (getenv "HOME")) t ".org$" t))
       )
     :config
     (defvar org-todofile
