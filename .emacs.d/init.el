@@ -1697,7 +1697,7 @@ argument `name' could be directory or filename"
       (vterm-toggle-scope-p . 'project)
       :config
       (add-to-list 'display-buffer-alist
-                   '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                   '((lambda(bufname _) (with-current-buffer bufname (eq major-mode 'vterm-mode)))
                      (display-buffer-reuse-window display-buffer-at-bottom)
                      ;;(display-buffer-reuse-window display-buffer-in-direction)
                      ;;display-buffer-in-direction/direction/dedicated is added in emacs27
@@ -1779,7 +1779,7 @@ argument `name' could be directory or filename"
     (pdf-loader-install)
     )
 
-  (leaf *darwin-dictionary-integration :if (equal system-type 'darwin)
+  (leaf *darwin-dictionary-integration :if (eq system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
     (defun macos-dict-lookup (word)
@@ -1912,16 +1912,16 @@ argument `name' could be directory or filename"
     :custom
     `(
       ;; use gnu-ls if available on macOS
-      (insert-directory-program . ,(if (and (equal system-type 'darwin)
+      (insert-directory-program . ,(if (and (eq system-type 'darwin)
                                              (not (executable-find "gls")))
                                        "ls" "gls"))
-      (dired-listing-switches    . ,(if (and (equal system-type 'darwin)
+      (dired-listing-switches    . ,(if (and (eq system-type 'darwin)
                                              (not (executable-find "gls")))
                                         "-l" "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group"))
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
       ;; NOTE: on macOS, require full disk access to use trash bin
-      (trash-directory           . ,(when (equal system-type 'darwin) "~/.Trash"))
+      (trash-directory           . ,(when (eq system-type 'darwin) "~/.Trash"))
       )
     :config
     (ffap-bindings)
@@ -1955,11 +1955,11 @@ argument `name' could be directory or filename"
                                         ("d" ,(expand-file-name "Dowwnloads" (getenv "HOME")) "Downloads")
                                         ("D" ,(expand-file-name "Documents"  (getenv "HOME")) "Documents")
                                         ("e" ,(expand-file-name ".emacs.d"   (getenv "HOME")) "Emacs directory")
-                                        ("m" ,(cond ((equal system-type 'darwin)    "/Volumes/")
-                                                    ((equal system-type 'gnu/linux) "/mnt/")
+                                        ("m" ,(cond ((eq system-type 'darwin)    "/Volumes/")
+                                                    ((eq system-type 'gnu/linux) "/mnt/")
                                                     (t "(not available)")) "Drives")
-                                        ("t" ,(cond ((equal system-type 'darwin)    "~/.Trash")
-                                                    ((equal system-type 'gnu/linux) "~/.local/share/Trash/files/")
+                                        ("t" ,(cond ((eq system-type 'darwin)    "~/.Trash")
+                                                    ((eq system-type 'gnu/linux) "~/.local/share/Trash/files/")
                                                     (t "(not available)")) "TrashCan")))
       )
 
