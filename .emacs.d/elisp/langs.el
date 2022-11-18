@@ -324,8 +324,8 @@
       (org-preview-latex-default-process . 'dvisvgm)
       (org-startup-with-latex-preview    . nil)
       :config
-      (custom-set-variables
-       '(org-format-latex-options (plist-put org-format-latex-options :scale 1.4)))
+      (customize-set-variable
+       'org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       )
 
     (leaf *org-latex-preview-imagemagick
@@ -336,8 +336,8 @@
       (org-latex-create-formula-image-program . 'imagemagick)
       (org-startup-with-latex-preview    . nil)
       :config
-      (custom-set-variables
-       '(org-format-latex-options (plist-put org-format-latex-options :scale 1.6)))
+      (customize-set-variable
+       'org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
       (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
       )
 
@@ -376,15 +376,15 @@
       :doc  "prettify todo keywords"
       :hook
       (after-load-theme-hook . (lambda ()
-        (custom-set-variables
-         '(org-todo-keyword-faces
+        (customize-set-variable
+         'org-todo-keyword-faces
            `(
              ("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
              ("NEXT"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))))
              ("STARTED" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'cyan)))))
              ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
              ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta)))))
-             ))
+             )
          )))
       )
 

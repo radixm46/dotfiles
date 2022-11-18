@@ -124,8 +124,8 @@
 
   (leaf *doom-modeline-patch-on-frame-type
     :hook
-    (conf-on-term-hook . (lambda () (custom-set-variables '(doom-modeline-icon nil))))
-    (conf-on-gui-hook .  (lambda () (custom-set-variables '(doom-modeline-icon t))))
+    (conf-on-term-hook . (lambda () (customize-set-variable 'doom-modeline-icon nil)))
+    (conf-on-gui-hook .  (lambda () (customize-set-variable 'doom-modeline-icon t)))
     )
 )
 

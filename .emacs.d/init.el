@@ -217,10 +217,10 @@ argument `name' could be directory or filename"
 (leaf *font-configure
   :doc "font configure"
   :config
-  (custom-set-variables
-   '(default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
+  (customize-set-variable
+   'default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
                                        '(width . 80)
-                                       '(height . 45)) default-frame-alist)))
+                                       '(height . 45)) default-frame-alist))
   (defvar font-for-tables "UDEV Gothic NF" "1:2 width font for table")
 
   (leaf nerd-fonts
@@ -624,8 +624,8 @@ argument `name' could be directory or filename"
       "toggle relative"
       (interactive)
       (if (eq display-line-numbers-type 'relative)
-          (custom-set-variables '(display-line-numbers-type  't))
-        (custom-set-variables '(display-line-numbers-type  'relative)))
+          (customize-set-variable 'display-line-numbers-type  t)
+        (customize-set-variable 'display-line-numbers-type  'relative))
       (display-line-numbers--turn-on)) ;; read config
     )
 
