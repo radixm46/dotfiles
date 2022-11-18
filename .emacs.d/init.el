@@ -444,10 +444,12 @@ argument `name' could be directory or filename"
 
   (leaf yasnippet
     :ensure t
-    :hook (prog-mode-hook . yas-minor-mode)
-    :config
+    :hook
+    ((prog-mode-hook     . yas-minor-mode)
+     (emacs-startup-hook . yas-global-mode))
+    :init
     (leaf yasnippet-snippets :ensure t)
-
+    :config
     (leaf consult-yasnippet
       :doc "consulting yasnippet candidates"
       :straight
@@ -456,7 +458,7 @@ argument `name' could be directory or filename"
       :bind
       (("M-g s"   . consult-yasnippet)
        ("M-g M-s" . consult-yasnippet)))
-    (yas-reload-all))
+    )
 
   (leaf tab-bar :emacs>= "27.1"
     :tag "builtin"
