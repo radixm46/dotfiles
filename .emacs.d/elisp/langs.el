@@ -334,7 +334,7 @@
       :after org
       :custom
       (org-latex-create-formula-image-program . 'imagemagick)
-      (org-startup-with-latex-preview    . nil)
+      (org-startup-with-latex-preview         . nil)
       :config
       (customize-set-variable
        'org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
@@ -642,7 +642,6 @@
    ("M-6"       . hydra-org/body)
    ("<f6>"      . hydra-org/body))
   )
-
 
 (leaf *lml-modes
   :doc "lightweight markup languages"
@@ -1013,11 +1012,14 @@ based on elfeed-search-browse-url"
   :tag "builtin"
   :doc "text base web browser"
   :custom
-  (shr-width . 70)
-  (shr-indentation . 4)
-  (shr-use-fonts . t)
-  (shr-bullet . "* ")
-  (eww-search-prefix . "https://www.google.com/search?q=")
+  `(
+    (shr-width               . 70)
+    (shr-indentation         . 4)
+    (shr-use-fonts           . t)
+    (shr-bullet              . "* ")
+    (eww-search-prefix       . "https://www.google.com/search?q=")
+    (eww-bookmarks-directory . ,(cache-sub-dir "eww"))
+    )
   :hook
   (eww-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
   :config
