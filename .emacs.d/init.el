@@ -1230,10 +1230,9 @@ argument `name' could be directory or filename"
   (leaf eldoc
     :tag "builtin"
     :config
-    (leaf eldoc-box :unless (emacs-works-on-term-p)
+    (leaf eldoc-box
       :ensure t
-      :hook (eldoc-mode-hook . (lambda () (unless (emacs-works-on-term-p)
-                                            eldoc-box-hover-mode)))
+      :hook (eldoc-mode-hook . (lambda () (unless (display-graphic-p) (eldoc-box-hover-mode))))
       :custom
       (eldoc-box-only-multi-line    . nil)
       (eldoc-box-fringe-use-same-bg . t)
@@ -2052,12 +2051,22 @@ argument `name' could be directory or filename"
 
   (leaf treemacs
     :ensure t
-    :require t
-    ;; :defer t
-    ;; :require treemacs
     :init
     (with-eval-after-load 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+
+    (leaf treemacs-all-the-icons
+      :after treemacs-themes all-the-icons
+      :require t
+      :ensure t
+      :hook
+      (conf-on-term-hook  . (lambda () (treemacs-load-theme "Default")))
+      (conf-on-gui-hook   . (lambda () (treemacs-load-theme "all-the-icons")))
+      (treemacs-mode-hook . (lambda ()
+                              (if (display-graphic-p)
+                                  (treemacs-load-theme "all-the-icons")
+                                (treemacs-load-theme "Default"))))
+      )
     :bind
     (("M-0"       . treemacs-select-window)
      ("C-x t 1"   . treemacs-delete-other-windows)
@@ -2143,10 +2152,6 @@ argument `name' could be directory or filename"
         (projectile-known-projects-file . ,(cache-sub-file "projectile-known-projects.eld" "projectile"))
         ))
 
-    (leaf treemacs-all-the-icons
-      :after treemacs all-the-icons
-      :ensure t :require t)
-
     (leaf treemacs-icons-dired :disabled t
       :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
       :after treemacs dired
@@ -2157,11 +2162,6 @@ argument `name' could be directory or filename"
     ;;  :ensure t
     ;;  :config (treemacs-set-scope-type 'Perspectives))
 
-    (leaf *treemacs-patch-on-frame-type
-      :hook
-      (conf-on-term-hook . (lambda () (treemacs-load-theme "Default")))
-      (conf-on-gui-hook .  (lambda () (treemacs-load-theme "all-the-icons")))
-      )
     )
   )
 
