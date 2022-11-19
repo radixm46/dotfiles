@@ -11,18 +11,11 @@
 
 (leaf *startup
   :config
-  (leaf *gc-config
-    :custom
-    `(
-      (garbage-collection-messages . t)
-      (gc-cons-threshold           . ,(* 128 1024 1024)) ;; 128MB
-      )
-    :config
-    (leaf gcmh
-      :doc "Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
-      :ensure t
-      :config
-      (gcmh-mode 1))
+  (leaf gcmh
+    :doc "gcmh works after startup"
+    :doc "Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
+    :ensure t
+    :hook (emacs-startup-hook . (lambda () (gcmh-mode 1)))
     )
 
   (leaf *mouse-support-on-term :unless (window-system)
@@ -38,76 +31,11 @@
     :require t
     :doc "load cl-lib")
 
-  (leaf *conf-on-state
-    :config
-    (defun emacs-works-on-term-p ()
-      "returns t if emacs seems running on term"
-      (not (or (daemonp) (display-graphic-p))))
-
-    (defvar conf-on-term-hook nil "Hook run by conf-on-term.")
-    (defun conf-on-term ()
-      "fire hooked functions for swtitch appearance on tui frame"
-      (interactive)
-      (message "switch to term")
-      (run-hooks 'conf-on-term-hook))
-
-    (defvar conf-on-gui-hook nil  "Hook run by conf-on-gui.")
-    (defun conf-on-gui ()
-      "fire hooked functions for swtitch appearance on gui frame"
-      (interactive)
-      (message "switch to gui")
-      (run-hooks 'conf-on-gui-hook))
-    )
-
-  (leaf *cache-directory-conf
-    :doc "configure emacs cache directory path (default: ~/.cache/emacs)"
-    :config
-    (defun expand-file-rec (path basedir)
-      "generate full path from basedir with given list
-
-example:
-  (expand-file-rec '(\"foo\" \"bar\" \"baz\") \"~\")
-  => \"/home/user/foo/bar/buzz\""
-      (cond
-       ((length= path 1)
-        (expand-file-name (car path) basedir))
-       ((length> path 1)
-        (expand-file-rec
-         (cdr path) (expand-file-name (car path) basedir)))
-       (t
-        (message "invalid path value"))
-       ))
-
-    (defvar emacs-cache-root-dir
-      (expand-file-rec '(".cache" "emacs") (getenv "HOME"))
-      "emacs cache directory path (default: $HOME/.cache)")
-
-    (defun cache-sub-dir (&optional name)
-      "check directory path (create if not exists), and returns full path to dir.
-if argument is not given, returns `emacs-cache-root-dir'"
-      (let ((lpath (if (eq name nil)
-                      (expand-file-name emacs-cache-root-dir)
-                    (expand-file-name name emacs-cache-root-dir))))
-        (if (not (file-directory-p lpath))
-            (progn (make-directory lpath t) lpath)
-          lpath)))
-
-    (defun cache-sub-file (name &optional subdir )
-      "returns file path like 'emacs-cache-root-dir/subdir/name'
-if name is not given, returns 'emacs-cache-root-dir/name'
-argument `name' could be directory or filename"
-      (expand-file-name name (cache-sub-dir subdir)))
-    )
-
   (leaf exec-path-from-shell
     :doc "load path from shell at startup"
     :ensure t
     :custom (exec-path-from-shell-arguments . '("-l"))
     :config (when (daemonp) (exec-path-from-shell-initialize)))
-
-  (leaf *supress-cl-warning :emacs>= "27"
-    :doc "supress cl warning"
-    :setq (byte-compile-warnings . '(not cl-functions obsolete)))
   )
 
 
@@ -216,10 +144,6 @@ argument `name' could be directory or filename"
 (leaf *font-configure
   :doc "font configure"
   :config
-  (customize-set-variable
-   'default-frame-alist (append (list '(font . "UDEV Gothic 35NF-13.0")
-                                       '(width . 80)
-                                       '(height . 45)) default-frame-alist))
   (defvar font-for-tables "UDEV Gothic NF" "1:2 width font for table")
 
   (leaf nerd-fonts
@@ -515,14 +439,8 @@ argument `name' could be directory or filename"
 
 (leaf *conf-appearance
   :custom
-  (inhibit-splash-screen . t)
   (ring-bell-function . 'ignore)
   :config
-  (unless (emacs-works-on-term-p)
-    (progn
-      (tool-bar-mode -1)
-      (scroll-bar-mode -1)))
-  (menu-bar-mode -1)
   (display-time)
   (column-number-mode t)
   (blink-cursor-mode 0)

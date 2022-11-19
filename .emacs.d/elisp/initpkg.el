@@ -10,7 +10,6 @@
                                  ("melpa-stable" . "https://stable.melpa.org/packages/")
                                  ("org"          . "https://orgmode.org/elpa/"))
                                package-archives))
-(setq load-prefer-newer t)
 
 ;; auto load use-package package
 ;; (unless (package-installed-p 'use-package)
