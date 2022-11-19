@@ -1539,8 +1539,8 @@
                                               system-name
                                               system-type)) ;; Set the title
      (dashboard-startup-banner     . ,(let ((banner-img "~/.emacs.d/banner.png"))
-                                        (if (and (f-file-p banner-img)
-                                                 (not (emacs-works-on-term-p))) banner-img 3)))
+                                        (if (and (file-regular-p banner-img)
+                                                 (display-graphic-p)) banner-img 3)))
      (dashboard-center-content     . t)
      (dashboard-show-shortcuts     . t)
      (dashboard-set-heading-icons  . t)

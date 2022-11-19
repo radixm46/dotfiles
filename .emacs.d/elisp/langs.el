@@ -285,7 +285,7 @@
 
   :config
   (leaf *org-config-directory
-    :if (f-directory-p (expand-file-rec '("org" "orgfiles") (getenv "HOME")))
+    :if (file-directory-p (expand-file-rec '("org" "orgfiles") (getenv "HOME")))
     :custom
     `(
       (org-directory              . ,(expand-file-rec '("org" "orgfiles") (getenv "HOME")))
