@@ -2167,10 +2167,11 @@
 (leaf *conf-appearance-on-state
   :doc "apply theme and frame state hooks after init"
   :hook
-  (after-init-hook . (lambda ()
-                       (if (display-graphic-p)
-                           (conf-on-gui) (conf-on-term))
-                       (load-theme 'doom-nord-aurora t)))
+  ((server-after-make-frame-hook
+    after-init-hook) . (lambda ()
+                         (if (display-graphic-p)
+                             (conf-on-gui) (conf-on-term))))
+  (after-init-hook   . (lambda () (load-theme 'doom-nord-aurora t)))
   )
 
 
