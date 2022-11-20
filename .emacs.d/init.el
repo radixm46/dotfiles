@@ -2173,8 +2173,10 @@
   :config
   (let
       ((local-conf (expand-file-rec '("elisp" "local.el") user-emacs-directory)))
-    (if (file-exists-p local-conf)
-        (load local-conf)
-      ;; create elisp/local.el if not exists
+    (unless (file-exists-p local-conf)
       (with-temp-file local-conf nil))
+    (load local-conf)
     ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; init.el ends here
