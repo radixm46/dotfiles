@@ -50,7 +50,7 @@
       :custom (auto-save-no-message . t))
     :custom
     `(
-      (auto-save-file-name-transforms . `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,(cache-sub-dir "autosaved") t)))
+      (auto-save-file-name-transforms . `((".*" ,(expand-file-name "\\2" (cache-sub-dir "autosaved")) t)))
       (delete-auto-save-files         . t)
       (auto-save-default              . t)
       (auto-save-timeout              . 15)
@@ -63,21 +63,24 @@
     :tag "builtin"
     :custom
     `(
-      (backup-directory-alist . `(("." .  ,(cache-sub-dir "backup"))))
-      (make-backup-files      . t)
-      (version-control        . t) ;; enable version control
-      (kept-new-versions      . 5)
-      (kept-old-versions      . 1)
-      (delete-old-versions    . t)
-      (create-lockfiles       . nil)
+      (backup-directory-alist         . `(("." .  ,(cache-sub-dir "backup"))))
+      (auto-save-list-file-prefix     . ,(expand-file-name ".saves-"
+                                          (cache-sub-dir "auto-save-list")))
+      (auto-save-list-file-name)
+      (make-backup-files              . t)
+      (version-control                . t) ;; enable version control
+      (kept-new-versions              . 5)
+      (kept-old-versions              . 1)
+      (delete-old-versions            . t)
+      (create-lockfiles               . nil)
       ))
 
   (leaf history
     :doc "configure history, log"
     :tag "builtin"
     :custom
-    (message-log-max . 10000)
-    (history-length . 1000)
+    (message-log-max           . 10000)
+    (history-length            . 1000)
     (history-delete-duplicates . t))
 
   (leaf recentf
