@@ -1655,6 +1655,69 @@
     (epa-pinentry-mode . 'loopback)
     )
 
+  (leaf eww
+    :tag "builtin"
+    :doc "text base web browser"
+    :custom
+    `(
+      (shr-width               . 70)
+      (shr-indentation         . 4)
+      (shr-use-fonts           . t)
+      (shr-bullet              . "* ")
+      (eww-search-prefix       . "https://www.google.com/search?q=")
+      (eww-bookmarks-directory . ,(cache-sub-dir "eww"))
+      )
+    :hook
+    (eww-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
+    :config
+    (leaf *eww-patch-faces :after doom-themes
+      :hook
+      ((after-load-theme-hook
+        eww-mode-hook) . (lambda ()
+        (custom-set-faces
+         `(eww-form-text ((t :background ,(doom-color 'bg-alt)))))))
+      )
+
+    (leaf *eww-bind-nerd-icons
+      :custom
+      `(
+        (shr-bullet                        . ,(format "%s " (nerd-fonts "oct-primitive-square")))
+        (eww-form-checkbox-symbol          . ,(nerd-fonts "fa-square-o"))
+        (eww-form-checkbox-selected-symbol . ,(nerd-fonts "fa-check-square-o"))
+        )
+      )
+
+    (leaf *eww-toggle-inhibit-images :emacs>= "28.1"
+      :doc "disable image by default"
+      :custom
+      (shr-inhibit-images . t)
+      :config
+      (evil-define-key 'normal eww-mode-map
+        "i" 'eww-toggle-images
+        "I" 'eww-toggle-images)
+      )
+
+    (leaf *eww-use-color-config
+      :doc "config colors in eww"
+      :custom
+      (shr-use-colors . nil)
+      :config
+      (evil-define-key 'normal eww-mode-map
+        "c" 'eww-toggle-colors
+        "C" 'eww-toggle-colors)
+      )
+
+    (leaf *patch-eww-heading-size
+      :hook
+      (after-load-theme-hook . (lambda ()
+                                 (set-face-attribute 'shr-h1 nil :height 1.4)
+                                 (set-face-attribute 'shr-h2 nil :height 1.2)
+                                 (set-face-attribute 'shr-h3 nil :height 1.1)
+                                 (set-face-attribute 'shr-h4 nil :height 1.0)
+                                 ))
+      )
+    )
+
   (leaf emacs-w3m :if (executable-find "w3m")
     :ensure t)
 
