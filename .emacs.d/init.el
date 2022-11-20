@@ -1894,6 +1894,11 @@
   :config
   (leaf dired
     :tag "builtin"
+    :preface
+    (leaf osx-trash :if (eq 'system-type 'darwin)
+      :ensure t
+      :config
+      (osx-trash-setup))
     :custom
     `(
       ;; use gnu-ls if available on macOS
