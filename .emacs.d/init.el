@@ -1956,21 +1956,33 @@
                                                     (t "(not available)")) "TrashCan")))
       )
 
-    :preface
-    (leaf *dirvish-on-term :if (emacs-works-on-term-p)
-      :doc "not use `all-the-icons'"
-      :custom
-      (dirvish-attributes           . '(collapse git-msg file-size))
-      (dirvish-side-attributes      . '(collapse git-msg file-size))
-      )
-    (leaf *dirvish-on-gui :unless (emacs-works-on-term-p)
-      :doc "minimize state on term" ;; remove subtree-state
-      :custom
-      (dirvish-attributes           . '(vc-state all-the-icons collapse git-msg file-size))
-      (dirvish-side-attributes      . '(vc-state all-the-icons collapse git-msg file-size))
-      )
-
     :init
+    (leaf *dirvish-on-state
+      :doc "switch dirvish attributes"
+      :custom
+      `(
+        (dirvish-attributes           . `,(if (or (daemonp) (display-graphic-p))
+                                             '(vc-state all-the-icons collapse git-msg file-time file-size)
+                                           '(collapse git-msg file-time file-size)))
+        (dirvish-side-attributes      . `,(if (or (daemonp) (display-graphic-p))
+                                             '(vc-state all-the-icons collapse git-msg file-size)
+                                           '(collapse git-msg file-size)))
+        )
+      :hook
+      (dirvish-directory-view-mode-hook . (lambda ()
+                                            (if (display-graphic-p)
+                                                (progn
+                                                  (customize-set-variable 'dirvish-attributes
+                                                                          '(vc-state all-the-icons collapse git-msg file-time file-size))
+                                                  (customize-set-variable 'dirvish-side-attributes
+                                                                          '(vc-state all-the-icons collapse git-msg file-size)))
+                                              (progn
+                                                (customize-set-variable 'dirvish-attributes
+                                                                        '(collapse git-msg file-time file-size))
+                                                (customize-set-variable 'dirvish-side-attributes
+                                                                        '(collapse git-msg file-size))
+                                                ))))
+      )
     ;; Let Dirvish take over Dired globally
     (dirvish-override-dired-mode)
     (add-to-list 'undo-tree-incompatible-major-modes 'dirvish-mode)
@@ -1985,7 +1997,18 @@
         (when (file-directory-p file) ; we only interest in directories here
           `(shell . ("exa" "--color=always" "--icons" "--git" "--group-directories-first" "-al" ,file))))
       :custom
-      (dirvish-preview-dispatchers  . '(exa image gif video audio epub archive pdf))
+      `(
+        (dirvish-preview-dispatchers  . `(exa image gif video audio epub archive
+                                             ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))
+        )
+      )
+
+    (leaf *dirvish-preview-hooks-mediainfo :if (executable-find "mediainfo")
+      :hook
+      ((dirvish-image-preview-dp-hook
+        dirvish-video-preview-dp-hook
+        dirvish-gif-preview-dp-hook
+        dirvish-audio-preview-dp-hook) . dirvish-media-properties)
       )
 
     (evil-define-key 'normal dirvish-mode-map
