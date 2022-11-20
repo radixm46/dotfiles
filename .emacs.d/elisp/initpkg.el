@@ -6,16 +6,11 @@
 ;; load custom.el if exists
 ;; (when (file-exists-p custom-file) (load custom-file))
 
-(setq package-archives (append '(("melpa"        . "https://melpa.org/packages/")
-                                 ("melpa-stable" . "https://stable.melpa.org/packages/")
-                                 ("org"          . "https://orgmode.org/elpa/"))
-                               package-archives))
-
-;; auto load use-package package
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
-;; (require 'use-package)
+(setq package-archives
+      (append '(("melpa"        . "https://melpa.org/packages/")
+                ("melpa-stable" . "https://stable.melpa.org/packages/")
+                ("org"          . "https://orgmode.org/elpa/"))
+              package-archives))
 
 ;; auto load leaf.el package
 (unless (package-installed-p 'leaf)
@@ -71,7 +66,7 @@
     ;; NOTE: straight.el configures straight-disable-native-compile with straight--native-comp-available
     :custom
     ;; use straight as leaf default package management
-    ((leaf-alias-keyword-alist . '((:ensure . :straight)))
+    ((leaf-alias-keyword-alist            . '((:ensure . :straight)))
      (straight-vc-git-default-clone-depth . 1))
     :config
     (defvar bootstrap-version)
