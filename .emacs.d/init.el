@@ -2160,17 +2160,12 @@
 
 
 (leaf *conf-appearance-on-state
-  :doc "switch appearance when on gui or term"
+  :doc "apply theme and frame state hooks after init"
   :hook
-  (server-after-make-frame-hook . (lambda ()
-                                    (if (display-graphic-p)
-                                        (conf-on-gui) (conf-on-term))
-                                    (load-theme 'doom-nord-aurora t)))
-  ;; NOTE: `load-theme' must be here, frame parameters required by `highlight-indent-guides' color config
-  :preface
-  (if (emacs-works-on-term-p)
-      (conf-on-term) (conf-on-gui))
-  (unless (daemonp) (load-theme 'doom-nord-aurora t))
+  (after-init-hook . (lambda ()
+                       (if (display-graphic-p)
+                           (conf-on-gui) (conf-on-term))
+                       (load-theme 'doom-nord-aurora t)))
   )
 
 
