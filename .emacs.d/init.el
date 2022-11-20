@@ -1768,6 +1768,16 @@
     (pdf-loader-install)
     )
 
+  (leaf go-translate
+    :ensure t
+    :setq
+    (gts-translate-list     . '(("en" "ja")
+                                ("ja" "en")))
+    ;;(go-translate-buffer-follow-p . t)       ; focus the result window
+    ;;(go-translate-buffer-source-fold-p . t)  ; fold the source text in the result window
+    ;;(go-translate-buffer-window-config . ..) ; config the result window as your wish
+    )
+
   (leaf *darwin-dictionary-integration :if (eq system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
