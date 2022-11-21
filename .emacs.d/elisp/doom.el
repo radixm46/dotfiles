@@ -1,3 +1,10 @@
+;;; doom.el --- summary
+;;; Commentary:
+;;
+;; provides doom-modeline, doom-themes configuration
+;;
+
+;;; Code:
 ;; enable doom-modeline
 (leaf doom-modeline
   :ensure t
@@ -141,3 +148,6 @@
   (doom-themes-treemacs-config)
   (doom-themes-neotree-config)
 )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; doom.el ends here

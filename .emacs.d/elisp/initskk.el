@@ -1,3 +1,11 @@
+;;; initskk.el --- ddskk config
+;;; Commentary:
+;;
+;; Provides ddskk configuration
+;;
+
+;;; Code:
+
 ;; skk init file
 (setq skk-get-jisyo-directory (cache-sub-file "dict" "skk"))
 
@@ -28,3 +36,6 @@
 ;;(define-key skk-j-mode-map (kbd "M-n"))
 
 ;(setq skk-cdb-large-jisyo "~/.emacs.d/skkdict/SKK-JISYO.L.cdb")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; initskk.el ends here

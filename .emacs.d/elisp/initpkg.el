@@ -1,3 +1,10 @@
+;;; initpkg.el --- summary -*- lexical-binding: t -*-
+;;; Commentary:
+;;
+;; package manager configuration.
+;;
+
+;;; Code:
 ;; init package
 
 ;; use custom.el for package-selected-packages
@@ -75,3 +82,5 @@
   :ensure t
   :config (paradox-enable))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; initpkg.el ends here

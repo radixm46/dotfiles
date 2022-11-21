@@ -1,4 +1,10 @@
+;;; langs.el --- summary -*- lexical-binding: t -*-
+;;; Commentary:
+;;
 ;; major modes loaded by init.el
+;;
+
+;;; Code:
 
 (leaf emacs-lisp-mode
   :tag "builtin"
