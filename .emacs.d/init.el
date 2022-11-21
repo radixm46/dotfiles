@@ -1011,6 +1011,7 @@
                                                ;; defaults
                                                "-e ARG OPTS")))
     (evil-ex-define-cmd "ls" 'consult-buffer)
+    (evil-ex-define-cmd "reg" 'consult-yank-from-kill-ring)
     (leaf consult-dir :ensure t))
 
   (leaf orderless
