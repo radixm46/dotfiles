@@ -19,13 +19,13 @@
     :hook (emacs-startup-hook . (lambda () (gcmh-mode 1)))
     )
 
-  (leaf *mouse-support-on-term :unless (window-system)
+  (leaf xt-mouse
     :doc "mouse support on terminal"
-    :require mouse
-    :setq (mouse-sel-mode . t)
-    :config
-    (xterm-mouse-mode t)
-    (defun track-mouse (e)))
+    :tag "builtin"
+    :hook
+    (conf-on-term-hook . (lambda ()  (xterm-mouse-mode +1)))
+    (conf-on-gui-hook  . (lambda ()  (xterm-mouse-mode -1)))
+    )
 
   (leaf cl-lib
     :tag "builtin"
