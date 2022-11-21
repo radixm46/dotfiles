@@ -15,21 +15,23 @@
     :config
     (leaf *patch-highlight-defined-faces :after doom-themes
       :doc "patch face color from font-lock-face"
-      :hook
-      ((highlight-defined-mode-hook
-        after-load-theme-hook) . (lambda ()
+      :preface
+      (defun patch-highlight-defined-faces ()
         (custom-set-faces
          `(highlight-defined-function-name-face
-           ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+           ((t (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
          `(highlight-defined-builtin-function-name-face
-           ((nil (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+           ((t (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
          `(highlight-defined-special-form-name-face
-           ((nil (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
+           ((t (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
          `(highlight-defined-macro-name-face
-           ((nil (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
+           ((t (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
          `(highlight-defined-variable-name-face
-           ((nil (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
-         )))
+           ((t (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
+         ))
+      :hook
+      ((highlight-defined-mode-hook
+        after-load-theme-hook) . patch-highlight-defined-faces)
       )
 
     (leaf *highlight-symbol-evil-bind
@@ -343,31 +345,33 @@
       (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
       )
 
-     (leaf *org-mode-patch-face :after doom-themes
-       :hook ;; without `doom-color': (face-attribute 'default :background)
-       ((after-load-theme-hook
-         org-mode-hook) . (lambda ()
-                                  (custom-set-faces
-                                   `(org-hide             ((nil (:foreground ,(doom-color 'bg))))) ; org-hide
-                                   `(org-table             ((nil :family ,font-for-tables))) ;; use 1:2 font for table
-                                   `(org-ellipsis         ((t (:background ,(doom-color 'bg)))))
-                                   `(org-block-begin-line ((t (:background ,(doom-color 'bg)))))
-                                   `(org-block-end-line   ((t (:background ,(doom-color 'bg)))))
-                                   )))
-       )
+    (leaf *patch-org-mode-header-size
+      :doc "set larger face for org-level-1 to 5"
+      :preface
+      (defun patch-org-mode-header-size ()
+        (set-face-attribute 'org-document-title nil :height 2.0)
+        (set-face-attribute 'org-level-1 nil :height 1.75)
+        (set-face-attribute 'org-level-2 nil :height 1.50)
+        (set-face-attribute 'org-level-3 nil :height 1.25)
+        (set-face-attribute 'org-level-4 nil :height 1.1)
+        (set-face-attribute 'org-level-5 nil :height 1.0))
+      :hook
+      (after-load-theme-hook . patch-org-mode-header-size)
+      )
 
-     (leaf *org-mode-header-size
-       :doc "set larger face for org-level-1 to 5"
-       :hook
-       (after-load-theme-hook . (lambda ()
-                                  (set-face-attribute 'org-document-title nil :height 2.0)
-                                  (set-face-attribute 'org-level-1 nil :height 1.75)
-                                  (set-face-attribute 'org-level-2 nil :height 1.50)
-                                  (set-face-attribute 'org-level-3 nil :height 1.25)
-                                  (set-face-attribute 'org-level-4 nil :height 1.1)
-                                  (set-face-attribute 'org-level-5 nil :height 1.0)
-                                  ))
-       )
+    (leaf *patch-org-mode-face :after doom-themes
+      :preface
+      (defun patch-org-mode-face ()
+        (custom-set-faces
+         `(org-hide             ((t (:foreground ,(doom-color 'bg))))) ; org-hide
+         `(org-table             ((t :family ,font-for-tables)))       ; use 1:2 font for table
+         `(org-ellipsis         ((t (:background ,(doom-color 'bg)))))
+         `(org-block-begin-line ((t (:background ,(doom-color 'bg)))))
+         `(org-block-end-line   ((t (:background ,(doom-color 'bg)))))
+         ))
+      :hook ;; without `doom-color': (face-attribute 'default :background)
+      (after-load-theme-hook . patch-org-mode-face)
+      )
 
     (leaf org-bullets :disabled t
       :ensure t
@@ -376,18 +380,19 @@
 
     (leaf *patch-org-todo-faces :after doom-themes
       :doc  "prettify todo keywords"
-      :hook
-      (after-load-theme-hook . (lambda ()
+      :preface
+      (defun patch-org-todo-faces ()
         (customize-set-variable
          'org-todo-keyword-faces
-           `(
-             ("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
-             ("NEXT"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))))
-             ("STARTED" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'cyan)))))
-             ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
-             ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta)))))
-             )
-         )))
+         `(
+           ("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
+           ("NEXT"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))))
+           ("STARTED" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'cyan)))))
+           ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
+           ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta)))))
+           )))
+      :hook
+      (after-load-theme-hook . patch-org-todo-faces)
       )
 
     (leaf org-modern
@@ -772,11 +777,20 @@
     :custom
     `((rmh-elfeed-org-files . `,(list (expand-file-name "elfeed.org" elfeed-dir-path)))))
 
-  (leaf *elfeed-patch-faces :after doom-themes
+  (leaf *patch-elfeed-faces :after doom-themes
     :hook
-    (elfeed-search-update-hook . (lambda ()
-                                   (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt)))
-                                   (set-face-attribute 'elfeed-search-tag-face nil :foreground `,(doom-color 'green)))))
+    ((elfeed-search-update-hook
+      after-load-theme-hook) . (lambda ()
+                                 (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt)))
+                                 (set-face-attribute 'elfeed-search-tag-face nil :foreground `,(doom-color 'green))
+                                 (dolist (face '(elfeed-search-tag-face
+                                                 elfeed-search-date-face
+                                                 elfeed-search-feed-face
+                                                 elfeed-search-title-face
+                                                 elfeed-search-unread-title-face))
+                                   (set-face-attribute
+                                    face nil :family font-for-tables :height 1.0))))
+    )
 
   (leaf *elfeed-patch-entry-switch
     :doc "patch entry-switch behavior"
