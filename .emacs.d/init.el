@@ -990,6 +990,8 @@
      ("M-g M-C" . consult-mode-command)
      ("M-g b"   . consult-bookmark)
      ("M-g M-b" . consult-bookmark)
+     ("M-g a"   . consult-org-agenda)
+     ("M-g M-a" . consult-org-agenda)
      ("M-y"     . consult-yank-from-kill-ring)
      ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
      ("M-5"     . hydra-consult/body)
