@@ -1497,6 +1497,19 @@
     (which-key-mode)
     )
 
+
+  (leaf transient
+    :ensure t
+    :doc "required by magit, git-timemachine"
+    :custom
+    `(
+      (transient-save-history . t)
+      (transient-levels-file  . ,(expand-file-name "levels.el"  (cache-sub-dir "transient")))
+      (transient-values-file  . ,(expand-file-name "values.el"  (cache-sub-dir "transient")))
+      (transient-history-file . ,(expand-file-name "history.el" (cache-sub-dir "transient")))
+      )
+    )
+
   (leaf undo-tree
     :ensure t
     :custom
