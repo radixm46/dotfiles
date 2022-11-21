@@ -5,9 +5,10 @@
 
 ;; emacs configuration by radixM491VA
 
-;; ---------------  load package ---------------
-(load "~/.emacs.d/elisp/initpkg.el")
 
+;; ---------------  load package ---------------
+(load (expand-file-name "~/.emacs.d/elisp/initpkg.el"))
+(load (expand-file-name "~/.emacs.d/elisp/util.el"))
 
 (leaf *startup
   :config

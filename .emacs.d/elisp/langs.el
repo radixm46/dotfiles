@@ -6,7 +6,7 @@
   (emacs-lisp-mode-hook . hs-minor-mode)
   (emacs-lisp-mode-hook . flycheck-mode)
   (emacs-lisp-mode-hook . (lambda ()
-                            (unless (emacs-works-on-term-p)
+                            (when (display-graphic-p)
                                 (eldoc-box-hover-mode))))
   (emacs-lisp-mode-hook . highlight-symbol-mode)
   :init
