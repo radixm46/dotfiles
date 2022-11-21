@@ -1567,6 +1567,37 @@
          ))
       :hook
       (after-load-theme-hook . patch-calendar-faces))
+
+    (leaf japanese-holidays
+      :ensure t
+      :custom
+      `(
+        (japanese-holiday-weekend         . '(0 6))
+        (japanese-holiday-weekend-marker  . '(holiday  ;; sun
+                                              nil nil nil nil nil ;; mon - fri
+                                              japanese-holiday-saturday))
+        )
+      :hook
+      ((calendar-today-visible-hook   . japanese-holiday-mark-weekend)
+       (calendar-today-invisible-hook . japanese-holiday-mark-weekend))
+      :defvar
+      (japanese-holidays
+       holiday-local-holidays
+       calendar-holidays)
+      :config
+      (setq calendar-holidays (append japanese-holidays
+                                      holiday-local-holidays))
+
+      (leaf *patch-calendar-face :after doom-themes
+      :preface
+      (defun patch-japanese-holiday-saturday ()
+        (custom-set-faces
+         `(japanese-holiday-saturday
+           ((nil (:foreground ,(doom-color 'blue) :background ,(doom-color 'bg)))))
+         ))
+        :hook
+        (after-load-theme-hook . patch-japanese-holiday-saturday))
+      )
     )
 
   (leaf eshell
