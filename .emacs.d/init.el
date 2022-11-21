@@ -46,7 +46,7 @@
     :doc "configure auto save files"
     :tag "builtin"
     :preface
-    (leaf *disable-auto-save-message :emacs>= "27"
+    (leaf *disable-auto-save-message :emacs>= "27.1"
       :doc "supress auto saving message"
       :custom (auto-save-no-message . t))
     :custom
@@ -623,7 +623,6 @@
 
   (leaf highlight-indent-guides
     :ensure t
-    :require t
     :hook
     ((conf-mode-hook
       outline-mode-hook
@@ -1127,7 +1126,7 @@
     :doc "Add icons to completion candidates using the built in completion metadata functions."
     :ensure t
     :hook
-    (conf-on-term-hook . (lambda () (all-the-icons-completion-mode 0)))
+    (conf-on-term-hook . (lambda () (all-the-icons-completion-mode -1)))
     (conf-on-gui-hook  . (lambda () (all-the-icons-completion-mode +1)))
     )
   )
