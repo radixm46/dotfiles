@@ -1169,9 +1169,11 @@
       )
 
 
-    (leaf flycheck-posframe :if (not (emacs-works-on-term-p))
+    (leaf flycheck-posframe
       :ensure t
-      :hook (flycheck-mode-hook . flycheck-posframe-mode)
+      :hook (flycheck-mode-hook . (lambda () (when (display-graphic-p)
+                                                 (flycheck-posframe-mode))))
+
       :custom
       `(
         (flycheck-posframe-position       . 'window-bottom-right-corner)
