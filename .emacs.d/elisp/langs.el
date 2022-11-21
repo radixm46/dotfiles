@@ -284,6 +284,33 @@
   ;; agenda filter preset
   (org-agenda-tag-filter-preset . '("-agenda_ignore"))
   (org-agenda-include-diary     . t)
+  :init
+  (leaf evil-org
+    :ensure t
+    :hook
+    (org-mode-hook . evil-org-mode)
+    :preface
+    (evil-set-initial-state 'org-agenda-mode 'motion)
+    :init
+    (require 'evil-org-agenda)
+    (add-hook 'org-agenda-mode-hook #'evil-org-agenda-set-keys)
+    :config
+    ;; enable evil-org features
+    (evil-org-set-key-theme
+     '(textobjects insert navigation additional shift todo heading))
+    (leaf *patch-evil-org-ctrl-behavior
+      :hook
+      (conf-on-term-hook . (lambda () (setq evil-want-C-i-jump nil)))
+      (conf-on-gui-hook  . (lambda () (setq evil-want-C-i-jump t)))
+      )
+    )
+
+  (leaf *reconfig-org-consult-key :after consult
+    :doc "bind consult functions if available"
+    :bind
+    (:org-mode-map
+     ("M-g o"   . consult-org-heading)
+     ("M-g M-o" . consult-org-heading)))
 
   :config
   (leaf *org-config-directory
@@ -410,24 +437,6 @@
       (org-modern-horizontal-rule . nil)
       )
     )
-
-  (leaf *reconfig-org-vi-key :if (fboundp 'evil-mode)
-    :config
-    (evil-set-initial-state 'org-agenda-mode 'insert)
-    (evil-define-key 'normal org-mode-map
-      "j" 'evil-next-visual-line
-      "k" 'evil-previous-visual-line
-      "gj" 'evil-next-line
-      "gk" 'evil-previous-line))
-
-  (leaf *reconfig-org-consult-key :if (fboundp 'consult-buffer)
-    :doc "bind consult functions if available"
-    :bind
-    (:org-mode-map
-     ("M-g o"   . consult-org-heading)
-     ("M-g M-o" . consult-org-heading)
-     ("M-g a"   . consult-org-agenda)
-     ("M-g M-a" . consult-org-agenda)))
 
   ;; (setq system-time-locale "C") ; dates written in eng
 
