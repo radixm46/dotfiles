@@ -694,11 +694,30 @@
   (leaf valign
     :doc "CJK supported table vertical alignment (on graphical environment)"
     :ensure t
+    :custom
+    (valign-fancy-bar . t)
+    :preface
+    (defun valign-buffer-on-gui ()
+      (mapc #'(lambda (buffer)
+                (with-current-buffer buffer
+                  (when (or (eq major-mode #'org-mode)
+                            (eq major-mode #'markdown-mode))
+                    (valign-mode +1))))
+            (buffer-list))
+      )
+    (defun valign-remove-buffer-on-term ()
+      (mapc #'(lambda (buffer)
+                (with-current-buffer buffer
+                  (when (or (eq major-mode #'org-mode)
+                            (eq major-mode #'markdown-mode))
+                    (valign-mode -1))))
+            (buffer-list))
+      )
     :hook
     ((org-mode-hook
-      markdown-mode-hook) . valign-mode)
-    (conf-on-gui-hook  . (lambda () (setq valign-fancy-bar t)))
-    (conf-on-term-hook . (lambda () (setq valign-fancy-bar nil)))
+      markdown-mode-hook) . (lambda () (when (display-graphic-p) (valign-mode +1))))
+    (conf-on-gui-hook     . valign-buffer-on-gui)
+    (conf-on-term-hook    . valign-remove-buffer-on-term)
     )
   )
 

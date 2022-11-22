@@ -1549,16 +1549,19 @@
                                         (dashboard-refresh-buffer)
                                         (get-buffer "*dashboard*")))
       )
-    ;; choose banner before refreshing dashboard
+    :preface
+    (defun dashboard-banner-selector (&rest _args)
+      "choose banner before refreshing dashboard"
+      (let ((banner-img "~/.emacs.d/banner.png"))
+        (if (and (file-regular-p banner-img)
+                 (display-graphic-p))
+            (customize-set-variable 'dashboard-startup-banner banner-img)
+          (customize-set-variable 'dashboard-startup-banner 3)
+          ))
+      )
     :advice
     (:before dashboard-refresh-buffer
-             (lambda (&rest _args)
-               (let ((banner-img "~/.emacs.d/banner.png"))
-                 (if (and (file-regular-p banner-img)
-                          (display-graphic-p))
-                     (customize-set-variable 'dashboard-startup-banner banner-img)
-                     (customize-set-variable 'dashboard-startup-banner 3)
-                   ))))
+             dashboard-banner-selector)
     :bind ("<f12>" . dashboard-refresh-buffer))
 
   (leaf calendar
@@ -1938,7 +1941,7 @@
   (leaf dired
     :tag "builtin"
     :preface
-    (leaf osx-trash :if (eq 'system-type 'darwin)
+    (leaf osx-trash :if (eq system-type 'darwin)
       :ensure t
       :config
       (osx-trash-setup))
