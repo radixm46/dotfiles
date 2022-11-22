@@ -1194,7 +1194,7 @@
        ("C-M-l" . consult-flycheck)))
     )
 
-  (leaf company
+  (leaf company :emacs< "27"
     :doc "company completion framework"
     :ensure t
     :custom
@@ -1216,6 +1216,82 @@
       :ensure t
       :hook (company-mode-hook . company-box-mode))
     :global-minor-mode global-company-mode)
+
+  (leaf corfu :emacs>= "27"
+    :ensure t
+    :custom
+    (corfu-cycle                   . t)   ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto                    . t)   ;; Enable auto completion
+    (corfu-separator               . ?\s) ;; Orderless field separator
+    (corfu-quit-no-match           . nil) ;; Never quit, even if there is no match
+    (corfu-preview-current         . nil) ;; Disable current candidate preview
+    (corfu-preselect-first         . nil) ;; Disable candidate preselection
+    (corfu-on-exact-match          . nil) ;; Configure handling of exact matches
+    (corfu-echo-documentation      . nil) ;; Disable documentation in the echo area
+    (corfu-scroll-margin           . 5)   ;; Use scroll margin
+    (corfu-auto-prefix             . 2)
+    (completion-category-overrides . '((corfu (style orderless))
+                                       (file  (style partial-completion))))
+    :hook
+    ((text-mode-hook
+      prog-mode-hook
+      conf-mode-hook) . corfu-mode)
+    :init
+    (leaf *corfu-emacs-custom
+      :custom
+      (completion-cycle-threshold . 3)
+      (tab-always-indent          . 'complete))
+
+    :config
+
+    (leaf *config-corfu-with-evil-map
+      :config
+      :url "https://github.com/minad/corfu/issues/12"
+      (evil-make-overriding-map corfu-map)
+      (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+      (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
+      )
+
+    (leaf *corfu-ui-config
+      :doc "corfu ui related configuration"
+      :config
+      (leaf corfu-terminal
+        :straight
+        (corfu-terminal
+         :type git
+         :repo "https://codeberg.org/akib/emacs-corfu-terminal.git")
+        :doc "`corfu' popup on terminal"
+        :hook
+        (conf-on-term-hook . (lambda () (corfu-terminal-mode +1)))
+        (conf-on-gui-hook  . (lambda () (corfu-terminal-mode -1)))
+        )
+
+      (leaf corfu-doc
+        :doc "Display a documentation popup for completion candidate when using Corfu."
+        :ensure t
+        :hook (corfu-mode-hook . corfu-doc-mode)
+        :config
+        (leaf corfu-doc-terminal
+          :doc "`corfu-doc' popup on terminal"
+          :straight
+          (corfu-doc-terminal
+           :type git
+           :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git")
+          :hook
+          (conf-on-term-hook . (lambda () (corfu-doc-terminal-mode +1)))
+          (conf-on-gui-hook  . (lambda () (corfu-doc-terminal-mode -1)))
+          )
+        )
+
+      (leaf kind-icon
+        :doc "adds configurable icon or text-based completion prefixes based on the :company-kind property"
+        :ensure t
+        :custom (kind-icon-default-face . 'corfu-default)
+        :config
+        (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+      )
+
+    )
 
   (leaf lsp-mode
     :doc "configure lsp"
@@ -1426,6 +1502,99 @@
       (eglot-managed-mode-hook . (lambda ()
                                    (if (fboundp 'eldoc-box-hover-mode)
                                        (eldoc-box-hover-mode)))))
+    )
+
+  (leaf cape
+    :doc "provides Completion At Point Extensions
+ which can be used in combination with the Corfu or the default completion UI."
+    :ensure t
+    :config
+    (leaf company
+      :doc "required for company-yasnippet"
+      :ensure t
+      :config
+      (defalias 'cape-company-yasnippet
+        (cape-company-to-capf #'company-yasnippet))
+      )
+
+    (leaf *cape-capf-config
+      :doc "configure completion-at-point-functions"
+      :preface
+      ;; define cape-super-*
+      (defalias 'cape-super-text
+        (cape-super-capf
+         #'cape-dabbrev #'cape-file
+         #'cape-dict))
+      (defalias 'cape-super-prog
+        (cape-super-capf
+         #'cape-symbol #'cape-keyword))
+
+      (defun rdm/set-capf-prog-conf ()
+        (setq-local completion-at-point-functions
+                    (list #'cape-company-yasnippet
+                          #'cape-keyword
+                          #'cape-super-text))
+        )
+      (defun rdm/set-capf-text-conf ()
+        (setq-local completion-at-point-functions
+                    (list #'cape-company-yasnippet
+                          #'cape-super-text))
+        )
+      (defun rdm/set-capf-elisp-conf ()
+        (setq-local completion-at-point-functions
+                    (list #'cape-company-yasnippet
+                          #'cape-super-prog
+                          #'cape-super-text))
+        )
+      ;; lsp related packages
+      (leaf *eglot-with-corfu :after eglot
+        :doc "corfu with eglot config"
+        :url "https://github.com/minad/corfu/wiki"
+        :preface
+        (defalias 'cape-super-eglot
+          (cape-capf-buster
+           (cape-super-capf
+            #'cape-company-yasnippet #'eglot-completion-at-point
+            #'cape-symbol #'cape-keyword)))
+
+        ;; Option 1: Specify explicitly to use Orderless for Eglot
+        (add-to-list 'completion-category-overrides '(eglot (styles orderless)) t)
+        ;; Option 2: Undo the Eglot modification of completion-category-defaults
+        (with-eval-after-load 'eglot
+          (setq completion-category-defaults nil))
+
+        (defun rdm/set-capf-eglot-prog ()
+          (setq-local completion-at-point-functions
+                      (list #'cape-super-eglot
+                            #'cape-super-text)))
+
+        :hook ;(eglot--pre-command-hook . ())
+        (eglot-managed-mode-hook . rdm/set-capf-eglot-prog)
+        )
+
+      (leaf *lsp-mode-with-corfu :after lsp-mode
+        :doc "corfu with lsp-mode config"
+        :preface
+        (defalias 'cape-super-lsp
+          (cape-capf-buster
+           (cape-super-capf
+            #'cape-company-yasnippet #'lsp-completion-at-point
+            #'cape-symbol #'cape-keyword)))
+
+        (defun rdm/set-capf-lsp-prog-conf ()
+          (setq-local completion-at-point-functions
+                      (list #'cape-super-lsp
+                            #'cape-super-text)))
+        :hook
+        (lsp-completion-mode-hook . rdm/set-capf-lsp-prog-conf)
+        )
+
+      :hook
+      ((prog-mode-hook
+        conf-mode-hook)     . rdm/set-capf-prog-conf)
+      (text-mode-hook       . rdm/set-capf-text-conf)
+      (emacs-lisp-mode-hook . rdm/set-capf-elisp-conf)
+      )
     )
 
   (leaf dap-mode
