@@ -2250,9 +2250,20 @@
   (let
       ((local-conf (expand-file-name  "~/.emacs.d/elisp/local.el")))
     (unless (file-exists-p local-conf)
-      (with-temp-file local-conf nil))
-    (load local-conf)
-    ))
+      (with-temp-file local-conf
+        (insert "\
+;;; local.el --- local configuration. -*-  no-byte-compile: t -*-
+;;; Commentary:
+;;
+;; local config file
+;;
+;;; Code:
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; local.el ends here
+"))) (load local-conf)
+))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
