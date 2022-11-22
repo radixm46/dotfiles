@@ -988,8 +988,9 @@
      ("M-g M-c" . consult-minor-mode-menu)
      ("M-g C"   . consult-mode-command) ; narrowing with l/g/m
      ("M-g M-C" . consult-mode-command)
-     ("M-g b"   . consult-bookmark)
-     ("M-g M-b" . consult-bookmark)
+     ("M-g B"   . consult-bookmark)
+     ("M-g b"   . consult-buffer)
+     ("M-g M-b" . consult-buffer)
      ("M-g a"   . consult-org-agenda)
      ("M-g M-a" . consult-org-agenda)
      ("M-y"     . consult-yank-from-kill-ring)
