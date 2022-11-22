@@ -1956,7 +1956,6 @@
                                   (face-remap-add-relative
                                    'default `(:family  ,(face-attribute 'variable-pitch :family))))))
     :init
-    (message "-*- leaf: w3m-emacs init")
     (leaf *patch-w3m-face :after doom-themes
       :doc "patch w3m faces with doom-colors"
       :preface
