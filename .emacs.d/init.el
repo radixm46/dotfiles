@@ -7,8 +7,8 @@
 ;;; Code:
 
 ;; ---------------  load package ---------------
-(load (expand-file-name "~/.emacs.d/elisp/initpkg.el"))
-(load (expand-file-name "~/.emacs.d/elisp/util.el"))
+(load (expand-file-name "~/.emacs.d/elisp/initpkg"))
+(load (expand-file-name "~/.emacs.d/elisp/util"))
 
 (leaf *startup
   :config
@@ -487,7 +487,7 @@
 
   (leaf *config-doom-modeline
     :config
-    (load (expand-file-name "~/.emacs.d/elisp/doom.el"))
+    (load (expand-file-name "~/.emacs.d/elisp/doom"))
 
     (leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
       :after doom-themes
@@ -2231,7 +2231,7 @@
 
 (leaf *load-lang-settings
   :config
-  (load (expand-file-name "~/.emacs.d/elisp/langs.el")))
+  (load (expand-file-name "~/.emacs.d/elisp/langs")))
 
 
 (leaf *conf-appearance-on-state
