@@ -43,6 +43,11 @@
     (load bootstrap-file nil 'nomessage))
   )
 
+(prog1 '*patch-straight-use-repos
+  (customize-set-variable
+   'straight-recipe-repositories
+   '(org-elpa melpa gnu-elpa-mirror nongnu-elpa emacsmirror-mirror)))
+
 ;; setup leaf via straight.el
 (prog1 '*leaf-with-straight-setup
   (straight-use-package 'leaf)
