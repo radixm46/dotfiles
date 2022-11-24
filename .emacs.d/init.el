@@ -1126,7 +1126,7 @@
     :config
     (leaf eldoc-box
       :ensure t
-      :hook (eldoc-mode-hook . (lambda () (unless (display-graphic-p) (eldoc-box-hover-mode))))
+      :hook (eldoc-mode-hook . (lambda () (when (display-graphic-p) (eldoc-box-hover-mode))))
       :custom
       (eldoc-box-only-multi-line    . nil)
       (eldoc-box-fringe-use-same-bg . t)
