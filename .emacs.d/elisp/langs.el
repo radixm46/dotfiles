@@ -254,7 +254,6 @@
 (leaf org
   :doc "org-mode config"
   :ensure t
-  :require t
   :mode ("\\.org\\'" . org-mode)
   :custom
   ;; priority
@@ -352,6 +351,7 @@
                               (800 1000 1200 1400 1600 1800 2000)
                               " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
     (org-agenda-current-time-string . "⭠ now ─────────────────────────────────────────────────")
+
     :config
     (leaf *org-latex-preview-svg :if (executable-find "dvisvgm") :disabled t
       :doc "if dvisvgm available, startup with latex preview"
@@ -802,6 +802,7 @@
                                   face nil :family font-for-tables :weight 'normal :height 1.0))))
   :init
   (add-to-list 'undo-tree-incompatible-major-modes 'elfeed-search-mode)
+
   (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
     :ensure t
     :url "https://github.com/remyhonig/elfeed-org"

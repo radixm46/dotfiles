@@ -989,10 +989,14 @@
      ("M-g C"   . consult-mode-command) ; narrowing with l/g/m
      ("M-g M-C" . consult-mode-command)
      ("M-g B"   . consult-bookmark)
+     ("M-g f"   . consult-find)
+     ("M-g M-f" . consult-find)
      ("M-g b"   . consult-buffer)
      ("M-g M-b" . consult-buffer)
      ("M-g a"   . consult-org-agenda)
      ("M-g M-a" . consult-org-agenda)
+     ("M-g M-y" . consult-yank-from-kill-ring)
+     ("M-g y"   . consult-yank-from-kill-ring)
      ("M-y"     . consult-yank-from-kill-ring)
      ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
      ("M-5"     . hydra-consult/body)
@@ -2160,7 +2164,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
       (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))
       :hook (magit-section-mode-hook . magit-todos-mode))
 
-    (leaf *magit-git-gutter-integration :if (fboundp 'git-gutter)
+    (leaf *magit-git-gutter-integration
       :doc "refresh git-gutter on magit operation"
       :url "https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit"
       :hook
