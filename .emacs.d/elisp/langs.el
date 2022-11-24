@@ -257,36 +257,36 @@
   :mode ("\\.org\\'" . org-mode)
   :custom
   ;; priority
-  (org-priority-highest         . 1)
-  (org-priority-lowest          . 4)
-  (org-priority-default         . 3)
+  (org-priority-highest               . 1)
+  (org-priority-lowest                . 4)
+  (org-priority-default               . 3)
   ;; keywords
-  (org-refile-targets           . '((org-agenda-files :maxlevel . 3)))
-  (org-todo-keywords            . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
-                                              "DONE(d!)" "CANCELLED(c@)")))
-  (org-capture-templates        . `( ;; NOTE: require material icons
-                                    ("t" ,(format "%s  Task to Inbox" (nerd-fonts "fa-check"))
-                                     entry (file+headline org-todofile "Inbox")
-                                     "** TODO %?\nEntered on %U\n%a"
-                                     :empty-lines-before 1) ; %u->%t
-                                    ("n" ,(format "%s  Note to Inbox" (nerd-fonts "fa-sticky-note"))
-                                     entry (file+headline "" "Inbox")
-                                     "** %?\nEntered on %U\n %i\n%a"
-                                     :empty-lines-before 1)
-                                    ))
-  (org-log-done                 . 'time)
-  (org-clock-clocked-in-display . 'frame-title)
+  (org-refile-targets                 . '((org-agenda-files :maxlevel . 3)))
+  (org-todo-keywords                  . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
+                                                    "DONE(d!)" "CANCELLED(c@)")))
+  (org-capture-templates              . `( ;; NOTE: require material icons
+                                          ("t" ,(format "%s  Task to Inbox" (nerd-fonts "fa-check"))
+                                           entry (file+headline org-todofile "Inbox")
+                                           "-*- TODO %?\nEntered on %U\n%a"
+                                           :empty-lines-before 1) ; %u->%t
+                                          ("n" ,(format "%s  Note to Inbox" (nerd-fonts "fa-sticky-note"))
+                                           entry (file+headline "" "Inbox")
+                                           "-*- %?\nEntered on %U\n %i\n%a"
+                                           :empty-lines-before 1)
+                                          ))
+  (org-log-done                       . 'time)
+  (org-clock-clocked-in-display       . 'frame-title)
   ;; for org src
-  (org-src-preserve-indentation . t)
+  (org-src-preserve-indentation       . t)
   ;; Edit settings
-  (org-auto-align-tags . t)
-  (org-tags-column . 75)
-  (org-catch-invisible-edits . 'show-and-error)
-  (org-special-ctrl-a/e . nil)
+  (org-auto-align-tags                . t)
+  (org-tags-column                    . 75)
+  (org-catch-invisible-edits          . 'show-and-error)
+  (org-special-ctrl-a/e               . nil)
   (org-insert-heading-respect-content . nil)
   ;; agenda filter preset
-  (org-agenda-tag-filter-preset . '("-agenda_ignore"))
-  (org-agenda-include-diary     . t)
+  (org-agenda-tag-filter-preset       . '("-agenda_ignore"))
+  (org-agenda-include-diary           . t)
   :init
   (leaf evil-org
     :ensure t
@@ -338,18 +338,16 @@
 
   (leaf *org-appearance
     :custom
-    '(
-      (org-startup-truncated     . t)
-      (org-startup-folded        . nil)
-      (org-image-actual-width    . nil)
-      (org-hide-emphasis-markers . t)
-      (org-pretty-entities       . nil)
-      (org-ellipsis              . "…")
-      )
-    (org-agenda-block-separator . ?─)
-    (org-agenda-time-grid . '((daily today require-timed)
-                              (800 1000 1200 1400 1600 1800 2000)
-                              " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+    (org-startup-truncated          . t)
+    (org-startup-folded             . nil)
+    (org-image-actual-width         . nil)
+    (org-hide-emphasis-markers      . t)
+    (org-pretty-entities            . nil)
+    (org-ellipsis                   . "…")
+    (org-agenda-block-separator     . ?─)
+    (org-agenda-time-grid           . '((daily today require-timed)
+                                        (800 1000 1200 1400 1600 1800 2000)
+                                        " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
     (org-agenda-current-time-string . "⭠ now ─────────────────────────────────────────────────")
 
     :config
@@ -459,15 +457,17 @@
     :ensure t
     )
 
-  ;; configure bibtex
-  (defun org-mode-reftex-setup ()
-    "setup reftex on org-mode doc"
-    (load-library "reftex")
-    (and (buffer-file-name)
-         (file-exists-p (buffer-file-name))
-         (reftex-parse-all))
-    (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
-
+  (leaf *configure-bibtex
+    :defun reftex-parse-all
+    :config
+    (defun org-mode-reftex-setup ()
+      "setup reftex on org-mode doc"
+      (load-library "reftex")
+      (and (buffer-file-name)
+           (file-exists-p (buffer-file-name))
+           (reftex-parse-all))
+      (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
+   )
   ;; (use-package ox-bibtex)
 
   (leaf org-ref :ensure t)
