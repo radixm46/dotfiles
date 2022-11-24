@@ -1692,9 +1692,9 @@
     :ensure t
     :custom
     `(
-      (undo-tree-visualizer-timestamps . t)
-      (undo-tree-auto-save-history . t)
-      (undo-tree-history-directory-alist . `(("." . ,(cache-sub-dir "undo-tree"))))
+      (undo-tree-visualizer-timestamps   . t)
+      (undo-tree-auto-save-history       . t)
+      (undo-tree-history-directory-alist . `(("[^\\.cache\\/emacs\\/.*]" . ,(cache-sub-dir "undo-tree"))))
       )
     :global-minor-mode (global-undo-tree-mode))
 
