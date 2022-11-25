@@ -791,15 +791,7 @@
   :url "https://github.com/skeeto/elfeed"
   :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
   :hook
-  (elfeed-search-mode-hook . (lambda ()
-                               (rdm/sw-lnsp 0.75)
-                               (dolist (face '(elfeed-search-tag-face
-                                               elfeed-search-date-face
-                                               elfeed-search-feed-face
-                                               elfeed-search-title-face
-                                               elfeed-search-unread-title-face))
-                                 (set-face-attribute
-                                  face nil :family font-for-tables :weight 'normal :height 1.0))))
+  (elfeed-search-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
   :init
   (add-to-list 'undo-tree-incompatible-major-modes 'elfeed-search-mode)
 
