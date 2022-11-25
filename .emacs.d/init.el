@@ -439,6 +439,48 @@
                                   `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan))))))))
       )
     )
+
+  (leaf *config-completion-styles
+    :doc "setup completion packages"
+    :config
+    (leaf orderless
+      :ensure t
+      :doc "Advanced completion style"
+      )
+
+    (leaf fussy :after ordderless hotfuzz ;:disabled t
+      :doc "provide a completion-style to Emacs that is able to leverage
+ flx as well as various other fuzzy matching scoring packages"
+      :ensure t
+      :init
+      (leaf hotfuzz
+        :doc  "fuzzy Emacs completion style with a better scoring algorithm."
+        :ensure t
+        )
+
+      :custom
+      (fussy-use-cache . t)
+      :setq
+      (fussy-score-fn              . 'fussy-hotfuzz-score)
+      (fussy-filter-fn             . 'fussy-filter-orderless)
+      (fussy-compare-same-score-fn . 'fussy-histlen->strlen<)
+      )
+
+    (leaf *configure-completion-styles
+      :doc "control completion-styles on context"
+      :hook
+      ;; use orderless on minibuffer
+      (minibuffer-setup-hook . (lambda ()
+                                 (setq-local completion-styles '(orderless))))
+      :custom
+      (completion-styles             . '(fussy basic))
+      (completion-category-overrides . '((file         . (style partial-completion))
+                                         ;; (buffer       . (style hotfuzz)) ;; buffer selection
+                                         ;; (project-file . (style hotfuzz))
+                                         (info-menu   . (style fussy))
+                                         ))
+      )
+    )
   )
 
 
@@ -1021,14 +1063,6 @@
     (evil-ex-define-cmd "reg" 'consult-yank-from-kill-ring)
     (leaf consult-dir :ensure t))
 
-  (leaf orderless
-    :ensure t
-    :doc "Advanced completion style"
-    :custom
-    (completion-styles             . '(orderless))
-    (completion-category-defaults  . nil)
-    (completion-category-overrides . '((file (style partial-completion)))))
-
   (leaf marginalia
     :ensure t
     :doc "Rich annotations in the minibuffer"
@@ -1234,8 +1268,6 @@
     (corfu-echo-documentation      . nil) ;; Disable documentation in the echo area
     (corfu-scroll-margin           . 5)   ;; Use scroll margin
     (corfu-auto-prefix             . 2)
-    (completion-category-overrides . '((corfu (style orderless))
-                                       (file  (style partial-completion))))
     :hook
     ((text-mode-hook
       prog-mode-hook
@@ -1293,6 +1325,18 @@
         :custom (kind-icon-default-face . 'corfu-default)
         :config
         (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+      (leaf *corfu-fussy-integration :after fussy
+        :url "https://github.com/jojojames/fussy#corfu-integration"
+        :advice ;; For cache functionality.
+        (:before corfu--capf-wrapper
+                 fussy-wipe-cache)
+        :hook
+        (corfu-mode-hook . (lambda ()
+                             (setq-local fussy-max-candidate-limit 5000
+                                         fussy-default-regex-fn 'fussy-pattern-first-letter
+                                         fussy-prefer-prefix nil)))
+        )
       )
 
     )
@@ -1551,7 +1595,7 @@
                           #'cape-super-text))
         )
       ;; lsp related packages
-      (leaf *eglot-with-corfu :after eglot
+      (leaf *eglot-with-corfu :after eglot fussy
         :doc "corfu with eglot config"
         :url "https://github.com/minad/corfu/wiki"
         :preface
@@ -1561,8 +1605,8 @@
             #'cape-company-yasnippet #'eglot-completion-at-point
             #'cape-symbol #'cape-keyword)))
 
-        ;; Option 1: Specify explicitly to use Orderless for Eglot
-        (add-to-list 'completion-category-overrides '(eglot (styles orderless)) t)
+        ;; Option 1: Specify explicitly to use fussy for Eglot
+        (add-to-list 'completion-category-overrides '(eglot (styles fussy)) t)
         ;; Option 2: Undo the Eglot modification of completion-category-defaults
         (with-eval-after-load 'eglot
           (setq completion-category-defaults nil))
