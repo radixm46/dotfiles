@@ -18,25 +18,23 @@
   (prog1 '*straight-patch-alias-resolve
     ;; workaround for emacs28
     ;; https://github.com/raxod502/straight.el/issues/701
-  (when
-      (version<= "28" emacs-version)
+  (when (version<= "28" emacs-version)
     (advice-add 'straight--build-autoloads :around
-                #'(lambda
-                    (oldfun &rest r)
-                    (let
-                        ((find-file-visit-truename nil))
+                #'(lambda (oldfun &rest r)
+                    (let ((find-file-visit-truename nil))
                       (apply oldfun r))))))
 
-  (customize-set-variable 'straight-vc-git-default-clone-depth 1 "Customized with leaf in `*straight-setup' block")
+  (customize-set-variable 'straight-vc-git-default-clone-depth 1 "customized at initpkg")
   (defvar bootstrap-version)
-  (let
-      ((bootstrap-file
+  (let ((bootstrap-file
         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
        (bootstrap-version 5))
     (unless
         (file-exists-p bootstrap-file)
       (with-current-buffer
-          (url-retrieve-synchronously "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el" 'silent 'inhibit-cookies)
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
         (goto-char
          (point-max))
         (eval-print-last-sexp)))
