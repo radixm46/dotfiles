@@ -1258,16 +1258,17 @@
   (leaf corfu :emacs>= "27"
     :ensure t
     :custom
-    (corfu-cycle                   . t)   ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto                    . t)   ;; Enable auto completion
-    (corfu-separator               . ?\s) ;; Orderless field separator
-    (corfu-quit-no-match           . nil) ;; Never quit, even if there is no match
-    (corfu-preview-current         . nil) ;; Disable current candidate preview
-    (corfu-preselect-first         . nil) ;; Disable candidate preselection
-    (corfu-on-exact-match          . nil) ;; Configure handling of exact matches
-    (corfu-echo-documentation      . nil) ;; Disable documentation in the echo area
-    (corfu-scroll-margin           . 5)   ;; Use scroll margin
+    (corfu-cycle                   . t)          ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto                    . t)          ;; Enable auto completion
     (corfu-auto-prefix             . 2)
+    (corfu-auto-delay              . 0.2)
+    (corfu-separator               . ?\s)        ;; Orderless field separator
+    (corfu-quit-no-match           . 'separator) ;; Never quit, even if there is no match
+    (corfu-preview-current         . nil)        ;; Disable current candidate preview
+    (corfu-preselect-first         . nil)        ;; Disable candidate preselection
+    (corfu-on-exact-match          . nil)        ;; Configure handling of exact matches
+    (corfu-echo-documentation      . nil)        ;; Disable documentation in the echo area
+    (corfu-scroll-margin           . 5)          ;; Use scroll margin
     :hook
     ((text-mode-hook
       prog-mode-hook
@@ -1291,32 +1292,10 @@
     (leaf *corfu-ui-config
       :doc "corfu ui related configuration"
       :config
-      (leaf corfu-terminal
-        :straight
-        (corfu-terminal
-         :type git
-         :repo "https://codeberg.org/akib/emacs-corfu-terminal.git")
-        :doc "`corfu' popup on terminal"
-        :hook
-        (conf-on-term-hook . (lambda () (corfu-terminal-mode +1)))
-        (conf-on-gui-hook  . (lambda () (corfu-terminal-mode -1)))
-        )
-
       (leaf corfu-doc
         :doc "Display a documentation popup for completion candidate when using Corfu."
         :ensure t
         :hook (corfu-mode-hook . corfu-doc-mode)
-        :config
-        (leaf corfu-doc-terminal
-          :doc "`corfu-doc' popup on terminal"
-          :straight
-          (corfu-doc-terminal
-           :type git
-           :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git")
-          :hook
-          (conf-on-term-hook . (lambda () (corfu-doc-terminal-mode +1)))
-          (conf-on-gui-hook  . (lambda () (corfu-doc-terminal-mode -1)))
-          )
         )
 
       (leaf kind-icon
@@ -1336,6 +1315,52 @@
                              (setq-local fussy-max-candidate-limit 5000
                                          fussy-default-regex-fn 'fussy-pattern-first-letter
                                          fussy-prefer-prefix nil)))
+        )
+
+      (leaf *corfu-ui-on-term
+        :preface
+        (leaf corfu-terminal :after corfu
+          :doc "`corfu' popup on terminal"
+          :straight
+          (corfu-terminal
+           :type git
+           :repo "https://codeberg.org/akib/emacs-corfu-terminal.git")
+          )
+
+        (leaf corfu-doc-terminal :after corfu-doc
+          :doc "`corfu-doc' popup on terminal"
+          :straight
+          (corfu-doc-terminal
+           :type git
+           :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git")
+          )
+
+        (defun switch-corfu-on-gui ()
+          (corfu-terminal-mode -1) (corfu-doc-terminal-mode -1))
+
+        (defun switch-corfu-on-term ()
+          (corfu-terminal-mode +1) (corfu-doc-terminal-mode +1))
+
+        :hook
+        (corfu-mode-hook   . (lambda ()
+                               (if (display-graphic-p)
+                                   (switch-corfu-on-gui)
+                                 (switch-corfu-on-term)
+                                 )))
+        (conf-on-term-hook . (lambda ()
+                               (dolist (buff (buffer-list))
+                                 (with-current-buffer buff
+                                   (when (and corfu-mode
+                                              (not (display-graphic-p)))
+                                     (switch-corfu-on-term)
+                                     )))))
+        (conf-on-gui-hook  . (lambda ()
+                               (dolist (buff (buffer-list))
+                                 (with-current-buffer buff
+                                   (when (and corfu-mode
+                                              (display-graphic-p))
+                                     (switch-corfu-on-gui)
+                                     )))))
         )
       )
 
