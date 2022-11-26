@@ -696,8 +696,7 @@
                                       (cl-mapcar #'(lambda (a b) (/ (+ a b) z))
                                                  (color-name-to-rgb x)
                                                  (color-name-to-rgb y)))))
-               (dimmc (funcall mix-colors
-                               (doom-color 'bg) (doom-color 'grey) 2.2))
+               (dimmc (doom-lighten 'bg  0.025))
                (actvc (funcall mix-colors
                                (doom-color 'bg) (doom-color 'dark-blue) 2.0)))
           (custom-set-faces
