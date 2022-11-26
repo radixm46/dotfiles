@@ -388,7 +388,7 @@
       (after-load-theme-hook . patch-org-mode-header-size)
       )
 
-    (leaf *patch-org-mode-face :after doom-themes
+    (leaf *patch-org-mode-faces :after doom-themes
       :preface
       (defun patch-org-mode-face ()
         (custom-set-faces
@@ -399,7 +399,8 @@
          `(org-block-end-line   ((t (:background ,(doom-color 'bg)))))
          ))
       :hook ;; without `doom-color': (face-attribute 'default :background)
-      (after-load-theme-hook . patch-org-mode-face)
+      ((after-load-theme-hook
+        after-load-theme-hook) . patch-org-mode-face)
       )
 
     (leaf org-bullets :disabled t
