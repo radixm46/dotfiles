@@ -546,18 +546,18 @@
     :config
     (org-roam-db-autosync-mode)
 
-    (leaf org-roam-ui
+    (leaf org-roam-ui :after org-roam
       :doc "org-roam frontend package"
       :straight
       (org-roam-ui :type git :host github
                    :repo "org-roam/org-roam-ui" :branch "main"
                    :files ("*.el" "out"))
-      :after org-roam
-      :setq
-      (org-roam-ui-sync-theme . t)
-      (org-roam-ui-follow . t)
+      :custom
+      (org-roam-ui-sync-theme     . t)
+      (org-roam-ui-follow         . t)
       (org-roam-ui-update-on-save . t)
-      (org-roam-ui-open-on-start . t))
+      (org-roam-ui-open-on-start  . t)
+      )
     )
 
   (leaf org-pdftools :after pdf-tools
