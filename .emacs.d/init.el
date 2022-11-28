@@ -2260,12 +2260,12 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
     :custom
     `(
       ;; use gnu-ls if available on macOS
-      (insert-directory-program . ,(if (and (eq system-type 'darwin)
-                                             (not (executable-find "gls")))
-                                       "ls" "gls"))
+      (insert-directory-program  . ,(if (and (eq system-type 'darwin)
+                                            (executable-find "gls"))
+                                       "gls" "ls"))
       (dired-listing-switches    . ,(if (and (eq system-type 'darwin)
-                                             (not (executable-find "gls")))
-                                        "-l" "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group"))
+                                             (executable-find "gls"))
+                                        "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group" "-l"))
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
       ;; NOTE: on macOS, require full disk access to use trash bin
@@ -2278,8 +2278,8 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
     )
 
   (leaf dirvish
-    :unless (and (equal system-type 'darwin)
-                 (not (executable-find "gls")))
+    :if (or (not (equal system-type 'darwin))
+            (executable-find "gls"))
     :ensure t
     :after transient
     :custom
