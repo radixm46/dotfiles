@@ -474,10 +474,8 @@
                                  (setq-local completion-styles '(orderless))))
       :custom
       (completion-styles             . '(fussy basic))
-      (completion-category-overrides . '((file         . (style partial-completion))
-                                         ;; (buffer       . (style hotfuzz)) ;; buffer selection
-                                         ;; (project-file . (style hotfuzz))
-                                         (info-menu   . (style fussy))
+      (completion-category-overrides . '((file      . (style partial-completion))
+                                         (info-menu . (style fussy))
                                          ))
       )
     )

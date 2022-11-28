@@ -42,9 +42,10 @@
   )
 
 (prog1 '*patch-straight-use-repos
-  (customize-set-variable
-   'straight-recipe-repositories
-   '(org-elpa melpa gnu-elpa-mirror nongnu-elpa emacsmirror-mirror)))
+  (customize-set-variable 'straight-recipe-repositories
+                          '(org-elpa melpa gnu-elpa-mirror nongnu-elpa emacsmirror-mirror)
+                          "customiized at initpkg")
+  )
 
 ;; setup leaf via straight.el
 (prog1 '*leaf-with-straight-setup
@@ -52,7 +53,8 @@
   (straight-use-package 'leaf-keywords)
   (leaf-keywords-init)
   (customize-set-variable 'leaf-alias-keyword-alist
-                          '((:ensure . :straight)))
+                          '((:ensure . :straight))
+                          "customized at initpkg")
   )
 
 (leaf *leaf-configure
@@ -64,8 +66,9 @@
   (leaf leaf-tree
     :doc "interactive side-bar feature"
     :ensure t
-    :custom ((imenu-list-size . 30)
-             (imenu-list-position . 'left)))
+    :custom
+    ((imenu-list-size     . 30)
+     (imenu-list-position . 'left)))
 
   ;; install feather.el
   (leaf feather :disabled t

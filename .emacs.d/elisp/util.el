@@ -5,9 +5,6 @@
 ;;
 
 ;;; Code:
-(eval-when-compile
-  (load (expand-file-name "~/.emacs.d/elisp/initpkg"))
-  )
 
 
 (leaf *conf-cache-history
