@@ -322,6 +322,7 @@ function print_os_glyph() {
                     raspbian*) printf $'\UF315' ;;
                     sles*) printf $'\UF314' ;;
                     ubuntu*) printf $'\UF31C' ;;
+                    steamos*) printf $'\UF1B6' ;;
                     # slackware) printf $'\UF318' ;;
                     # nixos) printf $'\UF313' ;;
                     # mint) printf $'\UF30F' ;;
