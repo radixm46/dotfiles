@@ -271,9 +271,12 @@ alias -g T='| tail'
 alias -g G='| grep'
 
 is_available 'fd' &&\
-    alias find='fd --color=auto'
-is_available 'bat' &&\
+    alias fd='fd --color=auto'
+if is_available 'bat'; then
     alias -g B='| bat'
+    alias -g Ba='| bat --show-all'
+    alias -g Bap='| bat --show-all --plain'
+fi
 is_available 'duf' &&\
     alias duf='duf -all -style=unicode -theme=dark'
 
