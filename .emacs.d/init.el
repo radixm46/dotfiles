@@ -595,6 +595,17 @@
           (customize-set-variable 'display-line-numbers-type  t)
         (customize-set-variable 'display-line-numbers-type  'relative))
       (display-line-numbers--turn-on)) ;; read config
+
+    (leaf *patch-display-line-numbers-current :after doom-themes
+      :preface
+      (defun patch-display-line-numbers-current ()
+        "patch `line-number-current-line'"
+        (custom-set-faces
+         `(line-number-current-line ((t (:foreground ,(doom-color 'fg) :background ,(doom-color 'bg))))))
+        )
+      :hook
+      (after-load-theme-hook . patch-display-line-numbers-current)
+      )
     )
 
   (leaf display-fill-column-indicator
