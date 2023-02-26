@@ -1297,6 +1297,7 @@
       (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
       (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
       )
+      )
 
     (leaf *corfu-official-extensions
       :doc "extensions provided from corfu"
