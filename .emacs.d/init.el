@@ -448,7 +448,7 @@
       :doc "Advanced completion style"
       )
 
-    (leaf fussy :after ordderless hotfuzz ;:disabled t
+    (leaf fussy :after ordderless
       :doc "provide a completion-style to Emacs that is able to leverage
  flx as well as various other fuzzy matching scoring packages"
       :ensure t
