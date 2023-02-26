@@ -1297,12 +1297,25 @@
       (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
       (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
       )
+
+    (leaf *corfu-official-extensions
+      :doc "extensions provided from corfu"
+      :load-path
+      `(,(expand-file-name
+          "straight/repos/corfu/extensions"
+          straight-base-dir))
+      :config
+      (leaf *corfu-popup-info
+        :require corfu-popupinfo
+        :custom
+        (corfu-popupinfo-delay . (0.8 . 0.5))
+        :global-minor-mode corfu-popupinfo-mode)
       )
 
     (leaf *corfu-ui-config
       :doc "corfu ui related configuration"
       :config
-      (leaf corfu-doc
+      (leaf corfu-doc :disabled t
         :doc "Display a documentation popup for completion candidate when using Corfu."
         :ensure t
         :hook (corfu-mode-hook . corfu-doc-mode)
