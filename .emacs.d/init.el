@@ -730,7 +730,7 @@
                           trailing
                           space-mark
                           newline newline-mark
-                          ;;tab-mark tabs ;; conflicts highlight indent mode
+                          ;; tab-mark tabs ;; conflicts highlight indent mode
                           ;;empty  ; empty line
                           ;;lines-tail
                           ;;spaces
@@ -1044,6 +1044,7 @@
     (leaf *consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
       :custom (consult-find-command . "fd --color=never --full-path ARG OPTS"))
+
     (leaf *consult-use-rigrep :if (executable-find "rg")
       :doc "use ripgrep for grep if avalable"
       :custom (consult-grep-command . '(concat "rg --null --color=ansi"
@@ -1284,6 +1285,7 @@
       (evil-make-overriding-map corfu-map)
       (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
       (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
+      )
       )
 
     (leaf *corfu-ui-config
@@ -1900,14 +1902,15 @@
                      (reusable-frames . visible)
                      (window-height . 0.25))))
     :bind
-    (("M-2" . vterm-toggle)
+    (("M-2"  . vterm-toggle)
      ("<f2>" . vterm-toggle)
-     ("M-@" . rdm/vterm-new-buffer-in-current-window))
+     ("M-@"  . rdm/vterm-new-buffer-in-current-window))
     (:vterm-mode-map
-     ("C-u" . vterm-send-C-u)
+     ("C-u"     . vterm-send-C-u)
+     ("C-t"     . vterm-send-C-t)
      ("C-c C-[" . vterm-send-escape)
-     ("M-2" . vterm-toggle)
-     ("<f2>" . vterm-toggle))
+     ("M-2"     . vterm-toggle)
+     ("<f2>"    . vterm-toggle))
     )
 
   (leaf tramp
