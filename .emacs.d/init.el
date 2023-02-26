@@ -416,7 +416,7 @@
 
   (leaf quickrun :ensure t)
 
-  (leaf tree-sitter
+  (leaf tree-sitter :emacs<= "28"
     :ensure t
     :commands (tree-sitter-hl-mode)
     :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
