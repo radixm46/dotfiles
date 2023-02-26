@@ -1,4 +1,4 @@
-;;; initpkg.el --- summary -*- lexical-binding: t -*-
+;;; initpkg.el --- init package env -*- no-byte-compile: t; lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; package manager configuration.

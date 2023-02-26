@@ -371,7 +371,7 @@
       :config
       (customize-set-variable
        'org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
-      (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
+      (add-to-list 'org-babel-load-languages '(latex . t))
       )
 
     (leaf *patch-org-mode-header-size
