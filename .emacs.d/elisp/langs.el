@@ -1031,8 +1031,8 @@ based on elfeed-search-browse-url"
       "tr" 'elfeed-show-untag))
 
   :custom
-  (elfeed-db-directory           .  "~/.config/elfeed/.db")
-  (elfeed-enclosure-default-dir  .  elfeed-dir-path)
+  (elfeed-db-directory           . "~/.config/elfeed/.db")
+  (elfeed-enclosure-default-dir  . elfeed-dir-path)
   (elfeed-search-filter          . "@1-months-ago +unread -later -junk")
   (elfeed-search-title-max-width . 95)
   (elfeed-search-date-format     . '("%Y-%m-%d (%a) %k:%M" 22 :left))
