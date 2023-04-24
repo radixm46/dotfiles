@@ -1309,7 +1309,7 @@
       (leaf *corfu-popup-info
         :require corfu-popupinfo
         :custom
-        (corfu-popupinfo-delay . (0.8 . 0.5))
+        (corfu-popupinfo-delay . 0.5)
         :global-minor-mode corfu-popupinfo-mode)
       )
 
