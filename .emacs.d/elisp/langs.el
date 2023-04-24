@@ -276,6 +276,8 @@
                                           ))
   (org-log-done                       . 'time)
   (org-clock-clocked-in-display       . 'frame-title)
+  (org-list-allow-alphabetical        . t)
+  (org-startup-indented               . t)
   ;; for org src
   (org-src-preserve-indentation       . t)
   ;; Edit settings
@@ -572,7 +574,6 @@
 
   :hook
   ;; (org-mode-hook . org-mode-reftex-setup)
-  (org-mode-hook . org-indent-mode)
 
   :hydra
   ((hydra-org
