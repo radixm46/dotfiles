@@ -2313,7 +2313,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
     :custom
     `(
       ;; kill all session buffers on quit
-      (dirvish-reuse-ssession       . nil)
+      (dirvish-reuse-session       . nil)
       ;; cache
       (dirvish-cache-dir                  . ,(cache-sub-dir "dirvish"))
       (dirvish-media-auto-cache-threshold . '(500 . 4))
