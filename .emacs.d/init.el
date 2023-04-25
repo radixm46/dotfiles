@@ -416,13 +416,11 @@
 
   (leaf quickrun :ensure t)
 
-  (leaf tree-sitter :emacs<= "28"
+  (leaf tree-sitter :emacs< "29"
     :ensure t
     :commands (tree-sitter-hl-mode)
     :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
-    :init
-    (leaf tree-sitter-langs
-      :ensure t)
+    :init (leaf tree-sitter-langs :ensure t)
     :global-minor-mode global-tree-sitter-mode
     )
 
