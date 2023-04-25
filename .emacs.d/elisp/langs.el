@@ -310,13 +310,6 @@
       )
     )
 
-  (leaf *reconfig-org-consult-key :after consult
-    :doc "bind consult functions if available"
-    :bind
-    (:org-mode-map
-     ("M-g o"   . consult-org-heading)
-     ("M-g M-o" . consult-org-heading)))
-
   :config
   (leaf *org-config-directory
     :if (file-directory-p (expand-file-rec '("org" "orgfiles") (getenv "HOME")))

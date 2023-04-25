@@ -1051,6 +1051,10 @@
      ("C-x b"   . consult-buffer) ; replace switch-to-buffer. narrowing with b/f/m/p
      ("M-5"     . hydra-consult/body)
      ("<f5>"    . hydra-consult/body))
+    (:org-mode-map ;; override outline on org-mode
+     ("M-g o"   . consult-org-heading)
+     ("M-g M-o" . consult-org-heading))
+
     :init
     (leaf *consult-use-fd :if (executable-find "fd")
       :doc "use fd for find if avalable"
