@@ -1,3 +1,4 @@
+# -*- mode:conf; -*-
 input type:touchpad {
     tap enhabled natural_scroll disabled
     scroll_factor 0.8 }

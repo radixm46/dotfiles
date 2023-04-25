@@ -1,3 +1,5 @@
+# -*- mode:conf; -*-
+
 unset beep
 unset help
 set new_mail_command="~/.config/neomutt/notifier.sh %v %n %u"
