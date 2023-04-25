@@ -262,20 +262,24 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias mkdir='mkdir -p'
 
+# enable alias with sudo
+is_available 'sudo' && \
+    alias sudo='sudo '
+
 # glob aliases
 alias -g L='| less'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
 
-is_available 'fd' &&\
+is_available 'fd' && \
     alias fd='fd --color=auto'
 if is_available 'bat'; then
     alias -g B='| bat'
     alias -g Ba='| bat --show-all'
     alias -g Bap='| bat --show-all --plain'
 fi
-is_available 'duf' &&\
+is_available 'duf' && \
     alias duf='duf -all -style=unicode -theme=dark'
 
 if is_available 'rg'; then
@@ -292,7 +296,12 @@ elif is_available 'putclip'; then
     alias -g C='| putclip'
 fi
 
-[[ ${OSTYPE} == linux* ]] && is_available 'ip' && alias ip='ip -color'
+[[ ${OSTYPE} == linux* ]] && \
+    is_available 'ip' && \
+    alias ip='ip -color'
+
+[[ ${OSTYPE} == darwin* ]] && \
+    alias log-darwin='/usr/bin/log'
 
 alias -g TC="TERM=xterm-24bit"
 
