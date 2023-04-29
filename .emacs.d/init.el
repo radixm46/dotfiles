@@ -1292,13 +1292,17 @@
 
     :config
 
-    (leaf *config-corfu-with-evil-map
-      :config
+    (leaf *config-corfu-with-evil-map :after evil
       :url "https://github.com/minad/corfu/issues/12"
+      :preface
       (evil-make-overriding-map corfu-map)
-      (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
-      (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
+      :advice
+      (:after corfu--setup
+              evil-normalize-keymaps)
+      (:after corfu--teardown
+              evil-normalize-keymaps)
       )
+    )
 
     (leaf *corfu-official-extensions
       :doc "extensions provided from corfu"
