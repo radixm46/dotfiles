@@ -1392,7 +1392,6 @@
                                      )))))
         )
       )
-    )
 
   (leaf lsp-mode
     :doc "configure lsp"
