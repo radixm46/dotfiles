@@ -118,17 +118,17 @@
   :doc "locale and encoding"
   :custom
   (default-buffer-file-coding-system . 'utf-8)
-  (default-coding-systems            . 'utf-8)
   (coding-system-for-write           . 'utf-8)
   ;; (setq coding-system-for-read 'utf-8) ;; conflicts ddskk
   :config
-  (set-locale-environment nil)
-  (set-default 'buffer-file-coding-system 'utf-8)
-  (set-language-environment "Japanese")
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
+  (set-locale-environment         nil)
+  (set-default                    'buffer-file-coding-system 'utf-8)
+  (set-language-environment       "Japanese")
+  (set-default-coding-systems     'utf-8)
+  (set-terminal-coding-system     'utf-8)
+  (set-keyboard-coding-system     'utf-8)
   (set-buffer-file-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+  (prefer-coding-system           'utf-8)
 
   ;; skk config(use
   (leaf ddskk
