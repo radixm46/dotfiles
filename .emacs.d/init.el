@@ -534,8 +534,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                                  (setq-local completion-styles '(orderless))))
       :custom
       (completion-styles             . '(fussy basic))
-      (completion-category-overrides . '((file      . (style partial-completion))
-                                         (info-menu . (style fussy))
+      (completion-category-overrides . '((file      . (styles partial-completion))
+                                         (info-menu . (styles fussy))
                                          ))
       )
     )
