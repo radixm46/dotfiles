@@ -29,9 +29,9 @@ set $menu wofi \
     --location=top \
     --prompt="Hello $(whoami) -- $(date +%Y/%m/%d\ %a\ %H:%M:%S)" \
     --lines=15
-# set $screenshot app
-set $screenshot grim
-# set $screenshot_window
+
+# set $screenshot
+set $screenshot            "${HOME}/dotfiles/bin/screencap.sh"
 
 ### Output configuration
 #
@@ -273,7 +273,12 @@ bindsym XF86AudioPrev exec playerctl previous
 
 bindsym $sup+$mod+l exec swaylock -f -c 000000  # swaylock
 
-bindsym $sup+$mod+Shift+3 exec $screenshot  # take screenshot
+# take screenshot to file
+bindsym $sup+$mod+Shift+1 exec $screenshot
+bindsym $sup+$mod+Shift+2 exec $screenshot -t
+# take screenshot to clipboard
+bindsym $sup+$mod+Shift+3 exec $screenshot -c
+bindsym $sup+$mod+Shift+4 exec $screenshot -c -t
 # bindsym $sup+$mod+Shift+4 exec $screenshot_window
 
 # start fcitx

@@ -32,4 +32,27 @@ actions=1
 default-timeout=8000
 ignore-timeout=0
 
-# group-by=
+# default buttons behavior
+on-button-left=dismiss
+on-button-right=dismiss
+on-button-middle=dismiss
+
+group-by=category
+
+[urgency=normal]
+on-notify=exec mpv --no-terminal /usr/share/sounds/freedesktop/stereo/bell.oga
+
+[urgency=critical]
+font=UDEV Gothic 35JPDOC 15
+ignore-timeout=1
+on-notify=exec mpv --no-terminal /usr/share/sounds/freedesktop/stereo/dialog-warning.oga
+text-color=#202224FF
+background-color=#FF6A6AC3
+
+[category="screenshot"]
+on-notify=exec mpv --no-terminal /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
+
+[category="screenshot" summary="Image saved!"]
+on-button-left=exec makoctl list | jq -r '.data|..|select(.id?.data=='$id')|.body|.data' | wl-copy -n; mackoctl dismiss -n $id
+[category="screenshot" summary="Image captured!"]
+on-button-left=exec dismiss; makoctl invoke -n $id; makoctl dismiss -n $id; wl-paste | imv -
