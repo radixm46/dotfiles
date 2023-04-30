@@ -148,7 +148,79 @@
 (leaf *font-configure
   :doc "font configure"
   :config
-  (defvar font-for-tables "UDEV Gothic NF" "1:2 width font for table")
+  (defun rdm/apply-func-in-fonts (fonts &optional func-found func-fail)
+    "Apply `func-found' to the first available font in `fonts', if found.
+If `func-found' is nil or not given, return the found font name.
+If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
+
+`fonts' is a list of font names.
+`func-found' is a function taking one argument, the found font.
+`func-fail' is a function taking no arguments."
+    (let ((fonts-available (font-family-list))
+          (font-found nil))
+      (catch 'found
+        (dolist (f fonts)
+          (when (member f fonts-available)
+            (setq font-found f)
+            (throw 'found f))))
+      (if font-found
+          (funcall (or func-found #'identity) font-found)
+        (when func-fail (funcall func-fail)))))
+
+  (defun rdm/default-frame-font ()
+    "Get the default font family from the default frame, without font size."
+    (let ((default-fparam (cdr (assq 'font default-frame-alist))))
+      (substring
+       default-fparam
+       0 (string-match "-" default-fparam))
+      ))
+
+  (defvar font-for-tables "UDEV Gothic"          "1:2 width font for table") ;; refered via org mode etc.
+  (defvar font-for-term ;; if not found, fallback to font-for-tables
+    (rdm/apply-func-in-fonts
+     '("UDEV Gothic NFLG")
+     nil (lambda () font-for-tables))
+    "1:2 width font for term")
+  (defvar font-for-doc ;; if not found, fallback to default frame font
+    (rdm/apply-func-in-fonts
+     '("UDEV Gothic 35JPDOC")
+     nil #'rdm/default-frame-font)
+    "3:5 width font for doc")
+
+  (custom-set-faces `(fixed-pitch ((t :family ,font-for-term))))
+  (defun remap-face-with-doc-font ()
+    "remap buffer face with `font-for-doc'"
+    (interactive)
+    (face-remap-add-relative 'default `(:family ,font-for-doc))
+    )
+
+  (leaf ligature
+    :doc "configure ligatures"
+    :straight
+    (ligature-mode :type git :host github
+                   :repo "mickeynp/ligature.el" :branch "master")
+    :config
+    ;; all Jetbrains Mono Ligatures
+    (ligature-set-ligatures 'prog-mode '(
+                                         "--" "---" "==" "===" "!=" "!==" "=!=" "=:=" "=/=" "<=" ">=" "&&" "&&&" "&="
+                                         "++" "+++" "***" ";;" "!!" "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>"
+                                         "<<<" ">>>" "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
+                                         "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$" "$>" "<+>"
+                                         "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--" "-->" "->" "->>" "<<-" "<-"
+                                         "<=<" "=<<" "<<=" "<==" "<=>" "<==>" "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<"
+                                         ">->" "<-<" "<-|" "<=|" "|=>" "|->" "<->" "<<~" "<~~" "<~" "<~>" "~~" "~~>" "~>"
+                                         "~-" "-~" "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||" "|||>" "<|||"
+                                         "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::=" ":?" ":?>" "//" "///" "/*" "*/"
+                                         "/=" "//=" "/==" "@_" "__" "???" ";;;"
+                                         ))
+
+    (defun activate-ligature-on-window-system ()
+      "enable ligature on window system"
+      (when (window-system) (ligature-mode))
+      )
+    :hook
+    (prog-mode-hook . activate-ligature-on-window-system)
+    )
 
   (leaf nerd-fonts
     :doc "Emacs nerd-fonts utilities."
@@ -156,15 +228,6 @@
     (nerd-fonts :type git :host github
                 :repo "twlz0ne/nerd-fonts.el")
     :require t)
-
-  (defun rdm/apply-func-in-fonts (fonts func)
-    "apply func to available font in list"
-    (let ((fonts-available (font-family-list)))
-      (catch 'found
-        (dolist (f fonts)
-          (if (member f fonts-available)
-              (progn (funcall func f)
-                     (throw 'found f)))))))
 
   (leaf *hide-nobreak-whitespace :emacs>= "28"
     :doc "hack to disable face for double byte space"
@@ -185,8 +248,7 @@
     "returns serif font family available in list"
     (rdm/apply-func-in-fonts '("Hiragino Mincho ProN"
                                "BIZ UDP Mincho"
-                               "Noto Serif CJK JP")
-                             (lambda (f) '())))
+                               "Noto Serif CJK JP")))
 
   (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
     :ensure t

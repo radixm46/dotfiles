@@ -20,9 +20,9 @@
 (setq frame-inhibit-implied-resize t)
 (push '(menu-bar-lines . 0)  default-frame-alist)
 (push '(tool-bar-lines . 0)  default-frame-alist)
-(push '(width          . 80) default-frame-alist)
-(push '(height         . 45) default-frame-alist)
-(push '(font           . "UDEV Gothic 35NF-13.0") default-frame-alist)
+(push '(width          . 90) default-frame-alist)
+(push '(height         . 75) default-frame-alist)
+(push '(font           . "UDEV Gothic 35NFLG-13.0") default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
 ;; Suppress flashing at startup

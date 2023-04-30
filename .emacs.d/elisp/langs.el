@@ -6,6 +6,12 @@
 
 ;;; Code:
 
+(leaf text-mode
+  :tag "builtin"
+  :hook
+  (text-mode-hook . remap-face-with-doc-font)
+  )
+
 (leaf emacs-lisp-mode
   :tag "builtin"
   :hook
@@ -566,6 +572,7 @@
     )
 
   :hook
+  (org-mode-hook . remap-face-with-doc-font)
   ;; (org-mode-hook . org-mode-reftex-setup)
 
   :hydra
@@ -669,13 +676,16 @@
     (("README\\.md\\'"  . gfm-mode)
      ("\\.md\\'"
       "\\.markdown\\'") . markdown-mode)
+    :hook
+    (markdown-mode-hook . remap-face-with-doc-font)
+    (gfm-mode-hook      . remap-face-with-doc-font)
     :custom
-    (markdown-command . "multimarkdown")
-    (markdown-hide-markup . t)
-    (markdown-header-scaling . t)
-    (markdown-header-scaling-values . '(1.75 1.5 1.25 1.1 1.0 1.0))
+    (markdown-command                    . "multimarkdown")
+    (markdown-hide-markup                . t)
+    (markdown-header-scaling             . t)
+    (markdown-header-scaling-values      . '(1.75 1.5 1.25 1.1 1.0 1.0))
     (markdown-enable-highlighting-syntax . t)
-    (markdown-enable-math . t)
+    (markdown-enable-math                . t)
     :config
     (evil-define-key 'normal markdown-mode-map
       "j" 'evil-next-visual-line
