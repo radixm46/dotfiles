@@ -441,24 +441,23 @@
   (leaf *config-completion-styles
     :doc "setup completion packages"
     :config
-    (leaf orderless
-      :ensure t
-      :doc "Advanced completion style"
-      )
-
-    (leaf fussy :after ordderless
+    (leaf fussy
       :doc "provide a completion-style to Emacs that is able to leverage
  flx as well as various other fuzzy matching scoring packages"
       :ensure t
       :init
+      (leaf orderless
+        :ensure t
+        :doc "Advanced completion style"
+        )
+
       (leaf hotfuzz
         :doc  "fuzzy Emacs completion style with a better scoring algorithm."
         :ensure t
         )
 
       :custom
-      (fussy-use-cache . t)
-      :setq
+      (fussy-use-cache             . t)
       (fussy-score-fn              . 'fussy-hotfuzz-score)
       (fussy-filter-fn             . 'fussy-filter-orderless)
       (fussy-compare-same-score-fn . 'fussy-histlen->strlen<)
@@ -1152,6 +1151,8 @@
 
 (leaf *competion-linting
   :doc "completion and linting packages"
+  :custom
+  (completion-ignore-case . t)
   :config
   (leaf auto-complete
     :tag "builtin"
@@ -1249,7 +1250,6 @@
     :custom
     (company-idle-delay . 0)
     (company-selection-wrap-around . t)
-    (completion-ignore-case . t)
     (company-minimum-prefix-length . 1)
     (company-transformers . '(
                               company-sort-by-occurrence
@@ -1275,10 +1275,10 @@
     (corfu-auto-delay              . 0.2)
     (corfu-separator               . ?\s)        ;; Orderless field separator
     (corfu-quit-no-match           . 'separator) ;; Never quit, even if there is no match
+    (corfu-quit-at-boundary        . 'separator) ;; Never quit at completion boundary
     (corfu-preview-current         . nil)        ;; Disable current candidate preview
-    (corfu-preselect-first         . nil)        ;; Disable candidate preselection
+    (corfu-preselect               . 'valid)     ;; Preselect the prompt
     (corfu-on-exact-match          . nil)        ;; Configure handling of exact matches
-    (corfu-echo-documentation      . nil)        ;; Disable documentation in the echo area
     (corfu-scroll-margin           . 5)          ;; Use scroll margin
     :hook
     ((text-mode-hook
