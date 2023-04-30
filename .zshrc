@@ -288,8 +288,10 @@ if is_available 'rg'; then
 fi
 
 # clipboard manager
-if is_available 'pbcopy'; then
-    alias -g C='| pbcopy'
+if [[ ${OSTYPE} == darwin* ]]; then
+    is_available 'pbcopy' && alias -g C='| pbcopy'
+elif is_available 'wl-copy'; then
+    alias -g C='| wl-copy --trim-newline'
 elif is_available 'xsel'; then
     alias -g C='| xsel --input --clipboard'
 elif is_available 'putclip'; then
