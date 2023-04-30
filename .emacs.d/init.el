@@ -416,7 +416,8 @@
 
   (leaf quickrun :ensure t)
 
-  (leaf tree-sitter :emacs< "29"
+  (leaf tree-sitter :unless (and (version< emacs-version "29")
+                                 (fboundp 'tree-sitter-hl-mode))
     :ensure t
     :commands (tree-sitter-hl-mode)
     :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
