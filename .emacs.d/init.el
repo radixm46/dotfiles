@@ -1681,6 +1681,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (:global-map
      ("<f7>" . hydra-lsp-functions/body)
      ("M-7"  . hydra-lsp-functions/body))
+    (:lsp-mode-map
+     ("C-c C-s"   . consult-lsp-file-symbols)
+     ("C-c C-S"   . consult-lsp-symbols))
     )
 
   (leaf eglot
