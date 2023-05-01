@@ -167,31 +167,56 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
           (funcall (or func-found #'identity) font-found)
         (when func-fail (funcall func-fail)))))
 
-  (defun rdm/default-frame-font ()
-    "Get the default font family from the default frame, without font size."
-    (let ((default-fparam (cdr (assq 'font default-frame-alist))))
-      (substring
-       default-fparam
-       0 (string-match "-" default-fparam))
-      ))
+  (leaf *font-patch-for-modes
+    :doc "define fonts for some major modes remap"
+    :hook
+    (conf-on-gui-hook . (lambda ()
+                          "bind fonts on gui frame create, remap"
+                          (remap-buffers-font-to-doc)
+                          (rdm/update-font-conf)))
+    :preface
+    (defun rdm/default-frame-font ()
+      "Get the default font family from the default frame, without font size."
+      (let ((default-fparam (cdr (assq 'font default-frame-alist))))
+        (substring
+         default-fparam
+         0 (string-match "-" default-fparam))
+        ))
 
-  (defvar font-for-tables "UDEV Gothic"          "1:2 width font for table") ;; refered via org mode etc.
-  (defvar font-for-term ;; if not found, fallback to font-for-tables
-    (rdm/apply-func-in-fonts
-     '("UDEV Gothic NFLG")
-     nil (lambda () font-for-tables))
-    "1:2 width font for term")
-  (defvar font-for-doc ;; if not found, fallback to default frame font
-    (rdm/apply-func-in-fonts
-     '("UDEV Gothic 35JPDOC")
-     nil #'rdm/default-frame-font)
-    "3:5 width font for doc")
+    (defvar font-for-tables "UDEV Gothic" "1:2 width font for table") ;; refered via org mode etc.
+    (defvar font-for-term   nil           "1:2 width font for term")
+    (defvar font-for-doc    nil           "3:5 width font for doc")
 
-  (custom-set-faces `(fixed-pitch ((t :family ,font-for-term))))
-  (defun remap-face-with-doc-font ()
-    "remap buffer face with `font-for-doc'"
-    (interactive)
-    (face-remap-add-relative 'default `(:family ,font-for-doc))
+    (defun rdm/update-font-conf ()
+      "update `font-for-...' params and fixed pitch"
+      (setq font-for-term
+            (rdm/apply-func-in-fonts
+             '("UDEV Gothic NFLG")
+             nil (lambda () font-for-tables)))
+      (setq font-for-doc
+            (rdm/apply-func-in-fonts
+             '("UDEV Gothic 35JPDOC")
+             nil #'rdm/default-frame-font))
+      (when font-for-term
+        (custom-set-faces `(fixed-pitch ((t :family ,font-for-term)))))
+      )
+    (defvar remap-font-to-doc-modes-list nil "major mode list for font update")
+
+    ;; aplly font-for-doc to buffers
+    (defun remap-font-to-doc ()
+      "if font-for-doc set, remap buffer face"
+      (interactive)
+      (when font-for-doc
+        (face-remap-add-relative 'default `(:family ,font-for-doc))))
+    (defun remap-buffers-font-to-doc ()
+      "remap buffer face with `font-for-doc'"
+      (mapc #'(lambda (buffer)
+                (with-current-buffer buffer
+                  (when (member major-mode remap-font-to-doc-modes-list)
+                    (remap-font-to-doc))))
+            (buffer-list))
+      )
+
     )
 
   (leaf ligature

@@ -8,8 +8,11 @@
 
 (leaf text-mode
   :tag "builtin"
-  :hook
-  (text-mode-hook . remap-face-with-doc-font)
+  :init
+  (leaf *font-remap-text-mode
+    :hook (text-mode-hook . remap-font-to-doc)
+    :preface (push #'text-mode  remap-font-to-doc-modes-list)
+    )
   )
 
 (leaf emacs-lisp-mode
@@ -296,6 +299,11 @@
   (org-agenda-tag-filter-preset       . '("-agenda_ignore"))
   (org-agenda-include-diary           . t)
   :init
+  (leaf *font-remap-org-mode
+    :hook (org-mode-hook . remap-font-to-doc)
+    :preface (push #'org-mode  remap-font-to-doc-modes-list)
+    )
+
   (leaf evil-org
     :ensure t
     :hook
@@ -572,7 +580,6 @@
     )
 
   :hook
-  (org-mode-hook . remap-face-with-doc-font)
   ;; (org-mode-hook . org-mode-reftex-setup)
 
   :hydra
@@ -676,9 +683,6 @@
     (("README\\.md\\'"  . gfm-mode)
      ("\\.md\\'"
       "\\.markdown\\'") . markdown-mode)
-    :hook
-    (markdown-mode-hook . remap-face-with-doc-font)
-    (gfm-mode-hook      . remap-face-with-doc-font)
     :custom
     (markdown-command                    . "multimarkdown")
     (markdown-hide-markup                . t)
@@ -686,6 +690,15 @@
     (markdown-header-scaling-values      . '(1.75 1.5 1.25 1.1 1.0 1.0))
     (markdown-enable-highlighting-syntax . t)
     (markdown-enable-math                . t)
+    :init
+    (leaf *font-remap-markdown-mode
+      :hook
+      (markdown-mode-hook . remap-font-to-doc)
+      (gfm-mode-hook      . remap-font-to-doc)
+      :preface
+      (push #'markdown-mode  remap-font-to-doc-modes-list)
+      (push #'gfm-mode       remap-font-to-doc-modes-list)
+      )
     :config
     (evil-define-key 'normal markdown-mode-map
       "j" 'evil-next-visual-line
