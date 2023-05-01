@@ -757,7 +757,7 @@
     :doc "major mode for editing docker-compose files, supports context-aware completion of docker-compose keys"
     :url "https://github.com/meqif/docker-compose-mode")
 
-  (leaf docker-tramp
+  (leaf docker-tramp :emacs< "29"
     :ensure t
     :doc "TRAMP method for Docker containers"
     :url "https://github.com/emacs-pe/docker-tramp.el"

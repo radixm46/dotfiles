@@ -23,8 +23,8 @@
     :doc "mouse support on terminal"
     :tag "builtin"
     :hook
-    (conf-on-term-hook . (lambda ()  (xterm-mouse-mode +1)))
-    (conf-on-gui-hook  . (lambda ()  (xterm-mouse-mode -1)))
+    (conf-on-term-hook . (lambda () (xterm-mouse-mode +1)))
+    (conf-on-gui-hook  . (lambda () (xterm-mouse-mode -1)))
     )
 
   (leaf cl-lib
@@ -311,9 +311,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (tab-width                . 4)
   (indent-tabs-mode         . nil)
   (truncate-lines           . t)
+  (word-wrap                . t)
   ;; configure indent tab to false as default
   ;; (setq line-move-visual t)
-  ;; (setq word-wrap t)
   :init
   (leaf visual-line-mode
     :doc "visual line mode enables word wrap"
@@ -340,6 +340,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :ensure t
     :tag "builtin"
     :custom (ediff-window-setup-function . #'ediff-setup-windows-plain)
+    :setq
+    (ediff-word-2 . "0-9.,。、")
+    (ediff-word-3 . "`'?!:;\"{}[]()「」（）？！")
     :config
     (defun ediff-window-display-p ()
       "overwritten ediff builtin function, for not generate new frame" nil)
@@ -1800,6 +1803,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :config
     (dap-mode 1)
     (dap-auto-configure-mode 1)
+    (dap-ui-mode 1)
+    (dap-ui-controls-mode 1)
     )
   )
 
