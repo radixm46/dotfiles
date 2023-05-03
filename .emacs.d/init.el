@@ -605,12 +605,16 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf *conf-theme-hook
     :doc "reconfigure appearance after `load-theme' fired"
     :url "https://emacs.stackexchange.com/a/28947"
-    :config
+    :preface
     (defvar after-load-theme-hook nil
-      "Hook run after color theme is loaded using `load-theme'.")
-    (defadvice load-theme (after run-after-load-theme-hook activate)
+      "Hook run after color theme is loaded using `load-theme'."
+      )
+    (defun run-after-load-theme-hook (&rest _args)
       "Run `after-load-theme-hook'."
       (run-hooks 'after-load-theme-hook))
+    :advice
+    (:after load-theme
+            run-after-load-theme-hook)
     )
 
   (leaf *config-doom-modeline
