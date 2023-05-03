@@ -54,7 +54,6 @@ if ${clipboard}; then
     notify-send "Image captured!" "Copied to clipboard! 📋" \
                 --urgency="low" --category="screenshot" \
                 --hint=string:image-path:"${tmpfile}"
-                # --hint=string:onclick-action:"imv ${tmpfile}" # これよくわからん、というか効いてない感じするな
 else
     imgfile="grim $(date '+%Y-%m-%d %H.%M.%S').png"
     imgpath="${dir}/${imgfile}"
