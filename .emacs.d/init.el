@@ -487,6 +487,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :tag "builtin"
     :doc "configure tab-bar mode"
     :custom (tab-bar-show . 1)
+    :custom-face (tab-bar-tab . '((t (:underline t))))
     :hydra
     (hydra-tab-bar
      (:hint nil)
