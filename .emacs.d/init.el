@@ -449,6 +449,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (kbd "C-c +") 'evil-numbers/inc-at-pt
         (kbd "C-c -") 'evil-numbers/dec-at-pt
         ))
+    (leaf evil-cleverparens
+      :doc "edit for lispy modes"
+      :ensure t
+      :hook (smartparens-enabled-hook . evil-cleverparens-mode))
     )
 
   (leaf editorconfig
@@ -657,13 +661,27 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       )
     :global-minor-mode show-paren-mode)
 
-  (leaf electric-pair-mode
+  (leaf electric-pair-mode :disabled t
     :doc "automatic pares parenthesis"
     :tag "builtin"
     :emacs>= "24"
     :hook
     ((conf-mode-hook
       prog-mode-hook) . electric-pair-mode))
+
+  (leaf smartparens
+    :ensure t
+    :custom (sp-show-pair-delay . 0.125)
+    :mode-hook
+    (after-load-theme-hook . ((custom-set-faces
+                               `(sp-show-pair-match-face
+                                 ((t (:background ,(doom-color 'green) :foreground ,(doom-color 'bg))))))))
+    :hook
+    ((prog-mode-hook
+      conf-mode-hook) . smartparens-mode))
+
+  (leaf paredit :ensure t
+    :doc "for `evil-cleverparens' dependency")
 
   (leaf display-line-numbers
     :tag "builtin"
