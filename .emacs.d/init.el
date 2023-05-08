@@ -460,10 +460,97 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :ensure t
     :config (editorconfig-mode))
 
+  (leaf treesit-auto :emacs>= "29"
+    :ensure t
+    :doc "automatically install and enables treesit major modes"
+    :custom (treesit-auto-install . t)
+    :setq (treesit-auto-opt-out-list . '(protobuf))
+    :config (treesit-auto-install-all)
+    :global-minor-mode global-treesit-auto-mode)
+
+  (leaf tree-sitter
+    :doc "provides tree-sitter highlighting"
+    :ensure t
+    :commands (tree-sitter-hl-mode)
+    :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+    :init (leaf tree-sitter-langs :ensure t)
+    :global-minor-mode global-tree-sitter-mode
+    :config
+    (leaf ts-fold :after evil
+      :doc "Code-folding using tree-sitter"
+      :straight
+      (ts-fold
+       :type git :host github
+       :repo "emacs-tree-sitter/ts-fold")
+      :custom
+      (ts-fold-summary-show            . t)
+      (ts-fold-summary-max-length      . 70)
+      (ts-fold-summary-exceeded-string . "...")
+      (ts-fold-summary-format          . "<Sum>: %s ")
+      :config
+      (leaf ts-fold-indicators
+        :straight
+        (ts-fold-indicators
+         :type git :host github
+         :repo "emacs-tree-sitter/ts-fold"))
+
+      (leaf *patch-ts-fold-with-treesit-modes :emacs>= "29"
+        :after tree-sitter
+        :doc "bind *-mode fold range to *-ts-mode until emacs29 support has come"
+        :url "https://github.com/emacs-tree-sitter/ts-fold/issues/48"
+        :config
+        (mapcar (lambda (a)
+                  (let ((matched (assoc (car a) ts-fold-range-alist)))
+                    (when matched
+                      (add-to-list 'ts-fold-range-alist (cons (cdr a) (cdr matched))))))
+                '((sh-mode         . bash-ts-mode)
+                  (c++-mode        . c++-ts-mode)
+                  (c++-mode        . c-or-c++-ts-mode)
+                  (c-mode          . c-ts-mode)
+                  (csharp-mode     . csharp-ts-mode)
+                  (css-mode        . css-ts-mode)
+                  (go-mode         . go-ts-mode)
+                  (java-mode       . java-ts-mode)
+                  (js-mode         . js-ts-mode)
+                  (json-mode       . json-ts-mode)
+                  (python-mode     . python-ts-mode)
+                  (ruby-mode       . ruby-ts-mode)
+                  (rust-mode       . rust-ts-mode)
+                  (conf-toml-mode  . toml-ts-mode)
+                  (typescript-mode . typescript-ts-mode)
+                  (yaml-mode       . yaml-ts-mode))))
+
+      :hook
+      (prog-mode-hook
+       conf-mode-hook . ts-fold-mode)
+      (prog-mode-hook
+       conf-mode-hook . ts-fold-indicators-mode))
+
+    (leaf *patch-major-ts-modes :emacs>= "29"
+      :doc "bind major-ts-mode for tree-sitter syntax highlighting"
+      :config
+      (dolist (mode-tsl '((bash-ts-mode       . bash)
+                          (c++-ts-mode        . cpp)
+                          (c-or-c++-ts-mode   . cpp)
+                          (c-ts-mode          . c)
+                          (csharp-ts-mode     . c-sharp)
+                          (css-ts-mode        . css)
+                          (go-ts-mode         . go)
+                          (java-ts-mode       . java)
+                          (js-ts-mode         . javascript)
+                          (json-ts-mode       . json)
+                          (python-ts-mode     . python)
+                          (ruby-ts-mode       . ruby)
+                          (rust-ts-mode       . rust)
+                          (toml-ts-mode       . toml)
+                          (tsx-ts-mode        . typescript)
+                          (typescript-ts-mode . typescript)
+                          (yaml-ts-mode       . yaml)))
+        (add-to-list 'tree-sitter-major-mode-language-alist mode-tsl))))
+
   (leaf origami
     :doc "folding blocks"
-    :ensure t
-    :hook (prog-mode-hook . origami-mode))
+    :ensure t)
 
   (leaf yasnippet
     :ensure t
@@ -510,15 +597,6 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     )
 
   (leaf quickrun :ensure t)
-
-  (leaf tree-sitter :unless (and (version< emacs-version "29")
-                                 (fboundp 'tree-sitter-hl-mode))
-    :ensure t
-    :commands (tree-sitter-hl-mode)
-    :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
-    :init (leaf tree-sitter-langs :ensure t)
-    :global-minor-mode global-tree-sitter-mode
-    )
 
   (leaf highlight-symbol
     :ensure t
@@ -1593,9 +1671,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                          ("C-x t s" . lsp-treemacs-symbols))
       :config (lsp-treemacs-sync-mode 1))
 
-    (leaf lsp-origami
-      :ensure t
-      :hook (lsp-after-open-hook . lsp-origami-try-enable))
+    (leaf lsp-origami :ensure t)
 
     (leaf lsp-ido :disabled t
       :after lsp
