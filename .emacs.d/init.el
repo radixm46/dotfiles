@@ -2774,13 +2774,12 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
 
 (leaf *conf-appearance-on-state
   :doc "apply theme and frame state hooks after init"
-  :hook
-  ((server-after-make-frame-hook
-    after-init-hook) . (lambda ()
-                         (if (display-graphic-p)
-                             (conf-on-gui) (conf-on-term))))
-  (after-init-hook   . (lambda () (load-theme 'doom-nord-aurora t)))
-  )
+  :mode-hook
+  (server-after-make-frame-hook . ((if (display-graphic-p)
+                                       (conf-on-gui) (conf-on-term))))
+  (after-init-hook              . ((load-theme 'doom-dracula t)
+                                   (if (display-graphic-p)
+                                       (conf-on-gui) (conf-on-term)))))
 
 
 (leaf *load-local-conf
