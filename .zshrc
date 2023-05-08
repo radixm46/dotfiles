@@ -305,7 +305,7 @@ fi
 [[ ${OSTYPE} == darwin* ]] && \
     alias log-darwin='/usr/bin/log'
 
-alias -g TC="TERM=xterm-24bit"
+alias -g TC='COLORTERM=truecolor'
 
 # ----------------------------------------------------------------------------------------
 # define functions
