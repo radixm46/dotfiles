@@ -641,37 +641,21 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  flx as well as various other fuzzy matching scoring packages"
       :ensure t
       :init
-      (leaf orderless
-        :ensure t
-        :doc "Advanced completion style"
-        )
-
-      (leaf hotfuzz
-        :doc  "fuzzy Emacs completion style with a better scoring algorithm."
-        :ensure t
-        )
-
+      (leaf orderless :ensure t
+        :doc "Advanced completion style")
+      (leaf hotfuzz :ensure t
+        :doc  "fuzzy Emacs completion style with a better scoring algorithm.")
       :custom
       (fussy-use-cache             . t)
       (fussy-score-fn              . 'fussy-hotfuzz-score)
       (fussy-filter-fn             . 'fussy-filter-orderless)
-      (fussy-compare-same-score-fn . 'fussy-histlen->strlen<)
-      )
-
-    (leaf *configure-completion-styles
-      :doc "control completion-styles on context"
-      :hook
-      ;; use orderless on minibuffer
-      (minibuffer-setup-hook . (lambda ()
-                                 (setq-local completion-styles '(orderless))))
-      :custom
-      (completion-styles             . '(fussy basic))
-      (completion-category-overrides . '((file      . (styles partial-completion))
-                                         (info-menu . (styles fussy))
-                                         ))
-      )
-    )
-  )
+      (fussy-compare-same-score-fn . 'fussy-histlen->strlen<))
+    :custom
+    (completion-styles             . '(fussy basic))
+    (completion-category-overrides . '((file      . (styles partial-completion))))
+    :mode-hook
+    (minibuffer-setup-hook . ((setq-local completion-styles '(orderless)))))
+)
 
 
 (leaf *conf-appearance
