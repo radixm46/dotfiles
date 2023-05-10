@@ -809,6 +809,8 @@
   :url "https://github.com/skeeto/elfeed"
   :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
   :hook
+  ((elfeed-show-mode-hook
+    elfeed-search-mode-hook) . rdm/text-scale-adjust)
   (elfeed-search-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
   :init
   (add-to-list 'undo-tree-incompatible-major-modes 'elfeed-search-mode)

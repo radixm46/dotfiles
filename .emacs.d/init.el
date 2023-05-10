@@ -299,6 +299,19 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :custom (emojify-display-style . 'ascii)
       :hook (after-init-hook . global-emojify-mode))
     )
+
+  (leaf *rdm/text-scale-adjust
+    :doc "adjust text scale on buffer"
+    :config
+    (defvar rdm/text-scale-amount
+      nil "text scale amount applied via rdm/text-scale-adjust, nil or number.
+ if number given, applied for text-scale on current buffer")
+    (defun rdm/text-scale-adjust ()
+      "run text-scale-adjust on buffer with amount `rdm/text-scale-amount'"
+      (interactive)
+      (when (numberp rdm/text-scale-amount)
+        (text-scale-adjust rdm/text-scale-amount)))
+    )
   )
 
 
@@ -2171,8 +2184,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (eww-search-prefix       . "https://www.google.com/search?q=")
       (eww-bookmarks-directory . ,(cache-sub-dir "eww"))
       )
-    :hook
-    (eww-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
+    :mode-hook
+    (eww-mode-hook . ((rdm/sw-lnsp 0.75)
+                      (rdm/text-scale-adjust)))
     :config
     (leaf *eww-patch-faces :after doom-themes
       :hook
@@ -2246,11 +2260,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (w3m-queries-log-file              . ,(expand-file-name ".sessions"                 (cache-sub-dir "w3m")))
       (w3m-queries-log-file              . ,(expand-file-name "emacs-w3m-queries_log.txt" (cache-sub-dir "w3m")))
       )
-    :hook
-    (w3m-fontify-after-hook . (lambda ()
-                                (when (display-graphic-p)
-                                  (face-remap-add-relative
-                                   'default `(:family  ,(face-attribute 'variable-pitch :family))))))
+    :mode-hook
+    (w3m-fontify-after-hook . ((when (display-graphic-p)
+                                 (rdm/text-scale-adjust)
+                                 (face-remap-add-relative
+                                  'default `(:family  ,(face-attribute 'variable-pitch :family))))))
     :init
     (leaf *patch-w3m-face :after doom-themes
       :doc "patch w3m faces with doom-colors"
