@@ -73,6 +73,7 @@
   :ensure t
   :hook (rust-mode-hook . lsp)
   :custom (rust-format-on-save . t)
+  :setq (rust-ts-mode-hook . rust-mode-hook)
   :config
   (leaf cargo
     :ensure t
@@ -102,7 +103,8 @@
   (leaf python-mode
     :tag "builtin" :ensure t
     :mode ("\\.py\\'" . python-mode)
-    :hook (python-mode-hook . lsp-deferred))
+    :hook (python-mode-hook . lsp-deferred)
+    :setq (python-ts-mode-hook . python-mode-hook))
 
   (leaf hy-mode
     :ensure t
@@ -184,6 +186,7 @@
     :mode ("\\.json\\'" . js-mode)
     :custom (js-indent-level . 2)
     :hook (js-mode-hook . lsp)
+    :setq (js-ts-mode-hook . js-mode-hook)
     :init
     (leaf js2-mode
       :ensure t
@@ -214,10 +217,11 @@
   :ensure t
   :mode ("\\.ts\\'" . typescript-mode)
   :hook (typescript-mode-hook . lsp)
+  :setq (typescript-ts-mode-hook . typescript-mode-hook)
   :custom
   (typescript-indent-level . 2)
   :config
-  (leaf tide
+  (leaf tide :emacs< "27"
     :ensure t
     :hook
     ;; (before-save-hook  . tide-format-before-save)
@@ -231,6 +235,7 @@
   :hook
   (sh-mode-hook . lsp)
   (sh-mode-hook . flycheck-mode)
+  :setq (bash-ts-mode-hook . sh-mode-hook)
   ;; :config (setq flycheck-checker 'sh-shellcheck)
   :init
   (leaf shfmt :if (executable-find "shfmt")
@@ -254,7 +259,8 @@
 (leaf yaml-mode
   :ensure t
   :mode ("\\.yml\\'" . yaml-mode)
-  :hook (yaml-mode-hook . hl-todo-mode))
+  :hook (yaml-mode-hook . hl-todo-mode)
+  :setq (yaml-ts-mode-hook . yaml-mode-hook))
 
 (leaf systemd :ensure t)
 
@@ -775,6 +781,7 @@
   (leaf lsp-java
     :ensure t
     :hook (java-mode-hook . lsp)
+    :setq (java-ts-mode-hook . java-mode-hook)
     ;; :custom
     ;; (lsp-java-format-settings-url . "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
     )
