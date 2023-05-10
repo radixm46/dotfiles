@@ -2171,14 +2171,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :tag "builtin"
     :doc "text base web browser"
     :custom
-    `(
-      (shr-width               . 70)
-      (shr-indentation         . 4)
-      (shr-use-fonts           . t)
-      (shr-bullet              . "* ")
-      (eww-search-prefix       . "https://www.google.com/search?q=")
-      (eww-bookmarks-directory . ,(cache-sub-dir "eww"))
-      )
+    `((shr-width                   . 80)
+      (shr-indentation             . 4)
+      (shr-use-fonts               . t)
+      (url-configuration-directory . ,(cache-sub-dir "url"))
+      (eww-bookmarks-directory     . ,(cache-sub-dir "eww"))
+      (eww-search-prefix           . "https://www.google.com/search?q=")
+      (eww-bookmarks-directory     . ,(cache-sub-dir "eww")))
     :mode-hook
     (eww-mode-hook . ((rdm/sw-lnsp 0.75)
                       (rdm/text-scale-adjust)))
