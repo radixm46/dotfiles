@@ -260,7 +260,7 @@
 
 (leaf lua-mode :ensure t)
 
-(leaf org
+(leaf org :after nerd-icons
   :doc "org-mode config"
   :ensure t
   :mode ("\\.org\\'" . org-mode)
@@ -274,11 +274,11 @@
   (org-todo-keywords                  . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
                                                     "DONE(d!)" "CANCELLED(c@)")))
   (org-capture-templates              . `( ;; NOTE: require material icons
-                                          ("t" ,(format "%s  Task to Inbox" (nerd-fonts "fa-check"))
+                                          ("t" ,(format "%s  Task to Inbox" (nerd-icons-faicon "nf-fa-check"))
                                            entry (file+headline org-todofile "Inbox")
                                            "-*- TODO %?\nEntered on %U\n%a"
                                            :empty-lines-before 1) ; %u->%t
-                                          ("n" ,(format "%s  Note to Inbox" (nerd-fonts "fa-sticky-note"))
+                                          ("n" ,(format "%s  Note to Inbox" (nerd-icons-faicon "nf-fa-sticky_note"))
                                            entry (file+headline "" "Inbox")
                                            "-*- %?\nEntered on %U\n %i\n%a"
                                            :empty-lines-before 1)
@@ -514,7 +514,7 @@
  _n r_: random
 
  _SPC_: BACK
-" (nerd-fonts "fa-file-text-o"))
+" (nerd-icons-faicon "nf-fa-file_text_o"))
      ("c"   org-roam-capture)
      ("f"   org-roam-find-file)
      ("g"   org-roam-ui-mode)
@@ -601,7 +601,7 @@
  ^   ^                       ^   ^                       _l_/_L_: link
 
  _m t_: timer                _m r_: roam                 _o_:^ ^  open org dir
-" (nerd-fonts "fa-file-text-o"))
+" (nerd-icons-faicon "nf-fa-file_text_o"))
     ("c"   org-capture :exit t)
     ("A"   org-agenda :exit t)
     ("a"   consult-org-agenda :exit t)

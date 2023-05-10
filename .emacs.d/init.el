@@ -247,13 +247,6 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (prog-mode-hook . activate-ligature-on-window-system)
     )
 
-  (leaf nerd-fonts
-    :doc "Emacs nerd-fonts utilities."
-    :straight
-    (nerd-fonts :type git :host github
-                :repo "twlz0ne/nerd-fonts.el")
-    :require t)
-
   (leaf *hide-nobreak-whitespace :emacs>= "28"
     :doc "hack to disable face for double byte space"
     :setq (nobreak-char-display . nil))
@@ -274,6 +267,16 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (rdm/apply-func-in-fonts '("Hiragino Mincho ProN"
                                "BIZ UDP Mincho"
                                "Noto Serif CJK JP")))
+
+  (leaf nerd-icons
+    :ensure t
+    :require t
+    :doc "Nerd-icons.el is a library for easily using Nerd Font icons inside Emacs,
+ an alternative to all-the-icons."
+    :custom
+    (nerd-icons-scale-factor . 1.2) ;; bit larger
+    (nerd-icons-color-icons  . t)
+    :push ((nerd-icons-extension-icon-alist . '("org_archive" nerd-icons-sucicon "nf-custom-orgmode" :face nerd-icons-lblue))))
 
   (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
     :ensure t
@@ -380,7 +383,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 ^^^^^^^^^^^^^^^^^^^................................................................................
     ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^           ^_N_ext^ / ^_P_revious tab^
    ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^        ^_t_:  tab-bar keys
-" (nerd-fonts "fa-window-maximize"))
+" (nerd-icons-faicon "nf-fa-window_maximize"))
      ("h" evil-window-left)
      ("j" evil-window-down)
      ("k" evil-window-up)
@@ -599,7 +602,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _r_:   rename                    _s_:   select
 
  _SPC_: BACK
-" (nerd-fonts "fa-window-maximize"))
+" (nerd-icons-faicon "nf-fa-window_maximize"))
      ("n"   tab-bar-new-tab)
      ("c"   tab-bar-close-tab)
      ("r"   tab-rename)
@@ -1072,7 +1075,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _m m_: minor mode menu                    ^[i] on / [o]ff / [l]ocal / [g]lobal^
  ^history^
  _h h_: history                            _h c_: complex command
-"  (nerd-fonts "fa-list-ul"))
+"  (nerd-icons-faicon "nf-fa-list_ul"))
       ("b" hydra-consult:virtual-buffer/body :exit t)
       ("e" hydra-consult:editing/body        :exit t)
       ("r" hydra-consult:register/body       :exit t)
@@ -1096,7 +1099,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                              _B_:   bookmark
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("b" consult-buffer       :exit t)
       ("B" consult-bookmark     :exit t)
       ("r" consult-recent-file  :exit t)
@@ -1111,7 +1114,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _p_:   yank pop                           _k_:   kmacro
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("y" consult-yank-from-kill-ring :exit t)
       ("p" consult-yank-pop            :exit t)
       ("r" consult-yank-replace        :exit t)
@@ -1127,7 +1130,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _l_:   load
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("r" consult-register        :exit t)
       ("l" consult-register-load   :exit t)
       ("s" consult-register-store  :exit t)
@@ -1142,7 +1145,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _o_:   outline              _M_:   global mark          _I_:   imenu multi
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("g" consult-goto-line   :exit t)
       ("m" consult-mark        :exit t)
       ("M" consult-global-mark :exit t)
@@ -1160,7 +1163,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _L_:   line multi           _M_:   multi occur          _f_:   focus lines
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("l" consult-line        :exit t)
       ("L" consult-line-multi  :exit t)
       ("M" consult-multi-occur :exit t)
@@ -1177,7 +1180,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _G_:   git grep             _l_:   locate
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("g" consult-grep     :exit t)
       ("r" consult-ripgrep  :exit t)
       ("G" consult-git-grep :exit t)
@@ -1194,7 +1197,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  ^ ^                         _c_:   flycheck
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("e" consult-compile-error :exit t)
       ("m" consult-flymake       :exit t)
       ("c" consult-flycheck      :exit t)
@@ -1212,7 +1215,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _p_:   preview at point
 
  _SPC_: BACK
-" (nerd-fonts "fa-list-ul"))
+" (nerd-icons-faicon "nf-fa-list_ul"))
       ("a" consult-apropos                  :exit t)
       ("m" consult-man                      :exit t)
       ("f" consult-file-externally          :exit t)
@@ -1343,7 +1346,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (minibuffer-prompt-properties . '(read-only t cursor-intangible t face minibuffer-prompt))
     :hook (minibuffer-setup-hook . cursor-intangible-mode))
 
-  (leaf all-the-icons-completion :emacs>= "26.1"
+  (leaf all-the-icons-completion :emacs>= "26.1" :disabled t
     :after all-the-icons marginalia
     :doc "Add icons to completion candidates using the built in completion metadata functions."
     :ensure t
@@ -1351,6 +1354,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (conf-on-term-hook . (lambda () (all-the-icons-completion-mode -1)))
     (conf-on-gui-hook  . (lambda () (all-the-icons-completion-mode +1)))
     )
+
+  (leaf nerd-icons-completion :after nerd-icons marginalia
+    :ensure t
+    :global-minor-mode nerd-icons-completion-mode)
   )
 
 
@@ -1435,9 +1442,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :custom
       `(
         (flycheck-posframe-position       . 'window-bottom-right-corner)
-        (flycheck-posframe-info-prefix    . ,(format "%s " (nerd-fonts "fa-info")))
-        (flycheck-posframe-warning-prefix . ,(format "%s " (nerd-fonts "fa-exclamation-triangle")))
-        (flycheck-posframe-error-prefix   . ,(format "%s " (nerd-fonts "fa-exclamation-circle")))
+        (flycheck-posframe-info-prefix    . ,(format "%s " (nerd-icons-faicon "nf-fa-info")))
+        (flycheck-posframe-warning-prefix . ,(format "%s " (nerd-icons-faicon "nf-fa-exclamation_triangle")))
+        (flycheck-posframe-error-prefix   . ,(format "%s " (nerd-icons-faicon "nf-fa-exclamation_circle")))
         )
       )
 
@@ -1447,6 +1454,12 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (:flycheck-mode-map
        :package flycheck
        ("C-M-l" . consult-flycheck)))
+
+    (leaf *flycheck-margin-faicon
+      :doc "use faicon on flycheck margin string"
+      :setq
+      `((flycheck-default-margin-str . ,(nerd-icons-faicon "nf-fa-angle_double_right")))
+      )
     )
 
   (leaf company :emacs< "27"
@@ -1720,7 +1733,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  ^   ^                       _s e_: declaration          _C D_: doctor
  ^diagnos (lsp-ui)^          ^   ^                       _C d_: disconnect
  _l_:   flycheck-list        _a_:   appearance           _C v_: version
-" (nerd-fonts "fa-code"))
+" (nerd-icons-faicon "nf-fa-code"))
       ;; act on code
       ("r"   lsp-rename :exit t)
       ("f"   lsp-format-buffer :exit t)
@@ -1768,7 +1781,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
  _d g_ :glance
 
  _SPC_ :BACK
-" (nerd-fonts "fa-code"))
+" (nerd-icons-faicon "nf-fa-code"))
       ;; appearance
       ("s"   lsp-ui-sideline-mode)
       ("m"   lsp-ui-imenu)
@@ -2199,9 +2212,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (leaf *eww-bind-nerd-icons
       :custom
       `(
-        (shr-bullet                        . ,(format "%s " (nerd-fonts "oct-primitive-square")))
-        (eww-form-checkbox-symbol          . ,(nerd-fonts "fa-square-o"))
-        (eww-form-checkbox-selected-symbol . ,(nerd-fonts "fa-check-square-o"))
+        (shr-bullet                        . ,(format "%s " (nerd-icons-octicon "nf-oct-primitive_square")))
+        (eww-form-checkbox-symbol          . ,(nerd-icons-faicon "nf-fa-square_o"))
+        (eww-form-checkbox-selected-symbol . ,(nerd-icons-faicon "nf-fa-check_square_o"))
         )
       )
 
@@ -2412,7 +2425,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
     `(
       (git-gutter:modified-sign . "=")
       (git-gutter:added-sign    . "+")
-      (git-gutter:deleted-sign  . ,(nerd-fonts "fa-minus"))
+      (git-gutter:deleted-sign  . ,(nerd-icons-faicon "nf-fa-minus"))
       (git-gutter:ask-p         . nil)
       )
     :config
@@ -2438,7 +2451,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
  _k_:   previous             _v_:   mark
  _G_:   end of hunk          _s_:   stage                _h_:   open git timemachine
  ^ ^                         _x_:   revert               _g_:   open magit mode
-" (nerd-fonts "fa-code-fork"))
+" (nerd-icons-faicon "nf-fa-code_fork"))
      ("j" git-gutter:next-hunk)
      ("k" git-gutter:previous-hunk)
      ("G" git-gutter:end-of-hunk)
@@ -2670,18 +2683,28 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
     (with-eval-after-load 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
 
-    (leaf treemacs-all-the-icons
+    (leaf treemacs-nerd-icons :after (treemacs-themes nerd-icons)
+      :url "https://github.com/rainstormstudio/treemacs-nerd-icons"
+      :straight
+      (treemacs-nerd-icons
+       :type git :host github
+       :repo "rainstormstudio/treemacs-nerd-icons")
+      :require t
+      :mode-hook
+      ;; NOTE: 常にロード
+      (treemacs-mode-hook . ((treemacs-load-theme "nerd-icons"))))
+
+    (leaf treemacs-all-the-icons :disabled t
       :after treemacs-themes all-the-icons
       :require t
       :ensure t
-      :hook
-      (conf-on-term-hook  . (lambda () (treemacs-load-theme "Default")))
-      (conf-on-gui-hook   . (lambda () (treemacs-load-theme "all-the-icons")))
-      (treemacs-mode-hook . (lambda ()
-                              (if (display-graphic-p)
-                                  (treemacs-load-theme "all-the-icons")
-                                (treemacs-load-theme "Default"))))
-      )
+      :mode-hook
+      (conf-on-term-hook  . ((treemacs-load-theme "Default")))
+      (conf-on-gui-hook   . ((treemacs-load-theme "all-the-icons")))
+      (treemacs-mode-hook . ((if (display-graphic-p)
+                                 (treemacs-load-theme "all-the-icons")
+                               (treemacs-load-theme "Default")))))
+
     :bind
     (("M-0"       . treemacs-select-window)
      ("C-x t 1"   . treemacs-delete-other-windows)

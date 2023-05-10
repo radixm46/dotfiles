@@ -16,10 +16,9 @@
   ;; How wide the mode-line bar should be. It's only respected in GUI.
   (doom-modeline-bar-width . 3)
 
-  ;; Whether display icons in the mode-line. Respects `all-the-icons-color-icons'.
+  ;; Whether display icons in the mode-line.
   ;; While using the server mode in GUI, should set the value explicitly.
-  ;(setq doom-modeline-icon (display-graphic-p))
-  (doom-modeline-icon . nil)
+  (doom-modeline-icon . t)
 
   ;(defun doom-frame-init-func (&optional frame)
   ;  "frame init on doom-modeline"
@@ -129,7 +128,8 @@
   :config
   (doom-modeline-mode 1)
 
-  (leaf *doom-modeline-patch-on-frame-type
+  :config ; NOTE: not necessary with nerd-icons and nerd font available term
+  (leaf *doom-modeline-patch-on-frame-type :disabled t
     :hook
     (conf-on-term-hook . (lambda () (customize-set-variable 'doom-modeline-icon nil)))
     (conf-on-gui-hook .  (lambda () (customize-set-variable 'doom-modeline-icon t)))
