@@ -732,40 +732,42 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (after-load-theme-hook . patch-childframe-color)
     )
 
-  (leaf paren
-    :doc "configure show-paren-mode"
-    :tag "builtin"
+  (leaf *parenthesis-related-things
+    :doc "smartparens and paredit for manipulate, paren for highlighting"
     :config
-    (leaf *patch-paren-face
-      :preface
-      (defun patch-paren-face ()
-        (custom-set-faces
-         `(show-paren-match  ((t (:background ,(doom-color 'green)))))))
-      :hook (after-load-theme-hook . patch-paren-face)
-      )
-    :global-minor-mode show-paren-mode)
+    (leaf paren
+      :doc "configure show-paren-mode"
+      :tag "builtin"
+      :config
+      (leaf *patch-paren-face
+        :preface
+        (defun patch-paren-face ()
+          (custom-set-faces
+           `(show-paren-match  ((t (:background ,(doom-color 'green)))))))
+        :hook (after-load-theme-hook . patch-paren-face))
+      :global-minor-mode show-paren-mode)
 
-  (leaf electric-pair-mode :disabled t
-    :doc "automatic pares parenthesis"
-    :tag "builtin"
-    :emacs>= "24"
-    :hook
-    ((conf-mode-hook
-      prog-mode-hook) . electric-pair-mode))
+    (leaf electric-pair-mode :disabled t
+      :doc "automatic pares parenthesis"
+      :tag "builtin"
+      :emacs>= "24"
+      :hook
+      ((conf-mode-hook
+        prog-mode-hook) . electric-pair-mode))
 
-  (leaf smartparens
-    :ensure t
-    :custom (sp-show-pair-delay . 0.125)
-    :mode-hook
-    (after-load-theme-hook . ((custom-set-faces
-                               `(sp-show-pair-match-face
-                                 ((t (:background ,(doom-color 'green) :foreground ,(doom-color 'bg))))))))
-    :hook
-    ((prog-mode-hook
-      conf-mode-hook) . smartparens-mode))
+    (leaf smartparens
+      :ensure t
+      :custom (sp-show-pair-delay . 0.125)
+      :mode-hook
+      (after-load-theme-hook . ((custom-set-faces
+                                 `(sp-show-pair-match-face
+                                   ((t (:background ,(doom-color 'green) :foreground ,(doom-color 'bg))))))))
+      :hook
+      ((prog-mode-hook
+        conf-mode-hook) . smartparens-mode))
 
-  (leaf paredit :ensure t
-    :doc "for `evil-cleverparens' dependency")
+    (leaf paredit :ensure t
+      :doc "for `evil-cleverparens' dependency"))
 
   (leaf display-line-numbers
     :tag "builtin"
