@@ -956,9 +956,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                           ;;lines-tail
                           ;;spaces
                           ))
-    (whitespace-display-mappings . '((tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
-                                     (newline-mark ?\n [?\x21B2 ?\n])
-                                     ))
+    (whitespace-display-mappings . '((tab-mark     ?\t [?\xBB ?\t] [?\\ ?\t])
+                                     (newline-mark ?\n [?\u21A9 ?\n])))
     :custom-face
     (whitespace-tab      . '((t (:inherit 'shadow))))
     (whitespace-newline  . '((nil (:inherit 'shadow))))
