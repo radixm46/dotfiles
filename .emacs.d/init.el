@@ -1209,16 +1209,12 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (format "\
                       ^^%s consult miscellaneous^^
 ^^^^--------------------------------------------------------------------------------
- _a_:   apropos
- _m_:   man
- _f_:   file externally                    _t_:   theme
+ _m_:   man                                _t_:   theme
  _p_:   preview at point
 
  _SPC_: BACK
 " (nerd-icons-faicon "nf-fa-list_ul"))
-      ("a" consult-apropos                  :exit t)
       ("m" consult-man                      :exit t)
-      ("f" consult-file-externally          :exit t)
       ("t" consult-theme                    :exit t)
       ("p" consult-preview-at-point         :exit t)
       ("SPC" hydra-consult/body :exit t))
