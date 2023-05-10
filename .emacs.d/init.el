@@ -16,16 +16,15 @@
     :doc "gcmh works after startup"
     :doc "Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
     :ensure t
-    :hook (emacs-startup-hook . (lambda () (gcmh-mode 1)))
+    :mode-hook (emacs-startup-hook . ((gcmh-mode 1)))
     )
 
   (leaf xt-mouse
     :doc "mouse support on terminal"
     :tag "builtin"
-    :hook
-    (conf-on-term-hook . (lambda () (xterm-mouse-mode +1)))
-    (conf-on-gui-hook  . (lambda () (xterm-mouse-mode -1)))
-    )
+    :mode-hook
+    (conf-on-term-hook . ((xterm-mouse-mode +1)))
+    (conf-on-gui-hook  . ((xterm-mouse-mode -1))))
 
   (leaf cl-lib
     :tag "builtin"
@@ -1380,7 +1379,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :config
     (leaf eldoc-box
       :ensure t
-      :hook (eldoc-mode-hook . (lambda () (when (display-graphic-p) (eldoc-box-hover-mode))))
+      :mode-hook (eldoc-mode-hook . ((when (display-graphic-p) (eldoc-box-hover-mode))))
       :custom
       (eldoc-box-only-multi-line    . nil)
       (eldoc-box-fringe-use-same-bg . t)
@@ -1432,8 +1431,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
     (leaf flycheck-posframe
       :ensure t
-      :hook (flycheck-mode-hook . (lambda () (when (display-graphic-p)
-                                                 (flycheck-posframe-mode))))
+      :mode-hook (flycheck-mode-hook . ((when (display-graphic-p)
+                                          (flycheck-posframe-mode))))
 
       :custom
       `(
@@ -1584,28 +1583,21 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (defun switch-corfu-on-term ()
           (corfu-terminal-mode +1) (corfu-doc-terminal-mode +1))
 
-        :hook
-        (corfu-mode-hook   . (lambda ()
-                               (if (display-graphic-p)
-                                   (switch-corfu-on-gui)
-                                 (switch-corfu-on-term)
-                                 )))
-        (conf-on-term-hook . (lambda ()
-                               (dolist (buff (buffer-list))
-                                 (with-current-buffer buff
-                                   (when (and corfu-mode
-                                              (not (display-graphic-p)))
-                                     (switch-corfu-on-term)
-                                     )))))
-        (conf-on-gui-hook  . (lambda ()
-                               (dolist (buff (buffer-list))
-                                 (with-current-buffer buff
-                                   (when (and corfu-mode
-                                              (display-graphic-p))
-                                     (switch-corfu-on-gui)
-                                     )))))
-        )
-      )
+        :mode-hook
+        (corfu-mode-hook   . ((if (display-graphic-p)
+                                  (switch-corfu-on-gui)
+                                (switch-corfu-on-term))))
+        (conf-on-term-hook . ((dolist (buff (buffer-list))
+                                (with-current-buffer buff
+                                  (when (and corfu-mode
+                                             (not (display-graphic-p)))
+                                    (switch-corfu-on-term))))))
+        (conf-on-gui-hook  . ((dolist (buff (buffer-list))
+                                (with-current-buffer buff
+                                  (when (and corfu-mode
+                                             (display-graphic-p))
+                                    (switch-corfu-on-gui))))))
+        ))
 
   (leaf lsp-mode
     :doc "configure lsp"
@@ -1624,10 +1616,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (lsp-completion-provider                . ,(if (fboundp 'company-mode) :capf :none))
       )
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
-    :hook
-    (lsp-mode-hook . (lambda ()
-                       (eldoc-box-hover-at-point-mode -1)
-                       (flycheck-posframe-mode -1))) ; disable flycheck-posframe
+    :mode-hook
+    (lsp-mode-hook . ((eldoc-box-hover-at-point-mode -1)
+                      (flycheck-posframe-mode -1))) ; disable flycheck-posframe
+    :defvar lsp-prefer-flymake
     :config
     (setq lsp-prefer-flymake nil)
 
@@ -2120,7 +2112,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :preface ; release keys for binding
     (global-unset-key [f2])
     (global-unset-key "\M-2")
-    :hook (vterm-mode-hook . (lambda () (rdm/sw-lnsp 1)))
+    :mode-hook
+    (vterm-mode-hook . ((rdm/sw-lnsp 1)
+                        (set (make-local-variable 'buffer-face-mode-face) 'fixed-pitch)
+                        (buffer-face-mode t)))
     :custom
     (vterm-max-scrollback . 10000)
     (vterm-buffer-name-string . "vterm: %s")
@@ -2309,9 +2304,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :bind (:pdf-view-mode-map ("C-s" . ctrlf-forward-default))
     :setq-default (pdf-view-display-size . 'fit-page)
     :hook
-    (pdf-view-mode-hook . (lambda() (line-number-mode -1)))
     (pdf-view-mode-hook . pdf-links-minor-mode)
     (pdf-view-mode-hook . pdf-annot-minor-mode)
+    :mode-hook
+    (pdf-view-mode-hook . ((line-number-mode -1)))
     :init
     (leaf *switch-pdf-view-dark :after doom-themes
       :doc "detect whether doom-theme bg color seems dark (to avoid crush)"
@@ -2468,7 +2464,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
   (leaf magit
     :ensure t
     ;:custom (magit-completing-read-function . 'magit-ido-completing-read)
-    :hook (magit-section-mode-hook . (lambda () (whitespace-mode -1)))
+    :mode-hook (magit-section-mode-hook . ((whitespace-mode -1)))
     :config
     (leaf magit-todos
       :ensure t
