@@ -11,17 +11,17 @@
   :init
   (leaf *font-remap-text-mode
     :hook (text-mode-hook . remap-font-to-doc)
-    :preface (push #'text-mode  remap-font-to-doc-modes-list)
-    )
-  )
+    :preface (push #'text-mode remap-font-to-doc-modes-list)))
 
 (leaf emacs-lisp-mode
   :tag "builtin"
-  :hook
-  (emacs-lisp-mode-hook . hs-minor-mode)
-  (emacs-lisp-mode-hook . flycheck-mode)
-  (emacs-lisp-mode-hook . eldoc-mode)
-  (emacs-lisp-mode-hook . highlight-symbol-mode)
+  :mode-hook
+  (emacs-lisp-mode-hook . ((hs-minor-mode +1)
+                           (flycheck-mode +1)
+                           (eldoc-mode +1)
+                           (highlight-symbol-mode +1)
+                           (smartparens-strict-mode +1)
+                           (paredit-mode +1)))
   :init
   (leaf highlight-defined
     :ensure t
@@ -109,10 +109,11 @@
   (leaf hy-mode
     :ensure t
     :mode ("\\.hy\\'" . hy-mode)
-    :hook
-    ((hy-mode-hook . hs-minor-mode)
-     (hy-mode-hook . poetry-tracking-mode)
-     (hy-mode-hook . eldoc-box-hover-at-point-mode))
+    :mode-hook
+    (hy-mode-hook . ((hs-minor-mode +1)
+                     (smartparens-strict-mode +1)
+                     (paredit-mode +1)
+                     (eglot-ensure +1)))
     :init
     (leaf *eglot-hyls-config :disabled t
       :doc "enable hy-lang language server with eglot"
@@ -195,8 +196,7 @@
       :mode ("\\.js\\'" . (lambda ()
                             (js-mode)
                             (js2-minor-mode)))
-      :custom (js2-basic-offset . 2)
-      )
+      :custom (js2-basic-offset . 2))
 
     (leaf flycheck-use-eslint :if (executable-find "eslint") :disabled t
       :hook
@@ -309,6 +309,7 @@
     :hook (org-mode-hook . remap-font-to-doc)
     :preface (push #'org-mode  remap-font-to-doc-modes-list)
     )
+
 
   (leaf evil-org
     :ensure t
@@ -953,8 +954,7 @@
       "Mark entry as read and show"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (elfeed-show-entry entry)
-      (rdm/elfeed-search-mark-read entry)
-      )
+      (rdm/elfeed-search-mark-read entry))
 
     (defun rdm/elfeed-search-untag-later-unread (entry)
       "Remove the 'unread' and 'later' tag from entry.
@@ -970,8 +970,7 @@ based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
         (rdm/elfeed-search-mark-read entry)
-        (forward-line) (recenter))
-      )
+        (forward-line) (recenter)))
 
     (defun rdm/elfeed-search-show-read-entry ()
       "Display the currently selected item in a buffer.

@@ -17,8 +17,7 @@
     :doc "gcmh works after startup
 Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
     :ensure t
-    :mode-hook (emacs-startup-hook . ((gcmh-mode 1)))
-    )
+    :mode-hook (emacs-startup-hook . ((gcmh-mode 1))))
 
   (leaf xt-mouse
     :doc "mouse support on terminal"
@@ -36,8 +35,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :doc "load path from shell at startup"
     :ensure t
     :custom (exec-path-from-shell-arguments . '("-l"))
-    :config (when (daemonp) (exec-path-from-shell-initialize)))
-  )
+    :config (when (daemonp) (exec-path-from-shell-initialize))))
 
 
 (leaf *conf-cache-history
@@ -50,21 +48,18 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "supress auto saving message"
       :custom (auto-save-no-message . t))
     :custom
-    `(
-      (auto-save-file-name-transforms . `((".*" ,(expand-file-name "\\2" (cache-sub-dir "autosaved")) t)))
+    `((auto-save-file-name-transforms . `((".*" ,(expand-file-name "\\2" (cache-sub-dir "autosaved")) t)))
       (delete-auto-save-files         . t)
       (auto-save-default              . t)
       (auto-save-timeout              . 15)
       (auto-save-interval             . 120)
-      (auto-save-list-file-prefix     . nil)
-      ))
+      (auto-save-list-file-prefix     . nil)))
 
   (leaf *backup-files
     :doc "make backup files"
     :tag "builtin"
     :custom
-    `(
-      (backup-directory-alist         . `(("." .  ,(cache-sub-dir "backup"))))
+    `((backup-directory-alist         . `(("." .  ,(cache-sub-dir "backup"))))
       (auto-save-list-file-prefix     . ,(expand-file-name ".saves-"
                                           (cache-sub-dir "auto-save-list")))
       (auto-save-list-file-name)
@@ -73,8 +68,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (kept-new-versions              . 5)
       (kept-old-versions              . 1)
       (delete-old-versions            . t)
-      (create-lockfiles               . nil)
-      ))
+      (create-lockfiles               . nil)))
 
   (leaf history
     :doc "configure history, log"
@@ -87,13 +81,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf recentf
     :tag "builtin"
     :custom
-    `(
-      (recentf-save-file       . ,(cache-sub-file "recentf"))
+    `((recentf-save-file       . ,(cache-sub-file "recentf"))
       (recentf-max-saved-items . 2000)
       (recentf-auto-cleanup    . 'never)
       (recentf-exclude         . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
-                                   "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
-      )
+                                   "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/")))
     :init
     (defmacro with-suppressed-message (&rest body)
       "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
@@ -103,14 +95,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (setq recentf-auto-save-timer
           (run-with-idle-timer 30 t #'(lambda ()
                                        (with-suppressed-message (recentf-save-list)))))
-    :global-minor-mode recentf-mode
-    )
+    :global-minor-mode recentf-mode)
 
   (leaf bookmark
     :tag "builtin"
     :custom
-    `((bookmark-default-file . ,(cache-sub-file "bookmarks")))
-    )
+    `((bookmark-default-file . ,(cache-sub-file "bookmarks"))))
   )
 
 
@@ -135,13 +125,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :doc "setup ddsk"
     :ensure t
     :custom
-    `(
-      (skk-use-azik         . t)
+    `((skk-use-azik         . t)
       (default-input-method . "japanese-skk")
       (skk-user-directory   . ,(cache-sub-dir "skk"))
-      (skk-init-file        . ,(expand-file-name "elisp/initskk.el" user-emacs-directory))
-      )
-    )
+      (skk-init-file        . ,(expand-file-name "elisp/initskk.el" user-emacs-directory))))
   )
 
 
@@ -299,8 +286,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :config
     (leaf *emojify-init :emacs< "28"
       :custom (emojify-display-style . 'ascii)
-      :hook (after-init-hook . global-emojify-mode))
-    )
+      :hook (after-init-hook . global-emojify-mode)))
 
   (leaf *rdm/text-scale-adjust
     :doc "adjust text scale on buffer"
@@ -1026,17 +1012,15 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :preface
       (defun patch-pulsar-color ()
         (custom-set-faces
-         `(pulsar-magenta ((nil (:background ,(doom-color 'magenta)))))
-         `(pulsar-yellow  ((nil (:background ,(doom-color 'yellow)))))
-         `(pulsar-red     ((nil (:background ,(doom-color 'red)))))
-         `(pulsar-blue    ((nil (:background ,(doom-color 'blue)))))
-         `(pulsar-cyan    ((nil (:background ,(doom-color 'cyan)))))
-         `(pulsar-green   ((nil (:background ,(doom-color 'green)))))
-        ))
+         `(pulsar-magenta ((t (:background ,(doom-color 'magenta)))))
+         `(pulsar-yellow  ((t (:background ,(doom-color 'yellow)))))
+         `(pulsar-red     ((t (:background ,(doom-color 'red)))))
+         `(pulsar-blue    ((t (:background ,(doom-color 'blue)))))
+         `(pulsar-cyan    ((t (:background ,(doom-color 'cyan)))))
+         `(pulsar-green   ((t (:background ,(doom-color 'green)))))))
       :hook
       ((after-load-theme-hook
-        pulsar-mode-hook) . patch-pulsar-color)
-      )
+        pulsar-mode-hook) . patch-pulsar-color))
 
     (evil-define-key 'normal 'global
       (kbd "SPC") 'pulsar-pulse-line
@@ -1364,8 +1348,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :tag "builtin"
     :setq-default
     (ispell-program-name     . "aspell")
-    (ispell-local-dictionary . "en_US")
-    )
+    (ispell-local-dictionary . "en_US"))
 
   (leaf eldoc
     :tag "builtin"
@@ -1384,9 +1367,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (defun patch-eldoc-box-faces ()
           (custom-set-faces ;; modify bg to eldoc-box-body
            `(eldoc-box-body   ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))
-           `(eldoc-box-border ((t (:background ,(doom-color 'bg)))))
-           )
-          )
+           `(eldoc-box-border ((t (:background ,(doom-color 'bg)))))))
         :hook
         (after-load-theme-hook . patch-eldoc-box-faces))
       )
@@ -1457,11 +1438,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (company-idle-delay . 0)
     (company-selection-wrap-around . t)
     (company-minimum-prefix-length . 1)
-    (company-transformers . '(
-                              company-sort-by-occurrence
+    (company-transformers . '(company-sort-by-occurrence
                               company-sort-by-backend-importance
-                              company-sort-prefer-same-case-prefix
-                              ))
+                              company-sort-prefer-same-case-prefix))
     :config
     (leaf *add-yasnippet-backend
       :after yasnippet
@@ -1506,8 +1485,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (:after corfu--setup
               evil-normalize-keymaps)
       (:after corfu--teardown
-              evil-normalize-keymaps)
-      )
+              evil-normalize-keymaps))
     )
 
     (leaf *corfu-official-extensions
@@ -2757,7 +2735,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
     (leaf treemacs-evil
       :ensure t
       :after (treemacs evil)
-      :require treemacs-evil
+      :require t
       ;; fix tab action
       :bind (:evil-treemacs-state-map ("TAB" . treemacs-TAB-action)))
 
