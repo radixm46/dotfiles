@@ -845,6 +845,7 @@
                                     face nil :family font-for-tables :height 1.0))))
     )
 
+  :config
   (leaf *elfeed-patch-entry-switch
     :doc "patch entry-switch behavior"
     :custom
@@ -869,7 +870,7 @@
       "gk"        'rdm/elfeed-show-prev)
    )
 
-  (leaf *elfeed-func
+  (leaf *elfeed-func-def-bind
     :doc "custom defined func"
     :config
     (defun rdm/elfeed-search-toggle-star ()
@@ -917,28 +918,6 @@
             (x-set-selection 'PRIMARY feed-info)
             (message "Yanked: %s" feed-info)))))
 
-    (defun rdm/elfeed-show-default-open (&optional use-generic-p)
-      "open with default browser"
-      (interactive "P")
-      (elfeed-show-visit use-generic-p))
-
-    (defun rdm/elfeed-search-default-open (&optional use-generic-p)
-      "open with default browser"
-      (interactive "P")
-      (elfeed-search-browse-url use-generic-p))
-
-    (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
-      "open with eww"
-      (interactive "P")
-      (let ((browse-url-browser-function #'eww-browse-url))
-        (elfeed-show-visit use-generic-p)))
-
-    (defun rdm/elfeed-search-eww-open (&optional use-generic-p)
-      "open with eww"
-      (interactive "P")
-      (let ((browse-url-browser-function #'eww-browse-url))
-        (elfeed-search-browse-url use-generic-p)))
-
     (defun rdm/elfeed-unread-p (entry)
       "returns t if selected entry has unread tag"
       (interactive (list (elfeed-search-selected :ignore-region)))
@@ -972,6 +951,15 @@ based on elfeed-search-show-entry"
         (rdm/elfeed-search-mark-read entry)
         (forward-line) (recenter)))
 
+    (defun rdm/elfeed-search-show-entry (entry)
+      "Display the currently selected item on elfeed-show buffer.
+without forwarding line and mark as read"
+      (interactive (list (elfeed-search-selected :ignore-region)))
+      (require 'elfeed-show)
+      (when (elfeed-entry-p entry)
+        (elfeed-search-update-entry entry)
+        (elfeed-show-entry entry)))
+
     (defun rdm/elfeed-search-show-read-entry ()
       "Display the currently selected item in a buffer.
 based on elfeed-search-show-entry.
@@ -981,9 +969,10 @@ based on elfeed-search-show-entry.
       (if (and (eq (line-number-at-pos (point)) 1)
                (call-interactively #'rdm/elfeed-unread-p))
           (call-interactively #'rdm/elfeed-search-mark-read-show)
-        (progn (forward-line) (recenter)
-               (call-interactively #'rdm/elfeed-search-mark-read-show))
-        ))
+        (progn
+          (call-interactively #'rdm/elfeed-search-mark-read)
+          (forward-line) (recenter)
+          (call-interactively #'rdm/elfeed-search-show-entry))))
 
     (defun rdm/elfeed-search-show-read-prev-entry ()
       "Display currently selected item in buffer.
@@ -1023,10 +1012,73 @@ based on elfeed-search-browse-url"
           (when filter-str
             (elfeed-search-set-filter (concat filter-str " +unread -later"))))))
 
+    ;; eww
+    (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
+      "open with eww"
+      (interactive "P")
+      (let ((browse-url-browser-function #'eww-browse-url))
+        (elfeed-show-visit use-generic-p)))
+
+    (defun rdm/elfeed-search-eww-open (&optional use-generic-p)
+      "open with eww"
+      (interactive "P")
+      (let ((browse-url-browser-function #'eww-browse-url))
+        (elfeed-search-browse-url use-generic-p)))
+
+    ;; w3m
+    (defun rdm/elfeed-search-w3m-open (&optional use-generic-p)
+      "open with w3m browser"
+      (interactive "P")
+      (if (fboundp 'w3m-browse-url)
+          (let ((browse-url-browser-function #'w3m-browse-url))
+            (elfeed-search-browse-url use-generic-p))
+        (warn "w3m-mode not found")))
+
+    (defun rdm/elfeed-show-w3m-open (&optional use-generic-p)
+      "open with eww"
+      (interactive "P")
+      (if (fboundp 'w3m-browse-url)
+          (let ((browse-url-browser-function #'w3m-browse-url))
+            (elfeed-show-visit use-generic-p))
+        (warn "w3m-mode not found")))
+
+    ;; xwidget-webkit
+    (defun rdm/elfeed-search-webkit-open (&optional use-generic-p)
+      "open with xwidget webkit browser"
+      (interactive "P")
+      (if (fboundp 'xwidget-webkit-browse-url)
+          (progn
+            (let ((browse-url-browser-function #'xwidget-webkit-browse-url))
+              (elfeed-search-browse-url use-generic-p))
+            ;; switch buffer
+            (dolist (buff (buffer-list))
+              (with-current-buffer buff
+                (when (eq major-mode
+                          #'xwidget-webkit-mode)
+                  (switch-to-buffer buff)))))
+        (warn "xwidget-webkit-mode seems not available")
+        ))
+
+    (defun rdm/elfeed-show-webkit-open (&optional use-generic-p)
+      "open with xwidget webkit browser"
+      (interactive "P")
+      (if (fboundp 'xwidget-webkit-browse-url)
+          (progn
+            (let ((browse-url-browser-function #'xwidget-webkit-browse-url))
+              (elfeed-show-visit use-generic-p))
+            ;; switch buffer
+            (dolist (buff (buffer-list))
+              (with-current-buffer buff
+                (when (eq major-mode
+                          #'xwidget-webkit-mode)
+                  (switch-to-buffer buff)))))
+        (warn "xwidget-webkit-mode seems not available")))
+
     (evil-define-key 'normal elfeed-search-mode-map
       "m"  'rdm/elfeed-search-toggle-star
       "l"  'rdm/elfeed-search-tag-later-unread
-      "b"  'rdm/elfeed-search-default-open
+      "b"  'rdm/elfeed-search-eww-open
+      "B"  'rdm/elfeed-search-webkit-open
       "u"  'rdm/elfeed-search-untag-later-unread
       "Y"  'rdm/elfeed-search-entry-share
       "F"  'rdm/elfeed-search-filter-feed-name
@@ -1034,11 +1086,11 @@ based on elfeed-search-browse-url"
       "ta" 'elfeed-search-tag-all
       "tr" 'elfeed-search-untag-all
       "tj" 'rdm/elfeed-search-tag-junk
-      "go" 'rdm/elfeed-search-browse-url
+      "go" 'elfeed-search-browse-url
       "oo" 'rdm/elfeed-search-mark-read-show
       (kbd "RET") 'rdm/elfeed-search-show-read-entry
-      (kbd "SPC") 'rdm/elfeed-search-show-read-prev-entry
-      (kbd "S-SPC") 'evil-previous-line
+      (kbd "SPC") 'rdm/elfeed-search-show-read-entry
+      (kbd "S-SPC") 'rdm/elfeed-search-show-read-prev-entry
       (kbd "C-j") 'rdm/elfeed-search-show-read-entry
       (kbd "M-j") 'rdm/elfeed-search-show-read-entry
       "]]"        'rdm/elfeed-search-show-read-entry
@@ -1050,10 +1102,13 @@ based on elfeed-search-browse-url"
       )
 
     (evil-define-key 'normal elfeed-show-mode-map
-      "b"  'rdm/elfeed-show-default-open
+      "b"  'rdm/elfeed-show-eww-open
       "Y"  'rdm/elfeed-show-entry-share
+      "B"  'rdm/elfeed-show-webkit-open
+      "go" 'elfeed-show-visit
       "ta" 'elfeed-show-tag
-      "tr" 'elfeed-show-untag))
+      "tr" 'elfeed-show-untag)
+    )
 
   :custom
   (elfeed-db-directory           . "~/.config/elfeed/.db")
