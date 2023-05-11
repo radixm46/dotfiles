@@ -2615,7 +2615,7 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
       )
     )
 
-  (leaf neotree
+  (leaf neotree :disabled t
     :ensure t
     ;; :bind ([f7] . neotree-toggle)
     :custom
@@ -2716,7 +2716,8 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
         (treemacs-user-mode-line-format         . nil)
         (treemacs-user-header-line-format       . nil)
         (treemacs-width                         . 35)
-        (treemacs-collapse-dirs                 . ,(if treemacs-python-executable 3 0))
+        (treemacs-collapse-dirs                 . 3)
+        ;; (treemacs-collapse-dirs                 . ,(if treemacs-python-executable 3 0))
         (treemacs-persist-file                  . ,(cache-sub-file "treemacs-persist"))
         ))
     ;; The default width and height of the icons is 22 pixels. If you are
