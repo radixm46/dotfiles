@@ -11,10 +11,11 @@
 (load (expand-file-name "~/.emacs.d/elisp/util"))
 
 (leaf *startup
+  :doc  "startup config"
   :config
   (leaf gcmh
-    :doc "gcmh works after startup"
-    :doc "Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
+    :doc "gcmh works after startup
+Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
     :ensure t
     :mode-hook (emacs-startup-hook . ((gcmh-mode 1)))
     )
@@ -285,8 +286,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :after all-the-icons
       :push
       ((all-the-icons-extension-icon-alist . '("org_archive" all-the-icons-fileicon "org" :face all-the-icons-lgreen)))
-      )
-    )
+      ))
 
   (leaf emojify
     :ensure t
