@@ -745,7 +745,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
           (custom-set-faces
            `(show-paren-match  ((t (:background ,(doom-color 'green)))))))
         :hook (after-load-theme-hook . patch-paren-face))
-      :global-minor-mode show-paren-mode)
+      :hook
+      (prog-mode-hook
+       conf-mode-hook . show-paren-mode))
 
     (leaf electric-pair-mode :disabled t
       :doc "automatic pares parenthesis"
