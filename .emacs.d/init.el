@@ -298,8 +298,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       "run text-scale-adjust on buffer with amount `rdm/text-scale-amount'"
       (interactive)
       (when (numberp rdm/text-scale-amount)
-        (text-scale-adjust rdm/text-scale-amount)))
-    )
+        (text-scale-increase rdm/text-scale-amount))))
   )
 
 
