@@ -1972,7 +1972,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (undo-tree-auto-save-history       . t)
       (undo-tree-history-directory-alist . `(("[^\\.cache\\/emacs\\/.*]" . ,(cache-sub-dir "undo-tree"))))
       )
-    :global-minor-mode (global-undo-tree-mode))
+    :hook
+    ((prog-mode-hook
+      conf-mode-hook
+      text-mode-hook) . undo-tree-mode))
 
   (leaf dashboard
     :ensure t
@@ -2555,7 +2558,6 @@ curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
       )
     ;; Let Dirvish take over Dired globally
     (dirvish-override-dired-mode)
-    (add-to-list 'undo-tree-incompatible-major-modes 'dirvish-mode)
 
     :config
     (leaf *dirvish-preview-config
