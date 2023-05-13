@@ -1975,7 +1975,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :hook
     ((prog-mode-hook
       conf-mode-hook
-      text-mode-hook) . undo-tree-mode))
+      text-mode-hook) . turn-on-undo-tree-mode))
 
   (leaf dashboard
     :ensure t
