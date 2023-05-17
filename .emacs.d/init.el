@@ -1897,6 +1897,14 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
 (leaf *helpful-things
   :config
+  (leaf ibuffer
+    :tag "builtin"
+    :bind
+    (:global-map ("C-x C-b" . ibuffer))
+    :config
+    (leaf nerd-icons-ibuffer
+      :ensure t
+      :hook (ibuffer-mode-hook . nerd-icons-ibuffer-mode)))
 
   (leaf rainbow-mode
     :ensure t
