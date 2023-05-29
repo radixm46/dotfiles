@@ -70,6 +70,7 @@ haskell_env
 
 # check rust environment
 path=("${HOME}/.cargo/bin"(N-/) ${path})
+path=("${HOME}/.local/bin"(N-/) ${path})
 
 # configure pyenv
 if is_available 'pyenv'; then
