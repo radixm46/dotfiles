@@ -2328,24 +2328,25 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     ;;(go-translate-buffer-window-config . ..) ; config the result window as your wish
     :config
     (defun show-deepl-api-usage ()
-      "Show DeepL usage statistics on echo area.
-(require curl)"
+      "Show DeepL usage statistics on echo area."
       (interactive)
       (if deepl-api-key
-          (let* ((api-res (shell-command-to-string
-                           (format "\
-curl -s -X GET 'https://api-free.deepl.com/v2/usage' \
--H 'Authorization: DeepL-Auth-Key %s'"
-                                   deepl-api-key)))
-                 (usage (json-parse-string api-res))
-                 (used  (gethash "character_count" usage))
-                 (limit (gethash "character_limit" usage)))
-            (message "DeepL API usage: %g %%  [ %s / %s chars ]"
-                     (* 100 (/ (float used) limit))
-                     used limit
-                     ))
-        (message "DeepL API key not set")
-        ))
+          (request
+            "https://api-free.deepl.com/v2/usage"
+            :type "GET"
+            :headers `(("Authorization" . ,(format "DeepL-Auth-Key %s"  deepl-api-key)))
+            :success (cl-function
+                      (lambda (&key data &allow-other-keys)
+                        (let* ((usage (json-parse-string data))
+                               (used  (gethash "character_count" usage))
+                               (limit (gethash "character_limit" usage)))
+                          (message "DeepL API usage: %g %%  [ %s / %s chars ]"
+                                   (* 100 (/ (float used) limit))
+                                   used limit))))
+            :error (cl-function
+                    (lambda (&key error-thrown &allow-other-keys)
+                      (message "Got error during ruquest: %S" error-thrown))))
+        (message "DeepL API key not set")))
     )
 
   (leaf *darwin-dictionary-integration :if (eq system-type 'darwin)
