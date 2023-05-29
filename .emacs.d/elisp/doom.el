@@ -125,8 +125,7 @@
   (doom-modeline-before-update-env-hook . nil)
   (doom-modeline-after-update-env-hook  . nil)
 
-  :config
-  (doom-modeline-mode 1)
+  :global-minor-mode (doom-modeline-mode)
 
   :config ; NOTE: not necessary with nerd-icons and nerd font available term
   (leaf *doom-modeline-patch-on-frame-type :disabled t
@@ -146,8 +145,7 @@
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
   (doom-themes-treemacs-config)
-  (doom-themes-neotree-config)
-)
+  (doom-themes-neotree-config))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; doom.el ends here
