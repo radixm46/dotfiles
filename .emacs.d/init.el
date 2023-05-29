@@ -2512,28 +2512,25 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (leaf *dirvish-on-state
       :doc "switch dirvish attributes"
       :custom
-      `(
-        (dirvish-attributes           . `,(if (or (daemonp) (display-graphic-p))
-                                             '(vc-state all-the-icons collapse git-msg file-time file-size)
-                                           '(collapse git-msg file-time file-size)))
+      `((dirvish-attributes           . `,(if (or (daemonp) (display-graphic-p))
+                                              '(vc-state nerd-icons collapse git-msg file-time file-size)
+                                            '(nerd-icons collapse git-msg file-time file-size)))
         (dirvish-side-attributes      . `,(if (or (daemonp) (display-graphic-p))
-                                             '(vc-state all-the-icons collapse git-msg file-size)
-                                           '(collapse git-msg file-size)))
-        )
+                                              '(vc-state nerd-icons collapse git-msg file-size)
+                                            '(nerd-icons collapse git-msg file-size))))
       :hook
       (dirvish-directory-view-mode-hook . (lambda ()
                                             (if (display-graphic-p)
                                                 (progn
                                                   (customize-set-variable 'dirvish-attributes
-                                                                          '(vc-state all-the-icons collapse git-msg file-time file-size))
+                                                                          '(vc-state nerd-icons collapse git-msg file-time file-size))
                                                   (customize-set-variable 'dirvish-side-attributes
-                                                                          '(vc-state all-the-icons collapse git-msg file-size)))
+                                                                          '(vc-state nerd-icons collapse git-msg file-size)))
                                               (progn
                                                 (customize-set-variable 'dirvish-attributes
-                                                                        '(collapse git-msg file-time file-size))
+                                                                        '(nerd-icons git-msg file-time file-size))
                                                 (customize-set-variable 'dirvish-side-attributes
-                                                                        '(collapse git-msg file-size))
-                                                ))))
+                                                                        '(nerd-icons git-msg file-size))))))
       )
     ;; Let Dirvish take over Dired globally
     (dirvish-override-dired-mode)
