@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # display current memory in GB
-nerdmem="\UF85A"
+nerdmem="\UF035B"
 case $(uname) in
     Darwin)
         mem_val=$(memory_pressure | awk 'NR==28{ print 100-$5 "\% (prs)" }')

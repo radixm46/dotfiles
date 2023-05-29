@@ -501,7 +501,7 @@ function TRAPINT() {
 # vcs info TODO: include vcs prompt to theme
 function define_vcs_prompt_style {
     local P_GITBRANCH=$'\UF418'
-    local P_VCSICO=$'\UF7A1'
+    local P_VCSICO=$'\UE702'
     local P_ENDR=$'\UE0C7'
     local P_MIDTEXR=$'\UE0C5'
     zstyle ':vcs_info:*' formats \
