@@ -167,8 +167,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (let ((default-fparam (cdr (assq 'font default-frame-alist))))
         (substring
          default-fparam
-         0 (string-match "-" default-fparam))
-        ))
+         0 (string-match "-" default-fparam))))
 
     (defvar font-for-tables "UDEV Gothic" "1:2 width font for table") ;; refered via org mode etc.
     (defvar font-for-term   nil           "1:2 width font for term")
@@ -185,8 +184,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
              '("UDEV Gothic 35JPDOC")
              nil #'rdm/default-frame-font))
       (when font-for-term
-        (custom-set-faces `(fixed-pitch ((t :family ,font-for-term)))))
-      )
+        (custom-set-faces `(fixed-pitch ((t :family ,font-for-term))))))
     (defvar remap-font-to-doc-modes-list nil "major mode list for font update")
 
     ;; aplly font-for-doc to buffers
@@ -201,8 +199,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                 (with-current-buffer buffer
                   (when (member major-mode remap-font-to-doc-modes-list)
                     (remap-font-to-doc))))
-            (buffer-list))
-      )
+            (buffer-list)))
 
     )
 
@@ -228,8 +225,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
     (defun activate-ligature-on-window-system ()
       "enable ligature on window system"
-      (when (window-system) (ligature-mode))
-      )
+      (when (window-system) (ligature-mode)))
     :hook
     (prog-mode-hook . activate-ligature-on-window-system)
     )
@@ -278,11 +274,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf emojify
     :ensure t
     :custom
-    `(
-      (emojify-emojis-dir . ,(cache-sub-dir "emojis"))
-      (emojify-display-style . 'unicode)
-      (emojify-composed-text-p . nil)
-      )
+    `((emojify-emojis-dir      . ,(cache-sub-dir "emojis"))
+      (emojify-display-style   . 'unicode)
+      (emojify-composed-text-p . nil))
     :config
     (leaf *emojify-init :emacs< "28"
       :custom (emojify-display-style . 'ascii)
@@ -431,8 +425,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (evil-goggles-blocking-duration . nil)
       :config
       (evil-goggles-mode)
-      (evil-goggles-use-diff-faces)
-      )
+      (evil-goggles-use-diff-faces))
     (leaf evil-lion :ensure t
       :doc "Evil align operator."
       :url "https://github.com/edkolev/evil-lion"
@@ -668,8 +661,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (defun rdm/lnsp-default ()
       "remove local line-spacing"
       (interactive)
-      (kill-local-variable 'line-spacing))
-    )
+      (kill-local-variable 'line-spacing)))
 
   (leaf *config-custom-themes-path
     :doc "load custom theme from elisp dir"
@@ -714,8 +706,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (custom-set-faces
        `(child-frame-border  ((t (:foreground ,(doom-color 'bg)))))))
     :hook
-    (after-load-theme-hook . patch-childframe-color)
-    )
+    (after-load-theme-hook . patch-childframe-color))
 
   (leaf *parenthesis-related-things
     :doc "smartparens and paredit for manipulate, paren for highlighting"
@@ -787,8 +778,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
          `(line-number-current-line ((t (:foreground ,(doom-color 'fg) :background ,(doom-color 'bg))))))
         )
       :hook
-      (after-load-theme-hook . patch-display-line-numbers-current)
-      )
+      (after-load-theme-hook . patch-display-line-numbers-current))
     )
 
   (leaf display-fill-column-indicator
@@ -898,8 +888,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
            `(highlight-indent-guides-top-even-face ((t (:background ,actvc)))))))
       :hook
       ((after-load-theme-hook
-        highlight-indent-guides-mode-on-hook) . patch-highlight-indent-guides-color)
-      )
+        highlight-indent-guides-mode-on-hook) . patch-highlight-indent-guides-color))
     )
 
   (leaf rainbow-delimiters
@@ -1890,8 +1879,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (dap-mode 1)
     (dap-auto-configure-mode 1)
     (dap-ui-mode 1)
-    (dap-ui-controls-mode 1)
-    )
+    (dap-ui-controls-mode 1))
   )
 
 
@@ -1952,35 +1940,27 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (defun patch-which-key-posframe-faces ()
           (custom-set-faces
            `(which-key-posframe        ((nil (:background ,(doom-color 'bg-alt)))))
-           `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))
-           ))
+           `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
         :hook
-        (after-load-theme-hook . patch-which-key-posframe-faces))
-      )
-    (which-key-mode)
-    )
+        (after-load-theme-hook . patch-which-key-posframe-faces)))
+    :global-minor-mode which-key-mode)
 
 
   (leaf transient
     :ensure t
     :doc "required by magit, git-timemachine"
     :custom
-    `(
-      (transient-save-history . t)
+    `((transient-save-history . t)
       (transient-levels-file  . ,(expand-file-name "levels.el"  (cache-sub-dir "transient")))
       (transient-values-file  . ,(expand-file-name "values.el"  (cache-sub-dir "transient")))
-      (transient-history-file . ,(expand-file-name "history.el" (cache-sub-dir "transient")))
-      )
-    )
+      (transient-history-file . ,(expand-file-name "history.el" (cache-sub-dir "transient")))))
 
   (leaf undo-tree
     :ensure t
     :custom
-    `(
-      (undo-tree-visualizer-timestamps   . t)
+    `((undo-tree-visualizer-timestamps   . t)
       (undo-tree-auto-save-history       . t)
-      (undo-tree-history-directory-alist . `(("[^\\.cache\\/emacs\\/.*]" . ,(cache-sub-dir "undo-tree"))))
-      )
+      (undo-tree-history-directory-alist . `(("[^\\.cache\\/emacs\\/.*]" . ,(cache-sub-dir "undo-tree")))))
     :hook
     ((prog-mode-hook
       conf-mode-hook
@@ -1989,8 +1969,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf dashboard
     :ensure t
     :custom
-    `(
-      (dashboard-banner-logo-title . ,(format "Welcome to Emacs %s! [on %s (%s)]"
+    `((dashboard-banner-logo-title . ,(format "Welcome to Emacs %s! [on %s (%s)]"
                                               emacs-version
                                               system-name
                                               system-type)) ;; Set the title
@@ -2009,8 +1988,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                                         (registers . 5)))
       (initial-buffer-choice        . (lambda ()
                                         (dashboard-refresh-buffer)
-                                        (get-buffer "*dashboard*")))
-      )
+                                        (get-buffer "*dashboard*"))))
     :preface
     (defun dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
@@ -2018,9 +1996,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (if (and (file-regular-p banner-img)
                  (display-graphic-p))
             (customize-set-variable 'dashboard-startup-banner banner-img)
-          (customize-set-variable 'dashboard-startup-banner 3)
-          ))
-      )
+          (customize-set-variable 'dashboard-startup-banner 3))))
     :advice
     (:before dashboard-refresh-buffer
              dashboard-banner-selector)
@@ -2029,12 +2005,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf calendar
     :tag "builtin"
     :custom
-    (
-     (calendar-month-name-array   . ["01" "02" "03" "04" "05" "06"
+    ((calendar-month-name-array   . ["01" "02" "03" "04" "05" "06"
                                      "07" "08" "09" "10" "11" "12" ])
      (calendar-week-start-day     . 0)
-     (calendar-mark-holidays-flag . t)
-     )
+     (calendar-mark-holidays-flag . t))
     :hook
     (calendar-today-visible-hook   . calendar-mark-today)
     :config
@@ -2045,20 +2019,17 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
          `(holiday
            ((t (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
          `(calendar-today
-           ((t (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))
-         ))
+           ((t (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))))
       :hook
       (after-load-theme-hook . patch-calendar-faces))
 
     (leaf japanese-holidays
       :ensure t
       :custom
-      `(
-        (japanese-holiday-weekend         . '(0 6))
+      `((japanese-holiday-weekend         . '(0 6))
         (japanese-holiday-weekend-marker  . '(holiday  ;; sun
                                               nil nil nil nil nil ;; mon - fri
-                                              japanese-holiday-saturday))
-        )
+                                              japanese-holiday-saturday)))
       :hook
       ((calendar-today-visible-hook   . japanese-holiday-mark-weekend)
        (calendar-today-invisible-hook . japanese-holiday-mark-weekend))
@@ -2087,8 +2058,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :custom
     `((eshell-history-file-name . ,(expand-file-name
                                     "history"
-                                    (cache-sub-dir "eshell"))))
-    )
+                                    (cache-sub-dir "eshell")))))
 
   (leaf vterm
     :ensure t
@@ -2315,8 +2285,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :config
     ;; setup package if not ready
     (pdf-tools-install)
-    (pdf-loader-install)
-    )
+    (pdf-loader-install))
 
   (leaf go-translate
     :ensure t
@@ -2579,19 +2548,15 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (when (file-directory-p file) ; we only interest in directories here
           `(shell . ("exa" "--color=always" "--icons" "--git" "--group-directories-first" "-al" ,file))))
       :custom
-      `(
-        (dirvish-preview-dispatchers  . `(exa image gif video audio epub archive
-                                             ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))
-        )
-      )
+      `((dirvish-preview-dispatchers  . `(exa image gif video audio epub archive
+                                             ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))))
 
     (leaf *dirvish-preview-hooks-mediainfo :if (executable-find "mediainfo")
       :hook
       ((dirvish-image-preview-dp-hook
         dirvish-video-preview-dp-hook
         dirvish-gif-preview-dp-hook
-        dirvish-audio-preview-dp-hook) . dirvish-media-properties)
-      )
+        dirvish-audio-preview-dp-hook) . dirvish-media-properties))
 
     (evil-define-key 'normal dirvish-mode-map
       (kbd "TAB") 'dirvish-subtree-toggle
