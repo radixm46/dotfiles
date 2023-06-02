@@ -1008,7 +1008,7 @@ based on elfeed-search-browse-url"
                (title-esc (replace-regexp-in-string " " "\\s-" title t t))
                (filter-str (concat "=" title-esc)))
           (when filter-str
-            (elfeed-search-set-filter (concat filter-str " +unread -later"))))))
+            (elfeed-search-set-filter (concat filter-str " @3-months-ago +unread -later"))))))
 
     ;; eww
     (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
@@ -1118,15 +1118,17 @@ based on elfeed-search-browse-url"
   :hydra
   (hydra-elfeed-search-filter (nil nil)
                               "elfeed filters"
-                              ("u" (elfeed-search-set-filter "+unread -junk")        "all unread")
-                              ("a" (elfeed-search-set-filter " -junk")               "all entries")
-                              ("n" (elfeed-search-set-filter "+news +unread -later -junk") "news")
-                              ("N" (elfeed-search-set-filter "+news -junk")          "news(all)")
-                              ("l" (elfeed-search-set-filter "+later +unread") "later")
-                              ("L" (elfeed-search-set-filter "+later -unread") "later(read)")
-                              ("s" (elfeed-search-set-filter "+star")          "starred")
-                              )
-  )
+                              ("u" (elfeed-search-set-filter "@4-weeks-ago +unread -junk")  "all unread")
+                              ("a" (elfeed-search-set-filter "@4-weeks-ago -junk")  "all entries")
+                              ("n" (elfeed-search-set-filter "@4-weeks-ago +news +unread -later -junk")  "news")
+                              ("N" (elfeed-search-set-filter "@4-weeks-ago +news -junk")  "news(all)")
+                              ("l" (elfeed-search-set-filter "+later +unread")  "later")
+                              ("L" (elfeed-search-set-filter "+later -unread")  "later(read)")
+                              ("c" (elfeed-search-set-filter "@6-weeks-ago +comic +unread")  "comic")
+                              ("C" (elfeed-search-set-filter "@6-weeks-ago +comic -unread")  "comic(all)")
+                              ("v" (elfeed-search-set-filter "@4-weeks-ago +YouTube +unread -later") "YouTube")
+                              ("V" (elfeed-search-set-filter "@4-weeks-ago +YouTube") "YouTube(all)")
+                              ("s" (elfeed-search-set-filter "star")  "starred")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
