@@ -361,12 +361,15 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 ^^^^^^^^^^^^^^^^^^^................................................................................
     ^_p_revious^            ^^_n_ew^^               ^^_d_elete^^           ^_N_ext^ / ^_P_revious tab^
    ^_a_ce window^        ^^other _f_rame^^        ^^delete _o_ther^^        ^_t_:  tab-bar keys
+   ^(_<f4>_/_M-4_)       ^^buf2other _F_rame
 " (nerd-icons-faicon "nf-fa-window_maximize"))
      ("h" evil-window-left)
      ("j" evil-window-down)
      ("k" evil-window-up)
      ("l" evil-window-right)
      ("a" ace-window)
+     ("<f4>" ace-window :exit t)
+     ("M-4"  ace-window :exit t)
      ("H" evil-window-move-far-left)
      ("J" evil-window-move-very-bottom)
      ("K" evil-window-move-very-top)
@@ -385,6 +388,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
      ("o" delete-other-windows :exit t)
      ("n" evil-window-new)
      ("f" other-frame)
+     ("F" consult-buffer-other-frame :exit t)
      ("N" tab-bar-switch-to-next-tab)
      ("P" tab-bar-switch-to-prev-tab)
      ("t" hydra-tab-bar/body :exit t))
