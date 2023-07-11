@@ -58,9 +58,12 @@
         "gP" 'highlight-symbol-prev-in-defun))
 
     :hook (emacs-lisp-mode-hook . highlight-defined-mode)
-    :custom (highlight-defined-face-use-itself . t)
-    )
-  )
+    :custom (highlight-defined-face-use-itself . t))
+
+  :config
+  ;; add original C-j behavior to M-RET
+  (evil-define-key '(normal insert) lisp-interaction-mode-map
+    (kbd "M-RET") 'eval-print-last-sexp))
 
 (leaf conf-mode
   :tag "builtin"
