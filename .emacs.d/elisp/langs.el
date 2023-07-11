@@ -380,7 +380,7 @@
        'org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       )
 
-    (leaf *org-latex-preview-imagemagick
+    (leaf *org-latex-preview-imagemagick :if (executable-find "imagemagick")
       :doc "use imagemagick for latex preview"
       :require ob-latex
       :after org
@@ -390,8 +390,9 @@
       :config
       (customize-set-variable
        'org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
-      (add-to-list 'org-babel-load-languages '(latex . t))
-      )
+      (customize-set-variable
+       'org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
+      (add-to-list 'org-babel-load-languages '(latex . t)))
 
     (leaf *patch-org-mode-header-size
       :doc "set larger face for org-level-1 to 5"
