@@ -2064,6 +2064,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       )
     )
 
+  (leaf info
+    :tag "builtin"
+    :doc "customize info-mode appearance (add line spacing, enlarge)"
+    :mode-hook
+    (Info-mode-hook . ((rdm/sw-lnsp 0.75)
+                       (rdm/text-scale-adjust))))
+
   (leaf eshell
     :tag "builtin"
     :custom
