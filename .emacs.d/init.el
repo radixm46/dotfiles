@@ -2329,6 +2329,25 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (message "DeepL API key not set")))
     )
 
+  (leaf mpv :if (executable-find "mpv")
+    :ensure t
+    :after nerd-icons
+    :commands mpv-live-p ; used to detect mpv running
+    :custom
+    `((mpv-default-options   . `(,(let ((mpvconf (expand-file-name
+                                                  "mpv" "~/.config")))
+                                    (if mpvconf (format "--config-dir=%s" mpvconf) ""))
+                                 "--save-position-on-quit"
+                                 "--volume=80"))
+      (mpv-start-timeout     . 1.0)
+      (mpv-current-indicator . ,(format "  -- (now playing)" (nerd-icons-faicon "nf-fa-play")))))
+
+  (leaf tldr :if (executable-find "tldr")
+    :doc "elegant tldr frontend"
+    :ensure t
+    :custom
+    `((tldr-directory-path . ,(cache-sub-dir "tldr"))))
+
   (leaf *darwin-dictionary-integration :if (eq system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
