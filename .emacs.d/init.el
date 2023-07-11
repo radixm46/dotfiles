@@ -650,6 +650,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 (leaf *conf-appearance
   :custom
   (ring-bell-function . 'ignore)
+  (fill-column        . 85)
   :config
   (display-time)
   (column-number-mode t)
