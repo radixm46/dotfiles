@@ -318,6 +318,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     ;; (global-visual-line-mode nil)
     )
 
+  (leaf pixel-scroll :emacs>= "29"
+    :doc "enable pixel scrolling"
+    :tag "builtin"
+    :custom
+    (pixel-scroll-precision-interpolate-page . t)
+    :global-minor-mode pixel-scroll-precision-mode)
+
   (leaf rg
     :doc "Use ripgrep in Emacs. (binaries included)"
     :ensure t
