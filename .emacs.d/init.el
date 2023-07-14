@@ -2535,7 +2535,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                                         :right (omit yank index)))
       ;; bookmarks TODO: add config for windows
       (dirvish-quick-access-entries . `(("h" ,(getenv "HOME")   "Home")
-                                        ("d" ,(expand-file-name "Dowwnloads" (getenv "HOME")) "Downloads")
+                                        ("d" ,(expand-file-name "Downloads" (getenv "HOME")) "Downloads")
                                         ("D" ,(expand-file-name "Documents"  (getenv "HOME")) "Documents")
                                         ("e" ,(expand-file-name ".emacs.d"   (getenv "HOME")) "Emacs directory")
                                         ("m" ,(cond ((eq system-type 'darwin)    "/Volumes/")
