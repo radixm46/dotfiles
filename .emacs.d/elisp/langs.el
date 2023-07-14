@@ -280,7 +280,7 @@
   (org-priority-default               . 3)
   ;; keywords
   (org-refile-targets                 . '((org-agenda-files :maxlevel . 3)))
-  (org-todo-keywords                  . '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "WAITING(w@/!)" "PROJ(p)" "|"
+  (org-todo-keywords                  . '((sequence "TODO(t)" "NEXT(n)" "SOMEDAY(s)" "WAITING(w@/!)" "PROJ(p)" "|"
                                                     "DONE(d!)" "CANCELLED(c@)")))
   (org-capture-templates              . `( ;; NOTE: require material icons
                                           ("t" ,(format "%s  Task to Inbox" (nerd-icons-faicon "nf-fa-check"))
@@ -368,6 +368,12 @@
                                         (800 1000 1200 1400 1600 1800 2000)
                                         " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
     (org-agenda-current-time-string . "⭠ now ─────────────────────────────────────────────────")
+    (org-agenda-prefix-format       . '((agenda . " %i %-12:c%?-12t%-6e% s")
+                                        (todo   . " %i %-12:c %-6e")
+                                        (tags   . " %i %-12:c")
+                                        (search . " %i %-12:c")))
+    (org-columns-default-format     . "%60ITEM(Task) %TODO %TAGS %6Effort(Estim){:} %CLOCKSUM(ActTime)")
+    (org-agenda-columns-add-appointments-to-effort-sum . t)
 
     :config
     (leaf *org-latex-preview-svg :if (executable-find "dvisvgm") :disabled t
@@ -434,16 +440,13 @@
       (defun patch-org-todo-faces ()
         (customize-set-variable
          'org-todo-keyword-faces
-         `(
-           ("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
+         `(("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
            ("NEXT"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))))
-           ("STARTED" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'cyan)))))
+           ("SOMEDAY" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'orange)))))
            ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
-           ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta)))))
-           )))
+           ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta))))))))
       :hook
-      (after-load-theme-hook . patch-org-todo-faces)
-      )
+      (after-load-theme-hook . patch-org-todo-faces))
 
     (leaf org-modern
       :straight
