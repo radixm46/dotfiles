@@ -419,7 +419,8 @@
       (defun patch-org-mode-face ()
         (custom-set-faces
          `(org-hide             ((t (:foreground ,(doom-color 'bg))))) ; org-hide
-         `(org-table             ((t :family ,font-for-tables)))       ; use 1:2 font for table
+         `(org-table            ((t :family ,font-for-tables)))       ; use 1:2 font for table
+         `(org-column           ((t :family ,font-for-tables)))       ; use 1:2 font for column
          `(org-ellipsis         ((t (:background ,(doom-color 'bg)))))
          `(org-block-begin-line ((t (:background ,(doom-color 'bg)))))
          `(org-block-end-line   ((t (:background ,(doom-color 'bg)))))
