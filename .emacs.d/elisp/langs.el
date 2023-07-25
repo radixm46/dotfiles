@@ -313,6 +313,10 @@
     :preface (push #'org-mode  remap-font-to-doc-modes-list)
     )
 
+  (leaf *font-remap-org-agenda-mode
+    :doc "for better alignment"
+    :hook (org-agenda-mode-hook . remap-font-to-term)
+    :preface (push #'org-mode  remap-font-to-term-modes-list))
 
   (leaf evil-org
     :ensure t
