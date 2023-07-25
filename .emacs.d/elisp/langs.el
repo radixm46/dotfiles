@@ -350,6 +350,16 @@
       (expand-file-name "todo.org" org-directory)
       "default org todo file path"))
 
+  (leaf *org-habits
+    :doc "enable `org-habit'"
+    :preface (add-to-list 'org-modules 'org-habit)
+    :custom
+    `((org-habit-completed-glyph . ,(string-to-char "-"))
+      (org-habit-today-glyph     . ,(string-to-char "O"))
+      (org-habit-following-days  . 7)
+      (org-habit-preceding-days  . 28)
+      (org-habit-show-all-today  . t)))
+
   (defun rdm/org-goto-dir ()
     "open dir '~/org' with dired"
     (interactive)
