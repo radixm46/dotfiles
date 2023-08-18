@@ -860,7 +860,8 @@
     :hook
     ((elfeed-search-update-hook
       after-load-theme-hook) . (lambda ()
-                                 (face-remap-add-relative 'hl-line `(:background ,(doom-color 'bg-alt)))
+                                 (face-remap-add-relative 'hl-line
+                                                          `(:background ,(doom-blend 'highlight 'bg-alt 0.30)))
                                  (set-face-attribute 'elfeed-search-tag-face nil :foreground `,(doom-color 'green))
                                  (dolist (face '(elfeed-search-tag-face
                                                  elfeed-search-date-face
@@ -868,8 +869,7 @@
                                                  elfeed-search-title-face
                                                  elfeed-search-unread-title-face))
                                    (set-face-attribute
-                                    face nil :family font-for-tables :height 1.0))))
-    )
+                                    face nil :family font-for-tables :height 1.0)))))
 
   :config
   (leaf *elfeed-patch-entry-switch
