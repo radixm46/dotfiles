@@ -17,6 +17,7 @@
     :doc "gcmh works after startup
 Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
     :ensure t
+    :custom (gcmh-verbose . t)
     :mode-hook (emacs-startup-hook . ((gcmh-mode 1))))
 
   (leaf xt-mouse
