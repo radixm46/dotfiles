@@ -364,6 +364,14 @@
       (org-habit-preceding-days  . 28)
       (org-habit-show-all-today  . t)))
 
+  (leaf *org-num-mode
+    :doc "configure org-num minor mode"
+    :custom
+    (org-num-skip-tags       . nil)
+    (org-num-skip-commented  . t)
+    (org-num-skip-footnotes  . t)
+    (org-num-skip-unnumbered . t))
+
   (defun rdm/org-goto-dir ()
     "open dir '~/org' with dired"
     (interactive)
