@@ -2783,7 +2783,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   :config
   (load (expand-file-name "~/.emacs.d/elisp/conf-org"))
   (load (expand-file-name "~/.emacs.d/elisp/conf-elfeed"))
-  (load (expand-file-name "~/.emacs.d/elisp/langs")))
+  (load (expand-file-name "~/.emacs.d/elisp/conf-langs")))
 
 
 (leaf *conf-appearance-on-state

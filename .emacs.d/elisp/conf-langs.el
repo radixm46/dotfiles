@@ -1,4 +1,4 @@
-;;; langs.el --- summary -*- lexical-binding: t -*-
+;;; conf-langs.el --- summary -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; major modes loaded by init.el
@@ -336,4 +336,4 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; langs.el ends here
+;;; conf-langs.el ends here
