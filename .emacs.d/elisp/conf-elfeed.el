@@ -7,7 +7,7 @@
 ;;; Code:
 
 
-(leaf elfeed :if (file-exists-p "~/.config/elfeed")
+(leaf elfeed
   :ensure t
   :url "https://github.com/skeeto/elfeed"
   :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")

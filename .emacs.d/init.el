@@ -2780,9 +2780,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 (leaf *load-major-modes
   :config
   (load (expand-file-name "~/.emacs.d/elisp/conf-org"))
-  (load (expand-file-name "~/.emacs.d/elisp/conf-elfeed"))
   (load (expand-file-name "~/.emacs.d/elisp/conf-langs")))
 
+(leaf *load-elfeed  :if (file-exists-p "~/.config/elfeed")
+  :doc "load elfeed plugins if elfeed db available"
+  :config (load (expand-file-name "~/.emacs.d/elisp/conf-elfeed")))
 
 (leaf *conf-appearance-on-state
   :doc "apply theme and frame state hooks after init"
