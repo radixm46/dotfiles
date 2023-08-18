@@ -2779,8 +2779,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   )
 
 
-(leaf *load-lang-settings
+(leaf *load-major-modes
   :config
+  (load (expand-file-name "~/.emacs.d/elisp/conf-org"))
+  (load (expand-file-name "~/.emacs.d/elisp/conf-elfeed"))
   (load (expand-file-name "~/.emacs.d/elisp/langs")))
 
 
