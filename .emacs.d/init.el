@@ -2173,12 +2173,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
     (leaf *eww-bind-nerd-icons
       :custom
-      `(
-        (shr-bullet                        . ,(format "%s " (nerd-icons-octicon "nf-oct-primitive_square")))
+      `((shr-bullet                        . ,(format "%s " (nerd-icons-octicon "nf-oct-square_fill")))
         (eww-form-checkbox-symbol          . ,(nerd-icons-faicon "nf-fa-square_o"))
-        (eww-form-checkbox-selected-symbol . ,(nerd-icons-faicon "nf-fa-check_square_o"))
-        )
-      )
+        (eww-form-checkbox-selected-symbol . ,(nerd-icons-faicon "nf-fa-check_square_o"))))
 
     (leaf *eww-toggle-inhibit-images :emacs>= "28.1"
       :doc "disable image by default"
