@@ -294,6 +294,68 @@
     :custom (docker-tramp-use-names . t))
   )
 
+(leaf *lml-modes
+  :doc "lightweight markup languages"
+  :config
+  (leaf markdown-mode
+    :ensure t
+    ;; :hook (markdown-mode . visual-line-mode)
+    :commands (markdown-mode gfm-mode)
+    :mode
+    (("README\\.md\\'"  . gfm-mode)
+     ("\\.md\\'"
+      "\\.markdown\\'") . markdown-mode)
+    :custom
+    (markdown-command                    . "multimarkdown")
+    (markdown-hide-markup                . t)
+    (markdown-header-scaling             . t)
+    (markdown-header-scaling-values      . '(1.75 1.5 1.25 1.1 1.0 1.0))
+    (markdown-enable-highlighting-syntax . t)
+    (markdown-enable-math                . t)
+    :init
+    (leaf *font-remap-markdown-mode
+      :hook
+      (markdown-mode-hook . remap-font-to-doc)
+      (gfm-mode-hook      . remap-font-to-doc)
+      :preface
+      (push #'markdown-mode  remap-font-to-doc-modes-list)
+      (push #'gfm-mode       remap-font-to-doc-modes-list))
+    :config
+    (evil-define-key 'normal markdown-mode-map
+      "j" 'evil-next-visual-line
+      "k" 'evil-previous-visual-line
+      "gj" 'evil-next-line
+      "gk" 'evil-previous-line)
+    ;; modify table face to 1:2
+    (set-face-attribute 'markdown-table-face nil :family font-for-tables))
+
+  (leaf valign
+    :doc "CJK supported table vertical alignment (on graphical environment)"
+    :ensure t
+    :custom
+    (valign-fancy-bar . t)
+    :preface
+    (defun valign-buffer-on-gui ()
+      (mapc #'(lambda (buffer)
+                (with-current-buffer buffer
+                  (when (or (eq major-mode #'org-mode)
+                            (eq major-mode #'markdown-mode))
+                    (valign-mode +1))))
+            (buffer-list)))
+    (defun valign-remove-buffer-on-term ()
+      (mapc #'(lambda (buffer)
+                (with-current-buffer buffer
+                  (when (or (eq major-mode #'org-mode)
+                            (eq major-mode #'markdown-mode))
+                    (valign-mode -1))))
+            (buffer-list)))
+    :hook
+    ((org-mode-hook
+      markdown-mode-hook) . (lambda () (when (display-graphic-p) (valign-mode +1))))
+    (conf-on-gui-hook     . valign-buffer-on-gui)
+    (conf-on-term-hook    . valign-remove-buffer-on-term))
+  )
+
 (leaf powershell
   :ensure t
   :mode ("\\.ps1\\'"))
