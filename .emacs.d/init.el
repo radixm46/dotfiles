@@ -341,14 +341,15 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf ediff
     :ensure t
     :tag "builtin"
-    :custom (ediff-window-setup-function . #'ediff-setup-windows-plain)
+    :custom
+    (ediff-window-setup-function . #'ediff-setup-windows-plain)
+    (ediff-split-window-function . #'split-window-horizontally)
     :setq
     (ediff-word-2 . "0-9.,。、")
     (ediff-word-3 . "`'?!:;\"{}[]()「」（）？！")
     :config
     (defun ediff-window-display-p ()
-      "overwritten ediff builtin function, for not generate new frame" nil)
-    )
+      "overwritten ediff builtin function, for not generate new frame" nil))
 
   (leaf evil
     :ensure t
