@@ -226,12 +226,6 @@
 
   ;; (setq system-time-locale "C") ; dates written in eng
 
-  (leaf ob-mermaid
-    :doc "configure mermaid for org babel"
-    :ensure t
-    :custom `(ob-mermaid-cli-path . ,(executable-find "mmdc"))
-    :config (add-to-list 'org-babel-load-languages '(mermaid . t)))
-
   (leaf org-pomodoro
     :doc "configure org-pomodoro"
     :ensure t

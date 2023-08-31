@@ -335,6 +335,22 @@
     )
   )
 
+(leaf *mermaid-setup :if (executable-find "mmdc")
+  :config
+  (leaf mermaid-mode
+    :doc "configure mermaid-mode"
+    :ensure t
+    :custom
+    (mermaid-output-format . "png")
+    (mermaid-flags         . "--backgroundColor transparent --theme forest"))
+
+  (leaf ob-mermaid
+    :doc "configure mermaid for org babel"
+    :ensure t
+    :custom `(ob-mermaid-cli-path . ,(executable-find "mmdc")))
+  ;; configure mermaid for babel (ob-mermaid)
+  (add-to-list 'org-babel-load-languages '(mermaid . t)))
+
 (leaf gnuplot :if (executable-find "gnuplot")
   :ensure t
   :mode
