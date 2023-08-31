@@ -335,5 +335,12 @@
     )
   )
 
+(leaf gnuplot :if (executable-find "gnuplot")
+  :ensure t
+  :mode
+  (("\\.gp\\'"
+    "\\.gnuplot\\'") . gnuplot-mode)
+  :config (add-to-list 'org-babel-load-languages '(babel . t)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; conf-langs.el ends here
