@@ -2273,11 +2273,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :mode ("\\.pdf\\'" . pdf-view-mode)
     :bind (:pdf-view-mode-map ("C-s" . ctrlf-forward-default))
     :setq-default (pdf-view-display-size . 'fit-page)
-    :hook
-    (pdf-view-mode-hook . pdf-links-minor-mode)
-    (pdf-view-mode-hook . pdf-annot-minor-mode)
     :mode-hook
-    (pdf-view-mode-hook . ((line-number-mode -1)))
+    (pdf-view-mode-hook . ((line-number-mode     -1)
+                           (pdf-links-minor-mode +1)
+                           (pdf-annot-minor-mode +1)))
+    :custom (pdf-view-selection-style . 'glyph) ; NOTE: required for selecting non-english langs
     :init
     (leaf *switch-pdf-view-dark :after doom-themes
       :doc "detect whether doom-theme bg color seems dark (to avoid crush)"
@@ -2298,12 +2298,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                 (pdf-view-dark-minor-mode -1))))))
       :hook
       (pdf-view-mode-hook    . pdf-view-mode-switch-dark)
-      (after-load-theme-hook . pdf-view-mode-switch-dark-with-theme-load)
-      )
-    :config
-    ;; setup package if not ready
-    (pdf-tools-install)
-    (pdf-loader-install))
+      (after-load-theme-hook . pdf-view-mode-switch-dark-with-theme-load))
+    (pdf-tools-install t)  ; Standard activation command
+    ;; (pdf-loader-install) ; On demand loading, leads to faster startup time
+    )
 
   (leaf go-translate
     :ensure t
