@@ -420,5 +420,7 @@
     "\\.gnuplot\\'") . gnuplot-mode)
   :config (add-to-list 'org-babel-load-languages '(babel . t)))
 
+(leaf git-modes :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; conf-langs.el ends here
