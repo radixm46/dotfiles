@@ -17,7 +17,8 @@
   :tag "builtin"
   :mode-hook
   (emacs-lisp-mode-hook . ((hs-minor-mode +1)
-                           (flycheck-mode +1)
+                           ;; (flycheck-mode +1)
+                           (flymake-mode +1)
                            (eldoc-mode +1)
                            (highlight-symbol-mode +1)
                            (smartparens-strict-mode +1)
@@ -243,6 +244,7 @@
     :ensure t
     :hook (sh-mode-hook . shfmt-on-save-mode))
   (leaf *flycheck-by-shellcheck :if (executable-find "shellcheck")
+    :disabled t
     :doc "use shellcheck for flychecker with lsp"
     :hook (lsp-after-initialize-hook . (lambda () (flycheck-add-next-checker 'lsp 'sh-shellcheck))))
   )

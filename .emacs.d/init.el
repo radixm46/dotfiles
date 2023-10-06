@@ -1372,7 +1372,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       )
     )
 
-  (leaf flymake :disabled t
+  (leaf flymake
     :tag "builtin"
     :emacs>= "26"
     :hook (prog-mode-hook . flymake-mode)
@@ -1380,9 +1380,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (:flymake-mode-map ("M-j"   . flymake-goto-next-error)
                        ("M-k"   . flymake-goto-previous-error)
                        ("C-M-l" . consult-flymake))
-    )
+    :config
+    (leaf flymake-collection :ensure t))
 
-  (leaf flycheck
+  (leaf flycheck :disabled t
     :ensure t
     :bind
     (:flycheck-mode-map ("M-j" . flycheck-next-error)
@@ -1589,10 +1590,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :mode-hook
     (lsp-mode-hook . ((eldoc-box-hover-at-point-mode -1)
                       (flycheck-posframe-mode -1))) ; disable flycheck-posframe
-    :defvar lsp-prefer-flymake
+    :setq (lsp-prefer-flymake . t)
     :config
-    (setq lsp-prefer-flymake nil)
-
     (leaf lsp-ui
       :doc "LSP UI tools"
       :ensure t
