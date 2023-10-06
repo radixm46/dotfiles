@@ -44,8 +44,7 @@
          ))
       :hook
       ((highlight-defined-mode-hook
-        after-load-theme-hook) . patch-highlight-defined-faces)
-      )
+        after-load-theme-hook) . patch-highlight-defined-faces))
 
     (leaf *highlight-symbol-evil-bind
       :config
@@ -68,8 +67,7 @@
 (leaf conf-mode
   :tag "builtin"
   :hook (conf-mode-hook . hl-todo-mode)
-  :mode ("\\.env\\'" . conf-mode)
-)
+  :mode ("\\.env\\'"    . conf-mode))
 
 ;; required for racer
 (leaf rust-mode
@@ -80,8 +78,7 @@
   :config
   (leaf cargo
     :ensure t
-    :hook (rust-mode-hook . cargo-minor-mode))
-  )
+    :hook (rust-mode-hook . cargo-minor-mode)))
 
 (leaf *python-config
   :doc "python related configuration"

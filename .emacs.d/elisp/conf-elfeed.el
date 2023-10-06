@@ -61,7 +61,7 @@
       (kbd "C-k") 'rdm/elfeed-show-prev
       "[["        'rdm/elfeed-show-prev
       "gk"        'rdm/elfeed-show-prev)
-   )
+    )
 
   (leaf *elfeed-func-def-bind
     :doc "custom defined func"

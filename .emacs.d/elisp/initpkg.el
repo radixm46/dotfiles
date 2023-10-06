@@ -38,14 +38,12 @@
         (goto-char
          (point-max))
         (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-  )
+    (load bootstrap-file nil 'nomessage)))
 
 (prog1 '*patch-straight-use-repos
   (customize-set-variable 'straight-recipe-repositories
                           '(org-elpa melpa gnu-elpa-mirror nongnu-elpa emacsmirror-mirror)
-                          "customiized at initpkg")
-  )
+                          "customiized at initpkg"))
 
 ;; setup leaf via straight.el
 (prog1 '*leaf-with-straight-setup
@@ -54,8 +52,8 @@
   (leaf-keywords-init)
   (customize-set-variable 'leaf-alias-keyword-alist
                           '((:ensure . :straight))
-                          "customized at initpkg")
-  )
+                          "customized at initpkg"))
+
 
 (leaf *leaf-configure
   :doc "configure leaf related packages"

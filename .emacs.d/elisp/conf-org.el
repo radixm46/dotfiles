@@ -47,8 +47,7 @@
   :init
   (leaf *font-remap-org-mode
     :hook (org-mode-hook . remap-font-to-doc)
-    :preface (push #'org-mode  remap-font-to-doc-modes-list)
-    )
+    :preface (push #'org-mode  remap-font-to-doc-modes-list))
 
   (leaf *font-remap-org-agenda-mode
     :doc "for better alignment"
@@ -71,9 +70,7 @@
     (leaf *patch-evil-org-ctrl-behavior
       :hook
       (conf-on-term-hook . (lambda () (setq evil-want-C-i-jump nil)))
-      (conf-on-gui-hook  . (lambda () (setq evil-want-C-i-jump t)))
-      )
-    )
+      (conf-on-gui-hook  . (lambda () (setq evil-want-C-i-jump t)))))
 
   :config
   (leaf *org-config-directory
@@ -236,8 +233,7 @@
 
   (leaf org-sidebar
     :doc "sidebar for org-mode"
-    :ensure t
-    )
+    :ensure t)
 
   (leaf *configure-bibtex
     :defun reftex-parse-all
@@ -249,7 +245,7 @@
            (file-exists-p (buffer-file-name))
            (reftex-parse-all))
       (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
-   )
+    )
   ;; (use-package ox-bibtex)
 
   (leaf org-ref :ensure t)

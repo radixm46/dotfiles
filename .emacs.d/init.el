@@ -453,8 +453,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :config
       (evil-define-key 'motion 'global
         (kbd "C-c +") 'evil-numbers/inc-at-pt
-        (kbd "C-c -") 'evil-numbers/dec-at-pt
-        ))
+        (kbd "C-c -") 'evil-numbers/dec-at-pt))
     (leaf evil-cleverparens
       :doc "edit for lispy modes"
       :ensure t
@@ -579,8 +578,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                          :repo "mohkale/consult-yasnippet")
       :bind
       (("M-g s"   . consult-yasnippet)
-       ("M-g M-s" . consult-yasnippet)))
-    )
+       ("M-g M-s" . consult-yasnippet))))
 
   (leaf tab-bar :emacs>= "27.1"
     :tag "builtin"
@@ -646,7 +644,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (completion-category-overrides . '((file      . (styles partial-completion))))
     :mode-hook
     (minibuffer-setup-hook . ((setq-local completion-styles '(orderless)))))
-)
+  )
 
 
 (leaf *conf-appearance
@@ -686,8 +684,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :url "https://emacs.stackexchange.com/a/28947"
     :preface
     (defvar after-load-theme-hook nil
-      "Hook run after color theme is loaded using `load-theme'."
-      )
+      "Hook run after color theme is loaded using `load-theme'.")
     (defun run-after-load-theme-hook (&rest _args)
       "Run `after-load-theme-hook'."
       (run-hooks 'after-load-theme-hook))
@@ -2056,12 +2053,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                                       holiday-local-holidays))
 
       (leaf *patch-calendar-face :after doom-themes
-      :preface
-      (defun patch-japanese-holiday-saturday ()
-        (custom-set-faces
-         `(japanese-holiday-saturday
-           ((nil (:foreground ,(doom-color 'blue) :background ,(doom-color 'bg)))))
-         ))
+        :preface
+        (defun patch-japanese-holiday-saturday ()
+          (custom-set-faces
+           `(japanese-holiday-saturday
+             ((nil (:foreground ,(doom-color 'blue) :background ,(doom-color 'bg)))))))
         :hook
         (after-load-theme-hook . patch-japanese-holiday-saturday))
       )
@@ -2170,8 +2166,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       ((after-load-theme-hook
         eww-mode-hook) . (lambda ()
         (custom-set-faces
-         `(eww-form-text ((t :background ,(doom-color 'bg-alt)))))))
-      )
+         `(eww-form-text ((t :background ,(doom-color 'bg-alt))))))))
 
     (leaf *eww-bind-nerd-icons
       :custom
@@ -2186,8 +2181,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :config
       (evil-define-key 'normal eww-mode-map
         "i" 'eww-toggle-images
-        "I" 'eww-toggle-images)
-      )
+        "I" 'eww-toggle-images))
 
     (leaf *eww-use-color-config
       :doc "config colors in eww"
@@ -2196,8 +2190,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :config
       (evil-define-key 'normal eww-mode-map
         "c" 'eww-toggle-colors
-        "C" 'eww-toggle-colors)
-      )
+        "C" 'eww-toggle-colors))
 
     (leaf *patch-eww-heading-size
       :preface
@@ -2205,12 +2198,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (set-face-attribute 'shr-h1 nil :height 1.4)
         (set-face-attribute 'shr-h2 nil :height 1.2)
         (set-face-attribute 'shr-h3 nil :height 1.1)
-        (set-face-attribute 'shr-h4 nil :height 1.0)
-        )
+        (set-face-attribute 'shr-h4 nil :height 1.0))
       :hook
-      (after-load-theme-hook . patch-eww-heading-size)
-      )
-    )
+      (after-load-theme-hook . patch-eww-heading-size)))
 
   (leaf emacs-w3m :if (executable-find "w3m")
     :doc "w3m interface for emacs"
@@ -2401,12 +2391,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf git-gutter
     :ensure t
     :custom
-    `(
-      (git-gutter:modified-sign . "=")
+    `((git-gutter:modified-sign . "=")
       (git-gutter:added-sign    . "+")
       (git-gutter:deleted-sign  . ,(nerd-icons-faicon "nf-fa-minus"))
-      (git-gutter:ask-p         . nil)
-      )
+      (git-gutter:ask-p         . nil))
     :config
     (leaf *patch-git-gutter-color :after doom-themes
       :preface
@@ -2490,24 +2478,21 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :config
       (osx-trash-setup))
     :custom
-    `(
-      ;; use gnu-ls if available on macOS
+    `(;; use gnu-ls if available on macOS
       (insert-directory-program  . ,(if (and (eq system-type 'darwin)
-                                            (executable-find "gls"))
-                                       "gls" "ls"))
+                                             (executable-find "gls"))
+                                        "gls" "ls"))
       (dired-listing-switches    . ,(if (and (eq system-type 'darwin)
                                              (executable-find "gls"))
                                         "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group" "-l"))
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
       ;; NOTE: on macOS, require full disk access to use trash bin
-      (trash-directory           . ,(when (eq system-type 'darwin) "~/.Trash"))
-      )
+      (trash-directory           . ,(when (eq system-type 'darwin) "~/.Trash")))
     :config
     (ffap-bindings)
     ;; by selecting directory, do not creaete new dired buffer
-    (put 'dired-find-alternate-file 'disabled nil)
-    )
+    (put 'dired-find-alternate-file 'disabled nil))
 
   (leaf dirvish
     :if (or (not (equal system-type 'darwin))
@@ -2526,10 +2511,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (dirvish-header-line-position . 'default)
       (dirvish-header-line-height   . '(25 . 25))
       (dirvish-header-line-format   . '(:left  (path)
-                                        :right (free-space)))
+                                               :right (free-space)))
       (dirvish-mode-line-position   . 'default)
       (dirvish-mode-line-format     . '(:left  (sort file-time " " file-size symlink)
-                                        :right (omit yank index)))
+                                               :right (omit yank index)))
       ;; bookmarks TODO: add config for windows
       (dirvish-quick-access-entries . `(("h" ,(getenv "HOME")   "Home")
                                         ("d" ,(expand-file-name "Downloads" (getenv "HOME")) "Downloads")
@@ -2581,7 +2566,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
           `(shell . ("exa" "--color=always" "--icons" "--git" "--group-directories-first" "-al" ,file))))
       :custom
       `((dirvish-preview-dispatchers  . `(exa image gif video audio epub archive
-                                             ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))))
+                                              ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))))
 
     (leaf *dirvish-preview-hooks-mediainfo :if (executable-find "mediainfo")
       :hook
@@ -2812,8 +2797,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; local.el ends here
-"))) (load local-conf)
-))
+")))
+    (load local-conf)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
