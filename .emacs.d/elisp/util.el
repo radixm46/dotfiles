@@ -31,8 +31,7 @@
   (leaf *conf-chache-dir
     :defun
     (cache-sub-dir
-     expand-file-rec
-     expand-file-name)
+     expand-file-rec)
     :config
     (defun expand-file-rec (path basedir)
       "generate full path from basedir with given list
@@ -55,8 +54,9 @@ example:
       "emacs cache directory path (default: $HOME/.cache)")
 
     (defun cache-sub-dir (&optional name)
-      "check directory path (create if not exists), and returns full path to dir.
-if argument is not given, returns `emacs-cache-root-dir'"
+      "Check directory existence, and return full path to given NAME.
+Create if cache sub directory NAME not exists.
+If argument is not given, returns `emacs-cache-root-dir'"
       (let ((lpath (if (eq name nil)
                        (expand-file-name emacs-cache-root-dir)
                      (expand-file-name name emacs-cache-root-dir))))
@@ -64,10 +64,10 @@ if argument is not given, returns `emacs-cache-root-dir'"
             (progn (make-directory lpath t) lpath)
           lpath)))
 
-    (defun cache-sub-file (name &optional subdir )
-      "returns file path like 'emacs-cache-root-dir/subdir/name'
-if name is not given, returns 'emacs-cache-root-dir/name'
-argument `name' could be directory or filename"
+    (defun cache-sub-file (name &optional subdir)
+      "returns file path like 'emacs-cache-root-dir/SUBDIR/NAME'
+if name is not given, returns 'emacs-cache-root-dir/NAME'
+argument NAME could be directory or filename"
       (expand-file-name name (cache-sub-dir subdir)))
 
     ;; create eln-cache in .cache
