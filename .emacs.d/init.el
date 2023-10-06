@@ -1883,8 +1883,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
      ("<f8>" . dap-hydra)
      ("M-8"  . dap-hydra))
     :custom
-    (dap-auto-configure-features
-     '(sessions locals breakpoints expressions repl controls tooltip))
+    `((dap-auto-configure-features . '(sessions locals breakpoints expressions repl controls tooltip))
+      (dap-breakpoints-file        . ,(cache-sub-file ".dap-breakpoints")))
     :config
     (dap-mode 1)
     (dap-auto-configure-mode 1)

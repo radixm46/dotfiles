@@ -80,7 +80,8 @@
       (org-default-notes-file . ,(expand-file-name
                                   "notes.org" (expand-file-name "org/orgfiles" (getenv "HOME"))))
       (org-agenda-files       . `,(directory-files
-                                   (expand-file-name "org/orgfiles" (getenv "HOME")) t ".org$" t)))
+                                   (expand-file-name "org/orgfiles" (getenv "HOME")) t ".org$" t))
+      (org-id-locations-file  . ,(cache-sub-file ".org-id-locations")))
     :config
     (defvar org-todofile
       (expand-file-name "todo.org" org-directory)
