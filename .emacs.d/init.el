@@ -61,8 +61,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :tag "builtin"
     :custom
     `((backup-directory-alist         . `(("." .  ,(cache-sub-dir "backup"))))
-      (auto-save-list-file-prefix     . ,(expand-file-name ".saves-"
-                                          (cache-sub-dir "auto-save-list")))
+      (auto-save-list-file-prefix     . ,(expand-file-name ".saves-" (cache-sub-dir "auto-save-list")))
       (auto-save-list-file-name)
       (make-backup-files              . t)
       (version-control                . t) ;; enable version control
@@ -95,7 +94,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         `(with-temp-message (or (current-message) "") ,@body)))
     (setq recentf-auto-save-timer
           (run-with-idle-timer 30 t #'(lambda ()
-                                       (with-suppressed-message (recentf-save-list)))))
+                                        (with-suppressed-message (recentf-save-list)))))
     :global-minor-mode recentf-mode)
 
   (leaf bookmark
@@ -118,7 +117,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (set-default-coding-systems     'utf-8)
   (set-terminal-coding-system     'utf-8)
   (set-keyboard-coding-system     'utf-8)
-  (set-buffer-file-coding-system 'utf-8)
+  (set-buffer-file-coding-system  'utf-8)
   (prefer-coding-system           'utf-8)
 
   ;; skk config(use
