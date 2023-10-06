@@ -234,8 +234,8 @@
 (leaf sh-mode
   :tag "builtin"
   :hook
-  (sh-mode-hook . lsp)
-  (sh-mode-hook . flycheck-mode)
+  ;; (sh-mode-hook . lsp)
+  ;; (sh-mode-hook . flycheck-mode)
   :setq (bash-ts-mode-hook . sh-mode-hook)
   ;; :config (setq flycheck-checker 'sh-shellcheck)
   :init
