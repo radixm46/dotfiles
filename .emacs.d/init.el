@@ -594,13 +594,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                        ^^%s tab-bar-mode^^
 ^^^^-----------------------------------------------------------------
  _n_:   new                       _j_:   next
- _c_:   close                     _k_:   previous
+ _x_:   close                     _k_:   previous
  _r_:   rename                    _s_:   select
 
  _SPC_: BACK
 " (nerd-icons-faicon "nf-fa-window_maximize"))
      ("n"   tab-bar-new-tab)
-     ("c"   tab-bar-close-tab)
+     ("x"   tab-bar-close-tab)
      ("r"   tab-rename)
      ("j"   tab-bar-switch-to-next-tab)
      ("k"   tab-bar-switch-to-prev-tab)
