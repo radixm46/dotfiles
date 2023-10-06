@@ -458,11 +458,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :ensure t
       :hook (smartparens-enabled-hook . evil-cleverparens-mode)
       :config
-      (evil-define-key 'normal evil-cleverparens-mode-map
-        "[" 'evil-cp-previous-opening
-        "]" 'evil-cp-next-opening
-        "{" 'evil-cp-previous-closing
-        "}" 'evil-cp-next-closing))
+      (evil-define-key '(normal visual) evil-cleverparens-mode-map
+        "gj" 'sp-next-sexp
+        "gk" 'sp-previous-sexp
+        "["  'evil-cp-previous-opening
+        "]"  'evil-cp-next-opening
+        "{"  'evil-cp-previous-closing
+        "}"  'evil-cp-next-closing))
     )
 
   (leaf editorconfig
