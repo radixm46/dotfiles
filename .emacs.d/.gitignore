@@ -36,5 +36,5 @@ banner.*
 
 # local .el files
 custom.el
-local.el
+/elisp/local*
 *.elc
