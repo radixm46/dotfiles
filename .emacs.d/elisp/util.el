@@ -30,27 +30,10 @@
 ;; setup .config/cache/emacs
   (leaf *conf-chache-dir
     :defun
-    (cache-sub-dir
-     expand-file-rec)
+    (cache-sub-dir)
     :config
-    (defun expand-file-rec (path basedir)
-      "generate full path from basedir with given list
-
-example:
-  (expand-file-rec '(\"foo\" \"bar\" \"baz\") \"~\")
-  => \"/home/user/foo/bar/buzz\""
-      (cond
-       ((length= path 1)
-        (expand-file-name (car path) basedir))
-       ((length> path 1)
-        (expand-file-rec
-         (cdr path) (expand-file-name (car path) basedir)))
-       (t
-        (message "invalid path value"))
-       ))
-
     (defvar emacs-cache-root-dir
-      (expand-file-rec '(".cache" "emacs") (getenv "HOME"))
+      (expand-file-name ".cache/emacs" (getenv "HOME"))
       "emacs cache directory path (default: $HOME/.cache)")
 
     (defun cache-sub-dir (&optional name)

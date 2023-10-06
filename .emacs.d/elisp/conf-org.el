@@ -77,15 +77,13 @@
 
   :config
   (leaf *org-config-directory
-    :if (file-directory-p (expand-file-rec '("org" "orgfiles") (getenv "HOME")))
+    :if (file-directory-p (expand-file-name "org/orgfiles" (getenv "HOME")))
     :custom
-    `(
-      (org-directory              . ,(expand-file-rec '("org" "orgfiles") (getenv "HOME")))
-      (org-default-notes-file     . ,(expand-file-name
-                                      "notes.org" (expand-file-rec '("org" "orgfiles") (getenv "HOME"))))
-      (org-agenda-files           . `,(directory-files
-                                       (expand-file-rec '("org" "orgfiles") (getenv "HOME")) t ".org$" t))
-      )
+    `((org-directory          . ,(expand-file-name "org/orgfiles" (getenv "HOME")))
+      (org-default-notes-file . ,(expand-file-name
+                                  "notes.org" (expand-file-name "org/orgfiles" (getenv "HOME"))))
+      (org-agenda-files       . `,(directory-files
+                                   (expand-file-name "org/orgfiles" (getenv "HOME")) t ".org$" t)))
     :config
     (defvar org-todofile
       (expand-file-name "todo.org" org-directory)
@@ -321,8 +319,8 @@
                                       ;;:head "#+title: ${title}\n"
                                       ;;:unnarrowed t)
                                       ))
-      (org-roam-directory         . ,(expand-file-rec '("org" "roam") (getenv "HOME")))
-      (org-roam-index-file        . ,(expand-file-rec '("org" "roam" "Index.org") (getenv "HOME")))
+      (org-roam-directory         . ,(expand-file-name "org/roam" (getenv "HOME")))
+      (org-roam-index-file        . ,(expand-file-name "org/roam/Index.org" (getenv "HOME")))
       (org-roam-db-location       . ,(cache-sub-file  "org-roam.db"))
       )
     :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
@@ -349,7 +347,7 @@
     :hook (org-mode-hook . org-pdftools-setup-link)
     :custom
     `(
-      (org-noter-notes-search-path . `(,(expand-file-rec '("org" "roam" "noter") (getenv "HOME"))))
+      (org-noter-notes-search-path . `(,(expand-file-name "org/roam/noter" (getenv "HOME"))))
       )
     )
 

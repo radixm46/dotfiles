@@ -7,8 +7,8 @@
 ;;; Code:
 
 ;; ---------------  load package ---------------
-(load (expand-file-name "~/.emacs.d/elisp/initpkg"))
-(load (expand-file-name "~/.emacs.d/elisp/util"))
+(load (expand-file-name "elisp/initpkg" user-emacs-directory))
+(load (expand-file-name "elisp/util"    user-emacs-directory))
 
 (leaf *startup
   :doc  "startup config"
@@ -679,7 +679,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
   (leaf *config-custom-themes-path
     :doc "load custom theme from elisp dir"
-    :custom (custom-theme-directory . "~/.emacs.d/elisp/"))
+    :custom `(custom-theme-directory . ,(expand-file-name "elisp" user-emacs-directory)))
 
   (leaf *conf-theme-hook
     :doc "reconfigure appearance after `load-theme' fired"
@@ -698,7 +698,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
   (leaf *config-doom-modeline
     :config
-    (load (expand-file-name "~/.emacs.d/elisp/doom"))
+    (load (expand-file-name "elisp/doom" user-emacs-directory))
 
     (leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
       :after doom-themes
@@ -2006,7 +2006,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :preface
     (defun dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
-      (let ((banner-img "~/.emacs.d/banner.png"))
+      (let ((banner-img (expand-file-name "banner.png" user-emacs-directory)))
         (if (and (file-regular-p banner-img)
                  (display-graphic-p))
             (customize-set-variable 'dashboard-startup-banner banner-img)
@@ -2534,7 +2534,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (dirvish-quick-access-entries . `(("h" ,(getenv "HOME")   "Home")
                                         ("d" ,(expand-file-name "Downloads" (getenv "HOME")) "Downloads")
                                         ("D" ,(expand-file-name "Documents"  (getenv "HOME")) "Documents")
-                                        ("e" ,(expand-file-name ".emacs.d"   (getenv "HOME")) "Emacs directory")
+                                        ("e" ,(expand-file-name user-emacs-directory) "Emacs directory")
                                         ("m" ,(cond ((eq system-type 'darwin)    "/Volumes/")
                                                     ((eq system-type 'gnu/linux) "/mnt/")
                                                     (t "(not available)")) "Drives")
@@ -2778,12 +2778,12 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
 (leaf *load-major-modes
   :config
-  (load (expand-file-name "~/.emacs.d/elisp/conf-org"))
-  (load (expand-file-name "~/.emacs.d/elisp/conf-langs")))
+  (load (expand-file-name "elisp/conf-org"   user-emacs-directory))
+  (load (expand-file-name "elisp/conf-langs" user-emacs-directory)))
 
 (leaf *load-elfeed  :if (file-exists-p "~/.config/elfeed")
   :doc "load elfeed plugins if elfeed db available"
-  :config (load (expand-file-name "~/.emacs.d/elisp/conf-elfeed")))
+  :config (load (expand-file-name "elisp/conf-elfeed" user-emacs-directory)))
 
 (leaf *conf-appearance-on-state
   :doc "apply theme and frame state hooks after init"
@@ -2798,7 +2798,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 (leaf *load-local-conf
   :config
   (let
-      ((local-conf (expand-file-name  "~/.emacs.d/elisp/local.el")))
+      ((local-conf (expand-file-name "elisp/local.el" user-emacs-directory)))
     (unless (file-exists-p local-conf)
       (with-temp-file local-conf
         (insert "\
