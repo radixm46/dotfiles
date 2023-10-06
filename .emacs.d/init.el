@@ -619,8 +619,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       :hook
       (after-load-theme-hook . (lambda ()
                                  (custom-set-faces
-                                  `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan))))))))
-      )
+                                  `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan) :foreground ,(doom-color 'bg)))))))))
     )
 
   (leaf *config-completion-styles
