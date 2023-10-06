@@ -422,5 +422,24 @@
 
 (leaf git-modes :ensure t)
 
+(leaf fsharp-mode
+  :ensure t
+  :preface (exec-path-from-shell-copy-env "DOTNET_ROOT") ; import dotnet runtime path
+  :mode-hook (fsharp-mode-hook . ((rainbow-delimiters-mode -1)))
+  :config
+  (leaf *eglot-fsharp
+    :doc "load `eglot-fsharp.el' inside straight cloned repo"
+    :mode-hook
+    (fsharp-mode-hook . ((unless eglot--managed-mode
+                           (call-interactively 'eglot))))
+    :load-path
+    `(,(expand-file-name
+        "straight/repos/emacs-fsharp-mode"
+        straight-base-dir))
+    :require eglot-fsharp
+    :custom `(eglot-fsharp-server-install-dir . ,(cache-sub-dir "FsAutoComplete"))
+  ))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; conf-langs.el ends here
