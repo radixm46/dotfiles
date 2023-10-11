@@ -61,8 +61,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :tag "builtin"
     :custom
     `((backup-directory-alist         . `(("." .  ,(cache-sub-dir "backup"))))
+      (backup-by-copying              . t)
       (auto-save-list-file-prefix     . ,(expand-file-name ".saves-" (cache-sub-dir "auto-save-list")))
-      (auto-save-list-file-name)
       (make-backup-files              . t)
       (version-control                . t) ;; enable version control
       (kept-new-versions              . 5)
@@ -298,14 +298,15 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
 (leaf *editor-functions
   :custom
-  (eol-mnemonic-dos         . "(CRLF)")
-  (eol-mnemonic-mac         . "(CR)")
-  (eol-mnemonic-unix        . "(LF)")
-  (find-file-visit-truename . t)
-  (tab-width                . 4)
-  (indent-tabs-mode         . nil)
-  (truncate-lines           . t)
-  (word-wrap                . t)
+  (eol-mnemonic-dos          . "(CRLF)")
+  (eol-mnemonic-mac          . "(CR)")
+  (eol-mnemonic-unix         . "(LF)")
+  (find-file-visit-truename  . t)
+  (tab-width                 . 4)
+  (indent-tabs-mode          . nil)
+  (sentence-end-double-space . nil)
+  (truncate-lines            . t)
+  (word-wrap                 . t)
   ;; configure indent tab to false as default
   ;; (setq line-move-visual t)
   :init
