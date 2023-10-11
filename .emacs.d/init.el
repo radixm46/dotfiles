@@ -1927,6 +1927,17 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :config
     (ace-link-setup-default))
 
+  (leaf minimap
+    :ensure t
+    :commands (minimap-bufname
+               minimap-create
+               minimap-kill)
+    :custom
+    (minimap-major-modes     . '(prog-mode))
+    (minimap-window-location . 'right)
+    (minimap-update-delay    . 0.20)
+    (minimap-minimum-width   . 15))
+
   (leaf which-key
     :ensure t
     :config
