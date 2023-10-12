@@ -1899,7 +1899,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (leaf ibuffer
     :tag "builtin"
     :custom
-    (ibuffer-default-sorting-mode . major-mode)
+    (ibuffer-default-sorting-mode . 'filename/process)
     :bind
     (:global-map ("C-x C-b" . ibuffer))
     :config
