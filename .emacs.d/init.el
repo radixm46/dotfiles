@@ -261,7 +261,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (nerd-icons-color-icons  . t)
     :push ((nerd-icons-extension-icon-alist . '("org_archive" nerd-icons-sucicon "nf-custom-orgmode" :face nerd-icons-lblue))))
 
-  (leaf all-the-icons ;; need installation by all-the-icons-install-fonts
+  (leaf all-the-icons :disabled t ;; need installation by all-the-icons-install-fonts
     :ensure t
     :config
     (leaf *patch-all-the-icons-fileicon
@@ -2650,12 +2650,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (with-eval-after-load 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
 
-    (leaf treemacs-nerd-icons :after (treemacs-themes nerd-icons)
+    (leaf treemacs-nerd-icons :after nerd-icons
       :url "https://github.com/rainstormstudio/treemacs-nerd-icons"
-      :straight
-      (treemacs-nerd-icons
-       :type git :host github
-       :repo "rainstormstudio/treemacs-nerd-icons")
+      :ensure t
       :require t
       :mode-hook
       ;; NOTE: 常にロード

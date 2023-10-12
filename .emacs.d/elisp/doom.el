@@ -144,8 +144,9 @@
   :config
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
-  (doom-themes-treemacs-config)
-  (doom-themes-neotree-config))
+  ;; (doom-themes-treemacs-config)
+  ;; (doom-themes-neotree-config)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; doom.el ends here
