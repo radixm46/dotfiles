@@ -10,7 +10,7 @@ function pr_batt_cap() {
         'true')
             local batt_signs=(
                 '\UF089C' '\UF0086' '\UF0087' '\UF0088' '\UF089D'
-                '\UF0089' '\UF089C' '\UF008A' '\UF008B' '\UF0085'
+                '\UF0089' '\UF089E' '\UF008A' '\UF008B' '\UF0085'
             ) ;;
         'false')
             local batt_signs=(
