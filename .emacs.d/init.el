@@ -310,6 +310,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   ;; configure indent tab to false as default
   ;; (setq line-move-visual t)
   :init
+  (leaf *word-wrap-by-category :emacs>= "28.1"
+    :doc "better wordwrapping above emacs 28"
+    :custom
+    (word-wrap-by-category . t))
+
   (leaf visual-line-mode
     :doc "visual line mode enables word wrap"
     :tag "builtin"
