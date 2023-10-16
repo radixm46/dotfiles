@@ -1972,6 +1972,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (after-load-theme-hook . patch-which-key-posframe-faces)))
     :global-minor-mode which-key-mode)
 
+  (leaf request
+    :ensure t
+    :doc "easy http request client"
+    :custom `((request-storage-directory . ,(cache-sub-dir "request"))))
 
   (leaf transient
     :ensure t
