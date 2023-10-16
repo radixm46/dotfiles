@@ -9,11 +9,13 @@ function pr_batt_cap() {
     case "$2" in
         'true')
             local batt_signs=(
+                '\UF008F'
                 '\UF089C' '\UF0086' '\UF0087' '\UF0088' '\UF089D'
                 '\UF0089' '\UF089E' '\UF008A' '\UF008B' '\UF0085'
             ) ;;
         'false')
             local batt_signs=(
+                '\UF008E'
                 '\UF007A' '\UF007B' '\UF007C' '\UF007D' '\UF007E'
                 '\UF007F' '\UF0080' '\UF0081' '\UF0082' '\UF0079'
             ) ;;
