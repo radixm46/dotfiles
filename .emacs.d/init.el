@@ -2523,6 +2523,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       ;; NOTE: on macOS, require full disk access to use trash bin
       (trash-directory           . ,(when (eq system-type 'darwin) "~/.Trash")))
     :config
+    (leaf async
+      :doc "configure dired async"
+      :ensure t
+      :global-minor-mode dired-async-mode)
+
     (ffap-bindings)
     ;; by selecting directory, do not creaete new dired buffer
     (put 'dired-find-alternate-file 'disabled nil))
