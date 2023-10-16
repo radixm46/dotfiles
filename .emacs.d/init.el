@@ -1986,6 +1986,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       (transient-values-file  . ,(expand-file-name "values.el"  (cache-sub-dir "transient")))
       (transient-history-file . ,(expand-file-name "history.el" (cache-sub-dir "transient")))))
 
+  (leaf xwidget-webkit :if (string-match "XWIDGETS"
+                                         system-configuration-features)
+    :tag "builtin"
+    :config
+    (evil-define-key nil xwidget-webkit-mode-map
+      (kbd "SPC") 'evil-collection-xwidget-webkit-scroll-half-page-up))
+
   (leaf undo-tree
     :ensure t
     :custom
@@ -2180,6 +2187,12 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :mode-hook
     (eww-mode-hook . ((rdm/sw-lnsp 0.75)
                       (rdm/text-scale-adjust)))
+    :init
+    (leaf *eww-with-xwidget :emacs>= "29.1"
+      :if (string-match "XWIDGETS" system-configuration-features)
+      :doc "use xwidgets for audio/movie rendering"
+      :custom (shr-use-xwidgets-for-media . t))
+
     :config
     (leaf *eww-patch-faces :after doom-themes
       :hook
