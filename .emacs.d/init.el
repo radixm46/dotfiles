@@ -5,6 +5,9 @@
 ;;
 
 ;;; Code:
+(when (getenv "PROFILE_EMACS")
+  (require 'profiler)
+  (profiler-start 'cpu))
 
 ;; ---------------  load package ---------------
 (load (expand-file-name "elisp/initpkg" user-emacs-directory))
@@ -2840,3 +2843,5 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
+(when (getenv "PROFILE_EMACS")
+  (profiler-report) (profiler-stop))
