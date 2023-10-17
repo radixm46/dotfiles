@@ -1,4 +1,4 @@
-;;; initskk.el --- ddskk config
+;;; initskk.el --- ddskk config -*- no-byte-compile: t -*-
 ;;; Commentary:
 ;;
 ;; Provides ddskk configuration

@@ -1,4 +1,4 @@
-;;; conf-langs.el --- summary -*- lexical-binding: t -*-
+;;; conf-langs.el --- major modes -*- lexical-binding: t; no-byte-compile: t -*-
 ;;; Commentary:
 ;;
 ;; major modes loaded by init.el

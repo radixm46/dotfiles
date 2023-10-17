@@ -1,4 +1,4 @@
-;;; conf-elfeed.el --- summary -*- lexical-binding: t -*-
+;;; conf-elfeed.el --- elfeed conf -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; configure elfeed

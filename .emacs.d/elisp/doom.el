@@ -1,4 +1,4 @@
-;;; doom.el --- summary
+;;; doom.el --- doom packages -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; provides doom-modeline, doom-themes configuration
