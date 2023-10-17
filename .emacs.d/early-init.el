@@ -43,6 +43,10 @@
 (setq initial-major-mode                'fundamental-mode)
 (setq initial-scratch-message           'nil)
 
+;; create eln-cache under ~/.cache
+(when (boundp 'native-comp-eln-load-path)
+  (startup-redirect-eln-cache
+   (expand-file-name ".cache/emacs/eln-cache" (getenv "HOME"))))
 
 
 ;; add timestamps to message buffer if certain env_var is set
