@@ -878,12 +878,12 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       text-mode-hook
       git-timemachine-mode-hook) . highlight-indent-guides-mode)
     :custom
-    (highlight-indent-guides-auto-enabled             . nil)
-    (highlight-indent-guides-auto-odd-face-perc       . 10)
-    (highlight-indent-guides-auto-even-face-perc      . 10)
-    (highlight-indent-guides-method                   . 'column)
-    (highlight-indent-guides-responsive               . 'top)
-    (highlight-indent-guides-delay                    . 0)
+    (highlight-indent-guides-auto-enabled        . nil)
+    (highlight-indent-guides-auto-odd-face-perc  . 10)
+    (highlight-indent-guides-auto-even-face-perc . 10)
+    (highlight-indent-guides-method              . 'column)
+    (highlight-indent-guides-responsive          . 'top)
+    (highlight-indent-guides-delay               . 0)
     ;; (highlight-indent-guides-auto-character-face-perc . 90)
     :config
     (leaf *patch-highlight-indent-guides-color :after doom-themes cl-lib
@@ -895,13 +895,16 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                                       (cl-mapcar #'(lambda (a b) (/ (+ a b) z))
                                                  (color-name-to-rgb x)
                                                  (color-name-to-rgb y)))))
-               (dimmc (doom-lighten 'bg  0.025))
+               (inacc (if (>= 0.5 ;; dim if bg color seems bright, dim if not
+                              (apply '+ (color-name-to-rgb (doom-color 'bg))))
+                          (doom-lighten 'bg 0.025)
+                        (doom-darken 'bg 0.025)))
                (actvc (funcall mix-colors
                                (doom-color 'bg) (doom-color 'dark-blue) 2.0)))
           (custom-set-faces
-           `(highlight-indent-guides-odd-face      ((t (:background ,dimmc))))
+           `(highlight-indent-guides-odd-face      ((t (:background ,inacc))))
            `(highlight-indent-guides-top-odd-face  ((t (:background ,actvc))))
-           `(highlight-indent-guides-even-face     ((t (:background ,dimmc))))
+           `(highlight-indent-guides-even-face     ((t (:background ,inacc))))
            `(highlight-indent-guides-top-even-face ((t (:background ,actvc)))))))
       :hook
       ((after-load-theme-hook
