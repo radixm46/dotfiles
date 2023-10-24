@@ -462,10 +462,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :config
       (leaf *patch-paren-face
         :preface
-        (defun patch-paren-face ()
+        (defsubst patch-paren-face ()
           (custom-set-faces
            `(show-paren-match  ((t (:background ,(doom-color 'green)))))))
-        :hook (after-load-theme-hook . patch-paren-face))
+        :hook ((after-load-theme-hook
+                show-paren-mode-hook) . patch-paren-face))
       :hook
       (prog-mode-hook
        conf-mode-hook . show-paren-mode))
@@ -521,7 +522,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
     (leaf *patch-display-line-numbers-current
       :preface
-      (defun patch-display-line-numbers-current ()
+      (defsubst patch-display-line-numbers-current ()
         "patch `line-number-current-line'"
         (custom-set-faces
          `(line-number-current-line ((t (:foreground ,(doom-color 'fg) :background ,(doom-color 'bg))))))
@@ -545,7 +546,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :config
     (leaf *patch-fill-column-indicator
       :preface
-      (defun patch-fill-column-indicator ()
+      (defsubst patch-fill-column-indicator ()
         (custom-set-faces
          `(fill-column-indicator ((t (:foreground ,(doom-color 'blue)))))))
       :hook
@@ -622,25 +623,16 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (highlight-indent-guides-delay               . 0)
     ;; (highlight-indent-guides-auto-character-face-perc . 90)
     :config
-    (leaf *patch-highlight-indent-guides-color :after doom-themes cl-lib
+    (leaf *patch-highlight-indent-guides-color
       :doc "patch `indent-guides-color'"
       :preface
-      (defun patch-highlight-indent-guides-color ()
-        (let* ((mix-colors #'(lambda (x y z)
-                               (apply #'color-rgb-to-hex
-                                      (cl-mapcar #'(lambda (a b) (/ (+ a b) z))
-                                                 (color-name-to-rgb x)
-                                                 (color-name-to-rgb y)))))
-               (inacc (if (>= 0.5 ;; dim if bg color seems bright, dim if not
-                              (apply '+ (color-name-to-rgb (doom-color 'bg))))
-                          (doom-lighten 'bg 0.025)
-                        (doom-darken 'bg 0.025)))
-               (actvc (funcall mix-colors
-                               (doom-color 'bg) (doom-color 'dark-blue) 2.0)))
+      (defsubst patch-highlight-indent-guides-color ()
+        (let* ((dimmc (doom-lighten 'bg  0.025))
+               (actvc (doom-blend   'bg 'dark-blue 0.5)))
           (custom-set-faces
-           `(highlight-indent-guides-odd-face      ((t (:background ,inacc))))
+           `(highlight-indent-guides-odd-face      ((t (:background ,dimmc))))
            `(highlight-indent-guides-top-odd-face  ((t (:background ,actvc))))
-           `(highlight-indent-guides-even-face     ((t (:background ,inacc))))
+           `(highlight-indent-guides-even-face     ((t (:background ,dimmc))))
            `(highlight-indent-guides-top-even-face ((t (:background ,actvc)))))))
       :hook
       ((after-load-theme-hook
@@ -691,9 +683,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     ;;(set-face-attribute 'whitespace-empty nil
     ;;  :background rdm/bg-color)
     :config
-    (leaf *patch-whitespace-face :after doom-themes
+    (leaf *patch-whitespace-face
       :preface
-      (defun patch-whitespace-face ()
+      (defsubst patch-whitespace-face ()
         (custom-set-faces
          `(whitespace-trailing
            ((nil (:background ,(doom-color 'bg) ;:inherit 'default
@@ -754,9 +746,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :commands pulsar-mode
     :config
     ;; (pulsar-global-mode 1)
-    (leaf *patch-pulsar-color :after doom-themes
+    (leaf *patch-pulsar-color
       :preface
-      (defun patch-pulsar-color ()
+      (defsubst patch-pulsar-color ()
         (custom-set-faces
          `(pulsar-magenta ((t (:background ,(doom-color 'magenta)))))
          `(pulsar-yellow  ((t (:background ,(doom-color 'yellow)))))
@@ -1128,7 +1120,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :config
       (leaf *patch-eldoc-box-faces
         :preface
-        (defun patch-eldoc-box-faces ()
+        (defsubst patch-eldoc-box-faces ()
           (custom-set-faces ;; modify bg to eldoc-box-body
            `(eldoc-box-body   ((t (:inherit 'default :background ,(doom-color 'bg-alt)))))
            `(eldoc-box-border ((t (:background ,(doom-color 'bg)))))))
@@ -1155,10 +1147,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (:flycheck-mode-map ("M-j" . flycheck-next-error)
                         ("M-k" . flycheck-previous-error))
     :config
-    (leaf *patch-flycheck-faces :after doom-themes
+    (leaf *patch-flycheck-faces
       :doc "on doom themes loaded"
       :preface
-      (defun patch-flycheck-faces ()
+      (defsubst patch-flycheck-faces ()
         (custom-set-faces
          `(flycheck-warning ((t (:background ,(doom-color 'bg)))))
          `(flycheck-info    ((t (:background ,(doom-color 'bg)))))
@@ -1737,10 +1729,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                (which-key-setup-minibuffer)
                                (which-key-posframe-mode +1)))
         )
-
-      (leaf *patch-which-key-posframe-faces :after doom-themes
+      (leaf *patch-which-key-posframe-faces
         :preface
-        (defun patch-which-key-posframe-faces ()
+        (defsubst patch-which-key-posframe-faces ()
           (custom-set-faces
            `(which-key-posframe        ((nil (:background ,(doom-color 'bg-alt)))))
            `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
@@ -1827,9 +1818,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :hook
     (calendar-today-visible-hook   . calendar-mark-today)
     :config
-    (leaf *patch-calendar-faces :after doom-themes
+    (leaf *patch-calendar-faces
       :preface
-      (defun patch-calendar-faces ()
+      (defsubst patch-calendar-faces ()
         (custom-set-faces
          `(holiday
            ((t (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
@@ -1856,9 +1847,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (setq calendar-holidays (append japanese-holidays
                                       holiday-local-holidays))
 
-      (leaf *patch-calendar-face :after doom-themes
+      (leaf *patch-calendar-face
         :preface
-        (defun patch-japanese-holiday-saturday ()
+        (defsubst patch-japanese-holiday-saturday ()
           (custom-set-faces
            `(japanese-holiday-saturday
              ((nil (:foreground ,(doom-color 'blue) :background ,(doom-color 'bg)))))))
@@ -2007,7 +1998,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
     (leaf *patch-eww-heading-size
       :preface
-      (defun patch-eww-heading-size ()
+      (defsubst patch-eww-heading-size ()
         (set-face-attribute 'shr-h1 nil :height 1.4)
         (set-face-attribute 'shr-h2 nil :height 1.2)
         (set-face-attribute 'shr-h3 nil :height 1.1)
@@ -2148,9 +2139,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (git-gutter:deleted-sign  . ,(nerd-icons-faicon "nf-fa-minus"))
       (git-gutter:ask-p         . nil))
     :config
-    (leaf *patch-git-gutter-color :after doom-themes
+    (leaf *patch-git-gutter-color
       :preface
-      (defun patch-git-gutter-color ()
+      (defsubst patch-git-gutter-color ()
         (custom-set-faces ;; modify bg fg
          `(git-gutter:modified ((t (:foreground ,(doom-color 'blue)  :background ,(doom-color 'blue)))))
          `(git-gutter:added    ((t (:foreground ,(doom-color 'base4) :background ,(doom-color 'green)))))
