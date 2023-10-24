@@ -65,6 +65,7 @@
 Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
     :ensure t
     :custom (gcmh-verbose . t)
+    :defun gcmh-mode
     :mode-hook (emacs-startup-hook . ((gcmh-mode 1))))
 
   (leaf xt-mouse
@@ -123,6 +124,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (recentf-auto-cleanup    . 'never)
       (recentf-exclude         . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
                                    "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/")))
+    :defvar recentf-auto-save-timer
+    :defun recentf-save-list
     :init
     (setq recentf-auto-save-timer
           (run-with-idle-timer 30 t #'(lambda ()
@@ -202,12 +205,17 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf ctrlf
     :doc "an intuitive and efficient solution for single-buffer text search in Emacs"
     :ensure t
-    :config
-    (ctrlf-mode +1))
+    :commands ctrlf-mode
+    :mode-hook (after-init-hook . ((ctrlf-mode +1))))
 
   (leaf ediff
     :ensure t
     :tag "builtin"
+    :defvar ediff-word-2 ediff-word-3
+    :defun ediff-setup-windows-plain
+    :commands
+    ediff ediff-files
+    ediff3 ediff-files3
     :custom
     (ediff-window-setup-function . #'ediff-setup-windows-plain)
     (ediff-split-window-function . #'split-window-horizontally)
@@ -227,7 +235,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf editorconfig
     :doc "load editorconfig"
     :ensure t
-    :config (editorconfig-mode))
+    :commands editorconfig-mode
+    :mode-hook (after-init-hook . ((editorconfig-mode))))
 
   (leaf treesit-auto :emacs>= "29"
     :ensure t
@@ -319,6 +328,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf origami
     :doc "folding blocks"
+    :commands origami-mode
     :ensure t)
 
   (leaf yasnippet
@@ -372,7 +382,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :custom
     (highlight-symbol-idle-delay . 1.0)
     :config
-    (leaf *patch-highlight-symbol :after doom-themes
+    (leaf *patch-highlight-symbol
       :hook
       (after-load-theme-hook . (lambda ()
                                  (custom-set-faces
@@ -467,6 +477,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf smartparens
       :ensure t
       :custom (sp-show-pair-delay . 0.125)
+      :commands smartparens-mode
       :mode-hook
       (after-load-theme-hook . ((custom-set-faces
                                  `(sp-show-pair-match-face
@@ -476,6 +487,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         conf-mode-hook) . smartparens-mode))
 
     (leaf paredit :ensure t
+      :commands paredit-mode
       :doc "for `evil-cleverparens' dependency"))
 
   (leaf display-line-numbers
@@ -492,6 +504,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       prog-mode-hook
       text-mode-hook
       git-timemachine-mode-hook) . display-line-numbers-mode)
+    :defvar display-line-numbers-type
+    :defun display-line-numbers--turn-on
     :config
     (defun rdm/display-line-numbers-toggle-rel ()
       "toggle relative"
@@ -501,7 +515,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (customize-set-variable 'display-line-numbers-type  'relative))
       (display-line-numbers--turn-on)) ;; read config
 
-    (leaf *patch-display-line-numbers-current :after doom-themes
+    (leaf *patch-display-line-numbers-current
       :preface
       (defun patch-display-line-numbers-current ()
         "patch `line-number-current-line'"
@@ -525,7 +539,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       prog-mode-hook
       text-mode-hook) . display-fill-column-indicator-mode)
     :config
-    (leaf *patch-fill-column-indicator :after doom-themes
+    (leaf *patch-fill-column-indicator
       :preface
       (defun patch-fill-column-indicator ()
         (custom-set-faces
@@ -537,6 +551,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf hl-todo
     :ensure t
+    :commands hl-todo-mode
     :hook
     (prog-mode-hook . hl-todo-mode))
 
@@ -570,6 +585,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf nyan-mode
     :ensure t
+    :defun nyan-start-animation nyan-stop-animation
+    :defvar nyan-wavy-trail
     :config
     (defun nyan-try ()
       (nyan-stop-animation)
@@ -585,6 +602,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf highlight-indent-guides
     :ensure t
+    :commands highlight-indent-guides-mode
     :hook
     ((conf-mode-hook
       outline-mode-hook
@@ -627,6 +645,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf rainbow-delimiters
     :ensure t
+    :commands rainbow-delimiters-mode
     :hook
     ((conf-mode-hook
       prog-mode-hook
@@ -728,6 +747,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     ((prog-mode-hook
       conf-mode-hook
       text-mode-hook) . pulsar-mode)
+    :commands pulsar-mode
     :config
     ;; (pulsar-global-mode 1)
     (leaf *patch-pulsar-color :after doom-themes
@@ -990,6 +1010,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf marginalia
     :ensure t
     :doc "Rich annotations in the minibuffer"
+    :defun marginalia-mode
     :config (marginalia-mode))
 
   (leaf embark
@@ -999,6 +1020,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (("C-." . embark-act)         ; pick some comfortable binding
      ("C-;" . embark-dwim)        ; good alternative: M-.
      ("C-h B" . embark-bindings)) ; alternative for `describe-bindings'
+    :defun embark-prefix-help-command
     ;; Optionally replace the key help with a completing-read interface
     :pre-setq (prefix-help-command . #'embark-prefix-help-command)
     :init
@@ -1022,6 +1044,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf vertico
     :ensure t
     :doc "VERTical Interactive COmpletion"
+    :defun vertico-mode crm-indicator
     :init
     (vertico-mode)
     (leaf savehist
@@ -1080,15 +1103,18 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf ispell :when (!executable-find "aspell")
     :tag "builtin"
+    :commands ispell
     :setq-default
     (ispell-program-name     . "aspell")
     (ispell-local-dictionary . "en_US"))
 
   (leaf eldoc
     :tag "builtin"
+    :commands eldoc
     :config
     (leaf eldoc-box
       :ensure t
+      :defun eldoc-box-hover-mode
       :mode-hook (eldoc-mode-hook . ((when (display-graphic-p) (eldoc-box-hover-mode))))
       :custom
       (eldoc-box-only-multi-line    . nil)
@@ -1096,7 +1122,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (eldoc-box-clear-with-C-g     . t)
       (eldoc-box-cleanup-interval   . 0.5)
       :config
-      (leaf *patch-eldoc-box-faces :after doom-themes
+      (leaf *patch-eldoc-box-faces
         :preface
         (defun patch-eldoc-box-faces ()
           (custom-set-faces ;; modify bg to eldoc-box-body
@@ -1110,6 +1136,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf flymake
     :tag "builtin"
     :emacs>= "26"
+    :commands flymake-mode
     :hook (prog-mode-hook . flymake-mode)
     :bind
     (:flymake-mode-map ("M-j"   . flymake-goto-next-error)
@@ -1169,6 +1196,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf company :emacs< "27"
     :doc "company completion framework"
     :ensure t
+    :defvar company-backends
     :custom
     (company-idle-delay . 0)
     (company-selection-wrap-around . t)
@@ -1178,7 +1206,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                               company-sort-prefer-same-case-prefix))
     :config
     (leaf *add-yasnippet-backend
-      :after yasnippet
       :config
       (add-to-list 'company-backends 'company-yasnippet))
     (leaf company-box
@@ -1188,6 +1215,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf corfu :emacs>= "27"
     :ensure t
+    :commands corfu-mode
     :custom
     (corfu-cycle                   . t)          ;; Enable cycling for `corfu-next/previous'
     (corfu-auto                    . t)          ;; Enable auto completion
@@ -1358,6 +1386,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (lsp-ui-peek-peek-height           . 20)
       (lsp-ui-peek-list-width            . 50)
       (lsp-ui-peek-fontify               . 'on-demand) ;; never, on-demand, or always
+      :defvar lsp-ui-doc-mode
+      :defun
+      (lsp-ui-doc--hide-frame
+       lsp-ui-doc-mode)
       :preface
       (defun ladicle/toggle-lsp-ui-doc ()
         (interactive)
@@ -1505,6 +1537,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf eglot
     :ensure t
     :doc "another lsp client"
+    :commands eglot
     :preface
     (leaf *eglot-with-eldoc-box
       :doc "use eldoc-box-mode if available"
@@ -1514,7 +1547,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                        (eldoc-box-hover-mode)))))
     )
 
-  (leaf cape
+  (leaf cape :after corfu
     :doc "provides Completion At Point Extensions
  which can be used in combination with the Corfu or the default completion UI."
     :ensure t
@@ -1607,10 +1640,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       )
     )
 
-  (leaf dap-mode
-    :ensure t
-    :after lsp-mode
+  (leaf dap-mode :after lsp-mode
     :doc "debug adapter protocol package"
+    :ensure t
     :require dap-hydra
     :bind
     (:global-map
@@ -1619,6 +1651,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :custom
     `((dap-auto-configure-features . '(sessions locals breakpoints expressions repl controls tooltip))
       (dap-breakpoints-file        . ,(cache-sub-file ".dap-breakpoints")))
+    :defun
+    dap-mode dap-auto-configure-mode
+    dap-ui-mode dap-ui-controls-mode
     :config
     (dap-mode 1)
     (dap-auto-configure-mode 1)
@@ -1642,11 +1677,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf rainbow-mode
     :ensure t
+    :commands rainbow-mode
     :doc "preview colors from hex values")
 
   (leaf ace-window
     :ensure t
     :bind ("M-o" . ace-window)
+    :commands ace-window
     :custom (aw-keys . '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :custom-face ;; larger leading char
     (aw-leading-char-face .
@@ -1656,9 +1693,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf ace-link
     :ensure t
     :doc "quickly follow links"
+    :commands ace-link
     :bind ("M-O" . ace-link)
-    :config
-    (ace-link-setup-default))
+    :defun ace-link-setup-default
+    :config (ace-link-setup-default))
 
   (leaf minimap
     :ensure t
@@ -1673,11 +1711,17 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf which-key
     :ensure t
+    :commands which-key-mode
     :config
     (leaf which-key-posframe
       :ensure t
       :custom
       (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner)
+      :defvar which-key-posframe-mode
+      :defun
+      which-key-posframe-mode
+      which-key-setup-minibuffer
+      which-key-setup-side-window-right-bottom
       :config
       (leaf *which-key-display-hook-on-state
         :doc "prefer posframe on gui"
@@ -1714,15 +1758,16 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (transient-values-file  . ,(!expand-file-name "values.el"  (cache-sub-dir "transient")))
       (transient-history-file . ,(!expand-file-name "history.el" (cache-sub-dir "transient")))))
 
-  (leaf xwidget-webkit :if (string-match "XWIDGETS"
-                                         system-configuration-features)
+  (leaf xwidget-webkit :when (featurep 'xwidget-internal)
     :tag "builtin"
+    :commands xwidget-webkit-browse-url
     :config
     (evil-define-key nil xwidget-webkit-mode-map
       (kbd "SPC") 'evil-collection-xwidget-webkit-scroll-half-page-up))
 
   (leaf undo-tree
     :ensure t
+    :commands (undo-tree-mode turn-on-undo-tree-mode global-undo-tree-mode)
     :custom
     `((undo-tree-visualizer-timestamps   . t)
       (undo-tree-auto-save-history       . t)
@@ -1821,12 +1866,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf info
     :tag "builtin"
     :doc "customize info-mode appearance (add line spacing, enlarge)"
+    :commands info
     :mode-hook
     (Info-mode-hook . ((rdm/sw-lnsp 0.75)
                        (rdm/text-scale-adjust))))
 
   (leaf eshell
     :tag "builtin"
+    :commands eshell
     :custom
     `((eshell-history-file-name . ,(!expand-file-name "history" (cache-sub-dir "eshell")))))
 
@@ -1835,6 +1882,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :preface ; release keys for binding
     (global-unset-key [f2])
     (global-unset-key "\M-2")
+    :commands vterm
     :mode-hook
     (vterm-mode-hook . ((rdm/sw-lnsp 1)
                         (set (make-local-variable 'buffer-face-mode-face) 'fixed-pitch)
@@ -1850,6 +1898,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (let ((display-buffer-alist nil)) (vterm)))
     (leaf vterm-toggle
       :ensure t
+      :commands vterm-toggle
       :custom
       (vterm-toggle-fullscreen-p . nil)
       (vterm-toggle-scope-p . 'project)
@@ -1902,6 +1951,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf eww
     :tag "builtin"
     :doc "text base web browser"
+    :commands eww
     :custom
     `((shr-width                   . 80)
       (shr-indentation             . 4)
@@ -1915,12 +1965,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                       (rdm/text-scale-adjust)))
     :init
     (leaf *eww-with-xwidget :emacs>= "29.1"
-      :if (string-match "XWIDGETS" system-configuration-features)
+      :when (featurep 'xwidget-internal)
       :doc "use xwidgets for audio/movie rendering"
       :custom (shr-use-xwidgets-for-media . t))
 
     :config
-    (leaf *eww-patch-faces :after doom-themes
+    (leaf *eww-patch-faces
       :hook
       ((after-load-theme-hook
         eww-mode-hook) . (lambda ()
@@ -1959,7 +2009,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (set-face-attribute 'shr-h3 nil :height 1.1)
         (set-face-attribute 'shr-h4 nil :height 1.0))
       :hook
-      (after-load-theme-hook . patch-eww-heading-size)))
+      (eww-mode-hook . patch-eww-heading-size)))
 
   (leaf load-conf-ext-fronts
     :doc "frontend of external apps"
@@ -1968,9 +2018,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf pdf-tools
     :doc "require to execute `pdf-tools-install'"
     :ensure t
+    :commands (pdf-view-mode pdf-loader-install pdf-tools-install)
     :mode ("\\.pdf\\'" . pdf-view-mode)
     :bind (:pdf-view-mode-map ("C-s" . ctrlf-forward-default))
     :setq-default (pdf-view-display-size . 'fit-page)
+    :defun pdf-links-minor-mode pdf-annot-minor-mode
     :mode-hook
     (pdf-view-mode-hook . ((line-number-mode     -1)
                            (pdf-links-minor-mode +1)
@@ -2003,6 +2055,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf go-translate
     :ensure t
+    :commands gts-do-translate
+    :defun request
+    :defvar
+    go-translate-buffer-follow-p
+    go-translate-buffer-source-fold-p
     :setq
     (gts-translate-list     . '(("en" "ja")
                                 ("ja" "en")))
@@ -2079,6 +2136,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   :config
   (leaf git-gutter
     :ensure t
+    :commands
+    (global-git-gutter-mode git-gutter-mode)
     :custom
     `((git-gutter:modified-sign . "=")
       (git-gutter:added-sign    . "+")
@@ -2152,7 +2211,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       )
     )
 
-  (leaf git-timemachine :ensure t)
+  (leaf git-timemachine
+    :ensure t
+    :commands git-timemachine git-timemachine-toggle)
   )
 
 
@@ -2164,8 +2225,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :preface
     (leaf osx-trash :when (!system-type 'darwin)
       :ensure t
-      :config
-      (osx-trash-setup))
+      :commands osx-trash-setup
+      :hook (after-init-hook . osx-trash-setup))
     :custom
     `(;; use gnu-ls if available on macOS
       (insert-directory-program  . ,(if (and (!system-type 'darwin)
@@ -2325,15 +2386,19 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf projectile
     :ensure t
+    :defun projectile-mode
     :config (projectile-mode +1))
 
   (leaf treemacs
     :ensure t
+    :defvar winum-keymap
+    :commands treemacs
+    :require t
     :init
     (with-eval-after-load 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
 
-    (leaf treemacs-nerd-icons :after nerd-icons
+    (leaf treemacs-nerd-icons
       :url "https://github.com/rainstormstudio/treemacs-nerd-icons"
       :ensure t
       :require t
@@ -2359,9 +2424,18 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("C-x t B"   . treemacs-bookmark)
      ("C-x t C-t" . treemacs-find-file)
      ("C-x t M-t" . treemacs-find-tag))
+    :defun
+    (treemacs-git-mode
+     treemacs-fringe-indicator-mode
+     treemacs-filewatch-mode
+     treemacs-follow-mode
+     treemacs-load-theme)
     :config
-    (leaf *treemacs-custom :after treemacs
+    (leaf *treemacs-custom
       :doc "eval after treemacs load"
+      :defvar
+      treemacs-last-period-regex-value
+      treemacs-python-executable
       :custom
       `(
         (treemacs-deferred-git-apply-delay      . 0.5)
