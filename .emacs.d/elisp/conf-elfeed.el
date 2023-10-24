@@ -5,25 +5,42 @@
 ;;
 
 ;;; Code:
+(eval-when-compile
+  (load (expand-file-name "elisp/initpkg"         user-emacs-directory))
+  (load (expand-file-name "elisp/conf-evil"       user-emacs-directory))
+  (load (expand-file-name "elisp/util"            user-emacs-directory))
+  (load (expand-file-name "elisp/doom"            user-emacs-directory))
+  (load (expand-file-name "elisp/conf-fonts"      user-emacs-directory))
+  (load (expand-file-name "elisp/conf-ext-fronts" user-emacs-directory))
 
+  (defconst elfeed-dir-path (expand-file-name "~/.config/elfeed/")
+    "Path of elfeed user dir."))
+(require 'straight)
+(require 'evil-core) ; for evil-define-key
+(require 'hydra)
+(require 'rdm/util)
+
+
+(leaf elfeed-org
+  :ensure t
+  :url "https://github.com/remyhonig/elfeed-org"
+  :commands elfeed-org
+  :custom
+  `((rmh-elfeed-org-files . `,(list (!expand-file-name "elfeed.org" elfeed-dir-path)))))
 
 (leaf elfeed
   :ensure t
   :url "https://github.com/skeeto/elfeed"
-  :preface (defconst elfeed-dir-path "~/.config/elfeed/" "elfeed config path")
+  :when (file-exists-p (!expand-file-name elfeed-dir-path))
+  :commands elfeed
   :hook
-  ((elfeed-show-mode-hook
-    elfeed-search-mode-hook) . rdm/text-scale-adjust)
-  (elfeed-search-mode-hook . (lambda () (rdm/sw-lnsp 0.75)))
-  :init
-  (leaf elfeed-org :if (file-exists-p (expand-file-name "elfeed.org" elfeed-dir-path))
-    :ensure t
-    :url "https://github.com/remyhonig/elfeed-org"
-    :init (elfeed-org)
-    :custom
-    `((rmh-elfeed-org-files . `,(list (expand-file-name "elfeed.org" elfeed-dir-path)))))
-
-  (leaf *patch-elfeed-faces :after doom-themes
+  (elfeed-show-mode-hook   . (lambda () (rdm/text-scale-adjust)))
+  (elfeed-search-mode-hook . (lambda ()
+                               (rdm/text-scale-adjust)
+                               (rdm/sw-lnsp 0.75)))
+  :config
+  (elfeed-org)
+  (leaf *patch-elfeed-faces
     :hook
     ((elfeed-search-update-hook
       after-load-theme-hook) . (lambda ()
@@ -37,6 +54,17 @@
                                                  elfeed-search-unread-title-face))
                                    (set-face-attribute
                                     face nil :family font-for-tables :height 1.0)))))
+  )
+
+(leaf *elfeed-conf :after elfeed
+  :defun elfeed-search-set-filter
+  :defvar elfeed-dir-path
+  :custom
+  `((elfeed-db-directory           . ,(!expand-file-name ".db" elfeed-dir-path))
+    (elfeed-enclosure-default-dir  . ,(!expand-file-name elfeed-dir-path))
+    (elfeed-search-filter          . "@1-months-ago +unread -later -junk")
+    (elfeed-search-title-max-width . 95)
+    (elfeed-search-date-format     . '("%Y-%m-%d (%a) %k:%M" 22 :left)))
 
   :config
   (leaf *elfeed-patch-entry-switch
@@ -54,16 +82,10 @@
       (let ((elfeed-show-entry-switch #'switch-to-buffer))
         (elfeed-show-prev)))
 
-    (evil-define-key 'normal elfeed-show-mode-map
-      (kbd "C-j") 'rdm/elfeed-show-next
-      "]]"        'rdm/elfeed-show-next
-      "gj"        'rdm/elfeed-show-next
-      (kbd "C-k") 'rdm/elfeed-show-prev
-      "[["        'rdm/elfeed-show-prev
-      "gk"        'rdm/elfeed-show-prev)
-    )
+    :defun elfeed-show-next elfeed-show-prev
+    :defvar elfeed-show-mode-map elfeed-show-entry-switch)
 
-  (leaf *elfeed-func-def-bind
+  (leaf *elfeed-func-def
     :doc "custom defined func"
     :config
     (defun rdm/elfeed-search-toggle-star ()
@@ -88,7 +110,7 @@
         (elfeed-search-update-entry entry)
         (unless elfeed-search-remain-on-entry (forward-line))))
 
-    (defun rdm/elfeed-show-entry-share (&optional use-generic-p)
+    (defun rdm/elfeed-show-entry-share (&optional _use-generic-p)
       "Copy the entry title and URL as org link to the clipboard."
       (interactive "P")
       (let* ((link (elfeed-entry-link elfeed-show-entry))
@@ -96,7 +118,7 @@
              (feed-info (concat title "\n" link)))
         (when feed-info
           (kill-new feed-info)
-          (x-set-selection 'PRIMARY feed-info)
+          (gui-set-selection 'PRIMARY feed-info)
           (message "Yanked: %s" feed-info))))
 
     (defun rdm/elfeed-search-entry-share (entry)
@@ -108,15 +130,15 @@
                (feed-info (concat title "\n" link)))
           (when feed-info
             (kill-new feed-info)
-            (x-set-selection 'PRIMARY feed-info)
+            (gui-set-selection 'PRIMARY feed-info)
             (message "Yanked: %s" feed-info)))))
 
-    (defun rdm/elfeed-unread-p (entry)
+    (defsubst rdm/elfeed-unread-p (entry)
       "returns t if selected entry has unread tag"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (elfeed-tagged-p 'unread entry))
 
-    (defun rdm/elfeed-search-mark-read (entry)
+    (defsubst rdm/elfeed-search-mark-read (entry)
       "mark entry read and remove later tag, then update elfeed-search"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (elfeed-untag entry 'unread 'later)
@@ -129,7 +151,7 @@
       (rdm/elfeed-search-mark-read entry))
 
     (defun rdm/elfeed-search-untag-later-unread (entry)
-      "Remove the 'unread' and 'later' tag from entry.
+      "Remove the \\='unread\\=' and \\='later\\=' tag from entry.
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
@@ -137,7 +159,7 @@ based on elfeed-search-show-entry"
         (unless elfeed-search-remain-on-entry (forward-line))))
 
     (defun rdm/elfeed-search-untag-unread (entry)
-      "Remove the 'unread' tag from entry and recenter.
+      "Remove the \\='unread\\=' tag from entry and recenter.
 based on elfeed-search-show-entry"
       (interactive (list (elfeed-search-selected :ignore-region)))
       (when (elfeed-entry-p entry)
@@ -148,7 +170,6 @@ based on elfeed-search-show-entry"
       "Display the currently selected item on elfeed-show buffer.
 without forwarding line and mark as read"
       (interactive (list (elfeed-search-selected :ignore-region)))
-      (require 'elfeed-show)
       (when (elfeed-entry-p entry)
         (elfeed-search-update-entry entry)
         (elfeed-show-entry entry)))
@@ -205,6 +226,25 @@ based on elfeed-search-browse-url"
           (when filter-str
             (elfeed-search-set-filter (concat filter-str " @3-months-ago +unread -later"))))))
 
+    :defun
+    elfeed-entry-feed elfeed-entry-link elfeed-entry-p elfeed-entry-title
+    elfeed-search-selected elfeed-search-toggle-all elfeed-search-update-entry
+    elfeed-meta
+    elfeed-show-entry
+    elfeed-tag elfeed-tagged-p elfeed-untag
+    rdm/elfeed-search-mark-read
+    rdm/elfeed-unread-p
+    rdm/elfeed-search-mark-read-show
+    rdm/elfeed-search-show-entry
+    :defvar
+    elfeed-show-entry
+    elfeed-search-remain-on-entry)
+
+  (leaf *elfeed-with-eww
+    :defun
+    elfeed-show-visit
+    elfeed-search-browse-url
+    :config
     ;; eww
     (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
       "open with eww"
@@ -218,28 +258,19 @@ based on elfeed-search-browse-url"
       (let ((browse-url-browser-function #'eww-browse-url))
         (elfeed-search-browse-url use-generic-p)))
 
-    ;; w3m
-    (defun rdm/elfeed-search-w3m-open (&optional use-generic-p)
-      "open with w3m browser"
-      (interactive "P")
-      (if (fboundp 'w3m-browse-url)
-          (let ((browse-url-browser-function #'w3m-browse-url))
-            (elfeed-search-browse-url use-generic-p))
-        (warn "w3m-mode not found")))
+    (evil-define-key 'normal elfeed-show-mode-map
+      "b" 'rdm/elfeed-show-eww-open)
+    (evil-define-key 'normal elfeed-search-mode-map
+      "b" 'rdm/elfeed-search-eww-open))
 
-    (defun rdm/elfeed-show-w3m-open (&optional use-generic-p)
-      "open with eww"
-      (interactive "P")
-      (if (fboundp 'w3m-browse-url)
-          (let ((browse-url-browser-function #'w3m-browse-url))
-            (elfeed-show-visit use-generic-p))
-        (warn "w3m-mode not found")))
-
-    ;; xwidget-webkit
+  (leaf *elfeed-with-xwidgets
+    :doc "elfeed with `xwidget-webkit'"
+    :defun xwidget-webkit-mode
+    :config
     (defun rdm/elfeed-search-webkit-open (&optional use-generic-p)
       "open with xwidget webkit browser"
       (interactive "P")
-      (if (fboundp 'xwidget-webkit-browse-url)
+      (if (featurep 'xwidget-internal)
           (progn
             (let ((browse-url-browser-function #'xwidget-webkit-browse-url))
               (elfeed-search-browse-url use-generic-p))
@@ -249,13 +280,12 @@ based on elfeed-search-browse-url"
                 (when (eq major-mode
                           #'xwidget-webkit-mode)
                   (switch-to-buffer buff)))))
-        (warn "xwidget-webkit-mode seems not available")
-        ))
+        (message "xwidget-webkit-mode seems not available")))
 
     (defun rdm/elfeed-show-webkit-open (&optional use-generic-p)
       "open with xwidget webkit browser"
       (interactive "P")
-      (if (fboundp 'xwidget-webkit-browse-url)
+      (if (featurep 'xwidget-internal)
           (progn
             (let ((browse-url-browser-function #'xwidget-webkit-browse-url))
               (elfeed-show-visit use-generic-p))
@@ -265,52 +295,82 @@ based on elfeed-search-browse-url"
                 (when (eq major-mode
                           #'xwidget-webkit-mode)
                   (switch-to-buffer buff)))))
-        (warn "xwidget-webkit-mode seems not available")))
-
-    (evil-define-key 'normal elfeed-search-mode-map
-      "m"  'rdm/elfeed-search-toggle-star
-      "l"  'rdm/elfeed-search-tag-later-unread
-      "b"  'rdm/elfeed-search-eww-open
-      "B"  'rdm/elfeed-search-webkit-open
-      "u"  'rdm/elfeed-search-untag-later-unread
-      "Y"  'rdm/elfeed-search-entry-share
-      "F"  'rdm/elfeed-search-filter-feed-name
-      "f"  'hydra-elfeed-search-filter/body
-      "ta" 'elfeed-search-tag-all
-      "tr" 'elfeed-search-untag-all
-      "tj" 'rdm/elfeed-search-tag-junk
-      "go" 'elfeed-search-browse-url
-      "oo" 'rdm/elfeed-search-mark-read-show
-      (kbd "RET") 'rdm/elfeed-search-show-read-entry
-      (kbd "SPC") 'rdm/elfeed-search-show-read-entry
-      (kbd "S-SPC") 'rdm/elfeed-search-show-read-prev-entry
-      (kbd "C-j") 'rdm/elfeed-search-show-read-entry
-      (kbd "M-j") 'rdm/elfeed-search-show-read-entry
-      "]]"        'rdm/elfeed-search-show-read-entry
-      "gj"        'rdm/elfeed-search-show-read-entry
-      (kbd "C-k") 'rdm/elfeed-search-show-read-prev-entry
-      (kbd "M-k") 'rdm/elfeed-search-show-read-prev-entry
-      "[["        'rdm/elfeed-search-show-read-prev-entry
-      "gk"        'rdm/elfeed-search-show-read-prev-entry
-      )
+        (message "xwidget-webkit-mode seems not available")))
 
     (evil-define-key 'normal elfeed-show-mode-map
-      "b"  'rdm/elfeed-show-eww-open
-      "Y"  'rdm/elfeed-show-entry-share
-      "B"  'rdm/elfeed-show-webkit-open
-      "go" 'elfeed-show-visit
-      "ta" 'elfeed-show-tag
-      "tr" 'elfeed-show-untag)
-    )
+      "B" 'rdm/elfeed-show-webkit-open)
+    (evil-define-key 'normal elfeed-search-mode-map
+      "B" 'rdm/elfeed-search-webkit-open))
 
-  :custom
-  (elfeed-db-directory           . "~/.config/elfeed/.db")
-  (elfeed-enclosure-default-dir  . elfeed-dir-path)
-  (elfeed-search-filter          . "@1-months-ago +unread -later -junk")
-  (elfeed-search-title-max-width . 95)
-  (elfeed-search-date-format     . '("%Y-%m-%d (%a) %k:%M" 22 :left))
+  (leaf *elfeed-with-w3m
+    :config
+    (defun rdm/elfeed-search-w3m-open (&optional use-generic-p)
+      "open with w3m browser"
+      (interactive "P")
+      (when (boundp 'w3m)
+        (let ((browse-url-browser-function w3m-browse-url))
+          (elfeed-search-browse-url use-generic-p))))
 
+    (defun rdm/elfeed-show-w3m-open (&optional use-generic-p)
+      "open with eww"
+      (interactive "P")
+      (when (boundp 'w3m)
+        (let ((browse-url-browser-function #'w3m-browse-url))
+          (elfeed-show-visit use-generic-p)))))
+
+  (evil-define-key 'normal elfeed-show-mode-map
+    (kbd "C-j") 'rdm/elfeed-show-next
+    "]]"        'rdm/elfeed-show-next
+    "gj"        'rdm/elfeed-show-next
+    (kbd "C-k") 'rdm/elfeed-show-prev
+    "[["        'rdm/elfeed-show-prev
+    "gk"        'rdm/elfeed-show-prev
+    "b"         'rdm/elfeed-show-eww-open
+    "Y"         'rdm/elfeed-show-entry-share
+    "go"        'elfeed-show-visit
+    "ta"        'elfeed-show-tag
+    "tr"        'elfeed-show-untag
+    "O"         'hydra-elfeed-show-open/body)
+
+  (evil-define-key 'normal elfeed-search-mode-map
+    "m"           'rdm/elfeed-search-toggle-star
+    "l"           'rdm/elfeed-search-tag-later-unread
+    "u"           'rdm/elfeed-search-untag-later-unread
+    "Y"           'rdm/elfeed-search-entry-share
+    "F"           'rdm/elfeed-search-filter-feed-name
+    "f"           'hydra-elfeed-search-filter/body
+    "ta"          'elfeed-search-tag-all
+    "tr"          'elfeed-search-untag-all
+    "tj"          'rdm/elfeed-search-tag-junk
+    "go"          'elfeed-search-browse-url
+    "oo"          'rdm/elfeed-search-mark-read-show
+    (kbd "RET")   'rdm/elfeed-search-show-read-entry
+    (kbd "SPC")   'rdm/elfeed-search-show-read-entry
+    (kbd "C-j")   'rdm/elfeed-search-show-read-entry
+    (kbd "M-j")   'rdm/elfeed-search-show-read-entry
+    "]]"          'rdm/elfeed-search-show-read-entry
+    "gj"          'rdm/elfeed-search-show-read-entry
+    (kbd "S-SPC") 'rdm/elfeed-search-show-read-prev-entry
+    (kbd "C-k")   'rdm/elfeed-search-show-read-prev-entry
+    (kbd "M-k")   'rdm/elfeed-search-show-read-prev-entry
+    "[["          'rdm/elfeed-search-show-read-prev-entry
+    "gk"          'rdm/elfeed-search-show-read-prev-entry
+    "O"           'hydra-elfeed-search-open/body)
   :hydra
+  (hydra-elfeed-search-open (nil nil)
+                            "open..."
+                            ("be" rdm/elfeed-search-eww-open       "browser (eww)" :exit t)
+                            ("bm" rdm/elfeed-search-w3m-open       "browser (w3m)" :exit t)
+                            ("bw" rdm/elfeed-search-webkit-open    "browser (webkit)" :exit t)
+                            ("bb" rdm/elfeed-search-browse-url     "browser (default)" :exit t))
+
+  (hydra-elfeed-show-open (nil nil)
+                          "open..."
+                          ("be" rdm/elfeed-show-eww-open       "browser (eww)" :exit t)
+                          ("bm" rdm/elfeed-show-w3m-open      "browser (w3m)"     :exit t)
+                          ("bw" rdm/elfeed-show-webkit-open      "browser (webkit)"  :exit t)
+                          ("bb" rdm/elfeed-show-default-open     "browser (default)" :exit t))
+
   (hydra-elfeed-search-filter (nil nil)
                               "elfeed filters"
                               ("u" (elfeed-search-set-filter "@4-weeks-ago +unread -junk")  "all unread")
@@ -324,6 +384,7 @@ based on elfeed-search-browse-url"
                               ("v" (elfeed-search-set-filter "@4-weeks-ago +YouTube +unread -later") "YouTube")
                               ("V" (elfeed-search-set-filter "@4-weeks-ago +YouTube") "YouTube(all)")
                               ("s" (elfeed-search-set-filter "star")  "starred")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; conf-elfeed.el ends here
