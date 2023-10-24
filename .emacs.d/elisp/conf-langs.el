@@ -1,20 +1,30 @@
-;;; conf-langs.el --- major modes -*- lexical-binding: t; no-byte-compile: t -*-
+;;; conf-langs.el --- major modes -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; major modes loaded by init.el
 ;;
 
 ;;; Code:
+(eval-when-compile
+  (load (expand-file-name "elisp/initpkg"   user-emacs-directory))
+  (load (expand-file-name "elisp/util"       user-emacs-directory))
+  (load (expand-file-name "elisp/conf-evil"  user-emacs-directory)))
+
 
 (leaf text-mode
   :tag "builtin"
   :init
   (leaf *font-remap-text-mode
+    :defvar remap-font-to-doc-modes-list
     :hook (text-mode-hook . remap-font-to-doc)
     :preface (push #'text-mode remap-font-to-doc-modes-list)))
 
 (leaf emacs-lisp-mode
   :tag "builtin"
+  :defun
+  highlight-symbol-mode
+  smartparens-strict-mode
+  paredit-mode
   :mode-hook
   (emacs-lisp-mode-hook . ((hs-minor-mode +1)
                            ;; (flycheck-mode +1)
@@ -26,6 +36,7 @@
   :init
   (leaf highlight-defined
     :ensure t
+    :defun straight-use-package
     :config
     (leaf *patch-highlight-defined-faces :after doom-themes
       :doc "patch face color from font-lock-face"
@@ -67,12 +78,14 @@
 
 (leaf conf-mode
   :tag "builtin"
+  :commands conf-mode
   :hook (conf-mode-hook . hl-todo-mode)
   :mode ("\\.env\\'"    . conf-mode))
 
 ;; required for racer
 (leaf rust-mode
   :ensure t
+  :commands rust-mode
   :hook (rust-mode-hook . lsp)
   :custom (rust-format-on-save . t)
   :setq (rust-ts-mode-hook . rust-mode-hook)
@@ -86,10 +99,17 @@
   :config
   (leaf poetry
     :ensure t
-    :hook (python-mode-hook . poetry-tracking-mode))
+    :hook (python-mode-hook . poetry-tracking-mode)
+    :custom (poetry-tracking-strategy . 'projectile))
 
   (leaf pipenv
     :ensure t
+    :defvar
+    (pipenv-mode
+     python-shell-virtualenv-root)
+    :defun
+    (pipenv-activate
+     pipenv-projectile-after-switch-extended)
     :custom
     (pipenv-projectile-after-switch-function . #'pipenv-projectile-after-switch-extended)
     ;; :hook (python-mode . python-pipenv-init))
@@ -103,12 +123,14 @@
 
   (leaf python-mode
     :tag "builtin" :ensure t
+    :commands python-mode
     :mode ("\\.py\\'" . python-mode)
     :hook (python-mode-hook . lsp-deferred)
     :setq (python-ts-mode-hook . python-mode-hook))
 
   (leaf hy-mode
     :ensure t
+    :commands hy-mode
     :mode ("\\.hy\\'" . hy-mode)
     :mode-hook
     (hy-mode-hook . ((hs-minor-mode +1)
@@ -128,14 +150,15 @@
 
 (leaf go-mode
   :ensure t
-  :hook ((go-mode-hook . lsp)
-         (before-save-hook . lsp-format-buffer)
-         (before-save-hook . lsp-organize-imports))
+  :commands go-mode
+  :hook (go-mode-hook . lsp)
+  :setq (go-ts-mode-hook . go-mode-hook)
   :mode ("\\.go\\'" . go-mode)
   )
 
 (leaf web-mode
   :ensure t
+  :commands web-mode
   :mode
   (("\\.html?\\'"
     "\\.phtml\\'"
@@ -151,12 +174,13 @@
   :hook (web-mode-hook . lsp)
   :preface
   (leaf *flycheck-use-tidy :disabled t
-    :if (executable-find "tidy")
+    :if (!executable-find "tidy")
     :doc "enable flycheck with html-tidy on web-mode"
-    :config (add-hook 'lsp-after-initialize-hook
-                      (lambda ()
-                        (flycheck-add-mode 'html-tidy 'web-mode)
-                        (flycheck-add-next-checker 'lsp 'html-tidy))))
+    ;; :config (add-hook 'lsp-after-initialize-hook
+    ;;                   (lambda ()
+    ;;                     (flycheck-add-mode 'html-tidy 'web-mode)
+    ;;                     (flycheck-add-next-checker 'lsp 'html-tidy)))
+    )
   :custom
   ;; highlights
   (web-mode-enable-current-element-highlight . t)
@@ -177,6 +201,7 @@
   (web-mode-enable-heredoc-fontification     . t))
 
 (leaf html-mode
+  :commands html-mode
   :tag "builtin")
 
 (leaf *javascript-conig
@@ -186,6 +211,7 @@
     :tag "builtin"
     :doc "use js-mode with lsp"
     :mode ("\\.json\\'" . js-mode)
+    :commands js-mode
     :custom (js-indent-level . 2)
     :hook (js-mode-hook . lsp)
     :setq (js-ts-mode-hook . js-mode-hook)
@@ -199,7 +225,7 @@
                             (js2-minor-mode)))
       :custom (js2-basic-offset . 2))
 
-    (leaf flycheck-use-eslint :if (executable-find "eslint") :disabled t
+    (leaf flycheck-use-eslint :if (!executable-find "eslint") :disabled t
       :hook
       (lsp-after-initialize-hook . (lambda ()
                                      (flycheck-add-mode 'javascript-eslint 'js-mode)
@@ -208,6 +234,7 @@
 
   (leaf js2-mode :emacs< "27"
     :ensure t
+    :commands js2-mode
     :doc "use js2-mode as major mode with lsp"
     :mode ("\\.js\\'" . js2-mode)
     :hook (js2-mode-hook . lsp)
@@ -218,6 +245,7 @@
   :ensure t
   :mode ("\\.ts\\'" . typescript-mode)
   :hook (typescript-mode-hook . lsp)
+  :commands typescript-mode
   :setq (typescript-ts-mode-hook . typescript-mode-hook)
   :custom
   (typescript-indent-level . 2)
@@ -227,23 +255,25 @@
     :hook
     ;; (before-save-hook  . tide-format-before-save)
     (typescript-mode-hook . tide-setup)
+    :defun tide-hl-identifier-mode
     :config
     (tide-hl-identifier-mode +1))
   )
 
 (leaf sh-mode
   :tag "builtin"
+  :commands sh-mode
   :hook
   ;; (sh-mode-hook . lsp)
   ;; (sh-mode-hook . flycheck-mode)
   :setq (bash-ts-mode-hook . sh-mode-hook)
   ;; :config (setq flycheck-checker 'sh-shellcheck)
   :init
-  (leaf shfmt :if (executable-find "shfmt")
+  (leaf shfmt :if (!executable-find "shfmt")
     :doc "format code on save"
     :ensure t
     :hook (sh-mode-hook . shfmt-on-save-mode))
-  (leaf *flycheck-by-shellcheck :if (executable-find "shellcheck")
+  (leaf *flycheck-by-shellcheck :if (!executable-find "shellcheck")
     :disabled t
     :doc "use shellcheck for flychecker with lsp"
     :hook (lsp-after-initialize-hook . (lambda () (flycheck-add-next-checker 'lsp 'sh-shellcheck))))
@@ -251,22 +281,26 @@
 
 (leaf csv-mode
   :ensure t
+  :commands csv-mode
   :mode (".csv" ".tsv"))
 
 (leaf json-mode
   :ensure t
+  :commands json-mode
   ;; :mode ("\\.json\\'" . json-mode)
   )
 
 (leaf yaml-mode
   :ensure t
+  :commands yaml-mode
   :mode ("\\.yml\\'" . yaml-mode)
   :hook (yaml-mode-hook . hl-todo-mode)
   :setq (yaml-ts-mode-hook . yaml-mode-hook))
 
 (leaf systemd :ensure t)
 
-(leaf lua-mode :ensure t)
+(leaf lua-mode :ensure t
+  :commands lua-mode)
 
 (leaf *docker-env
   :doc "docker related modes"
@@ -278,11 +312,13 @@
 
   (leaf dockerfile-mode
     :ensure t
+    :commands dockerfile-mode
     :doc "Docker file mode for emacs"
     :url "https://github.com/spotify/dockerfile-mode")
 
   (leaf docker-compose-mode
     :ensure t
+    :commands docker-compose-mode
     :doc "major mode for editing docker-compose files, supports context-aware completion of docker-compose keys"
     :url "https://github.com/meqif/docker-compose-mode")
 
@@ -331,6 +367,7 @@
   (leaf valign
     :doc "CJK supported table vertical alignment (on graphical environment)"
     :ensure t
+    :commands valign-mode
     :custom
     (valign-fancy-bar . t)
     :preface
@@ -357,11 +394,13 @@
 
 (leaf powershell
   :ensure t
+  :commands powershell-mode
   :mode ("\\.ps1\\'"))
 
 (leaf java-mode
   :tag "builtin"
   :doc "java environment config"
+  :commands java-mode
   :config
   (leaf lsp-java
     :ensure t
@@ -374,6 +413,7 @@
 
 (leaf elm-mode
   :ensure t
+  :commands elm-mode
   :mode ("\\.elm\\'" . elm-mode)
   :custom
   (elm-indent-simple-offset . 2)
@@ -382,6 +422,7 @@
 
 (leaf haskell-mode
   :ensure t
+  :commands haskell-mode
   :mode
   (("\\.hs\\'"
     "\\.lhs\\'"
@@ -396,11 +437,12 @@
     )
   )
 
-(leaf *mermaid-setup :if (executable-find "mmdc")
+(leaf *mermaid-setup :if (!executable-find "mmdc")
   :config
   (leaf mermaid-mode
     :doc "configure mermaid-mode"
     :ensure t
+    :commands mermaid-mode
     :custom
     (mermaid-output-format . "png")
     (mermaid-flags         . "--backgroundColor transparent --theme forest"))
@@ -408,21 +450,28 @@
   (leaf ob-mermaid
     :doc "configure mermaid for org babel"
     :ensure t
-    :custom `(ob-mermaid-cli-path . ,(executable-find "mmdc")))
+    :custom `(ob-mermaid-cli-path . ,(!executable-find "mmdc")))
   ;; configure mermaid for babel (ob-mermaid)
-  (add-to-list 'org-babel-load-languages '(mermaid . t)))
+  :defvar org-babel-load-languages
+  (eval-after-load
+      'org-mode
+    '(progn (add-to-list 'org-babel-load-languages '(mermaid . t)))))
 
-(leaf gnuplot :if (executable-find "gnuplot")
+(leaf gnuplot :if (!executable-find "gnuplot")
   :ensure t
+  :commands gnuplot-mode
   :mode
   (("\\.gp\\'"
     "\\.gnuplot\\'") . gnuplot-mode)
   :config (add-to-list 'org-babel-load-languages '(babel . t)))
 
-(leaf git-modes :ensure t)
+(leaf git-modes
+  :ensure t
+  :commands gitignore-mode gitconfig-mode gitattributes-mode)
 
 (leaf fsharp-mode
   :ensure t
+  :commands fsharp-mode
   :preface (exec-path-from-shell-copy-env "DOTNET_ROOT") ; import dotnet runtime path
   :mode-hook (fsharp-mode-hook . ((rainbow-delimiters-mode -1)))
   :config
@@ -432,7 +481,7 @@
     (fsharp-mode-hook . ((unless eglot--managed-mode
                            (call-interactively 'eglot))))
     :load-path
-    `(,(expand-file-name
+    `(,(!expand-file-name
         "straight/repos/emacs-fsharp-mode"
         straight-base-dir))
     :require eglot-fsharp
