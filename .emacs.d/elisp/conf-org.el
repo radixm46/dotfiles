@@ -5,11 +5,22 @@
 ;;
 
 ;;; Code:
+(eval-when-compile
+  (load (expand-file-name "elisp/initpkg"    user-emacs-directory))
+  (load (expand-file-name "elisp/conf-fonts" user-emacs-directory))
+  (load (expand-file-name "elisp/conf-evil"  user-emacs-directory))
 
-(leaf org :after nerd-icons
+  (defconst default-org-directory (expand-file-name "org/orgfiles" (getenv "HOME"))
+    "define default org directory path for compile"))
+(require 'straight)
+(require 'hydra)
+
+
+(leaf org
   :doc "org-mode config"
   :ensure t
   :mode ("\\.org\\'" . org-mode)
+  :defun nerd-icons-faicon
   :custom
   ;; priority
   (org-priority-highest               . 1)
@@ -19,7 +30,7 @@
   (org-refile-targets                 . '((org-agenda-files :maxlevel . 3)))
   (org-todo-keywords                  . '((sequence "TODO(t)" "NEXT(n)" "SOMEDAY(s)" "WAITING(w@/!)" "PROJ(p)" "|"
                                                     "DONE(d!)" "CANCELLED(c@)")))
-  (org-capture-templates              . `( ;; NOTE: require material icons
+  (org-capture-templates              . `( ;; NOTE: require font awsome icons
                                           ("t" ,(format "%s  Task to Inbox" (nerd-icons-faicon "nf-fa-check"))
                                            entry (file+headline org-todofile "Inbox")
                                            "-*- TODO %?\nEntered on %U\n%a"
@@ -47,23 +58,28 @@
   :init
   (leaf *font-remap-org-mode
     :hook (org-mode-hook . remap-font-to-doc)
-    :preface (push #'org-mode  remap-font-to-doc-modes-list))
+    :preface (push #'org-mode remap-font-to-doc-modes-list))
 
   (leaf *font-remap-org-agenda-mode
     :doc "for better alignment"
     :hook (org-agenda-mode-hook . remap-font-to-term)
-    :preface (push #'org-mode  remap-font-to-term-modes-list))
+    :defun org-agenda-mode
+    :preface (push #'org-agenda-mode remap-font-to-term-modes-list))
 
-  (leaf evil-org
+  (leaf evil-org :after org
     :ensure t
     :hook
     (org-mode-hook . evil-org-mode)
+    :defun
+    evil-org-agenda-set-keys evil-org-set-key-theme
+    evil-set-initial-state
     :preface
     (evil-set-initial-state 'org-agenda-mode 'motion)
     :init
-    (require 'evil-org-agenda)
     (add-hook 'org-agenda-mode-hook #'evil-org-agenda-set-keys)
     :config
+    ;; load evil-org-agenda
+    (require 'evil-org-agenda)
     ;; enable evil-org features
     (evil-org-set-key-theme
      '(textobjects insert navigation additional shift todo heading))
@@ -74,21 +90,23 @@
 
   :config
   (leaf *org-config-directory
-    :if (file-directory-p (expand-file-name "org/orgfiles" (getenv "HOME")))
+    :if (file-directory-p (!expand-file-name "org/orgfiles" (getenv "HOME")))
     :custom
-    `((org-directory          . ,(expand-file-name "org/orgfiles" (getenv "HOME")))
-      (org-default-notes-file . ,(expand-file-name
-                                  "notes.org" (expand-file-name "org/orgfiles" (getenv "HOME"))))
+    `((org-directory          . ,(!expand-file-name default-org-directory))
+      (org-default-notes-file . ,(!expand-file-name
+                                  "notes.org" default-org-directory))
       (org-agenda-files       . `,(directory-files
-                                   (expand-file-name "org/orgfiles" (getenv "HOME")) t ".org$" t))
+                                   (!expand-file-name default-org-directory) t ".org$" t))
       (org-id-locations-file  . ,(cache-sub-file ".org-id-locations")))
+    :defvar org-directory
     :config
     (defvar org-todofile
-      (expand-file-name "todo.org" org-directory)
+      (!expand-file-name "todo.org" default-org-directory)
       "default org todo file path"))
 
   (leaf *org-habits
     :doc "enable `org-habit'"
+    :defvar org-modules
     :preface (add-to-list 'org-modules 'org-habit)
     :custom
     `((org-habit-completed-glyph . ,(string-to-char "-"))
@@ -108,7 +126,7 @@
   (defun rdm/org-goto-dir ()
     "open dir '~/org' with dired"
     (interactive)
-    (find-file "~/org"))
+    (find-file (!expand-file-name "../" default-org-directory)))
 
   (leaf *org-appearance
     :custom
@@ -131,7 +149,7 @@
     (org-agenda-columns-add-appointments-to-effort-sum . t)
 
     :config
-    (leaf *org-latex-preview-svg :if (executable-find "dvisvgm") :disabled t
+    (leaf *org-latex-preview-svg :if (!executable-find "dvisvgm") :disabled t
       :doc "if dvisvgm available, startup with latex preview"
       :custom
       (org-preview-latex-default-process . 'dvisvgm)
@@ -141,13 +159,15 @@
        'org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       )
 
-    (leaf *org-latex-preview-imagemagick :if (executable-find "imagemagick")
+    (leaf *org-latex-preview-imagemagick :if (!executable-find "imagemagick")
       :doc "use imagemagick for latex preview"
       :require ob-latex
       :after org
       :custom
       (org-latex-create-formula-image-program . 'imagemagick)
       (org-startup-with-latex-preview         . nil)
+      :defvar
+      org-format-latex-options org-babel-load-languages
       :config
       (customize-set-variable
        'org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
@@ -158,7 +178,7 @@
     (leaf *patch-org-mode-header-size
       :doc "set larger face for org-level-1 to 5"
       :preface
-      (defun patch-org-mode-header-size ()
+      (defsubst patch-org-mode-header-size ()
         (set-face-attribute 'org-document-title nil :height 2.0)
         (set-face-attribute 'org-level-1 nil :height 1.75)
         (set-face-attribute 'org-level-2 nil :height 1.50)
@@ -166,12 +186,14 @@
         (set-face-attribute 'org-level-4 nil :height 1.1)
         (set-face-attribute 'org-level-5 nil :height 1.0))
       :hook
-      (after-load-theme-hook . patch-org-mode-header-size)
+      ((after-load-theme-hook
+        org-mode-hook) . patch-org-mode-header-size)
       )
 
     (leaf *patch-org-mode-faces :after doom-themes
+      :defun doom-color
       :preface
-      (defun patch-org-mode-face ()
+      (defsubst patch-org-mode-face ()
         (custom-set-faces
          `(org-hide             ((t (:foreground ,(doom-color 'bg))))) ; org-hide
          `(org-table            ((t :family ,font-for-tables)))       ; use 1:2 font for table
@@ -182,7 +204,7 @@
          ))
       :hook ;; without `doom-color': (face-attribute 'default :background)
       ((after-load-theme-hook
-        after-load-theme-hook) . patch-org-mode-face)
+        org-mode-hook) . patch-org-mode-face)
       )
 
     (leaf org-bullets :disabled t
@@ -193,7 +215,7 @@
     (leaf *patch-org-todo-faces :after doom-themes
       :doc  "prettify todo keywords"
       :preface
-      (defun patch-org-todo-faces ()
+      (defsubst patch-org-todo-faces ()
         (customize-set-variable
          'org-todo-keyword-faces
          `(("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
@@ -202,7 +224,8 @@
            ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
            ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta))))))))
       :hook
-      (after-load-theme-hook . patch-org-todo-faces))
+      ((after-load-theme-hook
+        org-mode-hook) . patch-org-todo-faces))
 
     (leaf org-modern
       :straight
@@ -210,7 +233,9 @@
                   :repo "minad/org-modern" :branch "main")
       :doc "better looking org mode"
       :hook
-      (org-mode-hook . org-modern-mode)
+      ((org-mode-hook
+        org-agenda-mode-hook) . org-modern-mode)
+      ;; (org-agenda-finalize-hook . org-modern-agenda) ;; FIXME modern-agenda でblock-faceが上書きされる
       :custom
       ;;org-modern custom
       (org-modern-todo            . nil)
@@ -238,6 +263,7 @@
 
   (leaf *configure-bibtex
     :defun reftex-parse-all
+    :defvar org-mode-map
     :config
     (defun org-mode-reftex-setup ()
       "setup reftex on org-mode doc"
@@ -253,6 +279,7 @@
 
   (leaf org-roam
     :ensure t
+    :defvar org-roam-v2-ack
     :pre-setq (org-roam-v2-ack . t)
     :bind
     (("C-c n c" . org-roam-capture)
@@ -316,11 +343,12 @@
                                       ;;:head "#+title: ${title}\n"
                                       ;;:unnarrowed t)
                                       ))
-      (org-roam-directory         . ,(expand-file-name "org/roam" (getenv "HOME")))
-      (org-roam-index-file        . ,(expand-file-name "org/roam/Index.org" (getenv "HOME")))
+      (org-roam-directory         . ,(!expand-file-name "org/roam" (getenv "HOME")))
+      (org-roam-index-file        . ,(!expand-file-name "org/roam/Index.org" (getenv "HOME")))
       (org-roam-db-location       . ,(cache-sub-file  "org-roam.db"))
       )
     :hook (org-roam-capture-new-node-hook . org-roam-db-sync)
+    :defun org-roam-db-autosync-mode
     :config
     (org-roam-db-autosync-mode)
 
@@ -330,21 +358,27 @@
       (org-roam-ui :type git :host github
                    :repo "org-roam/org-roam-ui" :branch "main"
                    :files ("*.el" "out"))
+      :defvar
+      (org-roam-ui-sync-theme
+       org-roam-ui-follow
+       org-roam-ui-update-on-save
+       org-roam-ui-open-on-start)
       :custom
       (org-roam-ui-sync-theme     . t)
       (org-roam-ui-follow         . t)
       (org-roam-ui-update-on-save . t)
-      (org-roam-ui-open-on-start  . t)
-      )
+      (org-roam-ui-open-on-start  . t))
     )
 
   (leaf org-pdftools :after pdf-tools
     :doc "org mode for pdf-tools integration (contains org-noter)"
     :ensure t
     :hook (org-mode-hook . org-pdftools-setup-link)
+    :defun
+    org-time-stamp org-time-stamp-inactive
     :custom
     `(
-      (org-noter-notes-search-path . `(,(expand-file-name "org/roam/noter" (getenv "HOME"))))
+      (org-noter-notes-search-path . `(,(!expand-file-name "org/roam/noter" (getenv "HOME"))))
       )
     )
 
