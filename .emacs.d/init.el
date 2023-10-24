@@ -29,17 +29,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :mode-hook
     (conf-on-term-hook . ((xterm-mouse-mode +1)))
     (conf-on-gui-hook  . ((xterm-mouse-mode -1))))
-
-  (leaf cl-lib
-    :tag "builtin"
-    :require t
-    :doc "load cl-lib")
-
-  (leaf exec-path-from-shell
-    :doc "load path from shell at startup"
-    :ensure t
-    :custom (exec-path-from-shell-arguments . '("-l"))
-    :config (when (daemonp) (exec-path-from-shell-initialize))))
+  )
 
 
 (leaf *conf-cache-history
@@ -90,11 +80,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (recentf-exclude         . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
                                    "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/")))
     :init
-    (defmacro with-suppressed-message (&rest body)
-      "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
-      (declare (indent 0))
-      (let ((message-log-max nil))
-        `(with-temp-message (or (current-message) "") ,@body)))
     (setq recentf-auto-save-timer
           (run-with-idle-timer 30 t #'(lambda ()
                                         (with-suppressed-message (recentf-save-list)))))
@@ -555,23 +540,6 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
   (blink-cursor-mode 0)
   (which-function-mode 1)
   (transient-mark-mode 1)
-
-  (leaf *set-linespacing
-    :doc "control line spacing"
-    :custom (line-spacing . 0.40)
-    :config
-    (defun rdm/sw-lnsp (wdth)
-      "switch line spacing"
-      (interactive "nset line spacing: ")
-      (setq-local line-spacing wdth))
-    (defun rdm/dbl-lnsp ()
-      "switch line spacing to double"
-      (interactive)
-      (setq-local line-spacing 2.0))
-    (defun rdm/lnsp-default ()
-      "remove local line-spacing"
-      (interactive)
-      (kill-local-variable 'line-spacing)))
 
   (leaf *config-custom-themes-path
     :doc "load custom theme from elisp dir"

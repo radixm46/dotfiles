@@ -5,58 +5,73 @@
 ;;
 
 ;;; Code:
+;; load package init
+(eval-when-compile
+  (load (expand-file-name "elisp/initpkg" user-emacs-directory)))
+(require 'straight)
 
 
-(leaf *conf-cache-history
+(leaf '*conf-on-state
   :config
-  (leaf '*conf-on-state
-    :config
-    (defvar conf-on-term-hook nil "Hook run by conf-on-term.")
-    (defvar conf-on-gui-hook  nil "Hook run by conf-on-gui.")
+  (defvar conf-on-term-hook nil "Hook run by conf-on-term.")
+  (defvar conf-on-gui-hook  nil "Hook run by conf-on-gui.")
 
-    (defun conf-on-term ()
-      "fire hooked functions for swtitch appearance on tui frame"
-      (interactive)
-      (message "switch to term")
-      (run-hooks 'conf-on-term-hook))
+  (defun conf-on-term ()
+    "fire hooked functions for swtitch appearance on tui frame"
+    (interactive)
+    (message "switch to term")
+    (run-hooks 'conf-on-term-hook))
 
-    (defun conf-on-gui ()
-      "fire hooked functions for swtitch appearance on gui frame"
-      (interactive)
-      (message "switch to gui")
-      (run-hooks 'conf-on-gui-hook))
-    )
-
-;; setup .config/cache/emacs
-  (leaf *conf-chache-dir
-    :defun
-    (cache-sub-dir)
-    :config
-    (defvar emacs-cache-root-dir
-      (expand-file-name ".cache/emacs" (getenv "HOME"))
-      "emacs cache directory path (default: $HOME/.cache)")
-
-    (defun cache-sub-dir (&optional name)
-      "Check directory existence, and return full path to given NAME.
-Create if cache sub directory NAME not exists.
-If argument is not given, returns `emacs-cache-root-dir'"
-      (let ((lpath (if (eq name nil)
-                       (expand-file-name emacs-cache-root-dir)
-                     (expand-file-name name emacs-cache-root-dir))))
-        (if (not (file-directory-p lpath))
-            (progn (make-directory lpath t) lpath)
-          lpath)))
-
-    (defun cache-sub-file (name &optional subdir)
-      "returns file path like 'emacs-cache-root-dir/SUBDIR/NAME'
-if name is not given, returns 'emacs-cache-root-dir/NAME'
-argument NAME could be directory or filename"
-      (expand-file-name name (cache-sub-dir subdir)))
-
-    ;; create eln-cache in .cache
-    (push (cache-sub-dir "eln-cache") native-comp-eln-load-path)
-    )
+  (defun conf-on-gui ()
+    "fire hooked functions for swtitch appearance on gui frame"
+    (interactive)
+    (message "switch to gui")
+    (run-hooks 'conf-on-gui-hook))
   )
 
+
+(leaf exec-path-from-shell
+  :doc "load path from shell at startup"
+  :ensure t
+  :custom (exec-path-from-shell-arguments . '("-l"))
+  :commands
+  exec-path-from-shell-setenv
+  exec-path-from-shell-getenv
+  :defun exec-path-from-shell-initialize
+  :config (when (daemonp) (exec-path-from-shell-initialize)))
+
+
+(leaf *line-space-contol
+  :doc "modifying line spaces on buffer"
+  :config
+  (defun rdm/sw-lnsp (wdth)
+    "switch line spacing"
+    (interactive "nset line spacing: ")
+    (setq-local line-spacing wdth))
+  (defun rdm/dbl-lnsp ()
+    "switch line spacing to double"
+    (interactive)
+    (setq-local line-spacing 2.0))
+  (defun rdm/lnsp-default ()
+    "remove local line-spacing"
+    (interactive)
+    (kill-local-variable 'line-spacing)))
+
+
+(leaf *text-scale-adjust
+  :doc "adjust text scale on buffer"
+  :preface
+  (defvar rdm/text-scale-amount
+    nil "text scale amount applied via rdm/text-scale-adjust, nil or number.
+ if number given, applied for text-scale on current buffer")
+
+  (defun rdm/text-scale-adjust ()
+    "run text-scale-adjust on buffer with amount `rdm/text-scale-amount'"
+    (interactive)
+    (when (numberp rdm/text-scale-amount)
+      (text-scale-increase rdm/text-scale-amount))))
+
+
+(provide 'rdm/util)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; util.el ends here
