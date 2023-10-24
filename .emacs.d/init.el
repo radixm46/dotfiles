@@ -374,20 +374,24 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("SPC" hydra-manage-windows/body :exit t))
     )
 
-  (leaf quickrun :ensure t)
+  (leaf quickrun :ensure t
+    :commands quickrun)
 
   (leaf highlight-symbol
     :ensure t
     :doc "automatic and manual symbol highlighting for Emacs"
-    :custom
-    (highlight-symbol-idle-delay . 1.0)
-    :config
+    :custom (highlight-symbol-idle-delay . 1.0)
+    :commands highlight-symbol-mode
+    :defun doom-color
+    :init
     (leaf *patch-highlight-symbol
-      :hook
-      (after-load-theme-hook . (lambda ()
-                                 (custom-set-faces
-                                  `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan) :foreground ,(doom-color 'bg)))))))))
-    )
+      :preface
+      (defsubst patch-highlight-symbol ()
+        "patch highlight-symbol color"
+        (custom-set-faces
+         `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan) :foreground ,(doom-color 'bg)))))))
+      :hook ((after-load-theme-hook
+              highlight-symbol-mode-hook) . patch-highlight-symbol)))
 
   (leaf *config-completion-styles
     :doc "setup completion packages"
