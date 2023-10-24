@@ -5,13 +5,57 @@
 ;;
 
 ;;; Code:
-(when (getenv "PROFILE_EMACS")
+
+;; setup load performance profiling
+(when (and (not noninteractive)
+           (getenv "PROFILE_EMACS"))
+  (prog1 '*configure-setup-tracker
+    ;; https://zenn.dev/zk_phi/books/cba129aacd4c1418ade4/viewer/4d0a9dde1043c6eaffad
+    (defvar setup-tracker--level 0)
+    (defvar setup-tracker--parents nil)
+    (defvar setup-tracker--times nil)
+
+    (when load-file-name
+      (push load-file-name setup-tracker--parents)
+      (push (current-time) setup-tracker--times)
+      (setq setup-tracker--level (1+ setup-tracker--level)))
+
+    (add-variable-watcher
+     'load-file-name
+     (lambda (_ v &rest __)
+       (cond ((equal v (car setup-tracker--parents))
+              nil)
+             ((equal v (cadr setup-tracker--parents))
+              (setq setup-tracker--level (1- setup-tracker--level))
+              (let* ((now (current-time))
+                     (start (pop setup-tracker--times))
+                     (elapsed (+ (* (- (nth 1 now) (nth 1 start)) 1000)
+                                 (/ (- (nth 2 now) (nth 2 start)) 1000))))
+                (with-current-buffer (get-buffer-create "*setup-tracker*")
+                  (save-excursion
+                    (goto-char (point-min))
+                    (dotimes (_ setup-tracker--level) (insert "> "))
+                    (insert
+                     (file-name-nondirectory (pop setup-tracker--parents))
+                     " (" (number-to-string elapsed) " msec)\n")))))
+             (t
+              (push v setup-tracker--parents)
+              (push (current-time) setup-tracker--times)
+              (setq setup-tracker--level (1+ setup-tracker--level)))))))
+
+  ;; set profiler
   (require 'profiler)
-  (profiler-start 'cpu))
+  (profiler-start 'cpu)
+  (add-hook 'after-init-hook
+            #'(lambda () (profiler-report) (profiler-stop))))
 
 ;; ---------------  load package ---------------
-(load (expand-file-name "elisp/initpkg" user-emacs-directory))
-(load (expand-file-name "elisp/util"    user-emacs-directory))
+(eval-and-compile
+  (load (expand-file-name "elisp/initpkg"    user-emacs-directory))
+  (load (!expand-file-name "elisp/util"       user-emacs-directory))
+  (load (!expand-file-name "elisp/conf-fonts" user-emacs-directory))
+  (require 'rdm/util))
+
 
 (leaf *startup
   :doc  "startup config"
@@ -42,7 +86,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "supress auto saving message"
       :custom (auto-save-no-message . t))
     :custom
-    `((auto-save-file-name-transforms . `((".*" ,(expand-file-name "\\2" (cache-sub-dir "autosaved")) t)))
+    `((auto-save-file-name-transforms . `((".*" ,(!expand-file-name "\\2" (cache-sub-dir "autosaved")) t)))
       (delete-auto-save-files         . t)
       (auto-save-default              . t)
       (auto-save-timeout              . 15)
@@ -55,7 +99,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :custom
     `((backup-directory-alist         . `(("." .  ,(cache-sub-dir "backup"))))
       (backup-by-copying              . t)
-      (auto-save-list-file-prefix     . ,(expand-file-name ".saves-" (cache-sub-dir "auto-save-list")))
+      (auto-save-list-file-prefix     . ,(!expand-file-name ".saves-" (cache-sub-dir "auto-save-list")))
       (make-backup-files              . t)
       (version-control                . t) ;; enable version control
       (kept-new-versions              . 5)
@@ -116,9 +160,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     `((skk-use-azik         . t)
       (default-input-method . "japanese-skk")
       (skk-user-directory   . ,(cache-sub-dir "skk"))
-      (skk-init-file        . ,(expand-file-name "elisp/initskk.el" user-emacs-directory))))
-  )
-
+      (skk-init-file        . ,(!expand-file-name "elisp/initskk.el" user-emacs-directory))))
   )
 
 
@@ -375,7 +417,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf *config-custom-themes-path
     :doc "load custom theme from elisp dir"
-    :custom `(custom-theme-directory . ,(expand-file-name "elisp" user-emacs-directory)))
+    :custom `(custom-theme-directory . ,(!expand-file-name "elisp" user-emacs-directory)))
 
   (leaf *conf-theme-hook
     :doc "reconfigure appearance after `load-theme' fired"
@@ -396,7 +438,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (eval-and-compile ;; load required for doom-* functions
       (load (!expand-file-name "elisp/doom" user-emacs-directory))))
 
-    )
 
   (leaf *parenthesis-related-things
     :doc "smartparens and paredit for manipulate, paren for highlighting"
@@ -914,11 +955,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("M-g M-o" . consult-org-heading))
 
     :init
-    (leaf *consult-use-fd :if (executable-find "fd")
+    (leaf *consult-use-fd :when (!executable-find "fd")
       :doc "use fd for find if avalable"
       :custom (consult-find-command . "fd --color=never --full-path ARG OPTS"))
 
-    (leaf *consult-use-rigrep :if (executable-find "rg")
+    (leaf *consult-use-rigrep :when (!executable-find "rg")
       :doc "use ripgrep for grep if avalable"
       :custom (consult-grep-command . '(concat "rg --null --color=ansi"
                                                "--max-columns=250"
@@ -1025,7 +1066,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (ac-sources  . '(ac-source-filename
                      ac-source-words-in-all-buffer)))
 
-  (leaf ispell :if (executable-find "aspell")
+  (leaf ispell :when (!executable-find "aspell")
     :tag "builtin"
     :setq-default
     (ispell-program-name     . "aspell")
@@ -1170,19 +1211,18 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
               evil-normalize-keymaps))
     )
 
-    (leaf *corfu-official-extensions
-      :doc "extensions provided from corfu"
-      :load-path
-      `(,(expand-file-name
-          "straight/repos/corfu/extensions"
-          straight-base-dir))
-      :config
-      (leaf *corfu-popup-info
-        :require corfu-popupinfo
-        :custom
-        (corfu-popupinfo-delay . 0.5)
-        :global-minor-mode corfu-popupinfo-mode)
-      )
+  (leaf *corfu-official-extensions :after corfu
+    :doc "extensions provided from corfu"
+    :load-path
+    `(,(!expand-file-name
+        "straight/repos/corfu/extensions"
+        straight-base-dir))
+    :config
+    (leaf *corfu-popup-info
+      :require corfu-popupinfo
+      :custom
+      (corfu-popupinfo-delay . 0.5)
+      :global-minor-mode corfu-popupinfo-mode))
 
     (leaf *corfu-ui-config
       :doc "corfu ui related configuration"
@@ -1658,9 +1698,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :doc "required by magit, git-timemachine"
     :custom
     `((transient-save-history . t)
-      (transient-levels-file  . ,(expand-file-name "levels.el"  (cache-sub-dir "transient")))
-      (transient-values-file  . ,(expand-file-name "values.el"  (cache-sub-dir "transient")))
-      (transient-history-file . ,(expand-file-name "history.el" (cache-sub-dir "transient")))))
+      (transient-levels-file  . ,(!expand-file-name "levels.el"  (cache-sub-dir "transient")))
+      (transient-values-file  . ,(!expand-file-name "values.el"  (cache-sub-dir "transient")))
+      (transient-history-file . ,(!expand-file-name "history.el" (cache-sub-dir "transient")))))
 
   (leaf xwidget-webkit :if (string-match "XWIDGETS"
                                          system-configuration-features)
@@ -1706,7 +1746,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :preface
     (defun dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
-      (let ((banner-img (expand-file-name "banner.png" user-emacs-directory)))
+      (let ((banner-img (!expand-file-name "banner.png" user-emacs-directory)))
         (if (and (file-regular-p banner-img)
                  (display-graphic-p))
             (customize-set-variable 'dashboard-startup-banner banner-img)
@@ -1776,9 +1816,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf eshell
     :tag "builtin"
     :custom
-    `((eshell-history-file-name . ,(expand-file-name
-                                    "history"
-                                    (cache-sub-dir "eshell")))))
+    `((eshell-history-file-name . ,(!expand-file-name "history" (cache-sub-dir "eshell")))))
 
   (leaf vterm
     :ensure t
@@ -1982,7 +2020,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (message "DeepL API key not set")))
     )
 
-  (leaf *darwin-dictionary-integration :if (eq system-type 'darwin)
+  (leaf *darwin-dictionary-integration :when (!system-type 'darwin)
     :doc "dictionary app integration on macOS"
     :config
     (defun macos-dict-lookup (word)
@@ -2112,22 +2150,22 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf dired
     :tag "builtin"
     :preface
-    (leaf osx-trash :if (eq system-type 'darwin)
+    (leaf osx-trash :when (!system-type 'darwin)
       :ensure t
       :config
       (osx-trash-setup))
     :custom
     `(;; use gnu-ls if available on macOS
-      (insert-directory-program  . ,(if (and (eq system-type 'darwin)
-                                             (executable-find "gls"))
+      (insert-directory-program  . ,(if (and (!system-type 'darwin)
+                                             (!executable-find "gls"))
                                         "gls" "ls"))
-      (dired-listing-switches    . ,(if (and (eq system-type 'darwin)
-                                             (executable-find "gls"))
+      (dired-listing-switches    . ,(if (and (!system-type 'darwin)
+                                             (!executable-find "gls"))
                                         "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group" "-l"))
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
-      ;; NOTE: on macOS, require full disk access to use trash bin
-      (trash-directory           . ,(when (eq system-type 'darwin) "~/.Trash")))
+      ;; NOTE: on macOS, require full disk access to see inside trash bin via dired
+      (trash-directory           . ,(when (!system-type 'darwin) "~/.Trash")))
     :config
     (leaf async
       :doc "configure dired async"
@@ -2139,8 +2177,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (put 'dired-find-alternate-file 'disabled nil))
 
   (leaf dirvish
-    :if (or (not (equal system-type 'darwin))
-            (executable-find "gls"))
+    :when (or (not (!system-type 'darwin))
+              (!executable-find "gls"))
     :ensure t
     :after transient
     :custom
@@ -2161,14 +2199,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                                :right (omit yank index)))
       ;; bookmarks TODO: add config for windows
       (dirvish-quick-access-entries . `(("h" ,(getenv "HOME")   "Home")
-                                        ("d" ,(expand-file-name "Downloads" (getenv "HOME")) "Downloads")
-                                        ("D" ,(expand-file-name "Documents"  (getenv "HOME")) "Documents")
-                                        ("e" ,(expand-file-name user-emacs-directory) "Emacs directory")
-                                        ("m" ,(cond ((eq system-type 'darwin)    "/Volumes/")
-                                                    ((eq system-type 'gnu/linux) "/mnt/")
+                                        ("d" ,(!expand-file-name "Downloads" (getenv "HOME")) "Downloads")
+                                        ("D" ,(!expand-file-name "Documents"  (getenv "HOME")) "Documents")
+                                        ("e" ,(!expand-file-name user-emacs-directory) "Emacs directory")
+                                        ("m" ,(cond ((!system-type 'darwin)    "/Volumes/")
+                                                    ((!system-type 'gnu/linux) "/mnt/")
                                                     (t "(not available)")) "Drives")
-                                        ("t" ,(cond ((eq system-type 'darwin)    "~/.Trash")
-                                                    ((eq system-type 'gnu/linux) "~/.local/share/Trash/files/")
+                                        ("t" ,(cond ((!system-type 'darwin)    (!expand-file-name "~/.Trash"))
+                                                    ((!system-type 'gnu/linux) (!expand-file-name "~/.local/share/Trash/files/"))
                                                     (t "(not available)")) "TrashCan")))
       )
 
@@ -2362,7 +2400,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (treemacs-follow-mode 0)
     (treemacs-filewatch-mode t)
     (treemacs-fringe-indicator-mode t)
-    (pcase (cons (not (null (executable-find "git")))
+    (pcase (cons (not (null (!executable-find "git")))
                  (not (null treemacs-python-executable)))
       (`(t . t) (treemacs-git-mode 'deferred))
       (`(t . _) (treemacs-git-mode 'simple)))
@@ -2402,14 +2440,16 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   )
 
 
+(leaf *load-conf-elfeed
+  :doc "load elfeed plugins if elfeed dir available"
+  :init (load (!expand-file-name "elisp/conf-elfeed" user-emacs-directory)))
+
+
 (leaf *load-major-modes
   :config
-  (load (expand-file-name "elisp/conf-org"   user-emacs-directory))
-  (load (expand-file-name "elisp/conf-langs" user-emacs-directory)))
+  (load (!expand-file-name "elisp/conf-org"   user-emacs-directory))
+  (load (!expand-file-name "elisp/conf-langs" user-emacs-directory)))
 
-(leaf *load-elfeed  :if (file-exists-p "~/.config/elfeed")
-  :doc "load elfeed plugins if elfeed db available"
-  :config (load (expand-file-name "elisp/conf-elfeed" user-emacs-directory)))
 
 (leaf *conf-appearance-on-state
   :doc "apply theme and frame state hooks after init"
@@ -2424,7 +2464,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 (leaf *load-local-conf
   :config
   (let
-      ((local-conf (expand-file-name "elisp/local.el" user-emacs-directory)))
+      ((local-conf (!expand-file-name "elisp/local" user-emacs-directory)))
     (unless (file-exists-p local-conf)
       (with-temp-file local-conf
         (insert "\
@@ -2443,5 +2483,3 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
-(when (getenv "PROFILE_EMACS")
-  (profiler-report) (profiler-stop))
