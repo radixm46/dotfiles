@@ -5,6 +5,11 @@
 ;;
 
 ;;; Code:
+(eval-when-compile
+  (load (expand-file-name "elisp/initpkg" user-emacs-directory)))
+(require 'straight)
+
+
 ;; enable doom-modeline
 (leaf doom-modeline
   :ensure t
@@ -141,12 +146,40 @@
   (doom-themes-enable-bold        . t)
   (doom-themes-enable-italic      . t)
   (doom-themes-neotree-file-icons . t)
+  :defun
+  doom-themes-visual-bell-config
+  doom-themes-org-config
+  :commands
+  doom-blend
+  doom-color
   :config
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
   ;; (doom-themes-treemacs-config)
   ;; (doom-themes-neotree-config)
   )
+
+(leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
+  :after doom-themes
+  :preface
+  (defsubst patch-help-key-face-with-doom-themes ()
+    (custom-set-faces
+     `(help-key-binding  ((t (
+                              :foreground ,(doom-color 'cyan)
+                              :background ,(doom-color 'bg-alt)
+                              :box (:line-width (1 . -1) :color ,(doom-color 'dark-cyan))
+                              ))))))
+  :hook
+  (after-load-theme-hook . patch-help-key-face-with-doom-themes))
+
+(leaf *patch-childframe-color :emacs> "28"
+  :after doom-themes
+  :preface
+  (defsubst patch-childframe-color ()
+    (custom-set-faces
+     `(child-frame-border  ((t (:foreground ,(doom-color 'bg)))))))
+  :hook
+  (after-load-theme-hook . patch-childframe-color))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; doom.el ends here

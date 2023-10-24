@@ -393,29 +393,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf *config-doom-modeline
     :config
-    (load (expand-file-name "elisp/doom" user-emacs-directory))
+    (eval-and-compile ;; load required for doom-* functions
+      (load (!expand-file-name "elisp/doom" user-emacs-directory))))
 
-    (leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
-      :after doom-themes
-      :preface
-      (defsubst patch-help-key-face-with-doom-themes ()
-        (custom-set-faces
-         `(help-key-binding  ((t (
-                                  :foreground ,(doom-color 'cyan)
-                                  :background ,(doom-color 'bg-alt)
-                                  :box (:line-width (1 . -1) :color ,(doom-color 'dark-cyan))
-                                  ))))))
-      :hook
-      (after-load-theme-hook . patch-help-key-face-with-doom-themes))
     )
-
-  (leaf *patch-childframe-color :emacs> "28" :after doom-themes
-    :preface
-    (defun patch-childframe-color ()
-      (custom-set-faces
-       `(child-frame-border  ((t (:foreground ,(doom-color 'bg)))))))
-    :hook
-    (after-load-theme-hook . patch-childframe-color))
 
   (leaf *parenthesis-related-things
     :doc "smartparens and paredit for manipulate, paren for highlighting"
