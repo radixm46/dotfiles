@@ -190,8 +190,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   :init
   (leaf *word-wrap-by-category :emacs>= "28.1"
     :doc "better wordwrapping above emacs 28"
-    :custom
-    (word-wrap-by-category . t))
+    :custom (word-wrap-by-category . t))
 
   (leaf visual-line-mode
     :doc "visual line mode enables word wrap"
@@ -1042,17 +1041,17 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
     )
 
+  (leaf savehist
+    :tag "builtin"
+    :doc "Persist minibuffer history over Emacs restarts."
+    :custom `((savehist-file . ,(cache-sub-file "history")))
+    :init (savehist-mode))
+
   (leaf vertico
     :ensure t
     :doc "VERTical Interactive COmpletion"
     :defun vertico-mode crm-indicator
-    :init
-    (vertico-mode)
-    (leaf savehist
-      :tag "builtin"
-      :doc "Persist history over Emacs restarts. Vertico sorts by history position."
-      :custom `((savehist-file . ,(cache-sub-file "history")))
-      :init (savehist-mode))
+    :init (vertico-mode)
 
     ;; Add prompt indicator to `completing-read-multiple'.
     ;; Alternatively try `consult-completing-read-multiple'.
@@ -1742,7 +1741,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
            `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
         :hook
         (after-load-theme-hook . patch-which-key-posframe-faces)))
-    :global-minor-mode which-key-mode)
+    :mode-hook (after-init-hook . ((which-key-mode)))
+    )
 
   (leaf request
     :ensure t
@@ -2201,14 +2201,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf *magit-git-gutter-integration
       :doc "refresh git-gutter on magit operation"
       :url "https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit"
-      :hook
-      (magit-post-refresh-hook . (lambda () ;; update visible buffer
-                                   (dolist (buff (buffer-list))
-                                     (with-current-buffer buff
-                                       (when (and git-gutter-mode
-                                                  (get-buffer-window buff))
-                                         (git-gutter-mode t))))))
-      )
+      :defvar git-gutter-mode
+      :mode-hook
+      (magit-post-refresh-hook . ((dolist (buff (buffer-list))
+                                    (with-current-buffer buff
+                                      (when (and git-gutter-mode
+                                                 (get-buffer-window buff))
+                                        (git-gutter-mode t)))))))
     )
 
   (leaf git-timemachine
@@ -2241,7 +2240,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (trash-directory           . ,(when (!system-type 'darwin) "~/.Trash")))
     :config
     (leaf async
-      :doc "configure dired async"
+      :doc "for dired async"
       :ensure t
       :global-minor-mode dired-async-mode)
 
@@ -2265,11 +2264,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (dirvish-default-layout       . '(0 0.2 0.8)) ;; no preview
       (dirvish-header-line-position . 'default)
       (dirvish-header-line-height   . '(25 . 25))
-      (dirvish-header-line-format   . '(:left  (path)
-                                               :right (free-space)))
+      (dirvish-header-line-format   . '(:left (path) :right (free-space)))
       (dirvish-mode-line-position   . 'default)
-      (dirvish-mode-line-format     . '(:left  (sort file-time " " file-size symlink)
-                                               :right (omit yank index)))
+      (dirvish-mode-line-format     . '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
       ;; bookmarks TODO: add config for windows
       (dirvish-quick-access-entries . `(("h" ,(getenv "HOME")   "Home")
                                         ("d" ,(!expand-file-name "Downloads" (getenv "HOME")) "Downloads")
