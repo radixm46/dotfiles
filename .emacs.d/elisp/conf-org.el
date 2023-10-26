@@ -190,14 +190,14 @@
         org-mode-hook) . patch-org-mode-header-size)
       )
 
-    (leaf *patch-org-mode-faces :after doom-themes
+    (leaf *patch-org-mode-faces
       :defun doom-color
       :preface
       (defsubst patch-org-mode-face ()
         (custom-set-faces
          `(org-hide             ((t (:foreground ,(doom-color 'bg))))) ; org-hide
-         `(org-table            ((t :family ,font-for-tables)))       ; use 1:2 font for table
-         `(org-column           ((t :family ,font-for-tables)))       ; use 1:2 font for column
+         `(org-table            ((t :family ,font-for-tables))) ; use 1:2 font for table
+         `(org-column           ((t :family ,font-for-tables))) ; use 1:2 font for column
          `(org-ellipsis         ((t (:background ,(doom-color 'bg)))))
          `(org-block-begin-line ((t (:background ,(doom-color 'bg)))))
          `(org-block-end-line   ((t (:background ,(doom-color 'bg)))))
@@ -212,7 +212,7 @@
       :doc "pretty looking bullet list"
       :hook (org-mode-hook . org-bullets-mode))
 
-    (leaf *patch-org-todo-faces :after doom-themes
+    (leaf *patch-org-todo-faces
       :doc  "prettify todo keywords"
       :preface
       (defsubst patch-org-todo-faces ()
