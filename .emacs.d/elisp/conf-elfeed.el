@@ -318,6 +318,81 @@ based on elfeed-search-browse-url"
         (let ((browse-url-browser-function #'w3m-browse-url))
           (elfeed-show-visit use-generic-p)))))
 
+  (leaf *elfeed-mpv-playback
+    :doc "integrate with mpv"
+    :defun
+    mpv-get-property mpv-live-p
+    mpv-playlist-append-url mpv-run-command mpv-start
+    rdm/elfeed-search--mpv-play
+    :init
+    (eval-when-compile (leaf mpv :ensure t))
+    (defsubst rdm/elfeed-search--mpv-play (fmt &optional _use-generic-p)
+      "Playback url with mpv and yt-dlp"
+      (catch 'quit
+        ;; first, check dependency
+        (unless (or (boundp 'mpv-play)
+                    (or (!executable-find "yt-dlp")
+                        (!executable-find "youtube-dl")))
+          (message "Cannot playback media, deps not satisfied (mpv and yt-dlp). Abort.")
+          (throw 'quit nil))
+
+        (if (mpv-live-p)          ; if mpv instance already exists, check options
+            (unless (string-equal
+                     (cdr (assoc 'format
+                                 (mpv-get-property "options/ytdl-raw-options")))
+                     fmt)
+              (message "Current mpv instance has different format options. Abort.")
+              (throw 'quit nil))
+          (mpv-start "--idle=once"
+                     (format "--ytdl-raw-options=format=%s,prefer-free-formats=" fmt)))
+
+        (let ((entries (elfeed-search-selected))
+              (async-shell-command-buffer 'rename))
+          (cl-loop for entry in entries
+                   do (elfeed-untag entry 'unread 'later)
+                   when (elfeed-entry-link entry)
+                   do (mpv-playlist-append-url it))
+          ;; start playing if playing-pos eq -1
+          (when (eq (mpv-get-property "playlist-playing-pos") -1)
+            (mpv-run-command "playlist-play-index" 0))
+          (mapc #'elfeed-search-update-entry entries)
+          (unless (use-region-p) (forward-line)))))
+    ;; playback functions
+    (defun rdm/elfeed-search-mpv-play-ultra (&optional use-generic-p)
+      "playback with Youtube-DL and mpv link (best vid+aud)"
+      (interactive "P")
+      (rdm/elfeed-search--mpv-play
+       "bv*[width>=1920]+ba/b[width>=1920]" use-generic-p))
+
+    (defun rdm/elfeed-search-mpv-play-high (&optional use-generic-p)
+      "playback with Youtube-DL and mpv link (best vid+aud)"
+      (interactive "P")
+      (rdm/elfeed-search--mpv-play
+       "bv*[width<=1920]+ba/b[width<=1920]" use-generic-p))
+
+    (defun rdm/elfeed-search-mpv-play-mid (&optional use-generic-p)
+      "playback with Youtube-DL and mpv link (720p)"
+      (interactive "P")
+      (rdm/elfeed-search--mpv-play
+       "bv*[width<720]+ba/b[width<720] / wv*+ba/w" use-generic-p))
+
+    (defun rdm/elfeed-search-mpv-play-low (&optional use-generic-p)
+      "playback with Youtube-DL and mpv link"
+      (interactive "P")
+      (rdm/elfeed-search--mpv-play
+       "bv*[width<=480]+ba/b[width<=480] / wv*+ba/w" use-generic-p))
+
+    (defun rdm/elfeed-search-mpv-play-audio (&optional use-generic-p)
+      "playback with Youtube-DL and mpv link (best aud)"
+      (interactive "P")
+      (rdm/elfeed-search--mpv-play "bestaudio" use-generic-p))
+
+    (evil-define-key '(normal visual) elfeed-search-mode-map
+      "oh"  'rdm/elfeed-search-mpv-play-high
+      "om"  'rdm/elfeed-search-mpv-play-mid
+      "ol"  'rdm/elfeed-search-mpv-play-low
+      "oa"  'rdm/elfeed-search-mpv-play-audio))
+
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "C-j") 'rdm/elfeed-show-next
     "]]"        'rdm/elfeed-show-next
@@ -359,6 +434,11 @@ based on elfeed-search-browse-url"
   :hydra
   (hydra-elfeed-search-open (nil nil)
                             "open..."
+                            ("d"  rdm/elfeed-search-youtube-dl     "download" :exit t)
+                            ("oh" rdm/elfeed-search-mpv-play-high  "play (high)" :exit t)
+                            ("om" rdm/elfeed-search-mpv-play-mid   "play (mid)" :exit t)
+                            ("ol" rdm/elfeed-search-mpv-play-low   "play (low)" :exit t)
+                            ("oa" rdm/elfeed-search-mpv-play-audio "play (audio)" :exit t)
                             ("be" rdm/elfeed-search-eww-open       "browser (eww)" :exit t)
                             ("bm" rdm/elfeed-search-w3m-open       "browser (w3m)" :exit t)
                             ("bw" rdm/elfeed-search-webkit-open    "browser (webkit)" :exit t)
