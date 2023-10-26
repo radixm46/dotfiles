@@ -36,11 +36,10 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :defun
     rdm/apply-func-in-fonts rdm/default-frame-font rdm/update-font-conf
     remap-buffers-font-to-doc remap-font-to-doc remap-font-to-term
-    :hook
-    (conf-on-gui-hook . (lambda ()
-                          "bind fonts on gui frame create, remap"
-                          (remap-buffers-font-to-doc)
-                          (rdm/update-font-conf)))
+    :mode-hook
+    (conf-on-gui-hook . (;;"bind fonts on gui frame create, remap"
+                         (rdm/update-font-conf)
+                         (remap-buffers-font-to-doc)))
     :preface
     (defsubst rdm/default-frame-font ()
       "Get the default font family from the default frame, without font size."
