@@ -261,7 +261,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :init (leaf tree-sitter-langs :ensure t)
     :global-minor-mode global-tree-sitter-mode
     :config
-    (leaf ts-fold :after evil
+    (leaf ts-fold
       :doc "Code-folding using tree-sitter"
       :straight
       (ts-fold
