@@ -465,8 +465,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (defsubst patch-paren-face ()
           (custom-set-faces
            `(show-paren-match  ((t (:background ,(doom-color 'green)))))))
-        :hook ((after-load-theme-hook
-                show-paren-mode-hook) . patch-paren-face))
+        :hook (after-load-theme-hook . patch-paren-face))
       :hook
       (prog-mode-hook
        conf-mode-hook . show-paren-mode))
