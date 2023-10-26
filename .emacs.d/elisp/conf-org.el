@@ -218,11 +218,11 @@
       (defsubst patch-org-todo-faces ()
         (customize-set-variable
          'org-todo-keyword-faces
-         `(("TODO"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))))
-           ("NEXT"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))))
-           ("SOMEDAY" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'orange)))))
-           ("WAITING" . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))))
-           ("PROJ"    . ((t (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta))))))))
+         `(("TODO"    . (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'green)))
+           ("NEXT"    . (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'blue)))
+           ("SOMEDAY" . (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'orange)))
+           ("WAITING" . (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'yellow)))
+           ("PROJ"    . (:foreground ,(doom-color 'bg) :box '(:line-width (0 . -4)) :background ,(doom-color 'magenta))))))
       :hook
       ((after-load-theme-hook
         org-mode-hook) . patch-org-todo-faces))
