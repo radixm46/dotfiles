@@ -457,6 +457,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (eval-and-compile ;; load required for doom-* functions
       (load (!expand-file-name "elisp/doom" user-emacs-directory))))
 
+  (leaf solaire-mode :after doom-themes
+    :doc "alternate bg color for 'unreal buffers'"
+    :ensure t
+    :custom (solaire-global-mode . 1)
+    :global-minor-mode solaire-global-mode)
 
   (leaf *parenthesis-related-things
     :doc "smartparens and paredit for manipulate, paren for highlighting"
