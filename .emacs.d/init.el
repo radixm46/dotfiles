@@ -1795,7 +1795,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                         (dashboard-refresh-buffer)
                                         (get-buffer "*dashboard*"))))
     :preface
-    (defun dashboard-banner-selector (&rest _args)
+    (defsubst dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
       (let ((banner-img (!expand-file-name "banner.png" user-emacs-directory)))
         (if (and (file-regular-p banner-img)
