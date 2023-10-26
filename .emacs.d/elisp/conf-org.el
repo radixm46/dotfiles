@@ -48,7 +48,7 @@
   (org-src-preserve-indentation       . t)
   ;; Edit settings
   (org-auto-align-tags                . t)
-  (org-tags-column                    . 75)
+  (org-tags-column                    . 0)
   (org-catch-invisible-edits          . 'show-and-error)
   (org-special-ctrl-a/e               . nil)
   (org-insert-heading-respect-content . nil)
