@@ -390,8 +390,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         "patch highlight-symbol color"
         (custom-set-faces
          `(highlight-symbol-face  ((t (:background ,(doom-color 'dark-cyan) :foreground ,(doom-color 'bg)))))))
-      :hook ((after-load-theme-hook
-              highlight-symbol-mode-hook) . patch-highlight-symbol)))
+      :hook (after-load-theme-hook . patch-highlight-symbol)))
 
   (leaf *config-completion-styles
     :doc "setup completion packages"
