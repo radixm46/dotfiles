@@ -634,31 +634,39 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :hook
     (prog-mode-hook . hl-todo-mode))
 
-  (leaf ov
-    :ensure t
-    :init
-    (defvar rdm/ov-serif nil "overlay with serif font")
-    (defun rdm/toggle-buffer-ov-serif (trigger-state-p)
-      "temporary make buffer to serif, ov-clear if ov available at buffer"
-      (let ((serif-fnt (rdm/available-serif-font)))
-        (if (and serif-fnt trigger-state-p)
-            (progn (rdm/sw-lnsp 0.8)
-                   (setq-local rdm/ov-serif
-                               (ov (point-min) (point-max) 'face `(:family ,serif-fnt))))
-          (progn (rdm/lnsp-default) (ov-reset rdm/ov-serif)))))
-    :commands (ov-reset ov-clear ov))
-
   (leaf darkroom
     :ensure t
+    :commands darkroom-mode
+    :defvar darkroom-mode
     :init
+    (leaf ov
+      :ensure t
+      :defun ov-reset rdm/ov-serif--toggle-state
+      :config
+      (defvar rdm/ov-serif-state nil "overlay with serif font")
+      (defun rdm/ov-serif--toggle-state (trigger-state-p)
+        "temporary make buffer to serif, ov-clear if ov available at buffer"
+        (let ((serif-face (rdm/available-serif-font)))
+          (if (and serif-face trigger-state-p)
+              (progn
+                (rdm/sw-lnsp 0.8)
+                (setq-local rdm/ov-serif-state
+                            (ov (point-min) (point-max)
+                                `(face (:family ,serif-face)))))
+            (progn
+              (rdm/lnsp-default)
+              (ov-reset rdm/ov-serif-state)))))
+      (defun rdm/ov-serif-buffer-toggle ()
+        "toggle buffer to serif"
+        (interactive)
+        (rdm/ov-serif--toggle-state (not rdm/ov-serif-state)))
+      )
+
     (defun rdm/darkroom-init ()
-      (rdm/toggle-buffer-ov-serif darkroom-mode))
+      (rdm/ov-serif--toggle-state darkroom-mode))
     :hook (darkroom-mode-hook . rdm/darkroom-init)
-    ;;(darkroom-mode . ov-clear)
     :bind ([f9] . darkroom-mode)
     :custom (darkroom-text-scale-increase . 1)
-    ;;:config
-    ;;(doom-modeline t) ;TODO:enable modeline
     )
 
   (leaf spacious-padding
