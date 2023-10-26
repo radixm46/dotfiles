@@ -68,12 +68,11 @@ argument NAME could be directory or filename"
    'custom-file (!expand-file-name "elisp/local-custom.el" user-emacs-directory)
    "customized at initpkg")
   ;; load `custom-file' if exists and save before quit
-  (when (and (not noninteractive)
-             (custom-file))
-    ;; (load custom-file)
-    ;; (add-hook 'kill-emacs-query-functions
-    ;;           'custom-prompt-customize-unsaved-options)
-    (add-hook 'kill-emacs-hook 'custom-save-all)))
+  ;; (when (and (not noninteractive)
+  ;;            (custom-file))
+  ;;   (load custom-file)
+  ;;   (add-hook 'kill-emacs-hook 'custom-save-all))
+  )
 
 ;; setup straight.el
 ;; NOTE: straight.el configures straight-disable-native-compile with straight--native-comp-available
