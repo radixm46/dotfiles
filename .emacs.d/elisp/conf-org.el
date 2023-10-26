@@ -62,9 +62,9 @@
 
   (leaf *font-remap-org-agenda-mode
     :doc "for better alignment"
-    :hook (org-agenda-mode-hook . remap-font-to-term)
+    :hook (org-agenda-mode-hook . remap-font-to-tables)
     :defun org-agenda-mode
-    :preface (push #'org-agenda-mode remap-font-to-term-modes-list))
+    :preface (push #'org-agenda-mode remap-font-to-tables-modes-list))
 
   (leaf evil-org :after org
     :ensure t

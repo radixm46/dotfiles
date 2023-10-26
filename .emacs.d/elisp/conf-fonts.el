@@ -36,10 +36,13 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :defun
     rdm/apply-func-in-fonts rdm/default-frame-font rdm/update-font-conf
     remap-buffers-font-to-doc remap-font-to-doc remap-font-to-term
+    remap-buffers-font-to-tables remap-buffers-font-to-term
     :mode-hook
     (conf-on-gui-hook . (;;"bind fonts on gui frame create, remap"
                          (rdm/update-font-conf)
-                         (remap-buffers-font-to-doc)))
+                         (remap-buffers-font-to-doc)
+                         (remap-buffers-font-to-term)
+                         (remap-buffers-font-to-tables)))
     :preface
     (defsubst rdm/default-frame-font ()
       "Get the default font family from the default frame, without font size."
@@ -54,21 +57,34 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
     (defun rdm/update-font-conf ()
       "update `font-for-...' params and fixed pitch"
+      ;; configure `fixed-pitch'
+      (let ((f (rdm/apply-func-in-fonts
+                '("UDEV Gothic JPDOC"
+                  "UDEV Gothic NFLG"
+                  "Noto Sans Mono CJK JP"))))
+        (when f (custom-set-faces `(fixed-pitch ((t :family ,f))))))
+
+      (setq font-for-tables
+            (rdm/apply-func-in-fonts
+             '("PlemolJP ConsoleHS"
+               "UDEV Gothic JPDOC"
+               "HackGen"
+               "Noto Sans Mono CJK JP")
+             nil #'(face-attribute 'fixed-pitch :family)))
+
       (setq font-for-term
             (rdm/apply-func-in-fonts
-             '("UDEV Gothic NFLG")
+             '("UDEV Gothic NFLG"
+               "HackGen Console NF"
+               "Noto Sans Mono CJK JP")
              nil #'(lambda () font-for-tables)))
+
       (setq font-for-doc
             (rdm/apply-func-in-fonts
-             '("UDEV Gothic 35JPDOC")
+             '("PlemolJP35 HS"
+               "UDEV Gothic 35JPDOC"
+               "Noto Sans CJK JP")
              nil #'(rdm/default-frame-font)))
-
-      ;; if available, configure fonts
-      (let ((f (rdm/apply-func-in-fonts
-                '("Noto Sans Mono CJK JP"
-                  "UDEV Gothic JPDOC"
-                  "UDEV Gothic NFLG"))))
-        (when f (custom-set-faces `(fixed-pitch ((t :family ,f))))))
 
       (let ((f (rdm/apply-func-in-fonts
                 '("Hiragino Sans"
@@ -78,15 +94,15 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
         (when f (custom-set-faces `(variable-pitch ((t :family ,f))))))
       )
 
-    (defvar remap-font-to-doc-modes-list nil
-      "major mode list for font update")
-
     ;; aplly font-for-doc to buffers
     (defun remap-font-to-doc ()
       "if font-for-doc set, remap buffer face"
       (interactive)
       (when font-for-doc
         (face-remap-add-relative 'default `(:family ,font-for-doc))))
+
+    (defvar remap-font-to-doc-modes-list nil
+      "major mode list for font update")
 
     (defun remap-buffers-font-to-doc ()
       "remap buffer face with `font-for-doc'"
@@ -100,17 +116,34 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
       "major mode list for font update")
 
     (defun remap-font-to-term ()
-      "if font-for-doc set, remap buffer face"
+      "if `font-for-term' set, remap buffer face"
       (interactive)
       (when font-for-term
         (face-remap-add-relative 'default `(:family ,font-for-term))))
 
     ;; NOTE: hookに未設定
     (defun remap-buffers-font-to-term ()
-      "remap buffer face with `font-for-doc'"
+      "remap buffer face with `font-for-term'"
       (mapc #'(lambda (buffer)
                 (with-current-buffer buffer
                   (when (member major-mode remap-font-to-term-modes-list)
+                    (remap-font-to-term))))
+            (buffer-list)))
+
+    (defun remap-font-to-tables ()
+      "if `font-for-tables' set, remap buffer face"
+      (interactive)
+      (when font-for-tables
+        (face-remap-add-relative 'default `(:family ,font-for-tables))))
+
+    (defvar remap-font-to-tables-modes-list nil
+      "major mode list for font update")
+
+    (defun remap-buffers-font-to-tables ()
+      "remap buffer face with `font-for-tables'"
+      (mapc #'(lambda (buffer)
+                (with-current-buffer buffer
+                  (when (member major-mode remap-font-to-tables-modes-list)
                     (remap-font-to-term))))
             (buffer-list)))
     ;; (defvar font-for-code   "UDEV Gothic 35LG"     "3:5 width font for code") ;; NOTE: これまだ使う予定ない。org-modeのblockで部分的にリガチャ適用とかできるようになったら意義が出るかも
