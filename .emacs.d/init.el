@@ -94,6 +94,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (auto-save-interval             . 120)
       (auto-save-list-file-prefix     . nil)))
 
+  (leaf autorevert
+    :tag "builtin"
+    :doc "autorevert files if modified on disk"
+    :custom (auto-revert-interval . 2)
+    :global-minor-mode global-auto-revert-mode)
+
+
   (leaf *backup-files
     :doc "make backup files"
     :tag "builtin"
