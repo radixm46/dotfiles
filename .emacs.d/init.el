@@ -2028,29 +2028,30 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                            (pdf-links-minor-mode +1)
                            (pdf-annot-minor-mode +1)))
     :custom (pdf-view-selection-style . 'glyph) ; NOTE: required for selecting non-english langs
-    :init
-    (leaf *switch-pdf-view-dark :after doom-themes
+    :config
+    (leaf *switch-pdf-view-dark
       :doc "detect whether doom-theme bg color seems dark (to avoid crush)"
+      :defun pdf-view-dark-minor-mode rdm/theme-seems-dark-p
       :preface
-      (defun theme-seems-dark-p ()
-        "Check `(doom-theme 'bg)'. If theme seems to be dark, returns t"
+      (defsubst rdm/theme-seems-dark-p ()
+        "Check `(doom-theme \=='bg)'. If theme seems to be dark, returns t"
         (< (apply '+ (color-name-to-rgb (doom-color 'bg))) 1.5))
       (defun pdf-view-mode-switch-dark ()
-        (if (theme-seems-dark-p)
+        (if (rdm/theme-seems-dark-p)
             (pdf-view-dark-minor-mode +1)
           (pdf-view-dark-minor-mode -1)))
       (defun pdf-view-mode-switch-dark-with-theme-load ()
         (dolist (buff (buffer-list))
           (with-current-buffer buff
             (when (eq major-mode #'pdf-view-mode)
-              (if (theme-seems-dark-p)
+              (if (rdm/theme-seems-dark-p)
                   (pdf-view-dark-minor-mode +1)
                 (pdf-view-dark-minor-mode -1))))))
       :hook
       (pdf-view-mode-hook    . pdf-view-mode-switch-dark)
       (after-load-theme-hook . pdf-view-mode-switch-dark-with-theme-load))
-    (pdf-tools-install t)  ; Standard activation command
-    ;; (pdf-loader-install) ; On demand loading, leads to faster startup time
+    ;; (pdf-tools-install t)  ; Standard activation command
+    (pdf-loader-install) ; On demand loading, leads to faster startup time
     )
 
   (leaf go-translate
