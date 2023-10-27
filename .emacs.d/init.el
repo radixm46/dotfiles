@@ -1386,9 +1386,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (lsp-headerline-breadcrumb-icons-enable . nil)
       (lsp-session-file                       . ,(cache-sub-file ".lsp-session-v1"))
       (lsp-server-install-dir                 . ,(cache-sub-dir "lsp")) ;; server install target path
-      (lsp-completion-provider                . ,(if (fboundp 'company-mode) :capf :none))
+      (lsp-completion-provider                . :none) ;; configured with corfu
       )
+    :preface (exec-path-from-shell-setenv "LSP_USE_PLISTS" "true") ; use `plist' instead of `has-table'
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
+    :defvar lsp-prefer-flymake
+    :defun flycheck-posframe-mode eldoc-box-hover-at-point-mode
     :mode-hook
     (lsp-mode-hook . ((eldoc-box-hover-at-point-mode -1)
                       (flycheck-posframe-mode -1))) ; disable flycheck-posframe
@@ -1458,6 +1461,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :hook (lsp . lsp-treemacs)
       :bind (:global-map ("C-x t e" . lsp-treemacs-errors-list)
                          ("C-x t s" . lsp-treemacs-symbols))
+      :defun lsp-treemacs-sync-mode
       :config (lsp-treemacs-sync-mode 1))
 
     (leaf lsp-origami :ensure t)
@@ -1696,6 +1700,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
       (leaf *lsp-mode-with-corfu :after lsp-mode
         :doc "corfu with lsp-mode config"
+        :defun lsp-completion-at-point cape-super-lsp
         :preface
         (defalias 'cape-super-lsp
           (cape-capf-buster
