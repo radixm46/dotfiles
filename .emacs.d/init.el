@@ -1675,14 +1675,15 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (defalias 'cape-super-eglot
           (cape-capf-buster
            (cape-super-capf
-            #'cape-company-yasnippet #'eglot-completion-at-point
-            #'cape-symbol #'cape-keyword)))
+            #'eglot-completion-at-point
+            #'cape-company-yasnippet
+            #'cape-keyword)))
 
         ;; Option 1: Specify explicitly to use fussy for Eglot
         (add-to-list 'completion-category-overrides '(eglot (styles fussy)) t)
         ;; Option 2: Undo the Eglot modification of completion-category-defaults
-        (with-eval-after-load 'eglot
-          (setq completion-category-defaults nil))
+        ;; (with-eval-after-load 'eglot
+        ;;   (setq completion-category-defaults nil))
 
         (defun rdm/set-capf-eglot-prog ()
           (setq-local completion-at-point-functions
