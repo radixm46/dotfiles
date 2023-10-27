@@ -1581,10 +1581,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :preface
     (leaf *eglot-with-eldoc-box
       :doc "use eldoc-box-mode if available"
-      :hook
-      (eglot-managed-mode-hook . (lambda ()
-                                   (if (fboundp 'eldoc-box-hover-mode)
-                                       (eldoc-box-hover-mode)))))
+      :mode-hook
+      (eglot-managed-mode-hook . ((when (fboundp 'eldoc-box-hover-mode)
+                                    (eldoc-box-hover-mode)))))
     )
 
   (leaf cape :after corfu
