@@ -1145,10 +1145,20 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :hook (prog-mode-hook . flymake-mode)
     :bind
     (:flymake-mode-map ("M-j"   . flymake-goto-next-error)
-                       ("M-k"   . flymake-goto-previous-error)
+                       ("M-k"   . flymake-goto-prev-error)
+                       ("C-M-n" . flymake-goto-next-error)
+                       ("C-M-p" . flymake-goto-prev-error)
                        ("C-M-l" . consult-flymake))
     :config
-    (leaf flymake-collection :ensure t))
+    (leaf flymake-collection :ensure t)
+    (leaf flymake-diagnostic-at-point
+      :ensure t
+      :commands flymake-diagnostic-at-point-display-popup
+      :custom
+      (flymake-diagnostic-at-point-display-diagnostic-function . 'flymake-diagnostic-at-point-display-minibuffer)
+      (flymake-diagnostic-at-point-error-prefix . ">> ")
+      :hook
+      (flymake-mode-hook . flymake-diagnostic-at-point-mode)))
 
   (leaf flycheck :disabled t
     :ensure t
