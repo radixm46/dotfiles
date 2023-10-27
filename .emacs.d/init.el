@@ -1585,6 +1585,44 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (eglot-managed-mode-hook . ((when (fboundp 'eldoc-box-hover-mode)
                                     (eldoc-box-hover-mode)))))
     (leaf consult-eglot :ensure t)
+    :hydra
+    ((hydra-eglot-functions
+      (:hint nil)
+      (format "\
+                           ^^^%s eglot functions^^^
+^^^^^^--------------------------------------------------------------------------------
+ ^act on code^               ^find^                       ^consult^
+ _r_:   rename               _s r_: references (xref)     _c s_: lsp symbols
+ _f_:   format buffer        _s d_: declaration           ^miscellaneous^
+ _F_:   format region        _s t_: type definition       _C s_: shutdown
+ _o_:   organize imports     _s i_: implementation        _C S_: shutdown all
+" (nerd-icons-faicon "nf-fa-code"))
+      ;; act on code
+      ("r"   eglot-rename :exit t)
+      ("f"   eglot-format-buffer :exit t)
+      ("F"   eglot-format         :exit t)
+      ("o"   eglot-code-action-organize-imports :exit t)
+      ;; consult
+      ("c s" consult-eglot-symbols)
+      ;; find
+      ("s r" xref-find-references)
+      ("s t" eglot-find-typeDefinition)
+      ("s d" eglot-find-declaration)
+      ("s i" eglot-find-implementation)
+      ;; misc
+      ("C s" eglot-shutdown)
+      ("C S" eglot-shutdown-all)))
+    :bind
+    (:eglot-mode-map
+     ("<f7>"        . hydra-eglot-functions/body)
+     ("M-7"         . hydra-eglot-functions/body)
+     ("C-c r"       . eglot-rename)
+     ("C-c R"       . eglot-rename)
+     ("C-c C-l g t" . eglot-find-typeDefinition)
+     ("C-c C-l g d" . eglot-find-declaration)
+     ("C-c C-l g i" . eglot-find-implementation)
+     ("C-c C-s"     . consult-lsp-file-symbols)
+     ("C-c C-S"     . consult-lsp-symbols))
     )
 
   (leaf cape :after corfu
