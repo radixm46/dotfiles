@@ -2097,40 +2097,44 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf *darwin-dictionary-integration :when (!system-type 'darwin)
     :doc "dictionary app integration on macOS"
+    :defun macos-dict--lookup
     :config
-    (defun macos-dict-lookup (word)
+    (defsubst macos-dict--lookup (word)
       "Lookup word with dictionary.app by apple."
       (call-process "open" nil 0 nil (concat "dict://" word) "-g"))
 
     (defun macos-dict-lookup-word ()
       "Lookup the word at point with dictionary.app by apple."
       (interactive)
-      (macos-dict-lookup (read-from-minibuffer "dictionary.app: " (current-word))))
+      (macos-dict--lookup (read-from-minibuffer "dictionary.app: " (current-word))))
 
-    (defun monokakido-app-installed-p ()
-      "if monokakido Dictionaries.app available, returns t"
-      (string-match-p "jp.monokakido.Dictionaries"
-                      (shell-command-to-string
-                       "mdls '/Applications/Dictionaries.app' -name 'kMDItemCFBundleIdentifier'")))
-
-    (leaf *monokakido-dict :if (monokakido-app-installed-p)
+    (leaf *monokakido-dict :when (monokakido--app-installed-p)
       :doc "use Disctionaries.app by monokakido (based on gist url)"
       :url "https://gist.github.com/skoji/aad5f66cbffc370e29888671e0801c6d"
+      :defun monokakido--lookup
+      :preface
+      (eval-when-compile
+        (defmacro monokakido--app-installed-p ()
+          "if monokakido Dictionaries.app available, returns non-nil (runs on bytecomp)"
+          (eval (string-match-p "Dictionaries.app"
+                                (shell-command-to-string
+                                 "mdfind 'kind:application' 'monokakido' 2>/dev/null")))))
+
       :config
-      (defun monokakido-lookup (word)
+      (defsubst monokakido--lookup (word)
         "Lookup word with Dictionaries.app by Monokakido."
         (call-process "open" nil 0 nil (concat "mkdictionaries:///?text=" word) "-g"))
 
       (defun monokakido-lookup-word ()
         "Lookup the word at point with Dictionaries.app by Monokakido."
         (interactive)
-        (monokakido-lookup (read-from-minibuffer "Monokakido: " (current-word))))
+        (monokakido--lookup (read-from-minibuffer "Monokakido: " (current-word))))
 
       (evil-define-key '(normal visual) 'global
         (kbd "C-w f") 'monokakido-lookup-word
         (kbd "C-w F") 'macos-dict-lookup-word))
 
-    (leaf *bind-macos-dict :unless (monokakido-app-installed-p)
+    (leaf *bind-macos-dict :unless (monokakido--app-installed-p)
       :doc "bind macos-dict-lookup-word to key with dictionary.app by apple"
       :config
       (evil-define-key '(normal visual) 'global
