@@ -1257,6 +1257,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
     (leaf *config-corfu-with-evil-map :after evil
       :url "https://github.com/minad/corfu/issues/12"
+      :defvar corfu-map
       :preface
       (evil-make-overriding-map corfu-map)
       :advice
@@ -1279,73 +1280,97 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (corfu-popupinfo-delay . 0.5)
       :global-minor-mode corfu-popupinfo-mode))
 
-    (leaf *corfu-ui-config
-      :doc "corfu ui related configuration"
+  (leaf *corfu-ui-config :after corfu
+    :doc "corfu ui related configuration"
+    :config
+    (leaf kind-icon
+      :doc "adds configurable icon or text-based completion prefixes based on the :company-kind property"
+      :ensure t
+      :custom (kind-icon-default-face . 'corfu-default)
       :config
-      (leaf corfu-doc :disabled t
-        :doc "Display a documentation popup for completion candidate when using Corfu."
-        :ensure t
-        :hook (corfu-mode-hook . corfu-doc-mode)
-        )
+      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+      (leaf *kind-icon-with-nerd-icons
+        :doc "use `nerd-icons' with corfu kind-icon"
+        :url "https://github.com/rainstormstudio/nerd-icons.el#use-nerd-icons-with-corfu"
+        :after nerd-icons
+        :custom (kind-icon-use-icons . nil)
+        :setq
+        (kind-icon-mapping . `((array          ,(nerd-icons-codicon "nf-cod-symbol_array")       :face font-lock-type-face)
+                               (boolean        ,(nerd-icons-codicon "nf-cod-symbol_boolean")     :face font-lock-builtin-face)
+                               (class          ,(nerd-icons-codicon "nf-cod-symbol_class")       :face font-lock-type-face)
+                               (color          ,(nerd-icons-codicon "nf-cod-symbol_color")       :face success)
+                               (command        ,(nerd-icons-codicon "nf-cod-terminal")           :face default)
+                               (constant       ,(nerd-icons-codicon "nf-cod-symbol_constant")    :face font-lock-constant-face)
+                               (constructor    ,(nerd-icons-codicon "nf-cod-triangle_right")     :face font-lock-function-name-face)
+                               (enummember     ,(nerd-icons-codicon "nf-cod-symbol_enum_member") :face font-lock-builtin-face)
+                               (enum-member    ,(nerd-icons-codicon "nf-cod-symbol_enum_member") :face font-lock-builtin-face)
+                               (enum           ,(nerd-icons-codicon "nf-cod-symbol_enum")        :face font-lock-builtin-face)
+                               (event          ,(nerd-icons-codicon "nf-cod-symbol_event")       :face font-lock-warning-face)
+                               (field          ,(nerd-icons-codicon "nf-cod-symbol_field")       :face font-lock-variable-name-face)
+                               (file           ,(nerd-icons-codicon "nf-cod-symbol_file")        :face font-lock-string-face)
+                               (folder         ,(nerd-icons-codicon "nf-cod-folder")             :face font-lock-doc-face)
+                               (interface      ,(nerd-icons-codicon "nf-cod-symbol_interface")   :face font-lock-type-face)
+                               (keyword        ,(nerd-icons-codicon "nf-cod-symbol_keyword")     :face font-lock-keyword-face)
+                               (macro          ,(nerd-icons-codicon "nf-cod-symbol_misc")        :face font-lock-keyword-face)
+                               (magic          ,(nerd-icons-codicon "nf-cod-wand")               :face font-lock-builtin-face)
+                               (method         ,(nerd-icons-codicon "nf-cod-symbol_method")      :face font-lock-function-name-face)
+                               (function       ,(nerd-icons-codicon "nf-cod-symbol_method")      :face font-lock-function-name-face)
+                               (module         ,(nerd-icons-codicon "nf-cod-file_submodule")     :face font-lock-preprocessor-face)
+                               (numeric        ,(nerd-icons-codicon "nf-cod-symbol_numeric")     :face font-lock-builtin-face)
+                               (operator       ,(nerd-icons-codicon "nf-cod-symbol_operator")    :face font-lock-comment-delimiter-face)
+                               (param          ,(nerd-icons-codicon "nf-cod-symbol_parameter")   :face default)
+                               (property       ,(nerd-icons-codicon "nf-cod-symbol_property")    :face font-lock-variable-name-face)
+                               (reference      ,(nerd-icons-codicon "nf-cod-references")         :face font-lock-variable-name-face)
+                               (snippet        ,(nerd-icons-codicon "nf-cod-symbol_snippet")     :face font-lock-string-face)
+                               (string         ,(nerd-icons-codicon "nf-cod-symbol_string")      :face font-lock-string-face)
+                               (struct         ,(nerd-icons-codicon "nf-cod-symbol_structure")   :face font-lock-variable-name-face)
+                               (text           ,(nerd-icons-codicon "nf-cod-text_size")          :face font-lock-doc-face)
+                               (typeparameter  ,(nerd-icons-codicon "nf-cod-list_unordered")     :face font-lock-type-face)
+                               (type-parameter ,(nerd-icons-codicon "nf-cod-list_unordered")     :face font-lock-type-face)
+                               (unit           ,(nerd-icons-codicon "nf-cod-symbol_ruler")       :face font-lock-constant-face)
+                               (value          ,(nerd-icons-codicon "nf-cod-symbol_field")       :face font-lock-builtin-face)
+                               (variable       ,(nerd-icons-codicon "nf-cod-symbol_variable")    :face font-lock-variable-name-face)
+                               (t              ,(nerd-icons-codicon "nf-cod-code")               :face font-lock-warning-face)))))
 
-      (leaf kind-icon
-        :doc "adds configurable icon or text-based completion prefixes based on the :company-kind property"
-        :ensure t
-        :custom (kind-icon-default-face . 'corfu-default)
-        :config
-        (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+    (leaf *corfu-fussy-integration :after fussy
+      :url "https://github.com/jojojames/fussy#corfu-integration"
+      :advice ;; For cache functionality.
+      (:before corfu--capf-wrapper
+               fussy-wipe-cache)
+      :mode-hook
+      (corfu-mode-hook . ((setq-local fussy-max-candidate-limit 5000
+                                      fussy-default-regex-fn 'fussy-pattern-first-letter
+                                      fussy-prefer-prefix nil))))
 
-      (leaf *corfu-fussy-integration :after fussy
-        :url "https://github.com/jojojames/fussy#corfu-integration"
-        :advice ;; For cache functionality.
-        (:before corfu--capf-wrapper
-                 fussy-wipe-cache)
-        :hook
-        (corfu-mode-hook . (lambda ()
-                             (setq-local fussy-max-candidate-limit 5000
-                                         fussy-default-regex-fn 'fussy-pattern-first-letter
-                                         fussy-prefer-prefix nil)))
-        )
-
-      (leaf *corfu-ui-on-term
-        :preface
-        (leaf corfu-terminal :after corfu
-          :doc "`corfu' popup on terminal"
-          :straight
-          (corfu-terminal
-           :type git
-           :repo "https://codeberg.org/akib/emacs-corfu-terminal.git")
-          )
-
-        (leaf corfu-doc-terminal :after corfu-doc
-          :doc "`corfu-doc' popup on terminal"
-          :straight
-          (corfu-doc-terminal
-           :type git
-           :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git")
-          )
-
-        (defun switch-corfu-on-gui ()
-          (corfu-terminal-mode -1) (corfu-doc-terminal-mode -1))
-
-        (defun switch-corfu-on-term ()
-          (corfu-terminal-mode +1) (corfu-doc-terminal-mode +1))
-
-        :mode-hook
-        (corfu-mode-hook   . ((if (display-graphic-p)
-                                  (switch-corfu-on-gui)
-                                (switch-corfu-on-term))))
-        (conf-on-term-hook . ((dolist (buff (buffer-list))
-                                (with-current-buffer buff
-                                  (when (and corfu-mode
-                                             (not (display-graphic-p)))
-                                    (switch-corfu-on-term))))))
-        (conf-on-gui-hook  . ((dolist (buff (buffer-list))
-                                (with-current-buffer buff
-                                  (when (and corfu-mode
-                                             (display-graphic-p))
-                                    (switch-corfu-on-gui))))))
-        ))
+    (leaf *corfu-ui-on-term
+      :preface
+      (leaf corfu-terminal :after corfu
+        :doc "`corfu' popup on terminal"
+        :straight
+        (corfu-terminal
+         :type git
+         :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
+      :defun corfu-terminal-mode
+      :defvar corfu-mode
+      :mode-hook
+      (corfu-mode-hook   . ((if (display-graphic-p)
+                                (corfu-terminal-mode -1)
+                              (corfu-terminal-mode +1))))
+      (conf-on-term-hook . ((dolist (buff (buffer-list))
+                              (with-current-buffer buff
+                                (when (and corfu-mode
+                                           (not (display-graphic-p)))
+                                  (corfu-terminal-mode +1))))))
+      (conf-on-gui-hook  . ((dolist (buff (buffer-list))
+                              (with-current-buffer buff
+                                (when (and corfu-mode
+                                           (display-graphic-p))
+                                  (corfu-terminal-mode -1))))))
+      ))
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+  ;; :global-minor-mode global-corfu-mode
 
   (leaf lsp-mode
     :doc "configure lsp"
