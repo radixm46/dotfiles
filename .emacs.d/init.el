@@ -1661,8 +1661,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (defalias 'cape-super-lsp
           (cape-capf-buster
            (cape-super-capf
-            #'cape-company-yasnippet #'lsp-completion-at-point
-            #'cape-symbol #'cape-keyword)))
+            #'cape-company-yasnippet
+            #'lsp-completion-at-point
+            #'cape-keyword)))
 
         (defun rdm/set-capf-lsp-prog-conf ()
           (setq-local completion-at-point-functions
