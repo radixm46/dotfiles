@@ -2335,7 +2335,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "for dired async"
       :ensure t
       :global-minor-mode dired-async-mode)
-
     (ffap-bindings)
     ;; by selecting directory, do not creaete new dired buffer
     (put 'dired-find-alternate-file 'disabled nil))
@@ -2386,35 +2385,61 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (dirvish-side-attributes      . `,(if (or (daemonp) (display-graphic-p))
                                               '(vc-state nerd-icons collapse git-msg file-size)
                                             '(nerd-icons collapse git-msg file-size))))
-      :hook
-      (dirvish-directory-view-mode-hook . (lambda ()
-                                            (if (display-graphic-p)
-                                                (progn
-                                                  (customize-set-variable 'dirvish-attributes
-                                                                          '(vc-state nerd-icons collapse git-msg file-time file-size))
-                                                  (customize-set-variable 'dirvish-side-attributes
-                                                                          '(vc-state nerd-icons collapse git-msg file-size)))
-                                              (progn
-                                                (customize-set-variable 'dirvish-attributes
-                                                                        '(nerd-icons git-msg file-time file-size))
-                                                (customize-set-variable 'dirvish-side-attributes
-                                                                        '(nerd-icons git-msg file-size))))))
-      )
-    ;; Let Dirvish take over Dired globally
-    (dirvish-override-dired-mode)
+      :mode-hook
+      (dired-mode-hook . ((if (display-graphic-p)
+                              (progn
+                                (customize-set-variable
+                                 'dirvish-attributes
+                                 '(vc-state nerd-icons collapse git-msg file-time file-size))
+                                (customize-set-variable
+                                 'dirvish-side-attributes
+                                 '(vc-state nerd-icons collapse git-msg file-size)))
+                            (progn
+                              (customize-set-variable
+                               'dirvish-attributes
+                               '(nerd-icons git-msg file-time file-size))
+                              (customize-set-variable
+                               'dirvish-side-attributes
+                               '(nerd-icons git-msg file-size)))))))
 
     :config
     (leaf *dirvish-preview-config
       :doc "configure dirvish preview dispathcer"
+      :custom
+      `((dirvish-preview-dispatchers  . `(,(when (!executable-find "exa") 'exa)
+                                          image gif video audio epub archive
+                                          ,(when (featurep 'xwidget-internal) 'html)
+                                          ,(cond ((fboundp  'pdf-loader-install) 'pdf)
+                                                 ((featurep 'xwidget-internal)   'pdf-xwidget)
+                                                 (t 'pdf-preface)))))
       :preface
+      ;; load dirvish on compile to expand macros
+      (eval-and-compile (leaf dirvish :ensure t :require t))
+
+      ;; define preview
       (dirvish-define-preview exa (file)
         "Use `exa' to generate directory preview."
         :require ("exa") ; tell Dirvish to check if we have the executable
         (when (file-directory-p file) ; we only interest in directories here
-          `(shell . ("exa" "--color=always" "--icons" "--git" "--group-directories-first" "-al" ,file))))
-      :custom
-      `((dirvish-preview-dispatchers  . `(exa image gif video audio epub archive
-                                              ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))))
+          `(shell . ("exa" "--color=always" "--icons"
+                     "--git" "--group-directories-first" "-al" ,file))))
+
+      ;; for html preview with xwidget
+      (when (featurep 'xwidget-internal)
+        (dirvish-define-preview html (file ext)
+          "Use xwidgets for HTML file previews"
+          (when (equal ext "html")
+            (let ((url (concat "file://" file)))
+              (xwidget-webkit-browse-url url)
+              (evil-window-mru))))
+
+        (dirvish-define-preview pdf-xwidget (file ext)
+          "Use xwidgets for PDF file previews"
+          (when (equal ext "pdf")
+            (let ((url (concat "file://" file)))
+              (xwidget-webkit-browse-url url)
+              (evil-window-mru)))))
+      )
 
     (leaf *dirvish-preview-hooks-mediainfo :when (!executable-find "mediainfo")
       :hook
