@@ -1675,6 +1675,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (leaf *eglot-with-corfu :after eglot fussy
         :doc "corfu with eglot config"
         :url "https://github.com/minad/corfu/wiki"
+        :defun cape-capf-buster eglot-completion-at-point cape-super-eglot
         :preface
         (defalias 'cape-super-eglot
           (cape-capf-buster
