@@ -2344,7 +2344,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :when (or (not (!system-type 'darwin))
               (!executable-find "gls"))
     :ensure t
-    :after transient
+    :commands dirvish dirvish-override-dired-mode
+    :mode-hook (dired-mode-hook . ((when (and window-system
+                                              (fboundp 'pdf-tools-install))
+                                     (pdf-tools-install t))))
+    :hook (after-init-hook . dirvish-override-dired-mode)
     :custom
     `(
       ;; kill all session buffers on quit
@@ -2412,7 +2416,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       `((dirvish-preview-dispatchers  . `(exa image gif video audio epub archive
                                               ,(if (fboundp 'pdf-tools-install) 'pdf 'pdf-preface)))))
 
-    (leaf *dirvish-preview-hooks-mediainfo :if (executable-find "mediainfo")
+    (leaf *dirvish-preview-hooks-mediainfo :when (!executable-find "mediainfo")
       :hook
       ((dirvish-image-preview-dp-hook
         dirvish-video-preview-dp-hook
