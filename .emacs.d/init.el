@@ -2323,9 +2323,19 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (insert-directory-program  . ,(if (and (!system-type 'darwin)
                                              (!executable-find "gls"))
                                         "gls" "ls"))
-      (dired-listing-switches    . ,(if (and (!system-type 'darwin)
-                                             (!executable-find "gls"))
-                                        "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group" "-l"))
+      ;; set `dired-use-ls-dired' to nil with darwin ls commands
+      (dired-use-ls-dired           . ,(if (and (not
+                                                 (!executable-find "gls"))
+                                                (!system-type 'darwin))
+                                           nil "unspecified"))
+      (dired-listing-switches    . ,(if (and (not
+                                              (!executable-find "gls"))
+                                             (!system-type 'darwin))
+                                        "-lTh" ;; for BSD ls options
+                                      (concat "-l --human-readable"
+                                              " --sort=time --time-style=long-iso"
+                                              " --group-directories-first --no-group")))
+
       (dired-dwim-target         . t)
       (delete-by-moving-to-trash . t)
       ;; NOTE: on macOS, require full disk access to see inside trash bin via dired
