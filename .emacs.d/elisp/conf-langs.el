@@ -479,7 +479,7 @@
   :mode
   (("\\.gp\\'"
     "\\.gnuplot\\'") . gnuplot-mode)
-  :config (add-to-list 'org-babel-load-languages '(babel . t)))
+  :config (add-to-list 'org-babel-load-languages '(gnuplot . t)))
 
 (leaf git-modes
   :ensure t
