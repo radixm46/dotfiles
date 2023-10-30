@@ -152,6 +152,8 @@
   :ensure t
   :commands go-mode
   :hook (go-mode-hook . lsp)
+  :defun lsp-format-buffer lsp-organize-imports
+  :defvar go-ts-mode-hook go-mode-hook
   :setq (go-ts-mode-hook . go-mode-hook)
   :mode ("\\.go\\'" . go-mode)
   )
@@ -214,6 +216,7 @@
     :commands js-mode
     :custom (js-indent-level . 2)
     :hook (js-mode-hook . lsp)
+    :defvar js-ts-mode-hook  js-mode-hook
     :setq (js-ts-mode-hook . js-mode-hook)
     :init
     (leaf js2-mode
@@ -244,8 +247,9 @@
 (leaf typescript-mode
   :ensure t
   :mode ("\\.ts\\'" . typescript-mode)
-  :hook (typescript-mode-hook . lsp)
   :commands typescript-mode
+  :hook (typescript-mode-hook . lsp)
+  :defvar typescript-ts-mode-hook typescript-mode-hook
   :setq (typescript-ts-mode-hook . typescript-mode-hook)
   :custom
   (typescript-indent-level . 2)
@@ -266,6 +270,7 @@
   :hook
   ;; (sh-mode-hook . lsp)
   ;; (sh-mode-hook . flycheck-mode)
+  :defvar bash-ts-mode-hook sh-mode-hook
   :setq (bash-ts-mode-hook . sh-mode-hook)
   ;; :config (setq flycheck-checker 'sh-shellcheck)
   :init
@@ -295,9 +300,12 @@
   :commands yaml-mode
   :mode ("\\.yml\\'" . yaml-mode)
   :hook (yaml-mode-hook . hl-todo-mode)
+  :defvar yaml-ts-mode-hook yaml-mode-hook
   :setq (yaml-ts-mode-hook . yaml-mode-hook))
 
-(leaf systemd :ensure t)
+(leaf systemd
+  :ensure t
+  :commands systemd-mode)
 
 (leaf lua-mode :ensure t
   :commands lua-mode)
@@ -308,7 +316,8 @@
   (leaf docker
     :ensure t
     :doc "emacs integration for Docker"
-    :url "https://github.com/Silex/docker.el")
+    :url "https://github.com/Silex/docker.el"
+    :commands docker-image-mode)
 
   (leaf dockerfile-mode
     :ensure t
@@ -476,11 +485,13 @@
 (leaf fsharp-mode
   :ensure t
   :commands fsharp-mode
+  :defun exec-path-from-shell-copy-env
   :preface (exec-path-from-shell-copy-env "DOTNET_ROOT") ; import dotnet runtime path
   :mode-hook (fsharp-mode-hook . ((rainbow-delimiters-mode -1)))
   :config
   (leaf *eglot-fsharp
     :doc "load `eglot-fsharp.el' inside straight cloned repo"
+    :defvar eglot--managed-mode
     :mode-hook
     (fsharp-mode-hook . ((unless eglot--managed-mode
                            (call-interactively 'eglot))))
