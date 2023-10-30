@@ -280,7 +280,13 @@
   (leaf shfmt :if (!executable-find "shfmt")
     :doc "format code on save"
     :ensure t
-    :hook (sh-mode-hook . shfmt-on-save-mode))
+    :commands shfmt-on-save-mode
+    :custom (shfmt-arguments . '("--indent" "4"
+                                 "--binary-next-line"
+                                 "--case-indent"
+                                 "--keep-padding"
+                                 "--space-redirects"))
+    :mode-hook (sh-mode-hook . ((shfmt-on-save-mode +1))))
   (leaf *flycheck-by-shellcheck :if (!executable-find "shellcheck")
     :disabled t
     :doc "use shellcheck for flychecker with lsp"
