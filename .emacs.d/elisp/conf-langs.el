@@ -26,13 +26,16 @@
   smartparens-strict-mode
   paredit-mode
   :mode-hook
-  (emacs-lisp-mode-hook . ((hs-minor-mode +1)
-                           ;; (flycheck-mode +1)
-                           (flymake-mode +1)
-                           (eldoc-mode +1)
-                           (highlight-symbol-mode +1)
+  (emacs-lisp-mode-hook . (;; (flycheck-mode +1)
+                           (hs-minor-mode           +1)
+                           (flymake-mode            +1)
+                           (eldoc-mode              +1)
+                           (highlight-symbol-mode   +1)
                            (smartparens-strict-mode +1)
-                           (paredit-mode +1)))
+                           (paredit-mode            +1)
+                           ;; check parens before save
+                           (add-hook 'before-save-hook
+                                     'check-parens nil 'local)))
   :init
   (leaf highlight-defined
     :ensure t
@@ -133,10 +136,10 @@
     :commands hy-mode
     :mode ("\\.hy\\'" . hy-mode)
     :mode-hook
-    (hy-mode-hook . ((hs-minor-mode +1)
+    (hy-mode-hook . ((hs-minor-mode           +1)
                      (smartparens-strict-mode +1)
-                     (paredit-mode +1)
-                     (eglot-ensure +1)))
+                     (paredit-mode            +1)
+                     (eglot-ensure            +1)))
     :init
     (leaf *eglot-hyls-config :disabled t
       :doc "enable hy-lang language server with eglot"
