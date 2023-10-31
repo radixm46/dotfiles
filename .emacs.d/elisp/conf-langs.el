@@ -462,7 +462,7 @@
     :ensure t
     :commands mermaid-mode
     :defun tree-sitter-hl-mode
-    :mode-hook (mermaid-mode . ((tree-sitter-hl-mode -1)))
+    :mode-hook (mermaid-mode-hook . ((tree-sitter-hl-mode -1)))
     :custom
     (mermaid-output-format . "png")
     (mermaid-flags         . "--backgroundColor transparent --theme forest"))
