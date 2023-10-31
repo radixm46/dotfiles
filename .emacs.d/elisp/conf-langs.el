@@ -277,7 +277,7 @@
   :setq (bash-ts-mode-hook . sh-mode-hook)
   ;; :config (setq flycheck-checker 'sh-shellcheck)
   :init
-  (leaf shfmt :if (!executable-find "shfmt")
+  (leaf shfmt :when (!executable-find "shfmt")
     :doc "format code on save"
     :ensure t
     :commands shfmt-on-save-mode
