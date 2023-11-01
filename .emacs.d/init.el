@@ -1056,6 +1056,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :ensure t
     :doc "VERTical Interactive COmpletion"
     :defun vertico-mode crm-indicator
+    :bind (:vertico-map
+           ("M-j" . next-history-element)
+           ("M-k" . previous-history-element)
+           ("C-u" . vertico-scroll-down)
+           ("C-d" . vertico-scroll-up))
     :init (vertico-mode)
 
     ;; Add prompt indicator to `completing-read-multiple'.
