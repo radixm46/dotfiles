@@ -527,13 +527,14 @@ add-zsh-hook precmd _update_vcs_info
 
 
 # ----------------------------------------------------------------------------------------
-#http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
+# based on http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
 function is_screen_running() { [ ! -z "$STY" ]; }
 function is_tmux_running() { [ ! -z "$TMUX" ]; }
 function is_screen_or_tmux_running() { is_screen_running || is_tmux_running; }
 function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
 function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
+function is_emacs_vterm_running() { [ ! -z "$EMACS_VTERM_PATH" ]; }
 
 # detect if tmux is running and attach
 function tmux_automatically_attach_session()
@@ -558,24 +559,57 @@ function tmux_automatically_attach_session()
                 return 1
             fi
 
-            if tmux has-session >/dev/null 2>&1 && tmux list-sessions | grep -qE '.*]$'; then
-                # detached session exists
-                tmux list-sessions
-                echo -n "Tmux: attach? (y/N/num) "
-                read
-                if [[ "$REPLY" =~ ^[Yy]$ ]] || [[ "$REPLY" == '' ]]; then
-                    tmux attach-session
-                    if [ $? -eq 0 ]; then
-                        echo "$(tmux -V) attached session"
-                        return 0
-                    fi
-                elif [[ "$REPLY" =~ ^[0-9]+$ ]]; then
-                    tmux attach -t "$REPLY"
-                    if [ $? -eq 0 ]; then
-                        echo "$(tmux -V) attached session"
-                        return 0
-                    fi
+            if [[ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ]]; then
+                # if emacs vterm running, try to attach session 'vterm'
+                if is_emacs_vterm_running; then
+                    echo "detect emacs vterm!"
+                    echo -n "attach / create 'vterm' session? (y/n): "
+                    read
+                    case "$REPLY" in
+                        [Yy] | "")
+                            tmux new-session -A -s "vterm"
+                            return 0
+                            ;;
+                        [Nn])
+                            echo "> Trying to attach..."
+                            # to next
+                            ;;
+                        *)
+                            echo "> invalid input"
+                            ;;
+                    esac
                 fi
+
+                tmux list-sessions
+                echo -n "Tmux: attach? (Yy/[n]o/[N]ew/session-name): "
+                read
+                case "$REPLY" in
+                    [Yy] | "")
+                        tmux attach-session
+                        if [ $? -eq 0 ]; then
+                            echo "$(tmux -V) attached session"
+                            return 0
+                        fi
+                        ;;
+                    n)
+                        echo "> starts without tmux"
+                        return 0
+                        ;;
+                    N)
+                        tmux new-session && echo "> starts new session"
+                        return 0
+                        ;;
+                    *)
+                        tmux new-session -A "$REPLY"
+                        if [ $? -eq 0 ]; then
+                            echo "$(tmux -V) attached session"
+                            return 0
+                        else
+                            echo "> invalid session name!"
+                            return 1
+                        fi
+                        ;;
+                esac
             fi
 
             if is_osx && is_available 'reattach-to-user-namespace'; then
