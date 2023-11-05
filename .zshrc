@@ -92,7 +92,7 @@ if is_available 'fzf'; then
 
     # page-up page-down temporary binded like emacs
     export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
-    function is_tmux_newer_than() { [[ 1 == $((${${$(tmux -V)#tmux}%[a-z]} >= $1)) ]]; }
+    function is_tmux_newer_than() { [[ $1 < ${${$(tmux -V)#tmux}%[a-z]} ]]; }
     function fzf_prev_command() {
         if is_available 'bat'; then
             printf '"bat --color=always --style=header,grid --line-range :100 {}"'
