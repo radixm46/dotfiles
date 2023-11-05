@@ -418,7 +418,7 @@ function prompt_rdm46theme_setup() {
     _vi_vis="%{${fg[magenta]}%} ${_csign} %{${reset_color}%}"
     _vi_rep="%{${fg[yellow]}%} ${_isign} %{${reset_color}%}"
     # for zsh jeffreytse/zsh-vi-mode -----------------------------------------------------
-    function zvm_after_select_vi_mode() {
+    function rdm_zvm_update_indicator() {
         case $ZVM_MODE in
             $ZVM_MODE_NORMAL)
                 vi_mode=${_vi_nor} ;;
@@ -432,6 +432,7 @@ function prompt_rdm46theme_setup() {
                 vi_mode=${_vi_rep} ;;
         esac
     }
+    zvm_after_select_vi_mode_commands+=(rdm_zvm_update_indicator)
     # for zsh builtin bindkey -v ---------------------------------------------------------
     # if zvm not loaded
     if [[ $(type zvm_init) == 'zvm_init not found' ]]; then
@@ -479,6 +480,9 @@ function prompt_rdm46theme_setup() {
     PROMPT2="\
 %{${bg[black]}%}%{${fg[green]}%} %_ >%{${reset_color}%}\
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%} "
+
+    # NOTE: initialize zvm indicator if zvm available on load
+    [[ $(type zvm_init) != 'zvm_init not found' ]] && rdm_zvm_update_indicator
 }
 
 case "$TERM" in
