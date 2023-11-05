@@ -243,7 +243,7 @@ function alias_ls() {
         case ${OSTYPE} in
             darwin*)
                 export CLICOLOR=1
-                alias ls="ls -G -F"
+                alias ls="ls -hGF"
                 ;;
             linux*)
                 alias ls="ls -F --color=auto"
@@ -456,7 +456,8 @@ function prompt_rdm46theme_setup() {
     local P_CLOCK=$'\UF017'
     local P_CONN=$'\UF438'
     [ ! -z ${SSH_CONNECTION} ] && \
-        local P_CONN_ST="${fg[red]}${P_CONN}[${fg[black]}${${SSH_CONNECTION%%\ *}/\%/@}${fg[red]}] "
+        local P_CONN_ST=\
+              "${fg[red]}${P_CONN}[${fg[black]}${${SSH_CONNECTION%%\ *}/\%/@}${fg[red]}] "
 
     PROMPT="\
 %{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
@@ -475,7 +476,7 @@ function prompt_rdm46theme_setup() {
 %{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
 \
 %{${fg[black]}%}${P_PROM}%{${reset_color}%}"'${vi_mode}'\
-'%(?.%{${fg[brblack]}%}.%{${fg[red]}%})%#%{${reset_color}%} '
+"%(?.%{${fg[brblack]}%}.%{${fg[red]}%})%#%{${reset_color}%} "
 
     PROMPT2="\
 %{${bg[black]}%}%{${fg[green]}%} %_ >%{${reset_color}%}\
