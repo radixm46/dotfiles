@@ -2125,9 +2125,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "detect whether doom-theme bg color seems dark (to avoid crush)"
       :defun pdf-view-dark-minor-mode rdm/theme-seems-dark-p
       :preface
-      (defsubst rdm/theme-seems-dark-p ()
-        "Check `(doom-theme \=='bg)'. If theme seems to be dark, returns t"
-        (< (apply '+ (color-name-to-rgb (doom-color 'bg))) 1.5))
       (defun pdf-view-mode-switch-dark ()
         (if (rdm/theme-seems-dark-p)
             (pdf-view-dark-minor-mode +1)

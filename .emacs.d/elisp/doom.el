@@ -181,5 +181,12 @@
   :hook
   (after-load-theme-hook . patch-childframe-color))
 
+(leaf *doom-util-func :after doom-themes
+  :defun doom-name-to-rgb
+  :config
+  (defsubst rdm/theme-seems-dark-p ()
+        "Check `(doom-theme \=='bg)'. If theme bg color seems to be dark, returns t"
+        (< (apply '+ (doom-name-to-rgb (doom-color 'bg))) 1.5)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; doom.el ends here
