@@ -1048,7 +1048,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf embark-consult
       :ensure t
       :doc "consult embark binding package"
-      :after (embark consult)
+      :after consult
       ;; :demand t ; only necessary if you have the hook below
       :leaf-defer nil
       ;; if you want to have consult previews as you move around an
@@ -1302,6 +1302,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "adds configurable icon or text-based completion prefixes based on the :company-kind property"
       :ensure t
       :custom (kind-icon-default-face . 'corfu-default)
+      :defvar corfu-margin-formatters kind-icon-mapping
+      :defun kind-icon-margin-formatter
       :config
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
       (leaf *kind-icon-with-nerd-icons
@@ -1403,7 +1405,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (lsp-server-install-dir                 . ,(cache-sub-dir "lsp")) ;; server install target path
       (lsp-completion-provider                . :none) ;; configured with corfu
       )
-    :preface (exec-path-from-shell-setenv "LSP_USE_PLISTS" "true") ; use `plist' instead of `has-table'
+    :preface (setenv "LSP_USE_PLISTS" "true") ; use `plist' instead of `has-table'
     :bind (:lsp-mode-map ("C-c r"   . lsp-rename))
     :defvar lsp-prefer-flymake
     :defun flycheck-posframe-mode eldoc-box-hover-at-point-mode
@@ -1470,9 +1472,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (lsp-mode-hook . lsp-ui-mode)
       )
 
-    (leaf lsp-treemacs
+    (leaf lsp-treemacs :after treemacs
       :ensure t
-      :after (treemacs lsp-mode)
       :hook (lsp . lsp-treemacs)
       :bind (:global-map ("C-x t e" . lsp-treemacs-errors-list)
                          ("C-x t s" . lsp-treemacs-symbols))
@@ -1652,6 +1653,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf company
       :doc "required for company-yasnippet"
       :ensure t
+      :defun
+      company-yasnippet
+      cape-company-to-capf cape-super-capf
+      cape-dabbrev cape-file cape-dict cape-symbol cape-keyword
+      cape-company-yasnippet
+      cape-super-text cape-super-prog
       :config
       (defalias 'cape-company-yasnippet
         (cape-company-to-capf #'company-yasnippet))
@@ -2683,16 +2690,15 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (`(t . _) (treemacs-git-mode 'simple)))
 
     ;; treemacs integrations
-    (leaf treemacs-evil
-      :ensure t
-      :after (treemacs evil)
-      :require t
+    (leaf treemacs-evil :after evil
+      :doc "treemacs `evil' keybindings (part of treemacs)"
+      :ensure t :require t
       ;; fix tab action
       :bind (:evil-treemacs-state-map ("TAB" . treemacs-TAB-action)))
 
-    (leaf treemacs-magit
-      :ensure t
-      :after (treemacs magit))
+    (leaf treemacs-magit :after magit
+      :doc "treemacs `magit' integration (part of treemacs)"
+      :ensure t :require t)
 
     (leaf treemacs-projectile
       :after treemacs projectile
