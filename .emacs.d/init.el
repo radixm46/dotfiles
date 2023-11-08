@@ -51,7 +51,7 @@
 
 ;; ---------------  load package ---------------
 (eval-and-compile
-  (load (expand-file-name "elisp/initpkg"    user-emacs-directory))
+  (load (expand-file-name  "elisp/initpkg"    user-emacs-directory))
   (load (!expand-file-name "elisp/util"       user-emacs-directory))
   (load (!expand-file-name "elisp/conf-fonts" user-emacs-directory))
   (require 'rdm/util))
