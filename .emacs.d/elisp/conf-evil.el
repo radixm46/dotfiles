@@ -84,9 +84,9 @@
       ;; TODO: もうちょっとsexp追加したいな……いっそhydraか何かで作ったほうがいいかも
       ;; "gh" 'sp-up-sexp
       ;; "gl" 'sp-down-sexp
-      "["  'evil-cp-previous-opening
       "]"  'evil-cp-next-opening
-      "{"  'evil-cp-previous-closing
+      "["  'evil-cp-previous-closing
+      "{"  'evil-cp-previous-opening
       "}"  'evil-cp-next-closing))
   (leaf evil-numbers
     :ensure t
