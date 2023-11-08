@@ -79,7 +79,7 @@
   :after nerd-icons
   :commands mpv-play mpv-play-url mpv-live-p; used to detect mpv running
   :custom
-  `((mpv-default-options   . `(,(let ((mpvconf (expand-file-name
+  `((mpv-default-options   . `(,(let ((mpvconf (!expand-file-name
                                                 "mpv" "~/.config")))
                                   (if mpvconf (format "--config-dir=%s" mpvconf) ""))
                                "--save-position-on-quit"
