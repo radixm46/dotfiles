@@ -2615,28 +2615,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                  (treemacs-load-theme "all-the-icons")
                                (treemacs-load-theme "Default")))))
 
-    :bind
-    (("M-0"       . treemacs-select-window)
-     ("C-x t 1"   . treemacs-delete-other-windows)
-     ("C-x t t"   . treemacs)
-     ("C-x t B"   . treemacs-bookmark)
-     ("C-x t C-t" . treemacs-find-file)
-     ("C-x t M-t" . treemacs-find-tag))
-    :defun
-    (treemacs-git-mode
-     treemacs-fringe-indicator-mode
-     treemacs-filewatch-mode
-     treemacs-follow-mode
-     treemacs-load-theme)
-    :config
     (leaf *treemacs-custom
       :doc "eval after treemacs load"
       :defvar
       treemacs-last-period-regex-value
       treemacs-python-executable
       :custom
-      `(
-        (treemacs-deferred-git-apply-delay      . 0.5)
+      `((treemacs-deferred-git-apply-delay      . 0.5)
         (treemacs-directory-name-transformer    . #'identity)
         (treemacs-display-in-side-window        . t)
         (treemacs-eldoc-display                 . t)
@@ -2675,12 +2660,24 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         (treemacs-width                         . 35)
         (treemacs-collapse-dirs                 . 3)
         ;; (treemacs-collapse-dirs                 . ,(if treemacs-python-executable 3 0))
-        (treemacs-persist-file                  . ,(cache-sub-file "treemacs-persist"))
-        ))
+        (treemacs-persist-file                  . ,(cache-sub-file "treemacs-persist"))))
+    :bind
+    (("M-0"       . treemacs-select-window)
+     ("C-x t 1"   . treemacs-delete-other-windows)
+     ("C-x t t"   . treemacs)
+     ("C-x t B"   . treemacs-bookmark)
+     ("C-x t C-t" . treemacs-find-file)
+     ("C-x t M-t" . treemacs-find-tag))
+    :defun
+    (treemacs-git-mode
+     treemacs-fringe-indicator-mode
+     treemacs-filewatch-mode
+     treemacs-follow-mode
+     treemacs-load-theme)
+    :config
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
     ;;(treemacs-resize-icons 44)
-
     (treemacs-follow-mode 0)
     (treemacs-filewatch-mode t)
     (treemacs-fringe-indicator-mode t)
