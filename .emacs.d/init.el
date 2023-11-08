@@ -2219,11 +2219,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     go-translate-buffer-follow-p
     go-translate-buffer-source-fold-p
     :setq
-    (gts-translate-list     . '(("en" "ja")
-                                ("ja" "en")))
     ;;(go-translate-buffer-follow-p . t)       ; focus the result window
     ;;(go-translate-buffer-source-fold-p . t)  ; fold the source text in the result window
     ;;(go-translate-buffer-window-config . ..) ; config the result window as your wish
+    :custom
+    (gts-translate-list . '(("en" "ja")
+                            ("ja" "en")))
+    :init (defvar deepl-api-key nil "API key for Deepl translation")
     :config
     (defun show-deepl-api-usage ()
       "Show DeepL usage statistics on echo area."
@@ -2720,10 +2722,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
 (leaf *load-conf-elfeed
   :doc "load elfeed plugins if elfeed dir available"
-  :init (load (!expand-file-name "elisp/conf-elfeed" user-emacs-directory)))
+  :config
+  (load (!expand-file-name "elisp/conf-elfeed" user-emacs-directory)))
 
 
 (leaf *load-major-modes
+  :doc "load some major modes"
   :config
   (load (!expand-file-name "elisp/conf-org"   user-emacs-directory))
   (load (!expand-file-name "elisp/conf-langs" user-emacs-directory)))
