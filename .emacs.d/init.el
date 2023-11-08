@@ -1957,13 +1957,64 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       )
     )
 
-  (leaf info
-    :tag "builtin"
-    :doc "customize info-mode appearance (add line spacing, enlarge)"
-    :commands info
-    :mode-hook
-    (Info-mode-hook . ((rdm/sw-lnsp 0.75)
-                       (rdm/text-scale-adjust))))
+  (leaf *online-doc-viewer
+    :config
+    (leaf info
+      :tag "builtin"
+      :doc "customize info-mode appearance (add line spacing, enlarge)"
+      :commands info
+      :preface (push #'Info-mode remap-font-to-doc-modes-list)
+      :mode-hook
+      (Info-mode-hook . ((rdm/sw-lnsp 0.75)
+                         (rdm/text-scale-adjust)
+                         (remap-font-to-doc)))
+      :custom-face
+      (Info-quoted . '((t (:inherit 'font-lock-constant-face))))
+      :config
+      ;; if on macOS and homebrew installed, add homebrew info directory
+      (when (and (!system-type 'darwin)
+                 (!executable-find "brew"))
+        (add-to-list 'Info-directory-list
+                     (!expand-file-name
+                      "share/info"
+                      (string-trim (shell-command-to-string "brew --prefix"))))))
+
+    (leaf man
+      :tag "builtin"
+      :doc "view man"
+      :commands man
+      :defun Man-mode
+      :preface (push #'Man-mode remap-font-to-doc-modes-list)
+      :mode-hook
+      (Man-mode-hook . ((rdm/sw-lnsp 0.75)
+                        (rdm/text-scale-adjust)
+                        (remap-font-to-doc))))
+
+    (leaf woman
+      :tag "builtin"
+      :doc "view man pages without external program"
+      :commands woman
+      :defun woman-mode
+      :defvar woman-manpath
+      :preface (push #'woman-mode remap-font-to-doc-modes-list)
+      :custom
+      (woman-fill-column    . 75)
+      (woman-default-indent . 7)
+      :custom-face
+      (woman-italic . '((t (:italic t :underline t))))
+      :mode-hook
+      (woman-mode-hook . ((rdm/sw-lnsp 0.75)
+                          (rdm/text-scale-adjust)
+                          (remap-font-to-doc)))
+      :config
+      ;; if on macOS and homebrew installed, add homebrew man directory
+      (when (and (!system-type 'darwin)
+                 (!executable-find "brew"))
+        (add-to-list 'woman-manpath
+                     (!expand-file-name
+                      "share/man"
+                      (string-trim (shell-command-to-string "brew --prefix"))))))
+    )
 
   (leaf eshell
     :tag "builtin"
