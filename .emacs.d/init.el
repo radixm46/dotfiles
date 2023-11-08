@@ -2585,6 +2585,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf projectile
     :ensure t
     :defun projectile-mode
+    :custom
+    `((projectile-cache-file          . ,(cache-sub-file "projectile.cache" "projectile"))
+      (projectile-known-projects-file . ,(cache-sub-file "projectile-known-projects.eld" "projectile")))
     :config (projectile-mode +1))
 
   (leaf treemacs
@@ -2697,14 +2700,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "treemacs `magit' integration (part of treemacs)"
       :ensure t :require t)
 
-    (leaf treemacs-projectile
-      :after treemacs projectile
-      :ensure t
-      :custom
-      `(
-        (projectile-cache-file          . ,(cache-sub-file "projectile.cache" "projectile"))
-        (projectile-known-projects-file . ,(cache-sub-file "projectile-known-projects.eld" "projectile"))
-        ))
+    (leaf treemacs-projectile :after projectile
+      :doc "treemacs `projectile' integration (part of treemacs)"
+      :ensure t :require t)
 
     (leaf treemacs-icons-dired :disabled t
       :doc "treemacs icons on dired (treemacs-all-the-icons, use all-the-icons)"
