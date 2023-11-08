@@ -735,11 +735,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (pulsar-pulse-functions        . '(
                                        ;; recenter-top-bottom
                                        ;; move-to-window-line-top-bottom
-                                       reposition-window
+                                       ;; reposition-window
                                        ;; forward-page
                                        ;; backward-page
                                        ;; scroll-up-command
                                        ;; scroll-down-command
+                                       evil-scroll-line-to-top
+                                       evil-scroll-line-to-center
+                                       evil-scroll-line-to-bottom
                                        org-next-visible-heading
                                        org-previous-visible-heading
                                        org-forward-heading-same-level
@@ -754,6 +757,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     ((prog-mode-hook
       conf-mode-hook
       text-mode-hook) . pulsar-mode)
+    ;; integrate with other functions
+    (consult-after-jump-hook . pulsar-reveal-entry)
+    (consult-after-jump-hook . pulsar-recenter-center)
+    (imenu-after-jump-hook   . pulsar-reveal-entry)
+    (imenu-after-jump-hook   . pulsar-recenter-center)
     :commands pulsar-mode
     :config
     ;; (pulsar-global-mode 1)
@@ -772,7 +780,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         pulsar-mode-hook) . patch-pulsar-color))
 
     (evil-define-key 'normal 'global
-      (kbd "SPC") 'pulsar-pulse-line
+      (kbd "SPC")   'pulsar-pulse-line
       (kbd "S-SPC") 'pulsar-highlight-line)
     )
   )
