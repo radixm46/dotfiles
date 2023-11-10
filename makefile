@@ -10,7 +10,7 @@ PAMENV:=.pam_environment
 
 NVIM:=nvim
 
-TERMINALS:=termite alacritty
+TERMINALS:=termite alacritty wezterm
 
 MISC:=mpv
 
