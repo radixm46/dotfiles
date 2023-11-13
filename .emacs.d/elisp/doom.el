@@ -149,9 +149,6 @@
   :defun
   doom-themes-visual-bell-config
   doom-themes-org-config
-  :commands
-  doom-blend
-  doom-color
   :config
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
