@@ -154,36 +154,33 @@
   (doom-themes-org-config)
   ;; (doom-themes-treemacs-config)
   ;; (doom-themes-neotree-config)
-  )
 
-(leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
-  :after doom-themes
-  :preface
-  (defsubst patch-help-key-face-with-doom-themes ()
-    (custom-set-faces
-     `(help-key-binding  ((t (
-                              :foreground ,(doom-color 'cyan)
-                              :background ,(doom-color 'bg-alt)
-                              :box (:line-width (1 . -1) :color ,(doom-color 'dark-cyan))
-                              ))))))
-  :hook
-  (after-load-theme-hook . patch-help-key-face-with-doom-themes))
+  (leaf *doom-util-func
+    :defun doom-name-to-rgb
+    :config
+    (defsubst rdm/theme-seems-dark-p ()
+      "Check `(doom-theme \=='bg)'. If theme bg color seems to be dark, returns t"
+      (< (apply '+ (doom-name-to-rgb (doom-color 'bg))) 1.5)))
 
-(leaf *patch-childframe-color :emacs> "28"
-  :after doom-themes
-  :preface
-  (defsubst patch-childframe-color ()
-    (custom-set-faces
-     `(child-frame-border  ((t (:foreground ,(doom-color 'bg)))))))
-  :hook
-  (after-load-theme-hook . patch-childframe-color))
+  (leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
+    :preface
+    (defsubst patch-help-key-face-with-doom-themes ()
+      (custom-set-faces
+       `(help-key-binding  ((t (
+                                :foreground ,(doom-color 'cyan)
+                                :background ,(doom-color 'bg-alt)
+                                :box (:line-width (1 . -1) :color ,(doom-color 'dark-cyan))
+                                ))))))
+    :hook
+    (after-load-theme-hook . patch-help-key-face-with-doom-themes))
 
-(leaf *doom-util-func :after doom-themes
-  :defun doom-name-to-rgb
-  :config
-  (defsubst rdm/theme-seems-dark-p ()
-        "Check `(doom-theme \=='bg)'. If theme bg color seems to be dark, returns t"
-        (< (apply '+ (doom-name-to-rgb (doom-color 'bg))) 1.5)))
+  (leaf *patch-childframe-color :emacs> "28"
+    :preface
+    (defsubst patch-childframe-color ()
+      (custom-set-faces
+       `(child-frame-border  ((t (:foreground ,(doom-color 'bg)))))))
+    :hook
+    (after-load-theme-hook . patch-childframe-color)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; doom.el ends here
