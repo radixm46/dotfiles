@@ -636,10 +636,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "patch `indent-guides-color'"
       :preface
       (defsubst patch-highlight-indent-guides-color ()
-        (let* ((inactive-c (if (rdm/theme-seems-dark-p)
-                               (doom-lighten 'bg  0.025)
-                             (doom-darken 'bg  0.025)))
-               (active-c   (doom-blend   'bg 'dark-blue 0.5)))
+        (let ((inactive-c (doom-color 'bg-alt))
+              (active-c   (doom-blend 'bg 'dark-blue 0.5)))
           (custom-set-faces
            `(highlight-indent-guides-odd-face      ((t (:background ,inactive-c))))
            `(highlight-indent-guides-top-odd-face  ((t (:background ,active-c))))
