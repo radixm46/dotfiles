@@ -166,12 +166,18 @@ do
          title = wezterm.truncate_right(title, max_width - 2)
 
          return {
+            { Background = { Color = edge_background } },
+            { Foreground = { Color = edge_foreground } },
+            { Text = TAB_LEFT_SEPARATOR },
             { Background = { Color = edge_foreground } },
             { Foreground = { Color = edge_background } },
             { Text = TAB_RIGHT_SEPARATOR },
             { Background = { Color = background } },
             { Foreground = { Color = foreground } },
-            { Text = ' ' .. title .. ' ' }, -- paddling
+            { Text = ' ' .. title }, -- paddling
+            { Background = { Color = edge_foreground } },
+            { Foreground = { Color = edge_background } },
+            { Text = TAB_LEFT_SEPARATOR },
             { Background = { Color = edge_background } },
             { Foreground = { Color = edge_foreground } },
             { Text = TAB_RIGHT_SEPARATOR },
