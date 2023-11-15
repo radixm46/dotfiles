@@ -64,15 +64,26 @@ do
    config.hide_tab_bar_if_only_one_tab = true
    config.tab_max_width                = 50 -- for longer tab name
 
+   -- active
    local active_bg_color   = color_palette.cursor_bg
    local active_fg_color   = color_palette.background
-   local hover_bg_color    = color_palette.selection_bg
-   local hover_fg_color    = color_palette.selection_fg
+   -- inactive
    local inactive_bg_color = color_palette.background
    local inactive_fg_color = color_palette.foreground
+   -- hover
+   local hover_bg_color    = color_palette.selection_bg or "orange"
+   local hover_fg_color    = color_palette.selection_fg or "black"
+
+   function transparentColor(c, a)
+      local r, g, b, _ = wezterm.color.parse(c):srgba_u8()
+      return string.format("rgba(%d %d %d %f)", r, g, b, a)
+   end
+
    config.colors = {
       tab_bar = {
-         background = 'rgba(0%, 0%, 0%, 0%)', -- transparent
+         -- transparent tab bar bg
+         background = transparentColor(inactive_bg_color,
+                                       config.window_background_opacity + 0.1),
          -- The active tab is the one that has focus in the window
          active_tab = {
             bg_color = active_bg_color,
