@@ -1,5 +1,6 @@
-EMACS ?= emacs
-COMPILE := @echo [Compile native+byte] - `date +%Y/%m/%d-%H:%M:%S`; $(EMACS) -Q --batch -f batch-byte+native-compile
+EMACS   ?= emacs
+COMPILE := @echo [Compile byte] - `date +%Y/%m/%d-%H:%M:%S`; \
+	$(EMACS) -Q --batch -f batch-byte-compile
 
 TOP_DIR := ${HOME}/.emacs.d
 
