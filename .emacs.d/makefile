@@ -15,7 +15,7 @@ ALL    := $(EARLY) $(PKG) $(SHARED) $(FEAT) $(INIT) $(LOCAL)
 
 
 .PHONY: default
-default: byte-compile-all
+default: compile-all
 
 early-init.elc: early-init.el
 	$(COMPILE) early-init.el
@@ -79,15 +79,15 @@ elisp/doom.el elisp/conf-org.el
 elisp/local.elc: elisp/local.el elisp/initpkg.el elisp/util.el
 	$(COMPILE) elisp/local.el
 
-.PHONY: byte-compile
-byte-compile:
+.PHONY: compile
+compile:
 	$(COMPILE) $(filter-out $@,$(MAKECMDGOALS))
 
-.PHONY: byte-compile-all
-byte-compile-all: $(ALL)
+.PHONY: compile-all
+compile-all: $(ALL)
 
-.PHONY: backup-pkgs
-backup-pkgs:
+.PHONY: pkgs-backup
+pkgs-backup:
 	mv ./straight ./straight.bak`date +%Y%m%d%H%M`
 
 .PHONY: clean-elc
