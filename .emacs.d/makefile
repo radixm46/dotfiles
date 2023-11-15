@@ -86,9 +86,21 @@ compile:
 .PHONY: compile-all
 compile-all: $(ALL)
 
+.PHONY: setup
+setup: init.elc
+	@echo [Setup init.el] - `date +%Y/%m/%d-%H:%M:%S`;\
+	$(EMACS) --batch --load init.elc \
+	--eval '(unless (string-match-p "NFM.ttf" (shell-command-to-string "fc-list | grep NFM")) (nerd-icons-install-fonts t))' \
+	--eval '(treesit-auto-install-all)'
+
 .PHONY: pkgs-backup
 pkgs-backup:
 	mv ./straight ./straight.bak`date +%Y%m%d%H%M`
+
+.PHONY: pkgs-freeze
+pkgs-freeze:
+	@echo [Straight freeze versions] - `date +%Y/%m/%d-%H:%M:%S`;\
+	$(EMACS) --batch --load init.elc --eval '(straight-freeze-versions t)'
 
 .PHONY: clean-elc
 clean-elc:
