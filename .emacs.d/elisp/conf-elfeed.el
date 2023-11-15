@@ -330,7 +330,7 @@ based on elfeed-search-browse-url"
       "Playback url with mpv and yt-dlp"
       (catch 'quit
         ;; first, check dependency
-        (unless (or (boundp 'mpv-play)
+        (unless (or (fboundp 'mpv-play)
                     (or (!executable-find "yt-dlp")
                         (!executable-find "youtube-dl")))
           (message "Cannot playback media, deps not satisfied (mpv and yt-dlp). Abort.")

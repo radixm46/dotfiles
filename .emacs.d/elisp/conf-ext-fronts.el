@@ -74,9 +74,8 @@
       w3m-load-hook) . patch-w3m-face))
   )
 
-(leaf mpv :if (!executable-find "mpv")
+(leaf mpv :when (!executable-find "mpv")
   :ensure t
-  :after nerd-icons
   :commands mpv-play mpv-play-url mpv-live-p; used to detect mpv running
   :custom
   `((mpv-default-options   . `(,(let ((mpvconf (!expand-file-name
