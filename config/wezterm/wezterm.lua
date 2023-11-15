@@ -33,10 +33,22 @@ end
 
 -------------------------------- window appearance ------------------------------------
 do
-   config.window_decorations        = "RESIZE"
+   local color_scheme        = "ayu"
+   config.color_scheme       = color_scheme
+   local color_palette       = wezterm.color.get_builtin_schemes()[color_scheme]
+   config.window_decorations = "RESIZE"
+
+   function isBgDark(c)
+      _, _, l, _ = wezterm.color.parse(c):hsla()
+      return l < 0.55
+   end
+
    config.window_background_opacity = os.getenv("Darwin")
       and 0.85
-      or 0.60
+      or  isBgDark(color_palette.background)
+          and 0.60
+          or  0.85 -- if bg seems 'light', less transparent bg
+
    config.macos_window_background_blur = 35
    config.window_padding = {
       left   = 2,
@@ -44,10 +56,6 @@ do
       top    = 0,
       bottom = 0,
    }
-
-   local color_scheme  = "ayu"
-   local color_palette = wezterm.color.get_builtin_schemes()[color_scheme]
-   config.color_scheme = color_scheme
 
    ---- define tab style ----
    -- use customized classic style tab bar
