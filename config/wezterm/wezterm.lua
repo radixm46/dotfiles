@@ -157,13 +157,6 @@ do
       visual_bell = color_palette.background,
    }
 
-   ---- dim inactive panes ----
-   config.inactive_pane_hsb = {
-      saturation = 0.9,
-      brightness = 0.8,
-   }
-
-
    ---- configure tab bar ----
    -- This function returns the suggested title for a tab.
    -- It prefers the title that was set via `tab:set_title()`
@@ -223,6 +216,12 @@ do
          }
       end
    )
+
+   ---- dim inactive panes ----
+   config.inactive_pane_hsb = {
+      saturation = 0.8,
+      brightness = 0.7,
+   }
 
    ---- visual bell config ----
    config.front_end     = "WebGpu" -- default
