@@ -79,6 +79,34 @@ do
       return string.format("rgba(%d %d %d %f)", r, g, b, a)
    end
 
+   ---- window active indicator ----
+   wezterm.on(
+      'update-status',
+      function(window)
+         local overrides = window:get_config_overrides() or {}
+         local border_top = '0.125cell'
+         if window:is_focused() then
+            overrides.window_frame = {
+               border_top_height = border_top,
+               border_top_color  = transparentColor(color_palette.brights[2], 0.8)
+            }
+         else
+            overrides.window_frame = {
+               border_top_height = border_top,
+               border_top_color  = transparentColor(inactive_bg_color, 0.7)
+            }
+         end
+         window:set_config_overrides(overrides)
+      end
+   )
+
+   ---- define tab style ----
+   -- use customized classic style tab bar
+   config.use_fancy_tab_bar            = false
+   config.tab_bar_at_bottom            = false
+   config.hide_tab_bar_if_only_one_tab = true
+   config.tab_max_width                = 50 -- for longer tab name
+
    config.colors = {
       tab_bar = {
          -- transparent tab bar bg
