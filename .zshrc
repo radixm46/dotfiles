@@ -10,8 +10,12 @@ function zinit_install() {
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
             print -P "%F{160}▓▒░ The clone has failed.%f%b"
 }
-[[ ! -d ${ZINITDIR} ]] && zinit_install
-source "${ZINITDIR}/zinit.zsh"
+
+# if NO_ZINIT is set, avoid to load zinit and plugins
+[ -z $NO_ZINIT ] && {
+    [[ ! -d ${ZINITDIR} ]] && zinit_install
+    source "${ZINITDIR}/zinit.zsh"
+}
 # if failed to load zinit
 if [[ $(type zinit) == 'zinit not found' ]]; then
     echo 'Failed to load zinit'
