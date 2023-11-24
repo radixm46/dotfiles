@@ -86,13 +86,13 @@ zinit ice has'emacs' depth=1 && zinit light Flinner/zsh-emacs # alias
 zinit ice has'systemctl' depth=1 && zinit light le0me55i/zsh-systemd # alias
 zinit ice has'docker' depth=1 && zinit light akarzim/zsh-docker-aliases #alias
 
-if is_available 'git'; then
+is_available 'git' && {
     zinit ice depth=1 && zinit light mdumitru/git-aliases # alias
     zinit ice depth=1 && zinit light paulirish/git-open # open homepage of repo
     zinit ice depth=1 && zinit light mollifier/cd-gitroot # move to root dir of repo
-fi
+}
 
-if is_available 'fzf'; then
+is_available 'fzf' && {
     zinit ice has'jq' depth=1 && zinit light reegnz/jq-zsh-plugin
 
     # page-up page-down temporary binded like emacs
@@ -132,11 +132,11 @@ if is_available 'fzf'; then
     bindkey -M vicmd '^f^s' anyframe-widget-checkout-git-branch
     bindkey -M vicmd '^fe'  anyframe-widget-insert-git-branch
     bindkey -M vicmd '^f^e' anyframe-widget-insert-git-branch
-    if is_available 'ghq'; then
+    is_available 'ghq' && {
         bindkey -M vicmd '^fg'  anyframe-widget-cd-ghq-repository
         bindkey -M vicmd '^f^g' anyframe-widget-cd-ghq-repository
-    fi
-fi
+    }
+}
 
 # ----------------------------------------------------------------------------------------
 # enable colors
@@ -382,19 +382,19 @@ function get_weather() {
 alias wttr='get_weather'
 
 # launch emacs magit from shell
-if is_available emacs; then
+is_available emacs && {
     function tdired() {
         emacsclient -nw --eval "(dired \"$1\")"
     }
     function dired() {
         emacsclient -c --eval "(dired \"$1\")" &
     }
-fi
+}
 
 # ----------------------------------------------------------------------------------------
 # config for libvt2
 function is_emacs_vterm_running() { [ ! -z "$EMACS_VTERM_PATH" ]; }
-if is_emacs_vterm_running; then
+is_emacs_vterm_running && {
     vterm_printf(){
         if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
             # Tell tmux to pass the escape sequences through
@@ -411,7 +411,7 @@ if is_emacs_vterm_running; then
     # vterm-buffer-name-string
     function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a"; }
     add-zsh-hook -Uz chpwd _vterm_chpwd && _vterm_chpwd
-fi
+}
 
 # ----------------------------------------------------------------------------------------
 # prompt configure
@@ -443,7 +443,7 @@ function prompt_rdm46theme_setup() {
     zvm_after_select_vi_mode_commands+=(rdm_zvm_update_indicator)
     # for zsh builtin bindkey -v ---------------------------------------------------------
     # if zvm not loaded
-    if [[ $(type zvm_init) == 'zvm_init not found' ]]; then
+    [[ $(type zvm_init) == 'zvm_init not found' ]] && {
         vi_mode=${_vi_ins}
         function zle-keymap-select {
             vi_mode="${${KEYMAP/vicmd/${_vi_nor}}/(main|viins)/${_vi_ins}}"
@@ -452,7 +452,7 @@ function prompt_rdm46theme_setup() {
         zle -N zle-keymap-select
         function zle-line-finish { vi_mode=${_vi_ins}; }
         zle -N zle-line-finish
-    fi
+    }
     local P_PROM=''
     # with nerd fonts
     local P_LOGIN=$'\UF2BD'
@@ -561,14 +561,10 @@ function tmux_automatically_attach_session()
         fi
     else
         if shell_has_started_interactively && ! is_ssh_running; then
-            if ! is_available 'tmux'; then
-                echo 'Error: tmux command not found' 2>&1
-                return 1
-            fi
-
-            if [[ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ]]; then
+            # if tmux already started
+            [[ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ]] && {
                 # if emacs vterm running, try to attach session 'vterm'
-                if is_emacs_vterm_running; then
+                is_emacs_vterm_running && {
                     echo "detect emacs vterm!"
                     echo -n "attach / create 'vterm' session? (Yy/n/[N]o tmux): "
                     read
@@ -589,7 +585,7 @@ function tmux_automatically_attach_session()
                             echo "> invalid input"
                             ;;
                     esac
-                fi
+                }
 
                 tmux list-sessions
                 echo -n "Tmux: attach? (Yy/[n]o/[N]ew/session-name): "
@@ -621,8 +617,7 @@ function tmux_automatically_attach_session()
                         fi
                         ;;
                 esac
-            fi
-
+            }
             tmux new-session && echo "tmux created new session"
         fi
     fi
