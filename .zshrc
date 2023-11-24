@@ -235,40 +235,12 @@ zstyle ':completion:*:sudo:*' \
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
 # alias ----------------------------------------------------------------------------------
-# define 'ls' default command
-function alias_ls() {
-    if is_available 'exa'; then
-        alias ls="exa -F --color=always --icons"
-        alias lss="exa -F --color=auto"
-        alias ll="ls -l --time-style=long-iso --git"
-        alias lla="ls -la --time-style=long-iso --git"
-        alias la="ls -a"
-    else
-        case ${OSTYPE} in
-            darwin*)
-                export CLICOLOR=1
-                alias ls="ls -hGF"
-                ;;
-            linux*)
-                alias ls="ls -F --color=auto"
-                ;;
-            *) ;;
-        esac
-        alias la="ls -a"
-        alias ll="ls -l"
-    fi
-}
-alias_ls
-
-alias ...='cd ../..'
+alias ..2='cd ../..'
+alias ..3='cd ../../..'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias mkdir='mkdir -p'
-
-# enable alias with sudo
-is_available 'sudo' && \
-    alias sudo='sudo '
 
 # glob aliases
 alias -g L='| less'
@@ -276,38 +248,68 @@ alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
 
+# define 'ls' alias
+if is_available 'exa'; then
+    alias ls="exa -F --color=always --icons"
+    alias lss="exa -F --color=auto"
+    alias ll="ls -l --time-style=long-iso --git"
+    alias lla="ls -la --time-style=long-iso --git"
+    alias la="ls -a"
+else
+    case ${OSTYPE} in
+        darwin*)
+            export CLICOLOR=1
+            alias ls="ls -hGF"
+            ;;
+        linux*)
+            alias ls="ls -F --color=auto"
+            ;;
+        *) ;;
+    esac
+    alias la="ls -a"
+    alias ll="ls -l"
+fi
+
+# enable alias with sudo
+is_available 'sudo' && \
+    alias sudo='sudo '
+
 is_available 'fd' && \
     alias fd='fd --color=auto'
-if is_available 'bat'; then
+is_available 'bat' && {
     alias -g B='| bat'
     alias -g Ba='| bat --show-all'
     alias -g Bap='| bat --show-all --plain'
-fi
+}
+
 is_available 'duf' && \
     alias duf='duf -all -style=unicode -theme=dark'
 
-if is_available 'rg'; then
+is_available 'rg' && {
     alias rg='rg --color=auto'
     alias -g R='| rg --color=auto'
-fi
+}
 
-# clipboard manager
-if [[ ${OSTYPE} == darwin* ]]; then
-    is_available 'pbcopy' && alias -g C='| pbcopy'
-elif is_available 'wl-copy'; then
-    alias -g C='| wl-copy --trim-newline'
-elif is_available 'xsel'; then
-    alias -g C='| xsel --input --clipboard'
-elif is_available 'putclip'; then
-    alias -g C='| putclip'
-fi
+case ${OSTYPE} in
+    darwin* )
+        alias log-darwin='/usr/bin/log'
+        is_available 'pbcopy' && alias -g C='| pbcopy'
+        ;;
+    linux* )
+        is_available 'ip' && \
+            alias ip='ip -color'
 
-[[ ${OSTYPE} == linux* ]] && \
-    is_available 'ip' && \
-    alias ip='ip -color'
-
-[[ ${OSTYPE} == darwin* ]] && \
-    alias log-darwin='/usr/bin/log'
+        # clipboard manager
+        if is_available 'wl-copy'; then
+            alias -g C='| wl-copy --trim-newline'
+        elif is_available 'xsel'; then
+            alias -g C='| xsel --input --clipboard'
+        elif is_available 'putclip'; then
+            alias -g C='| putclip'
+        fi
+        ;;
+    *) ;;
+esac
 
 alias -g TC='COLORTERM=truecolor'
 
