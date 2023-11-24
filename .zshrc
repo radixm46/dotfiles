@@ -390,24 +390,25 @@ fi
 
 # ----------------------------------------------------------------------------------------
 # config for libvt2
-vterm_printf(){
-    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
-        # Tell tmux to pass the escape sequences through
-        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-    elif [ "${TERM%%-*}" = "screen" ]; then
-        # GNU screen (screen, screen-256color, screen-256color-bce)
-        printf "\eP\e]%s\007\e\\" "$1"
-    else
-        printf "\e]%s\e\\" "$1"
-    fi
-}
-# vterm-clear-scrollback
-if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+function is_emacs_vterm_running() { [ ! -z "$EMACS_VTERM_PATH" ]; }
+if is_emacs_vterm_running; then
+    vterm_printf(){
+        if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+            # Tell tmux to pass the escape sequences through
+            printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+        elif [ "${TERM%%-*}" = "screen" ]; then
+            # GNU screen (screen, screen-256color, screen-256color-bce)
+            printf "\eP\e]%s\007\e\\" "$1"
+        else
+            printf "\e]%s\e\\" "$1"
+        fi
+    }
+    # vterm-clear-scrollback
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
+    # vterm-buffer-name-string
+    function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a"; }
+    add-zsh-hook -Uz chpwd _vterm_chpwd && _vterm_chpwd
 fi
-# vterm-buffer-name-string
-function _vterm_chpwd () { print -Pn "\e]2;%m:%2~\a"; }
-add-zsh-hook -Uz chpwd _vterm_chpwd
 
 # ----------------------------------------------------------------------------------------
 # prompt configure
@@ -538,7 +539,6 @@ function is_tmux_running() { [ ! -z "$TMUX" ]; }
 function is_screen_or_tmux_running() { is_screen_running || is_tmux_running; }
 function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
 function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
-function is_emacs_vterm_running() { [ ! -z "$EMACS_VTERM_PATH" ]; }
 
 # detect if tmux is running and attach
 function tmux_automatically_attach_session()
