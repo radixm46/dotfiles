@@ -62,11 +62,12 @@ function _vi_remap() {
     bindkey -M viins '^N' menu-expand-or-complete
     bindkey -M viins '^P' reverse-menu-complete
 }
-zinit ice depth=1 && zinit light jeffreytse/zsh-vi-mode && \
-    ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK && \
-    ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK && \
-    ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT && \
-    _vi_remap # remap after zvm load
+zinit ice depth=1 && zinit light jeffreytse/zsh-vi-mode && {
+        ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+        ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+        ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+        _vi_remap # remap after zvm load
+    }
 function zvm_config() {
     bindkey -M vicmd 'dd' zvm_kill_line
     bindkey -M vicmd 'D'  zvm_forward_kill_line
@@ -622,14 +623,7 @@ function tmux_automatically_attach_session()
                 esac
             fi
 
-            if is_osx && is_available 'reattach-to-user-namespace'; then
-                # on OS X force tmux's default command
-                # to spawn a shell in the user's namespace
-                tmux_config=$(cat $HOME/.tmux.conf <(echo 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'))
-                tmux -f <(echo "$tmux_config") new-session && echo "$(tmux -V) created new session supported OS X"
-            else
-                tmux new-session && echo "tmux created new session"
-            fi
+            tmux new-session && echo "tmux created new session"
         fi
     fi
 }
