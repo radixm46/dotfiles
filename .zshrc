@@ -567,16 +567,20 @@ function tmux_automatically_attach_session()
                 # if emacs vterm running, try to attach session 'vterm'
                 if is_emacs_vterm_running; then
                     echo "detect emacs vterm!"
-                    echo -n "attach / create 'vterm' session? (y/n): "
+                    echo -n "attach / create 'vterm' session? (Yy/n/[N]o tmux): "
                     read
                     case "$REPLY" in
                         [Yy] | "")
                             tmux new-session -A -s "vterm"
                             return 0
                             ;;
-                        [Nn])
+                        n)
                             echo "> Trying to attach..."
                             # to next
+                            ;;
+                        N)
+                            echo "> Starts without tmux..."
+                            return 0
                             ;;
                         *)
                             echo "> invalid input"
