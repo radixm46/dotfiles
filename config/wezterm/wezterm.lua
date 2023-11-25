@@ -251,5 +251,14 @@ do
    config.macos_forward_to_ime_modifier_mask = "SHIFT | CTRL"
 end
 
+
+-------------------------------- configure local --------------------------------------
+do -- try to load local.lua or local/init.lua
+   local local_exists, local_conf = pcall(require, 'local');
+   if local_exists then
+      local_conf.apply_local(config)
+   end
+end
+
 -- provide config
 return config
