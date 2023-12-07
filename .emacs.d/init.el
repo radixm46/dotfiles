@@ -248,8 +248,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :ensure t
     :doc "automatically install and enables treesit major modes"
     :custom (treesit-auto-install . t)
+    :defvar treesit-auto-opt-out-list
     :setq (treesit-auto-opt-out-list . '(protobuf))
-    :config (treesit-auto-install-all)
     :global-minor-mode global-treesit-auto-mode)
 
   (leaf tree-sitter
