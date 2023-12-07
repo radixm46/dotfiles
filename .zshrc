@@ -544,11 +544,11 @@ function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
 function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 
 # detect if tmux is running and attach
-function tmux_automatically_attach_session()
-{
-    if is_screen_or_tmux_running; then
-        ! is_available 'tmux' && return 1
+function tmux_automatically_attach_session() {
+    # check tmux or screen available, if not, abort
+    ! { is_available 'tmux' || is_available 'screen' } && return 1
 
+    if is_screen_or_tmux_running; then
         if is_tmux_running; then
             echo ""
             echo "${fg_bold[red]}.||.  .. .. ..   ... ...  ... ...${reset_color}"
