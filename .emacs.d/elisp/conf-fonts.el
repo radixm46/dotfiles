@@ -1,6 +1,6 @@
 ;;; conf-fonts.el --- configure fonts -*- lexical-binding: t -*-
 ;;; Commentary:
-;; fonts related thinds
+;; fonts related things
 
 ;;; Code:
 

@@ -409,7 +409,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (leaf orderless :ensure t
         :doc "Advanced completion style")
       (leaf hotfuzz :ensure t
-        :doc  "fuzzy Emacs completion style with a better scoring algorithm.")
+        :doc "fuzzy Emacs completion style with a better scoring algorithm.")
       :custom
       (fussy-use-cache             . t)
       (fussy-score-fn              . 'fussy-hotfuzz-score)
@@ -636,7 +636,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :doc "patch `indent-guides-color'"
       :preface
       (defsubst patch-highlight-indent-guides-color ()
-        (let ((inactive-c (doom-color 'bg-alt))
+        (let ((inactive-c (doom-blend 'bg 'bg-alt    0.7))
               (active-c   (doom-blend 'bg 'dark-blue 0.5)))
           (custom-set-faces
            `(highlight-indent-guides-odd-face      ((t (:background ,inactive-c))))
@@ -1888,24 +1888,25 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf dashboard
     :ensure t
     :custom
-    `((dashboard-banner-logo-title . ,(format "Welcome to Emacs %s! [on %s (%s)]"
-                                              emacs-version
-                                              system-name
-                                              system-type)) ;; Set the title
-      (dashboard-startup-banner     . 3)
-      (dashboard-center-content     . t)
-      (dashboard-show-shortcuts     . t)
-      (dashboard-set-heading-icons  . t)
-      (dashboard-set-file-icons     . t)
-      (dashboard-set-init-info      . t)
-      (dashboard-set-footer         . t)
-      (dashboard-match-agenda-entry . "-agenda_ignore")
-      (dashboard-items              . '((agenda    . 5)
-                                        (recents   . 5)
-                                        (bookmarks . 5)
-                                        (projects  . 5)
-                                        (registers . 5)))
-      (initial-buffer-choice        . (lambda ()
+    `((dashboard-banner-logo-title     . ,(format "Welcome to Emacs %s! [on %s (%s)]"
+                                                  emacs-version
+                                                  system-name
+                                                  system-type)) ;; Set the title
+      (dashboard-startup-banner        . 3)
+      (dashboard-center-content        . t)
+      (dashboard-show-shortcuts        . t)
+      (dashboard-set-heading-icons     . t)
+      (dashboard-set-file-icons        . t)
+      (dashboard-set-init-info         . t)
+      (dashboard-set-footer            . t)
+      (dashboard-bookmarks-item-format . "%.20s - %.40s")
+      (dashboard-match-agenda-entry    . "-agenda_ignore")
+      (dashboard-items                 . '((agenda    . 5)
+                                           (recents   . 5)
+                                           (bookmarks . 5)
+                                           (projects  . 5)
+                                           (registers . 5)))
+      (initial-buffer-choice           . (lambda ()
                                         (dashboard-refresh-buffer)
                                         (get-buffer "*dashboard*"))))
     :preface
@@ -1924,10 +1925,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf calendar
     :tag "builtin"
     :custom
-    ((calendar-month-name-array   . ["01" "02" "03" "04" "05" "06"
-                                     "07" "08" "09" "10" "11" "12" ])
-     (calendar-week-start-day     . 0)
-     (calendar-mark-holidays-flag . t))
+    `((calendar-month-name-array   . ["01" "02" "03" "04" "05" "06"
+                                      "07" "08" "09" "10" "11" "12" ])
+      (calendar-week-start-day     . 0)
+      (calendar-mark-holidays-flag . t)
+      (diary-file                  . ,(cache-sub-file "diary")))
     :hook
     (calendar-today-visible-hook   . calendar-mark-today)
     :config
@@ -1946,7 +1948,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :ensure t
       :custom
       `((japanese-holiday-weekend         . '(0 6))
-        (japanese-holiday-weekend-marker  . '(holiday  ;; sun
+        (japanese-holiday-weekend-marker  . '(holiday             ;; sun
                                               nil nil nil nil nil ;; mon - fri
                                               japanese-holiday-saturday)))
       :hook
@@ -2112,7 +2114,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :doc "text base web browser"
     :commands eww
     :custom
-    `((shr-width                   . 80)
+    `((shr-width                   . 85)
       (shr-indentation             . 4)
       (shr-use-fonts               . t)
       (url-configuration-directory . ,(cache-sub-dir "url"))
@@ -2190,7 +2192,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :config
     (leaf *switch-pdf-view-dark
       :doc "detect whether doom-theme bg color seems dark (to avoid crush)"
-      :defun pdf-view-dark-minor-mode rdm/theme-seems-dark-p
+      :defun pdf-view-dark-minor-mode
       :preface
       (defun pdf-view-mode-switch-dark ()
         (if (rdm/frame-bg-dark-p)
@@ -2218,8 +2220,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     go-translate-buffer-follow-p
     go-translate-buffer-source-fold-p
     :setq
-    ;;(go-translate-buffer-follow-p . t)       ; focus the result window
-    ;;(go-translate-buffer-source-fold-p . t)  ; fold the source text in the result window
+    (go-translate-buffer-follow-p      . nil) ; focus the result window
+    (go-translate-buffer-source-fold-p . t)   ; fold the source text in the result window
     ;;(go-translate-buffer-window-config . ..) ; config the result window as your wish
     :custom
     (gts-translate-list . '(("en" "ja")

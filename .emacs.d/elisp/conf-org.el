@@ -41,6 +41,7 @@
                                            :empty-lines-before 1)
                                           ))
   (org-log-done                       . 'time)
+  (org-log-into-drawer                . t)
   (org-clock-clocked-in-display       . 'frame-title)
   (org-list-allow-alphabetical        . t)
   (org-startup-indented               . t)

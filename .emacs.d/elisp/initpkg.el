@@ -123,9 +123,7 @@ argument NAME could be directory or filename"
     (leaf-keywords-init)
     (customize-set-variable 'leaf-alias-keyword-alist
                             '((:ensure . :straight))
-                            "customized at initpkg"))
-  )
-
+                            "customized at initpkg")))
 
 (leaf *leaf-configure
   :doc "configure leaf related packages"
