@@ -1655,8 +1655,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :ensure t
       :defun
       company-yasnippet
-      cape-company-to-capf cape-super-capf
-      cape-dabbrev cape-file cape-dict cape-symbol cape-keyword
+      cape-company-to-capf cape-capf-super
+      cape-dabbrev cape-file cape-dict cape-elisp-symbol cape-keyword
       cape-company-yasnippet
       cape-super-text cape-super-prog
       :config
@@ -1669,12 +1669,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :preface
       ;; define cape-super-*
       (defalias 'cape-super-text
-        (cape-super-capf
+        (cape-capf-super
          #'cape-dabbrev #'cape-file
          #'cape-dict))
       (defalias 'cape-super-prog
-        (cape-super-capf
-         #'cape-symbol #'cape-keyword))
+        (cape-capf-super
+         #'cape-elisp-symbol #'cape-keyword))
 
       (defun rdm/set-capf-prog-conf ()
         (setq-local completion-at-point-functions
@@ -1701,7 +1701,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         :preface
         (defalias 'cape-super-eglot
           (cape-capf-buster
-           (cape-super-capf
+           (cape-capf-super
             #'eglot-completion-at-point
             #'cape-company-yasnippet
             #'cape-keyword)))
@@ -1727,7 +1727,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         :preface
         (defalias 'cape-super-lsp
           (cape-capf-buster
-           (cape-super-capf
+           (cape-capf-super
             #'cape-company-yasnippet
             #'lsp-completion-at-point
             #'cape-keyword)))
