@@ -2193,14 +2193,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :defun pdf-view-dark-minor-mode rdm/theme-seems-dark-p
       :preface
       (defun pdf-view-mode-switch-dark ()
-        (if (rdm/theme-seems-dark-p)
+        (if (rdm/frame-bg-dark-p)
             (pdf-view-dark-minor-mode +1)
           (pdf-view-dark-minor-mode -1)))
       (defun pdf-view-mode-switch-dark-with-theme-load ()
         (dolist (buff (buffer-list))
           (with-current-buffer buff
             (when (eq major-mode #'pdf-view-mode)
-              (if (rdm/theme-seems-dark-p)
+              (if (rdm/frame-bg-dark-p)
                   (pdf-view-dark-minor-mode +1)
                 (pdf-view-dark-minor-mode -1))))))
       :hook

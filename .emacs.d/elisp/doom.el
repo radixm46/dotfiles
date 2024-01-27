@@ -155,13 +155,6 @@
   ;; (doom-themes-treemacs-config)
   ;; (doom-themes-neotree-config)
 
-  (leaf *doom-util-func
-    :defun doom-name-to-rgb
-    :config
-    (defsubst rdm/theme-seems-dark-p ()
-      "Check `(doom-theme \=='bg)'. If theme bg color seems to be dark, returns t"
-      (< (apply '+ (doom-name-to-rgb (doom-color 'bg))) 1.5)))
-
   (leaf *patch-help-key-face-with-doom-themes :emacs>= "28.1"
     :preface
     (defsubst patch-help-key-face-with-doom-themes ()

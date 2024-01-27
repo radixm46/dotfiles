@@ -71,6 +71,9 @@
     (when (numberp rdm/text-scale-amount)
       (text-scale-increase rdm/text-scale-amount))))
 
+(defsubst rdm/frame-bg-dark-p ()
+  "Check `background-mode' of `frame-parameter'. If `dark' is set, return t."
+  (eq (frame-parameter nil 'background-mode) 'dark))
 
 (provide 'rdm/util)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
