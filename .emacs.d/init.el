@@ -2049,7 +2049,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                         (set (make-local-variable 'buffer-face-mode-face) 'fixed-pitch)
                         (buffer-face-mode t)))
     :custom
-    (vterm-max-scrollback . 10000)
+    (vterm-max-scrollback     . 10000)
     (vterm-buffer-name-string . "vterm: %s")
     :config
     (evil-set-initial-state 'vterm-mode 'emacs)
@@ -2074,17 +2074,23 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                      ;;(dedicated . t) ;dedicated is supported in emacs27
                      (reusable-frames . visible)
                      (window-height . 0.25))))
+    (defun rdm/vterm-toggle-full ()
+      "vterm toggle into full screen"
+      (interactive)
+      (let ((vterm-toggle-fullscreen-p t)) (vterm-toggle)))
     :bind
-    (("M-2"  . vterm-toggle)
-     ("<f2>" . vterm-toggle)
-     ("M-@"  . rdm/vterm-new-buffer-in-current-window))
+    (("M-2"   . vterm-toggle)
+     ("<f2>"  . vterm-toggle)
+     ("C-M-2" . rdm/vterm-toggle-full)
+     ("M-@"   . rdm/vterm-new-buffer-in-current-window))
     (:vterm-mode-map
-     ("C-u"     . vterm-send-C-u)
-     ("C-t"     . vterm-send-C-t)
+     ("C-l"     . (lambda () (interactive) (vterm-send-key (kbd "C-l"))))
+     ("C-u"     . (lambda () (interactive) (vterm-send-key (kbd "C-u"))))
+     ("C-t"     . (lambda () (interactive) (vterm-send-key (kbd "C-t"))))
      ("C-c C-[" . vterm-send-escape)
      ("M-2"     . vterm-toggle)
      ("<f2>"    . vterm-toggle))
-    )
+    :defun vterm-send-key)
 
   (leaf tramp
     :tag "builtin"
