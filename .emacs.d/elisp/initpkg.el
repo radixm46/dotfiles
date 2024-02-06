@@ -124,6 +124,16 @@ argument NAME could be directory or filename"
                             '(org-elpa melpa gnu-elpa-mirror nongnu-elpa emacsmirror-mirror)
                             "customized at initpkg"))
 
+  (prog1 '*configure-straight-profiles
+    (customize-set-variable 'straight-profiles
+                            '((nil   . "default.el")
+                              (local . "local.el"))
+                            "customized at initpkg")
+    (when (file-exists-p (!expand-file-name
+                          (format "straight/versions/%s" (cdr (assoc nil straight-profiles)))
+                          straight-base-dir))
+      (straight-thaw-versions)))
+
   ;; setup leaf via straight.el
   (prog1 '*leaf-with-straight-setup
     (straight-use-package 'leaf)

@@ -2742,7 +2742,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 (leaf *load-local-conf
   :config
   (let
-      ((local-conf (!expand-file-name "elisp/local" user-emacs-directory)))
+      ((local-conf (!expand-file-name "elisp/local" user-emacs-directory))
+       (straight-current-profile 'local))
     (unless (file-exists-p local-conf)
       (with-temp-file local-conf
         (insert "\
