@@ -6,7 +6,7 @@
 ;;; Code:
 (eval-when-compile
   (load (expand-file-name "elisp/initpkg" user-emacs-directory))
-  (load (expand-file-name "elisp/doom"    user-emacs-directory)))
+  (!el-load "elisp/doom"))
 (require 'straight)
 
 (leaf rg :if (!executable-find "rg")

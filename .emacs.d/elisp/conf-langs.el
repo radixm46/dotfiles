@@ -7,8 +7,8 @@
 ;;; Code:
 (eval-when-compile
   (load (expand-file-name "elisp/initpkg"   user-emacs-directory))
-  (load (expand-file-name "elisp/util"       user-emacs-directory))
-  (load (expand-file-name "elisp/conf-evil"  user-emacs-directory)))
+  (!el-load "elisp/util"
+            "elisp/conf-evil"))
 
 
 (leaf text-mode

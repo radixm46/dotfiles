@@ -7,7 +7,7 @@
 
 (eval-when-compile
   (load (expand-file-name "elisp/initpkg"    user-emacs-directory))
-  (load (expand-file-name "elisp/conf-fonts" user-emacs-directory)))
+  (!el-load  "elisp/conf-fonts"))
 (require 'straight)
 (require 'hydra)
 

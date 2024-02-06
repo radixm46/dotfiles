@@ -51,9 +51,9 @@
 
 ;; ---------------  load package ---------------
 (eval-and-compile
-  (load (expand-file-name  "elisp/initpkg"    user-emacs-directory))
-  (load (!expand-file-name "elisp/util"       user-emacs-directory))
-  (load (!expand-file-name "elisp/conf-fonts" user-emacs-directory))
+  (load (expand-file-name "elisp/initpkg" user-emacs-directory))
+  (!el-load "elisp/util"
+            "elisp/conf-fonts")
   (require 'rdm/util))
 
 
@@ -235,8 +235,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf *load-evil-conf
     :doc "load evil"
     :preface
-    (eval-and-compile
-      (load (!expand-file-name "elisp/conf-evil" user-emacs-directory))))
+    (eval-and-compile (!el-load "elisp/conf-evil")))
 
   (leaf editorconfig
     :doc "load editorconfig"
@@ -2730,14 +2729,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 (leaf *load-conf-elfeed
   :doc "load elfeed plugins if elfeed dir available"
   :config
-  (load (!expand-file-name "elisp/conf-elfeed" user-emacs-directory)))
+  (!el-load "elisp/conf-elfeed"))
 
 
 (leaf *load-major-modes
   :doc "load some major modes"
   :config
-  (load (!expand-file-name "elisp/conf-org"   user-emacs-directory))
-  (load (!expand-file-name "elisp/conf-langs" user-emacs-directory)))
+  (!el-load "elisp/conf-org"
+            "elisp/conf-langs"))
 
 
 (leaf *load-local-conf

@@ -6,13 +6,12 @@
 
 ;;; Code:
 (eval-when-compile
-  (load (expand-file-name "elisp/initpkg"         user-emacs-directory))
-  (load (expand-file-name "elisp/conf-evil"       user-emacs-directory))
-  (load (expand-file-name "elisp/util"            user-emacs-directory))
-  (load (expand-file-name "elisp/doom"            user-emacs-directory))
-  (load (expand-file-name "elisp/conf-fonts"      user-emacs-directory))
-  (load (expand-file-name "elisp/conf-ext-fronts" user-emacs-directory))
-
+  (load (expand-file-name "elisp/initpkg" user-emacs-directory))
+  (!el-load "elisp/conf-evil"
+            "elisp/util"
+            "elisp/doom"
+            "elisp/conf-fonts"
+            "elisp/conf-ext-fronts")
   (defconst elfeed-dir-path (expand-file-name "~/.config/elfeed/")
     "Path of elfeed user dir."))
 (require 'straight)

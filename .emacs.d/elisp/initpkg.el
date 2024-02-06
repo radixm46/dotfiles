@@ -33,6 +33,14 @@
   (defmacro !expand-file-name (relative &optional basedir)
     "Macro retuns result of `(expand-file-name RELATIVE BASEDIR)'."
     (eval `(expand-file-name ,relative ,basedir)))
+
+  (defmacro !el-load (&rest modules)
+  "Load each module in the `modules' list, expanding relative paths from the `user-emacs-directory'.
+Each module name is expected to be a string."
+    (let ((path (mapcar (lambda (e)
+                          (expand-file-name e user-emacs-directory))
+                        modules)))
+       `(dolist (e ',path) (load e))))
   )
 
 

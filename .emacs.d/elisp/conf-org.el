@@ -7,9 +7,8 @@
 ;;; Code:
 (eval-when-compile
   (load (expand-file-name "elisp/initpkg"    user-emacs-directory))
-  (load (expand-file-name "elisp/conf-fonts" user-emacs-directory))
-  (load (expand-file-name "elisp/conf-evil"  user-emacs-directory))
-
+  (!el-load  "elisp/conf-fonts"
+             "elisp/conf-evil")
   (defconst default-org-directory (expand-file-name "org/orgfiles" (getenv "HOME"))
     "define default org directory path for compile"))
 (require 'straight)
