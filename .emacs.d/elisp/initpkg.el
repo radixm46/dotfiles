@@ -88,8 +88,10 @@ argument NAME could be directory or filename"
   ;; add eln-cache dir to path (required on bytecomp)
   (when (and noninteractive
              (featurep 'native-compile))
-    (startup-redirect-eln-cache
-     (!expand-file-name ".cache/emacs/eln-cache" (getenv "HOME"))))
+    (let ((eln-dir (!expand-file-name ".cache/emacs/eln-cache" (getenv "HOME"))))
+      (if (fboundp 'startup-redirect-eln-cache)
+          (startup-redirect-eln-cache eln-dir) ;; defined above 29.1
+        (push eln-dir native-comp-eln-load-path))))
 
   (prog1 '*straight-setup
     (customize-set-variable
