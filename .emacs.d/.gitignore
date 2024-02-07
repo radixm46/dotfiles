@@ -38,3 +38,6 @@ banner.*
 custom.el
 /elisp/local*
 *.elc
+
+# treesit
+tree-sitter/*

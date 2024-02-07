@@ -162,7 +162,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (set-buffer-file-coding-system  'utf-8)
   (prefer-coding-system           'utf-8)
 
-  ;; skk config(use
+  (leaf kkc
+    :doc "built-in kanji-kana conversion"
+    :tag "builtin"
+    :custom
+    `((kkc-init-file-name .  ,(cache-sub-file "kkcrc"))))
+
   (leaf ddskk
     :doc "setup ddsk"
     :ensure t
@@ -2035,7 +2040,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :tag "builtin"
     :commands eshell
     :custom
-    `((eshell-history-file-name . ,(!expand-file-name "history" (cache-sub-dir "eshell")))))
+    `((eshell-directory-name    . ,(cache-sub-dir     "eshell"))
+      (eshell-history-file-name . ,(!expand-file-name "history" (cache-sub-dir "eshell")))))
 
   (leaf vterm
     :ensure t
@@ -2111,8 +2117,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :tag "builtin"
     :doc "gpg pinentry mode"
     :custom
-    (epa-pinentry-mode . 'loopback)
-    )
+    (epa-pinentry-mode . 'loopback))
+
+  (leaf nsm
+    :tag "builtin"
+    :doc "network security manager"
+    :custom `((nsm-settings-file . ,(cache-sub-file "network-security.data"))))
 
   (leaf eww
     :tag "builtin"
