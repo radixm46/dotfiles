@@ -733,15 +733,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (pulsar-highlight-face         . 'pulsar-yellow)
     (pulsar-delay                  . 0.040)
     (pulsar-iterations             . 10)
-    (pulsar-pulse-on-window-change . t)
     (pulsar-pulse-functions        . '(
-                                       ;; recenter-top-bottom
                                        ;; move-to-window-line-top-bottom
                                        ;; reposition-window
                                        ;; forward-page
                                        ;; backward-page
                                        ;; scroll-up-command
                                        ;; scroll-down-command
+                                       recenter-top-bottom
                                        evil-scroll-line-to-top
                                        evil-scroll-line-to-center
                                        evil-scroll-line-to-bottom
