@@ -2092,6 +2092,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("C-l"     . (lambda () (interactive) (vterm-send-key (kbd "C-l"))))
      ("C-u"     . (lambda () (interactive) (vterm-send-key (kbd "C-u"))))
      ("C-t"     . (lambda () (interactive) (vterm-send-key (kbd "C-t"))))
+     ("C-c C-c" . (lambda () (interactive) (vterm-send-key (kbd "C-c"))))
+     ("<Esc>"   . vterm-send-escape)
      ("C-c C-[" . vterm-send-escape)
      ("M-2"     . vterm-toggle)
      ("<f2>"    . vterm-toggle))
@@ -2345,7 +2347,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
  _j_:   next                 _d_:   popup                _r_:   update all windows
  _k_:   previous             _v_:   mark
  _G_:   end of hunk          _s_:   stage                _h_:   open git timemachine
- ^ ^                         _x_:   revert               _g_:   open magit mode
+ ^ ^                         _x_:   revert      _<f3>_ / _M-3_:   open magit mode
 " (nerd-icons-faicon "nf-fa-code_fork"))
      ("j" git-gutter:next-hunk)
      ("k" git-gutter:previous-hunk)
@@ -2356,7 +2358,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("s" git-gutter:stage-hunk)
      ("r" git-gutter:update-all-windows)
      ("h" git-timemachine :exit t)
-     ("g" magit :exit t))
+     ("<f3>" magit :exit t)
+     ("M-3"  magit :exit t))
 
     :bind
     (:global-map
