@@ -431,6 +431,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   :custom
   (ring-bell-function . 'ignore)
   (fill-column        . 85)
+  (line-spacing       . 0.40)
   :config
   (display-time)
   (column-number-mode t)
@@ -1827,6 +1828,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :ensure t
       :custom
       (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner)
+      (which-key-posframe-parameters . '((line-spacing . 0)))
       :defvar which-key-posframe-mode
       :defun
       which-key-posframe-mode
