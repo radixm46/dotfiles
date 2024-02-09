@@ -209,6 +209,8 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :push ((nerd-icons-extension-icon-alist . '("org_archive" nerd-icons-sucicon "nf-custom-orgmode" :face nerd-icons-lblue))))
 
   (leaf emojify
+    :emacs<= "24.3"
+    :emacs> "28"
     :ensure t
     :custom
     `((emojify-emojis-dir      . ,(cache-sub-dir "emojis"))
