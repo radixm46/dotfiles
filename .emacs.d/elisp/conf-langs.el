@@ -13,6 +13,7 @@
 
 (leaf text-mode
   :tag "builtin"
+  :commands text-mode
   :init
   (leaf *font-remap-text-mode
     :defvar remap-font-to-doc-modes-list
@@ -21,6 +22,7 @@
 
 (leaf emacs-lisp-mode
   :tag "builtin"
+  :commands emacs-lisp-mode
   :defun
   highlight-symbol-mode
   smartparens-strict-mode
@@ -127,7 +129,6 @@
   (leaf python-mode
     :tag "builtin" :ensure t
     :commands python-mode
-    :mode ("\\.py\\'" . python-mode)
     :hook (python-mode-hook . lsp-deferred)
     :setq (python-ts-mode-hook . python-mode-hook))
 
@@ -249,7 +250,6 @@
 
 (leaf typescript-mode
   :ensure t
-  :mode ("\\.ts\\'" . typescript-mode)
   :commands typescript-mode
   :hook (typescript-mode-hook . lsp)
   :defvar typescript-ts-mode-hook typescript-mode-hook
@@ -295,19 +295,16 @@
 
 (leaf csv-mode
   :ensure t
-  :commands csv-mode
-  :mode (".csv" ".tsv"))
+  :commands csv-mode)
 
-(leaf json-mode
+(leaf json-mode :emacs< "29"
   :ensure t
   :commands json-mode
-  ;; :mode ("\\.json\\'" . json-mode)
-  )
+  :mode ("\\.json\\'" . json-mode))
 
 (leaf yaml-mode
   :ensure t
   :commands yaml-mode
-  :mode ("\\.yml\\'" . yaml-mode)
   :hook (yaml-mode-hook . hl-todo-mode)
   :defvar yaml-ts-mode-hook yaml-mode-hook
   :setq (yaml-ts-mode-hook . yaml-mode-hook))
@@ -355,9 +352,7 @@
     ;; :hook (markdown-mode . visual-line-mode)
     :commands (markdown-mode gfm-mode)
     :mode
-    (("README\\.md\\'"  . gfm-mode)
-     ("\\.md\\'"
-      "\\.markdown\\'") . markdown-mode)
+    ("README\\.md\\'"  . gfm-mode)
     :custom
     (markdown-command                    . "multimarkdown")
     (markdown-hide-markup                . t)
@@ -412,15 +407,14 @@
 
 (leaf powershell
   :ensure t
-  :commands powershell-mode
-  :mode ("\\.ps1\\'"))
+  :commands powershell-mode)
 
 (leaf java-mode
   :tag "builtin"
   :doc "java environment config"
   :commands java-mode
   :config
-  (leaf lsp-java
+  (leaf lsp-java :disabled t
     :ensure t
     :hook (java-mode-hook . lsp)
     :setq (java-ts-mode-hook . java-mode-hook)
