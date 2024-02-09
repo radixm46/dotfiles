@@ -55,7 +55,7 @@ Each module name is expected to be a string."
     "Check directory existence, and return full path to given NAME.
 Create if cache sub directory NAME not exists.
 If argument is not given, returns `emacs-cache-root-dir'"
-    (let ((lpath (if (eq name nil)
+    (let ((lpath (if (null name)
                      ;; if cache dirname not given, use emacs-cache-root-dir
                      emacs-cache-root-dir
                    (expand-file-name name emacs-cache-root-dir))))
@@ -132,7 +132,7 @@ argument NAME could be directory or filename"
                               (local . "local.el"))
                             "customized at initpkg")
     (when (file-exists-p (!expand-file-name
-                          (format "straight/versions/%s" (cdr (assoc nil straight-profiles)))
+                          (format "straight/versions/%s" (cdr (assq nil straight-profiles)))
                           straight-base-dir))
       (straight-thaw-versions)))
 
