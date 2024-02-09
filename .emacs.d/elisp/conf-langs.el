@@ -123,7 +123,7 @@
       "init python environment on python-mode"
       (when (not pipenv-mode)
         (pipenv-mode))
-      (when (eq python-shell-virtualenv-root nil)
+      (when (null python-shell-virtualenv-root)
         (pipenv-activate))))
 
   (leaf python-mode
