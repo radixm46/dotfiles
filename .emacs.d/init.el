@@ -2405,6 +2405,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   :config
   (leaf dired
     :tag "builtin"
+    :commands dired
     :preface
     (leaf osx-trash :when (!system-type 'darwin)
       :ensure t
