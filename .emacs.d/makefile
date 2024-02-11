@@ -86,23 +86,40 @@ compile:
 .PHONY: compile-all
 compile-all: $(ALL)
 
-.PHONY: setup
-setup: init.elc
-	@echo [Setup init.el] - `date +%Y/%m/%d-%H:%M:%S`;\
-	$(EMACS) --batch --load init.elc \
-	--eval '(unless (string-match-p "NFM.ttf" (shell-command-to-string "fc-list | grep NFM")) (nerd-icons-install-fonts t))' \
-	--eval '(treesit-auto-install-all)'
-
-.PHONY: pkgs-backup
-pkgs-backup:
-	mv ./straight ./straight.bak`date +%Y%m%d%H%M`
-
-.PHONY: pkgs-freeze
-pkgs-freeze:
-	@echo [Straight freeze versions] - `date +%Y/%m/%d-%H:%M:%S`;\
-	$(EMACS) --batch --load init.elc --eval '(straight-freeze-versions t)'
-
 .PHONY: clean-elc
 clean-elc:
 	rm -f *.elc elisp/*.elc
 
+.PHONY: pkgs-backup
+pkgs-backup:
+	mv ./straight ./straight.bak-`date +%Y%m%d%H%M`
+
+.PHONY: setup
+setup: init.elc
+	@echo [Setup init.el] - `date +%Y/%m/%d-%H:%M:%S`;\
+	$(EMACS) --batch --load 'init.elc' \
+	  --eval '(unless (string-match-p "NFM.ttf" (shell-command-to-string "fc-list | grep NFM")) (nerd-icons-install-fonts t))' \
+	  --eval '(treesit-auto-install-all)' \
+	  --eval '(vterm-module-compile)' \
+	  --eval '(pdf-tools-install-noverify)'
+
+
+LOCKFILE_DIR  := straight/versions
+.PHONY: lockfile-gen
+lockfile-gen: clean-elc lockfile-backup
+	@echo [Straight freeze versions] - `date +%Y/%m/%d-%H:%M:%S`;
+	$(MAKE) compile-all \
+	  COMPILE="$(EMACS) --quick --batch \
+	    --eval=\"(setq leaf-defaults '(:leaf-defer nil) \
+	                   leaf-alias-keyword-alist '((:ensure . :straight) (:config . :init) (:after . :require)))\" \
+	    --funcall=batch-byte-compile"
+	$(EMACS) --batch --load 'init.elc' --eval '(straight-freeze-versions t)'
+	$(MAKE) clean-elc
+	$(MAKE) compile-all
+
+.PHONY: lockfile-backup
+lockfile-backup:
+	@[ -e $(LOCKFILE_DIR)/default.el ] && \
+	  BKDATE=`date +%Y%m%d%H%M` && \
+	  cp "$(LOCKFILE_DIR)/default.el" "$(LOCKFILE_DIR)/default-$$BKDATE.el" && \
+	  echo "lockfile backed up to default-$$BKDATE.el"
