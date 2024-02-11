@@ -1251,17 +1251,17 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :ensure t
     :commands corfu-mode
     :custom
-    (corfu-cycle                   . t)          ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto                    . t)          ;; Enable auto completion
-    (corfu-auto-prefix             . 2)
-    (corfu-auto-delay              . 0.2)
-    (corfu-separator               . ?\s)        ;; Orderless field separator
-    (corfu-quit-no-match           . 'separator) ;; Never quit, even if there is no match
-    (corfu-quit-at-boundary        . 'separator) ;; Never quit at completion boundary
-    (corfu-preview-current         . nil)        ;; Disable current candidate preview
-    (corfu-preselect               . 'valid)     ;; Preselect the prompt
-    (corfu-on-exact-match          . nil)        ;; Configure handling of exact matches
-    (corfu-scroll-margin           . 5)          ;; Use scroll margin
+    (corfu-cycle            . t)          ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto             . t)          ;; Enable auto completion
+    (corfu-auto-prefix      . 2)
+    (corfu-auto-delay       . 0.2)
+    (corfu-separator        . ?\s)        ;; Orderless field separator
+    (corfu-quit-no-match    . 'separator) ;; Never quit, even if there is no match
+    (corfu-quit-at-boundary . 'separator) ;; Never quit at completion boundary
+    (corfu-preview-current  . nil)        ;; Disable current candidate preview
+    (corfu-preselect        . 'valid)     ;; Preselect the prompt
+    (corfu-on-exact-match   . nil)        ;; Configure handling of exact matches
+    (corfu-scroll-margin    . 5)          ;; Use scroll margin
     :hook
     ((text-mode-hook
       prog-mode-hook
@@ -1274,7 +1274,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
     :config
 
-    (leaf *config-corfu-with-evil-map :after evil
+    (leaf *config-corfu-with-evil-map :disabled t
+      :after evil
+      :doc "this configure is not required anymore (done with `evil-collection-corfu-setup')"
       :url "https://github.com/minad/corfu/issues/12"
       :defvar corfu-map
       :preface
