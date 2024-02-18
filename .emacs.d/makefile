@@ -94,8 +94,8 @@ clean-elc:
 pkgs-backup:
 	mv ./straight ./straight.bak-`date +%Y%m%d%H%M`
 
-.PHONY: setup
-setup: init.elc
+.PHONY: pkgs-setup
+pkgs-setup: init.elc
 	@echo [Setup init.el] - `date +%Y/%m/%d-%H:%M:%S`;\
 	$(EMACS) --batch --load 'init.elc' \
 	  --eval '(unless (string-match-p "NFM.ttf" (shell-command-to-string "fc-list | grep NFM")) (nerd-icons-install-fonts t))' \
