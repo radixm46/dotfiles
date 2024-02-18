@@ -2511,7 +2511,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf *dirvish-preview-config
       :doc "configure dirvish preview dispathcer"
       :custom
-      `((dirvish-preview-dispatchers  . `(,(when (!executable-find "exa") 'exa)
+      `((dirvish-preview-dispatchers  . `(,(when (!executable-find "eza") 'eza)
                                           image gif video audio epub archive
                                           ,(when (featurep 'xwidget-internal) 'html)
                                           ,(cond ((fboundp  'pdf-loader-install) 'pdf)
@@ -2522,12 +2522,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (eval-and-compile (leaf dirvish :ensure t :require t))
 
       ;; define preview
-      (dirvish-define-preview exa (file)
-        "Use `exa' to generate directory preview."
-        :require ("exa") ; tell Dirvish to check if we have the executable
+      (dirvish-define-preview eza (file)
+        "Use `eza' to generate directory preview."
+        :require ("eza") ; tell Dirvish to check if we have the executable
         (when (file-directory-p file) ; we only interest in directories here
-          `(shell . ("exa" "--color=always" "--icons"
-                     "--git" "--group-directories-first" "-al" ,file))))
+          `(shell . ("eza" "--long" "--color=always" "--icons=always" "--no-quotes"
+                     "--almost-all" "--group-directories-first"
+                     "--smart-group" "--git" ,file))))
 
       ;; for html preview with xwidget
       (when (featurep 'xwidget-internal)
