@@ -55,6 +55,16 @@ case "$(uname)" in
             alias vi='vim'
         fi
         ;;
+    Linux*)
+        () {
+            local BREW_PATH='/home/linuxbrew/.linuxbrew'
+            [ -d "${BREW_PATH}" ] && {
+                path=(${BREW_PATH}/bin(N-/) ${BREW_PATH}/sbin(N-/) \
+                                  ${path})
+                fpath=(${BREW_PATH}/share/zsh/site-functions(N-/) ${fpath})
+            }
+        }
+        ;;
 esac
 
 # check ghcup/stack installed and add path
