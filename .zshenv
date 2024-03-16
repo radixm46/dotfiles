@@ -53,7 +53,7 @@ case "$(uname)" in
         }
 
         # if macvim available, alias vim to macvim
-        if [[ -d '/Applications/MacVim.app' ]]; then
+        if [  -d '/Applications/MacVim.app' ]; then
             alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
             alias vi='vim'
         fi
