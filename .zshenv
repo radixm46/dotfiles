@@ -86,7 +86,8 @@ path=("${HOME}/.cargo/bin"(N-/) ${path})
 path=("${HOME}/.local/bin"(N-/) ${path})
 
 # configure pyenv
-if is_available 'pyenv'; then
+if is_available 'pyenv' || [ -d ${HOME}/.pyenv/bin ]; then
+    path=("${HOME}/.pyenv/bin"(N-/) ${path}) # if pyenv dir found at $HOME
     export PIPENV_VENV_IN_PROJECT=true
     eval "$(pyenv init --path)"
 fi
