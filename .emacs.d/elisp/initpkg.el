@@ -17,7 +17,8 @@
 ;; define macros for pkg manage
 (prog1 '*pkg-manage-macros
   (defmacro with-suppressed-message (&rest body)
-    "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
+    "Suppress new messages temporarily in the echo area and
+the `*Messages*' buffer while BODY is evaluated."
     (declare (indent 0))
     (let ((message-log-max nil))
       `(with-temp-message (or (current-message) "") ,@body)))
@@ -35,7 +36,8 @@
     (eval `(expand-file-name ,relative ,basedir)))
 
   (defmacro !el-load (&rest modules)
-  "Load each module in the `modules' list, expanding relative paths from the `user-emacs-directory'.
+  "Load each module in the `modules' list, expanding relative paths
+from the `user-emacs-directory'.
 Each module name is expected to be a string."
     (let ((path (mapcar (lambda (e)
                           (expand-file-name e user-emacs-directory))
