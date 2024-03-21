@@ -41,6 +41,12 @@ Each module name is expected to be a string."
                           (expand-file-name e user-emacs-directory))
                         modules)))
        `(dolist (e ',path) (load e))))
+
+  (defmacro !sys-featurep (feat)
+    "Checks if the specified `FEAT' matches any entry in
+`system-configuration-features' using `string-match-p'.
+`FEAT' must be a string or a regular expression."
+    (eval (string-match-p feat system-configuration-features)))
   )
 
 

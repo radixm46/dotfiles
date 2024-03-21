@@ -1872,7 +1872,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (transient-values-file  . ,(!expand-file-name "values.el"  (cache-sub-dir "transient")))
       (transient-history-file . ,(!expand-file-name "history.el" (cache-sub-dir "transient")))))
 
-  (leaf xwidget-webkit :when (featurep 'xwidget-internal)
+  (leaf xwidget-webkit :when (!sys-featurep "XWIDGETS")
     :tag "builtin"
     :commands xwidget-webkit-browse-url
     :config
@@ -2146,7 +2146,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                       (rdm/text-scale-adjust)))
     :init
     (leaf *eww-with-xwidget :emacs>= "29.1"
-      :when (featurep 'xwidget-internal)
+      :when (!sys-featurep "XWIDGETS")
       :doc "use xwidgets for audio/movie rendering"
       :custom (shr-use-xwidgets-for-media . t))
 
