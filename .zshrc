@@ -1,19 +1,24 @@
+# compile when update
+[ ! -f "${HOME}/.zshrc.zwc" -o "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ] && {
+    printf 'compile zshrc...'
+    zcompile "${HOME}/.zshrc"
+    printf 'done!\n'
+}
 # ----------------------------------------------------------------------------------------
 # zinit install
 # ----------------------------------------------------------------------------------------
 ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 ZINITDIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-function zinit_install() {
+
+# if NO_ZINIT is set, avoid to load zinit and plugins
+[ -z $NO_ZINIT ] && {
+    [[ ! -d ${ZINITDIR} ]] && {
     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
     command mkdir -p "$(dirname $ZINITDIR)" && command chmod g-rwX $(dirname ${ZINITDIR})
     command git clone https://github.com/zdharma-continuum/zinit.git "${ZINITDIR}" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
             print -P "%F{160}▓▒░ The clone has failed.%f%b"
-}
-
-# if NO_ZINIT is set, avoid to load zinit and plugins
-[ -z $NO_ZINIT ] && {
-    [[ ! -d ${ZINITDIR} ]] && zinit_install
+    }
     source "${ZINITDIR}/zinit.zsh"
 }
 # if failed to load zinit

@@ -1,3 +1,9 @@
+# compile when update
+[ ! -f "${HOME}/.zshenv.zwc" -o "${HOME}/.zshenv" -nt "${HOME}/.zshenv.zwc" ] && {
+    printf 'compile zshenv...'
+    zcompile "${HOME}/.zshenv"
+    printf 'done!\n'
+}
 export LANG=ja_JP.UTF-8
 export XDG_CONFIG_HOME=~/.config
 # export LANGUAGE=en_US.UTF-8
