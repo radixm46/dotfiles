@@ -111,15 +111,13 @@ is_available 'fzf' && {
     zinit ice has'jq' depth=1 && zinit light reegnz/jq-zsh-plugin
 
     # page-up page-down temporary binded like emacs
-    export FZF_DEFAULT_OPTS="--multi --cycle --ansi --color=dark --reverse --marker=* --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+    # NOTE: OneDark theme with bg+border
+    export FZF_DEFAULT_OPTS="--multi --cycle --ansi --reverse --marker=* \
+ --border=bold --color=dark --color=bg:#282c34,border:#cd00cd \
+ --color=fg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe \
+ --color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef \
+ --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
     function is_tmux_newer_than() { [[ $1 < ${${$(tmux -V)#tmux}%[a-z]} ]]; }
-    function fzf_prev_command() {
-        if is_available 'bat'; then
-            printf '"bat --color=always --style=header,grid --line-range :100 {}"'
-        else
-            printf '"cat"'
-        fi
-    }
 
     # TODO: write own completion pattern -- how to works with zsh default completion?
 
@@ -127,8 +125,13 @@ is_available 'fzf' && {
         autoload -Uz anyframe-init && anyframe-init
 
     alias -g F='| fzf --border=rounded'
-    alias -g Fp="| fzf --border=rounded --preview $(fzf_prev_command)"
-    if is_available 'tmux' && is_tmux_newer_than '3.2' && [ ! -z ${TMUX} ]; then
+    alias -g Fp="| fzf --border=rounded --preview $(
+        if is_available 'bat'; then
+            printf '"bat --color=always --theme=OneHalfDark --style=header,grid --line-range :100 {}"'
+        else
+            printf '"cat"'
+        fi)"
+    if is_available 'tmux' && is_tmux_newer_than '3.2' && [ ! -z "${TMUX}" ]; then
         zstyle ":anyframe:selector:" use fzf-tmux
         zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85% --select-1'
     elif is_available 'tmux'; then
