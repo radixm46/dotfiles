@@ -55,23 +55,22 @@ export KEYTIMEOUT=1
 # zvm ------------------------------------------------------------------------------------
 # init immediately after sourced
 ZVM_INIT_MODE=sourcing
-function _vi_remap() {
-    bindkey -M vicmd '^R' history-incremental-pattern-search-backward
-    bindkey -M viins '^F' forward-char
-    bindkey -M viins '^B' backward-char
-    bindkey -M viins '^I' expand-or-complete
-    bindkey -M viins '^H' backward-delete-char
-    bindkey -M viins '^D' delete-char
-    bindkey -M viins '^A' beginning-of-line
-    bindkey -M viins '^E' end-of-line
-    bindkey -M viins '^N' menu-expand-or-complete
-    bindkey -M viins '^P' reverse-menu-complete
-}
 zinit ice depth=1 && zinit light jeffreytse/zsh-vi-mode && {
         ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
         ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
         ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-        _vi_remap # remap after zvm load
+        function() { # remap after zvm load
+            bindkey -M vicmd '^R' history-incremental-pattern-search-backward
+            bindkey -M viins '^F' forward-char
+            bindkey -M viins '^B' backward-char
+            bindkey -M viins '^I' expand-or-complete
+            bindkey -M viins '^H' backward-delete-char
+            bindkey -M viins '^D' delete-char
+            bindkey -M viins '^A' beginning-of-line
+            bindkey -M viins '^E' end-of-line
+            bindkey -M viins '^N' menu-expand-or-complete
+            bindkey -M viins '^P' reverse-menu-complete
+        }
     }
 function zvm_config() {
     bindkey -M vicmd 'dd' zvm_kill_line
@@ -113,14 +112,14 @@ is_available 'fzf' && {
 
     # TODO: write own completion pattern -- how to works with zsh default completion?
 
-    zinit ice depth=1 && zinit light mollifier/anyframe && \
+    zinit ice depth=1 && zinit light mollifier/anyframe &&
         autoload -Uz anyframe-init && anyframe-init
 
     alias -g F='| fzf --border=rounded'
     alias -g Fp="| fzf --border=rounded --preview $(fzf_prev_command)"
     if is_available 'tmux' && is_tmux_newer_than '3.2' && [ ! -z ${TMUX} ]; then
         zstyle ":anyframe:selector:" use fzf-tmux
-        zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85%  --select-1'
+        zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85% --select-1'
     elif is_available 'tmux'; then
         zstyle ":anyframe:selector:" use fzf
         zstyle ":anyframe:selector:fzf:" command 'fzf --border=rounded --select-1'
@@ -337,22 +336,23 @@ function print_os_glyph() {
                                   do [[ "${l}" == ID* ]] && echo "${${l#'ID='}:Q:l}" \
                                          && break; done)
                 case "${distro_id}" in
-                    arch*) printf $'\UF303' ;;
-                    centos*) printf $'\UF304' ;;
-                    debian*) printf $'\UF306' ;;
-                    fedora*) printf $'\UF30A' ;;
-                    manjaro*) printf $'\UF312' ;;
+                    arch*)     printf $'\UF303' ;;
+                    centos*)   printf $'\UF304' ;;
+                    debian*)   printf $'\UF306' ;;
+                    fedora*)   printf $'\UF30A' ;;
+                    manjaro*)  printf $'\UF312' ;;
                     opensuse*) printf $'\UF314' ;;
                     raspbian*) printf $'\UF315' ;;
-                    sles*) printf $'\UF314' ;;
-                    ubuntu*) printf $'\UF31C' ;;
-                    steamos*) printf $'\UF1B6' ;;
+                    sles*)     printf $'\UF314' ;;
+                    ubuntu*)   printf $'\UF31C' ;;
+                    steamos*)  printf $'\UF1B6' ;;
+                    kali*)     printf $'\UF327' ;;
+                    ende*)     printf $'\UF322' ;;
                     # slackware) printf $'\UF318' ;;
                     # nixos) printf $'\UF313' ;;
                     # mint) printf $'\UF30F' ;;
-                    # alpine) printf $'\UF300' ;;
                     # redhat) printf $'\UF316' ;;
-                    *) printf $'\UF83C' ;;
+                    *) printf $'\UF31A' ;;
                 esac
             else
                 printf $'\UF83C'
@@ -516,7 +516,7 @@ function TRAPINT() {
 
 # ----------------------------------------------------------------------------------------
 # vcs info TODO: include vcs prompt to theme
-function define_vcs_prompt_style {
+function() {
     local P_GITBRANCH=$'\UF418'
     local P_VCSICO=$'\UE702'
     local P_ENDR=$'\UE0C7'
@@ -530,8 +530,6 @@ function define_vcs_prompt_style {
 %K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
 %{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
 }
-define_vcs_prompt_style
-
 function _update_vcs_info() {
     LANG=en_US.UTF-8 vcs_info
     RPROMPT="${vcs_info_msg_0_}"
@@ -549,7 +547,7 @@ function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
 function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 
 # detect if tmux is running and attach
-function tmux_automatically_attach_session() {
+function() {
     # check tmux or screen available, if not, abort
     ! { is_available 'tmux' || is_available 'screen' } && return 1
 
@@ -567,7 +565,7 @@ function tmux_automatically_attach_session() {
     else
         if shell_has_started_interactively && ! is_ssh_running; then
             # if tmux already started
-            [[ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ]] && {
+            [ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ] && {
                 # if emacs vterm running, try to attach session 'vterm'
                 is_emacs_vterm_running && {
                     echo "detect emacs vterm!"
@@ -598,10 +596,10 @@ function tmux_automatically_attach_session() {
                 case "$REPLY" in
                     [Yy] | "")
                         tmux attach-session
-                        if [ $? -eq 0 ]; then
+                        [ $? -eq 0 ] && {
                             echo "$(tmux -V) attached session"
                             return 0
-                        fi
+                        }
                         ;;
                     n)
                         echo "> starts without tmux"
@@ -627,4 +625,3 @@ function tmux_automatically_attach_session() {
         fi
     fi
 }
-tmux_automatically_attach_session
