@@ -24,15 +24,15 @@ case "$(uname)" in
         path=(${path} '/usr/sbin'(N-/) '/sbin'(N-/)) # init path
 
         # return true if macOS runs on certain arch
-        function runs_on_macARM64() { [[ "$(uname -m)" = 'arm64' ]]; }
-        function runs_on_macX86_64() { [[ "$(uname -m)" = 'x86_64' ]]; }
+        function runs_on_macARM64() { [ "$(uname -m)" = 'arm64' ]; }
+        function runs_on_macX86_64() { [ "$(uname -m)" = 'x86_64' ]; }
 
         # path of hoembrew on /opt/homebrew
-        () {
+        function() {
             local BREW_PATH_OPT='/opt/homebrew'
-            function brew_exists_at_opt() { [[ -d "${BREW_PATH_OPT}/bin" ]]; }
+            function brew_exists_at_opt() { [ -d "${BREW_PATH_OPT}/bin" ]; }
             # path of hoembrew on /usr/local/Homebrew
-            function brew_exists_at_local() { [[ -d '/usr/local/Homebrew' ]]; }
+            function brew_exists_at_local() { [ -d '/usr/local/Homebrew' ]; }
 
             # path add BREW_PATH_OPT/zsh to fpath
             path=(${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
@@ -46,7 +46,7 @@ case "$(uname)" in
                 function arm() { arch -arm64 $@; }
                 # launch zsh on rosetta2
                 function zsh_ovrst2() {
-                    if [[ -e '/usr/local/bin/zsh' ]]; then
+                    if [ -e '/usr/local/bin/zsh' ]; then
                         x86 '/usr/local/bin/zsh'
                     else
                         x86 '/bin/zsh'
@@ -59,13 +59,13 @@ case "$(uname)" in
         }
 
         # if macvim available, alias vim to macvim
-        if [  -d '/Applications/MacVim.app' ]; then
+        [ -d '/Applications/MacVim.app' ] && {
             alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
             alias vi='vim'
-        fi
+        }
         ;;
     Linux*)
-        () {
+        function() {
             local BREW_PATH='/home/linuxbrew/.linuxbrew'
             [ -d "${BREW_PATH}" ] && {
                 path=(${BREW_PATH}/bin(N-/) ${BREW_PATH}/sbin(N-/) \
@@ -77,15 +77,14 @@ case "$(uname)" in
 esac
 
 # check ghcup/stack installed and add path
-function haskell_env () {
+function() {
     local ghcup_path="${HOME}/.ghcup/bin"
-    if [[ -d ${ghcup_path} ]]; then
+    if [ -d ${ghcup_path} ]; then
         path=("${ghcup_path}"(N-/) ${path})
     elif is_available 'stack'; then
         path=($(stack path --local-bin)(N-/) ${path})
     fi
 }
-haskell_env
 
 # check rust environment
 path=("${HOME}/.cargo/bin"(N-/) ${path})
@@ -99,10 +98,10 @@ if is_available 'pyenv' || [ -d ${HOME}/.pyenv/bin ]; then
 fi
 
 # configure node environment
-if is_available 'npm' && [[ -d "${HOME}/.npm-global" ]]; then
+is_available 'npm' && [ -d "${HOME}/.npm-global" ] && {
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
     path=("${NPM_CONFIG_PREFIX}/bin"(N-/) ${path})
-fi
+}
 
 # set manpager as bat or nvim if available
 if is_available 'bat'; then
