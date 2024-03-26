@@ -262,26 +262,35 @@ alias -g T='| tail'
 alias -g G='| grep'
 
 # define 'ls' alias
-if is_available 'eza'; then
-    alias ls='eza -F --color=always --icons'
-    alias lss='eza -F --color=auto'
-    alias ll='ls -l --time-style=long-iso --git'
-    alias lla='ls -la --time-style=long-iso --git'
-    alias la='ls -a'
-else
-    case ${OSTYPE} in
-        darwin*)
-            export CLICOLOR=1
-            alias ls='ls -hGF'
-            ;;
-        linux*)
-            alias ls='ls -F --color=auto'
-            ;;
-        *) ;;
-    esac
-    alias la='ls -a'
-    alias ll='ls -l'
-fi
+function() {
+    local lscmd="ls"
+    for c in eza exa; do
+        hash "$c" 2>/dev/null && {
+            lscmd="$c"
+            break
+        }
+    done
+    if [ ! "$lscmd" = "ls" ]; then
+        alias ls="$lscmd -F --color=always --icons"
+        alias lss="$lscmd -F --color=auto"
+        alias ll='ls -l --time-style=long-iso --git'
+        alias lla='ls -la --time-style=long-iso --git'
+        alias la='ls -a'
+    else
+        case ${OSTYPE} in
+            darwin*)
+                export CLICOLOR=1
+                alias ls='ls -hGF'
+                ;;
+            linux*)
+                alias ls='ls -F --color=auto'
+                ;;
+            *) ;;
+        esac
+        alias la='ls -a'
+        alias ll='ls -l'
+    fi
+}
 
 # enable alias with sudo
 is_available 'sudo' && \
