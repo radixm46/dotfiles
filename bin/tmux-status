@@ -1,0 +1,112 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+function memstat() {
+    local nerdmem=$'\UF035B'
+    local mem_val=""
+    case $(uname) in
+        Darwin)
+            # display memory pressure value
+            local mem_val=$(memory_pressure | awk 'NR==28{ print 100-$5 "%% (prs)" }')
+            ;;
+        Linux*)
+            # display current memory in GB
+            mem_val=${$(free -m | awk 'NR==2{printf("%.1dper %.1fG", $3/$2*100, $3/1024)}')/'per'/'%%'}
+            ;;
+        *)
+            mem_val=$'\UF00D'
+            ;;
+    esac
+    printf "${nerdmem} ${mem_val}"
+}
+
+# print charging battery sign from nerd fonts
+# (arg1: int(battery capacity), arg2: bool(charging status))
+function pr_batt_cap() {
+    case "$1" in
+        'true')
+            local batt_signs=(
+                $'\UF089F'
+                $'\UF089C' $'\UF0086' $'\UF0087' $'\UF0088' $'\UF089D'
+                $'\UF0089' $'\UF089E' $'\UF008A' $'\UF008B' $'\UF0085'
+            )
+            ;;
+        'false')
+            local batt_signs=(
+                $'\UF008E'
+                $'\UF007A' $'\UF007B' $'\UF007C' $'\UF007D' $'\UF007E'
+                $'\UF007F' $'\UF0080' $'\UF0081' $'\UF0082' $'\UF0079'
+            )
+            ;;
+    esac
+    local batt_idx=$(($2 / 10 + 1))
+
+    if ((1 <= batt_idx)) && ((batt_idx <= 11)); then
+        printf "${batt_signs[batt_idx]}"
+    else
+        printf $'\UF0083'
+    fi
+}
+
+# display battery status
+function batstat() {
+    local pwr_conn=$'\UF06A5'
+    local pwr_discn=$'\UF06A6'
+    case $(uname) in
+        Darwin)
+            function() {
+                case "$2" in
+                    'AC')
+                        printf "${pwr_conn} $(pr_batt_cap false $1) $1%%"
+                        ;;
+                    'charging')
+                        printf "${pwr_conn} $(pr_batt_cap true $1) $1%%"
+                        ;;
+                    'discharging')
+                        printf "${pwr_discn} $(pr_batt_cap false $1) $1%%"
+                        ;;
+                    'charged')
+                        printf "${pwr_conn} $(pr_batt_cap false $1) $1%%"
+                        ;;
+                    *)
+                        printf "${pwr_conn} $(pr_batt_cap false $1) $1%%"
+                        ;;
+                esac
+            } $(pmset -g batt | awk 'NR==2{print($3 $4)}' | sed -e 's/;//g' -e 's/%/\ /')
+            ;;
+        Linux*)
+            # check if battery is available
+            {
+                for bpath in '/sys/class/power_supply/'BAT*; do
+                    [[ -L ${bpath} && -d ${bpath} ]] &&
+                        function () {
+                            case "$2" in
+                                'Charging')
+                                    printf "${pwr_conn} $(pr_batt_cap true $1) $1%%"
+                                    ;;
+                                'Discharging')
+                                    printf "${pwr_discn} $(pr_batt_cap false $1) $1%%"
+                                    ;;
+                                'Full')
+                                    printf "${pwr_conn} $(pr_batt_cap false $1) $1%%"
+                                    ;;
+                                'Not charging')
+                                    printf "${pwr_conn} $(pr_batt_cap false $1) $1%%"
+                                    ;;
+                                'Unknown')
+                                    printf "${pwr_conn} $(pr_batt_cap false $1) $1%%"
+                                    ;;
+                            esac
+                        } "$(< ${bpath}/capacity)" "$(< ${bpath}/status)"
+                done
+            } || printf "${pwr_conn} "$'\UF0091'
+            ;;
+        *)
+            printf $'\UF00D'
+            ;;
+    esac
+}
+
+memstat
+printf ' ' # separate output
+batstat
