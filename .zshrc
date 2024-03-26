@@ -44,7 +44,9 @@ autoload -Uz \
          chpwd_recent_dirs \
          cdr \
          add-zsh-hook \
-         vcs_info
+         vcs_info \
+         colors &&
+    colors
 add-zsh-hook chpwd chpwd_recent_dirs
 
 # keybinds -------------------------------------------------------------------------------
@@ -84,6 +86,15 @@ bindkey -M vicmd 'n' history-substring-search-down
 
 # auto pair brackets ---------------------------------------------------------------------
 zinit ice depth=1 && zinit light hlissner/zsh-autopair && autopair-init
+
+# alias reminder -------------------------------------------------------------------------
+zinit ice depth=1 && zinit light MichaelAquilina/zsh-you-should-use && function() {
+        local underline=$'\e[4m'
+        export YSU_MESSAGE_FORMAT="${bg[green]} ${reset_color}\
+${fg[green]}${underline} Alias found! ${reset_color}  \
+${fg_bold[magenta]}\"%command\"${reset_color}${fg[green]} -(%alias_type)-> \
+${fg_bold[blue]}\"%alias\"${reset_color}"
+    }
 
 # plugins depends on external commands ---------------------------------------------------
 zinit ice has'emacs' depth=1 && zinit light Flinner/zsh-emacs # alias
@@ -143,9 +154,6 @@ is_available 'fzf' && {
 }
 
 # ----------------------------------------------------------------------------------------
-# enable colors
-autoload -Uz colors && colors
-
 # Input/Output
 setopt no_flow_control
 setopt ignore_eof # zsh not terminate with C-d
