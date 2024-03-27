@@ -65,12 +65,12 @@ zinit ice depth=1 && zinit light jeffreytse/zsh-vi-mode && {
             bindkey -M vicmd '^R' history-incremental-pattern-search-backward
             bindkey -M viins '^F' forward-char
             bindkey -M viins '^B' backward-char
-            bindkey -M viins '^I' expand-or-complete
+            bindkey -M viins '^I' menu-expand-or-complete
             bindkey -M viins '^H' backward-delete-char
             bindkey -M viins '^D' delete-char
             bindkey -M viins '^A' beginning-of-line
             bindkey -M viins '^E' end-of-line
-            bindkey -M viins '^N' menu-expand-or-complete
+            bindkey -M viins '^N' expand-or-complete
             bindkey -M viins '^P' reverse-menu-complete
         }
     }
@@ -224,6 +224,7 @@ zstyle ':completion:*:default' menu select=2 interactive
 zstyle -e ':completion:*:default' list-colors \
        'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34;04=35}:${(s.:.)LS_COLORS}")'
 bindkey -M menuselect '^N' down-line-or-history
+bindkey -M menuselect '^I' down-line-or-history
 bindkey -M menuselect '^P' up-line-or-history
 bindkey -M menuselect '^S' history-incremental-search-forward
 bindkey -M menuselect '^J' accept-and-infer-next-history
