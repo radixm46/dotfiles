@@ -35,8 +35,11 @@
 			(redisplay)))
 
 ;; Startup setting
-(setq inhibit-splash-screen   t)
-(setq inhibit-startup-message t)
+(setq use-file-dialog             nil)
+(setq inhibit-splash-screen       t)
+(setq inhibit-x-resources         t)
+(setq inhibit-startup-message     t)
+(setq inhibit-startup-buffer-menu t)
 (setq byte-compile-warnings   '(not cl-functions obsolete))
 
 (setq inhibit-startup-echo-area-message t)
