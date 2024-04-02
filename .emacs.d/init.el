@@ -2389,7 +2389,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
  ^move to hunk^              ^act on hunk^               ^etc^
 ^^^^^^................................................................................
  _j_:   next                 _d_:   popup                _r_:   update all windows
- _k_:   previous             _v_:   mark
+ _k_:   previous             _v_:   mark                 _b_:   magit blame
  _G_:   end of hunk          _s_:   stage                _h_:   open git timemachine
  ^ ^                         _x_:   revert      _<f3>_ / _M-3_:   open magit mode
 " (nerd-icons-faicon "nf-fa-code_fork"))
@@ -2400,6 +2400,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("v" git-gutter:mark-hunk)
      ("x" git-gutter:revert-hunk)
      ("s" git-gutter:stage-hunk)
+     ("b" magit-blame)
      ("r" git-gutter:update-all-windows)
      ("h" git-timemachine :exit t)
      ("<f3>" magit :exit t)
