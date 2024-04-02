@@ -60,7 +60,25 @@
 (leaf *startup
   :doc  "startup config"
   :config
-  (leaf gcmh
+  (leaf *configure-garbage-collection
+    :custom
+    `((gc-cons-percentage          . 0.2)
+      (garbage-collection-messages . t))
+    :mode-hook
+    (after-init-hook . (;; set garbage collection with timer (if available, use `garbage-collect-maybe')
+                        (let ((gc-func (if (functionp 'garbage-collect-maybe)
+                                           (lambda (fact)
+                                             (when (garbage-collect-maybe fact)
+                                               (message "garbage-collect-maybe done! (fact: %d)" fact)))
+                                         (lambda (_) (garbage-collect)))))
+                          (mapc (lambda (arg)
+                                  (run-with-idle-timer
+                                   (car arg) t
+                                   (lambda () (funcall gc-func (cdr arg)))))
+                                '((30.0 . 1) (60.0 . 3))))
+                        (garbage-collect-maybe 2))))
+
+  (leaf gcmh :disabled t
     :doc "gcmh works after startup
 Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
     :ensure t
@@ -2777,6 +2795,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 ;;; local.el ends here
 ")))
     (load local-conf)))
+
+;; reconfigure gc after init
+(setq gc-cons-threshold (eval-when-compile (* 192 1024 1024)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
