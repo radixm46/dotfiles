@@ -624,6 +624,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :ensure t
     :defun nyan-start-animation nyan-stop-animation
     :defvar nyan-wavy-trail
+    :custom (nyan-cat-face-number . 4)
     :config
     (defun nyan-try ()
       (nyan-stop-animation)
