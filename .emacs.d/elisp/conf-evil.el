@@ -15,7 +15,6 @@
   :ensure t
   :defvar evil-want-keybinding
   :pre-setq (evil-want-keybinding . nil)
-  :custom (evil-undo-system . 'undo-tree)
   :defun
   evil-window-increase-height evil-window-decrease-height
   evil-window-increase-width evil-window-decrease-width

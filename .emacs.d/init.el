@@ -1898,7 +1898,29 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (evil-define-key nil xwidget-webkit-mode-map
       (kbd "SPC") 'evil-collection-xwidget-webkit-scroll-half-page-up))
 
-  (leaf undo-tree
+  (leaf *undo-fu-setup
+    :config
+    (leaf undo-fu
+      :ensure t
+      :custom (evil-undo-system . 'undo-fu))
+
+    (leaf undo-fu-session
+      :ensure t
+      :custom
+      `((undo-fu-session-directory                . ,(cache-sub-dir "undo-fu-session"))
+        (undo-fu-session-incompatible-files       . '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+        (undo-fu-session-incompatible-major-modes . '(comint-mode image-mode term-mode)))
+      :global-minor-mode undo-fu-session-global-mode)
+
+    (leaf vundo
+      :ensure t
+      :defvar vundo-unicode-symbols
+      :custom
+      (vundo-window-side . 'top)
+      (vundo-glyph-alist . vundo-unicode-symbols)
+      :bind ("C-x u" . vundo)))
+
+  (leaf undo-tree :disabled t
     :ensure t
     :commands (undo-tree-mode turn-on-undo-tree-mode global-undo-tree-mode)
     :custom
