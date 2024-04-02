@@ -87,6 +87,10 @@
   :hook (conf-mode-hook . hl-todo-mode)
   :mode ("\\.env\\'"    . conf-mode))
 
+(leaf so-long :emacs>= "27.1"
+  :tag "builtin"
+  :global-minor-mode global-so-long-mode)
+
 ;; required for racer
 (leaf rust-mode
   :ensure t
