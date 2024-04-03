@@ -60,6 +60,10 @@
 (leaf *startup
   :doc  "startup config"
   :config
+  (leaf *config-for-non-darwin :disabled (!system-type 'darwin)
+    :custom (command-line-ns-option-alist . nil))
+  (leaf *config-for-non-linux  :disabled (!system-type 'gnu/linux)
+    :custom (command-line-x-option-alist  . nil))
   (leaf *configure-garbage-collection
     :custom
     `((gc-cons-percentage          . 0.2)
