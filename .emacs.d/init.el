@@ -452,9 +452,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
 (leaf *conf-appearance
   :custom
-  (ring-bell-function . 'ignore)
-  (fill-column        . 85)
-  (line-spacing       . 0.40)
+  (ring-bell-function             . 'ignore)
+  (fill-column                    . 85)
+  (line-spacing                   . 0.40)
+  (idle-update-delay              . 0.8)
+  ;; hide cursor on inactive windows
+  (cursor-in-non-selected-windows . nil)
+  (highlight-nonselected-windows  . nil)
   :config
   (display-time)
   (column-number-mode t)
