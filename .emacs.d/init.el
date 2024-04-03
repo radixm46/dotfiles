@@ -208,6 +208,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (sentence-end-double-space . nil)
   (truncate-lines            . t)
   (word-wrap                 . t)
+  (use-short-answers         . t)
   ;; configure indent tab to false as default
   ;; (setq line-move-visual t)
   :init
