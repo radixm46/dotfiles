@@ -628,6 +628,19 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     ;;(doom-modeline t) ;TODO:enable modeline
     )
 
+  (leaf spacious-padding
+    :ensure t
+    :custom
+    (spacious-padding-widths           . '(:internal-border-width 15
+                                           :header-line-width     4
+                                           :mode-line-width       6
+                                           :tab-width             4
+                                           :right-divider-width   30
+                                           :scroll-bar-width      8))
+    (spacious-padding-subtle-mode-line . '(:mode-line-active   'default
+                                           :mode-line-inactive vertical-border))
+    :global-minor-mode spacious-padding-mode)
+
 
   (leaf nyan-mode
     :ensure t
