@@ -93,4 +93,17 @@
   :custom
   `((tldr-directory-path . ,(cache-sub-dir "tldr"))))
 
+(leaf difftastic :when (!executable-find "difft")
+  :doc "`difftastic' integration"
+  :ensure t :leaf-defer t
+  :config
+  (leaf *magit-diff-integration :after 'magit-diff
+    :doc "config for `magit'"
+    :bind (:magit-blame-read-only-mode-map
+           ("D" . difftastic-magit-show)
+           ("S" . difftastic-magit-show))
+    :config
+    (transient-append-suffix 'magit-diff '(-1 -1)
+      [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+       ("S" "Difftastic show" difftastic-magit-show)])))
 ;;; conf-ext-fronts.el ends here
