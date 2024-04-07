@@ -386,6 +386,32 @@ based on elfeed-search-browse-url"
       (interactive "P")
       (rdm/elfeed-search--mpv-play "bestaudio" use-generic-p))
 
+    (defun rdm/yt-dl (url)
+      "Downloads the URL in an async shell"
+      (let ((yt-dl-exec (or (!executable-find "yt-dlp") ;; prefer yt-dlp if found
+                            (!executable-find "youtube-dl")))
+            (default-directory "~/Downloads"))
+        (catch 'quit
+          (unless yt-dl-exec
+            (message "Cannot download media, deps not satisfied (yt-dlp). Abort.")
+            (throw 'quit nil)))
+        (async-shell-command
+         (format (concat yt-dl-exec " '%s' "
+                         "--format='bestvideo[height>=720]+bestaudio/best[height>=720]' "
+                         "--prefer-free-formats") url))))
+
+    (defun rdm/elfeed-search-yt-dl (&optional use-generic-p)
+      "Youtube-DL link"
+      (interactive "P")
+      (let ((entries (elfeed-search-selected))
+            (async-shell-command-buffer 'rename))
+        (cl-loop for entry in entries
+                 do (elfeed-untag entry 'unread 'later)
+                 when (elfeed-entry-link entry)
+                 do (rdm/yt-dl it))
+        (mapc #'elfeed-search-update-entry entries)
+        (unless (use-region-p) (forward-line))))
+
     (evil-define-key '(normal visual) elfeed-search-mode-map
       "oh"  'rdm/elfeed-search-mpv-play-high
       "om"  'rdm/elfeed-search-mpv-play-mid
@@ -433,7 +459,7 @@ based on elfeed-search-browse-url"
   :hydra
   (hydra-elfeed-search-open (nil nil)
                             "open..."
-                            ("d"  rdm/elfeed-search-youtube-dl     "download" :exit t)
+                            ("d"  rdm/elfeed-search-yt-dl     "download" :exit t)
                             ("oh" rdm/elfeed-search-mpv-play-high  "play (high)" :exit t)
                             ("om" rdm/elfeed-search-mpv-play-mid   "play (mid)" :exit t)
                             ("ol" rdm/elfeed-search-mpv-play-low   "play (low)" :exit t)
