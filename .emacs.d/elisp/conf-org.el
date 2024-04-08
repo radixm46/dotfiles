@@ -283,12 +283,9 @@
     :pre-setq (org-roam-v2-ack . t)
     :bind
     (("C-c n c" . org-roam-capture)
-     ("C-c n f" . org-roam-find-file)
      ("C-c n g" . org-roam-ui-mode)
      (:org-mode-map
       ("C-c n n" . org-roam-node-insert)
-      ("C-c n i" . org-roam-insert)
-      ("C-c n I" . org-roam-insert-immediate)
       ("C-c n a" . org-roam-alias-add)
       ("C-c n A" . org-roam-alias-remove)
       ("C-c n t" . org-roam-tag-add)
@@ -299,10 +296,8 @@
      (format "\
 ^^^                           %s org roam^^^
 ^^^^^^--------------------------------------------------------------------------
- _c_:   capture              _f_:   find file            _g_:   ui mode
+ _c_:   capture                                          _g_:   ui mode
 ^^^^^^..........................................................................
- _i_:   insert               _I_:   insert immediate
-
  ^node^                      ^alias^                     ^tag^
  _n i_: insert               _a a_: add                  _t a_: add
  _n f_: find                 _a r_: remove               _t r_: remove
@@ -368,7 +363,6 @@
       (org-roam-ui-follow         . t)
       (org-roam-ui-update-on-save . t)
       (org-roam-ui-open-on-start  . t))
-    )
 
   (leaf org-pdftools :after pdf-tools
     :doc "org mode for pdf-tools integration (contains org-noter)"
