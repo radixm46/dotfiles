@@ -2297,18 +2297,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf go-translate
     :ensure t
+    :preface (leaf plz :ensure t)
     :commands gts-do-translate
     :defun request
-    :defvar
-    go-translate-buffer-follow-p
-    go-translate-buffer-source-fold-p
-    :setq
-    (go-translate-buffer-follow-p      . nil) ; focus the result window
-    (go-translate-buffer-source-fold-p . t)   ; fold the source text in the result window
-    ;;(go-translate-buffer-window-config . ..) ; config the result window as your wish
-    :custom
-    (gts-translate-list . '(("en" "ja")
-                            ("ja" "en")))
     :init (defvar deepl-api-key nil "API key for Deepl translation")
     :config
     (defun show-deepl-api-usage ()
@@ -2330,8 +2321,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
             :error (cl-function
                     (lambda (&key error-thrown &allow-other-keys)
                       (message "Got error during ruquest: %S" error-thrown))))
-        (message "DeepL API key not set")))
-    )
+        (message "DeepL API key not set"))))
 
   (leaf *darwin-dictionary-integration :when (!system-type 'darwin)
     :doc "dictionary app integration on macOS"
