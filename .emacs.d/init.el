@@ -2812,12 +2812,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
 (leaf *load-local-conf
   :config
-  (let
-      ((local-conf (!expand-file-name "elisp/local" user-emacs-directory))
-       (straight-current-profile 'local))
+  (let ((local-conf (!expand-file-name "elisp/local.el" user-emacs-directory))
+        (straight-current-profile 'local))
     (unless (file-exists-p local-conf)
-      (with-temp-file local-conf
-        (insert "\
+      (write-region "\
 ;;; local.el --- local configuration. -*-  no-byte-compile: t -*-
 ;;; Commentary:
 ;;
@@ -2828,8 +2826,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; local.el ends here
-")))
-    (load local-conf)))
+" nil local-conf))
+    (load (file-name-sans-extension local-conf))))
 
 ;; reconfigure gc after init
 (setq gc-cons-threshold (eval-when-compile (* 192 1024 1024)))
