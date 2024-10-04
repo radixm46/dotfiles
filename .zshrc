@@ -1,8 +1,8 @@
 # compile when update
 [ ! -f "${HOME}/.zshrc.zwc" -o "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ] && {
-    printf 'compile zshrc...'
+    [[ -o interactive ]] && printf 'compile zshrc...'
     zcompile "${HOME}/.zshrc"
-    printf 'done!\n'
+    [[ -o interactive ]] && printf 'done!\n'
 }
 # ----------------------------------------------------------------------------------------
 # zinit install
