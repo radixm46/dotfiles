@@ -32,11 +32,11 @@
   (org-capture-templates              . `( ;; NOTE: require font awsome icons
                                           ("t" ,(format "%s  Task to Inbox" (nerd-icons-faicon "nf-fa-check"))
                                            entry (file+headline org-todofile "Inbox")
-                                           "-*- TODO %?\nEntered on %U\n%a"
+                                           "TODO %?\nEntered on %U\n%a"
                                            :empty-lines-before 1) ; %u->%t
                                           ("n" ,(format "%s  Note to Inbox" (nerd-icons-faicon "nf-fa-sticky_note"))
                                            entry (file+headline "" "Inbox")
-                                           "-*- %?\nEntered on %U\n %i\n%a"
+                                           "%?\nEntered on %U\n %i\n%a"
                                            :empty-lines-before 1)
                                           ))
   (org-log-done                       . 'time)
@@ -87,6 +87,16 @@
       :hook
       (conf-on-term-hook . (lambda () (setq evil-want-C-i-jump nil)))
       (conf-on-gui-hook  . (lambda () (setq evil-want-C-i-jump t)))))
+
+  (leaf org-pdftools :after org
+    :doc "org mode for pdf-tools integration (contains org-noter)"
+    :ensure t
+    ;; :hook (after-init-hook . org-pdftools-setup-link)
+    :hook (org-mode-hook . org-pdftools-setup-link)
+    :defun org-time-stamp org-time-stamp-inactive
+    :custom
+    `((org-noter-always-create-frame . nil)
+      (org-noter-notes-search-path   . `(,(!expand-file-name "org/roam/noter" (getenv "HOME"))))))
 
   :config
   (leaf *org-config-directory
@@ -233,16 +243,14 @@
                   :repo "minad/org-modern" :branch "main")
       :doc "better looking org mode"
       :hook
-      ((org-mode-hook
-        org-agenda-mode-hook) . org-modern-mode)
-      ;; (org-agenda-finalize-hook . org-modern-agenda) ;; FIXME modern-agenda でblock-faceが上書きされる
+      (org-mode-hook            . org-modern-mode)
+      (org-agenda-finalize-hook . org-modern-agenda)
       :custom
       ;;org-modern custom
       (org-modern-todo            . nil)
       (org-modern-label-border    . 4)
       (org-modern-table           . nil)
-      (org-modern-horizontal-rule . nil)
-      )
+      (org-modern-horizontal-rule . nil))
     )
 
   ;; (setq system-time-locale "C") ; dates written in eng
@@ -364,17 +372,6 @@
       (org-roam-ui-update-on-save . t)
       (org-roam-ui-open-on-start  . t)))
 
-  (leaf org-pdftools :after pdf-tools
-    :doc "org mode for pdf-tools integration (contains org-noter)"
-    :ensure t
-    :hook (org-mode-hook . org-pdftools-setup-link)
-    :defun
-    org-time-stamp org-time-stamp-inactive
-    :custom
-    `(
-      (org-noter-notes-search-path . `(,(!expand-file-name "org/roam/noter" (getenv "HOME"))))
-      )
-    )
 
   :hook
   ;; (org-mode-hook . org-mode-reftex-setup)
