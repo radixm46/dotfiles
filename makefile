@@ -1,27 +1,20 @@
-SHELLENV:=.zshrc .zshenv .tmux.conf
+SHELLENV   := .zshrc .zshenv .tmux.conf
+SHELLTOOLS := tig bat neomutt
+EMACS      := .emacs.d
+SWAYENV    := mako sway waybar swaylock gtk-3.0
+PAMENV     := .pam_environment
+NVIM       := nvim
+TERMINALS  := wezterm termite alacritty
+MISC       := mpv
 
-SHELLTOOLS:=tig bat neomutt
-
-EMACS:=.emacs.d
-
-SWAYENV:=mako sway waybar swaylock gtk-3.0
-
-PAMENV:=.pam_environment
-
-NVIM:=nvim
-
-TERMINALS:=termite alacritty wezterm
-
-MISC:=mpv
-
-CFG_TARGET:=$(shell if [ ! -z ${XDG_CONFIG} ]; \
-    then printf ${XDG_CONFIG}'\n'; \
-    else printf ${HOME}/.config'\n'; \
+CFG_TARGET := $(shell \
+	if [ ! -z ${XDG_CONFIG} ]; \
+      then printf ${XDG_CONFIG}'\n'; \
+      else printf ${HOME}/.config'\n'; \
     fi)
 
-BACKUP_TARGET=${HOME}/dotfiles_backup
-
-CHK_TARGET:=$(PWD)/bin/make_chkfile.sh
+BACKUP_TARGET = ${HOME}/dotfiles_backup
+CHK_TARGET   := $(PWD)/bin/make_chkfile.sh
 
 .PHONY: install
 install:
