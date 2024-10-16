@@ -28,16 +28,14 @@
   smartparens-strict-mode
   paredit-mode
   :mode-hook
-  (emacs-lisp-mode-hook . (;; (flycheck-mode +1)
-                           (hs-minor-mode           +1)
-                           (flymake-mode            +1)
-                           (eldoc-mode              +1)
-                           (highlight-symbol-mode   +1)
-                           (smartparens-strict-mode +1)
-                           (paredit-mode            +1)
-                           ;; check parens before save
-                           (add-hook 'before-save-hook
-                                     'check-parens nil 'local)))
+  ;; (flycheck-mode +1)
+   (hs-minor-mode           +1)
+   (flymake-mode            +1)
+   (eldoc-mode              +1)
+   (highlight-symbol-mode   +1)
+   (smartparens-strict-mode +1)
+   (paredit-mode            +1)
+   (add-hook 'before-save-hook #'check-parens nil 'local)
   :init
   (leaf highlight-defined
     :ensure t
@@ -141,10 +139,10 @@
     :commands hy-mode
     :mode ("\\.hy\\'" . hy-mode)
     :mode-hook
-    (hy-mode-hook . ((hs-minor-mode           +1)
-                     (smartparens-strict-mode +1)
-                     (paredit-mode            +1)
-                     (eglot-ensure            +1)))
+    (hs-minor-mode           +1)
+    (smartparens-strict-mode +1)
+    (paredit-mode            +1)
+    (eglot-ensure            +1)
     :init
     (leaf *eglot-hyls-config :disabled t
       :doc "enable hy-lang language server with eglot"
@@ -403,10 +401,12 @@
                     (valign-mode -1))))
             (buffer-list)))
     :hook
-    ((org-mode-hook
-      markdown-mode-hook) . (lambda () (when (display-graphic-p) (valign-mode +1))))
-    (conf-on-gui-hook     . valign-buffer-on-gui)
-    (conf-on-term-hook    . valign-remove-buffer-on-term))
+    (conf-on-gui-hook  . valign-buffer-on-gui)
+    (conf-on-term-hook . valign-remove-buffer-on-term)
+    :mode-hook
+    (org-mode-hook
+     org-agenda-mode-hook
+     markdown-mode-hook . ((when (display-graphic-p) (valign-mode +1)))))
   )
 
 (leaf powershell
@@ -460,7 +460,7 @@
     :ensure t
     :commands mermaid-mode
     :defun tree-sitter-hl-mode
-    :mode-hook (mermaid-mode-hook . ((tree-sitter-hl-mode -1)))
+    :mode-hook (tree-sitter-hl-mode -1)
     :custom
     (mermaid-output-format . "png")
     (mermaid-flags         . "--backgroundColor transparent --theme forest"))
@@ -494,7 +494,7 @@
   :commands fsharp-mode
   :defun exec-path-from-shell-copy-env
   :preface (exec-path-from-shell-copy-env "DOTNET_ROOT") ; import dotnet runtime path
-  :mode-hook (fsharp-mode-hook . ((rainbow-delimiters-mode -1)))
+  :mode-hook (rainbow-delimiters-mode -1)
   :config
   (leaf *eglot-fsharp
     :doc "load `eglot-fsharp.el' inside straight cloned repo"

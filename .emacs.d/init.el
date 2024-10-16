@@ -333,10 +333,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                   (yaml-mode       . yaml-ts-mode))))
 
       :hook
-      (prog-mode-hook
-       conf-mode-hook . ts-fold-mode)
-      (prog-mode-hook
-       conf-mode-hook . ts-fold-indicators-mode))
+      (prog-mode-hook . ts-fold-mode)
+      (prog-mode-hook . ts-fold-indicators-mode))
 
     (leaf *patch-major-ts-modes :emacs>= "29"
       :doc "bind major-ts-mode for tree-sitter syntax highlighting"
@@ -1181,7 +1179,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf eldoc-box
       :ensure t
       :defun eldoc-box-hover-mode
-      :mode-hook (eldoc-mode-hook . ((when (display-graphic-p) (eldoc-box-hover-mode))))
+      :mode-hook (when (display-graphic-p) (eldoc-box-hover-mode))
       :custom
       (eldoc-box-only-multi-line    . nil)
       (eldoc-box-fringe-use-same-bg . t)
@@ -2073,9 +2071,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :defun Man-mode
       :preface (push #'Man-mode remap-font-to-doc-modes-list)
       :mode-hook
-      (Man-mode-hook . ((rdm/sw-lnsp 0.75)
-                        (rdm/text-scale-adjust)
-                        (remap-font-to-doc))))
+      (rdm/sw-lnsp 0.75)
+      (rdm/text-scale-adjust)
+      (remap-font-to-doc))
 
     (leaf woman
       :tag "builtin"
@@ -2090,9 +2088,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :custom-face
       (woman-italic . '((t (:italic t :underline t))))
       :mode-hook
-      (woman-mode-hook . ((rdm/sw-lnsp 0.75)
-                          (rdm/text-scale-adjust)
-                          (remap-font-to-doc)))
+      (rdm/sw-lnsp 0.75)
+      (rdm/text-scale-adjust)
+      (remap-font-to-doc)
       :config
       ;; if on macOS and homebrew installed, add homebrew man directory
       (when (and (!system-type 'darwin)
@@ -2207,13 +2205,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (eww-search-prefix           . "https://www.google.com/search?q=")
       (eww-bookmarks-directory     . ,(cache-sub-dir "eww")))
     :mode-hook
-    (eww-mode-hook . ((rdm/sw-lnsp 0.75)
-                      (rdm/text-scale-adjust)))
+    (rdm/sw-lnsp 0.75)
+    (rdm/text-scale-adjust)
     :init
     (leaf *eww-with-xwidget :emacs>= "29.1"
       :when (!sys-featurep "XWIDGETS")
       :doc "use xwidgets for audio/movie rendering"
-      :custom (shr-use-xwidgets-for-media . t))
+      :custom (shr-use-xwidgets-for-media . nil))
 
     :config
     (leaf *eww-patch-faces
