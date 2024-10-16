@@ -180,9 +180,16 @@
     (kbd "b") 'mastodon-toot--toggle-boost
     (kbd "B") 'mastodon-toot--toggle-bookmark
     (kbd "P") 'mastodon-toot--pin-toot-toggle
+    ;; threads
+    (kbd "RET") 'mastodon-tl--thread
+    (kbd "T t") 'mastodon-tl--thread
+    (kbd "T T") 'mastodon-tl--view-whole-thread
+    (kbd "T m") 'mastodon-tl--mute-thread
+    (kbd "T M") 'mastodon-tl--unmute-thread
+    (kbd "T s") 'mastodon-tl--toggle-spoiler-in-thread
     ;; view
     (kbd "s") 'mastodon-tl--toggle-spoiler-text-in-toot
-    (kbd "v") 'mastodon-tl--poll-vote
+    (kbd "V") 'mastodon-tl--poll-vote
     (kbd "/") 'mastodon-search--query
     ;; operate on user
     (kbd "u p") 'mastodon-profile--show-user
