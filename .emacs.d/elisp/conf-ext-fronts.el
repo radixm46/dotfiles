@@ -79,9 +79,8 @@
   :ensure t
   :commands mpv-play mpv-play-url mpv-live-p; used to detect mpv running
   :custom
-  `((mpv-default-options   . `(,(let ((mpvconf (!expand-file-name
-                                                "mpv" "~/.config")))
-                                  (if mpvconf (format "--config-dir=%s" mpvconf) ""))
+  `((mpv-default-options   . `(,(if-let ((mpvconf (!expand-file-name "mpv" "~/.config")))
+                                    (format "--config-dir=%s" mpvconf) "")
                                "--save-position-on-quit"
                                "--volume=80"))
     (mpv-start-timeout     . 5.0)

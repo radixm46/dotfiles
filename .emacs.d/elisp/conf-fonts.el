@@ -58,11 +58,11 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     (defun rdm/update-font-conf ()
       "update `font-for-...' params and fixed pitch"
       ;; configure `fixed-pitch'
-      (let ((f (rdm/apply-func-in-fonts
-                '("UDEV Gothic JPDOC"
-                  "UDEV Gothic NFLG"
-                  "Noto Sans Mono CJK JP"))))
-        (when f (custom-set-faces `(fixed-pitch ((t :family ,f))))))
+      (when-let ((f (rdm/apply-func-in-fonts
+                     '("UDEV Gothic JPDOC"
+                       "UDEV Gothic NFLG"
+                       "Noto Sans Mono CJK JP"))))
+        (custom-set-faces `(fixed-pitch ((t :family ,f)))))
 
       (setq font-for-tables
             (rdm/apply-func-in-fonts
@@ -86,12 +86,12 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                "Noto Sans CJK JP")
              nil #'(rdm/default-frame-font)))
 
-      (let ((f (rdm/apply-func-in-fonts
-                '("Hiragino Sans"
-                  "BIZTER"
-                  "BIZ UDP Gothic"
-                  "Noto Sans CJK JP"))))
-        (when f (custom-set-faces `(variable-pitch ((t :family ,f))))))
+      (when-let ((f (rdm/apply-func-in-fonts
+                     '("Hiragino Sans"
+                       "BIZTER"
+                       "BIZ UDP Gothic"
+                       "Noto Sans CJK JP"))))
+        (custom-set-faces `(variable-pitch ((t :family ,f)))))
       )
 
     ;; aplly font-for-doc to buffers
