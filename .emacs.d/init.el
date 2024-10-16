@@ -2262,7 +2262,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf pdf-tools
     :doc "require to execute `pdf-tools-install'"
     :ensure t
-    :commands (pdf-view-mode pdf-loader-install pdf-tools-install)
+    :commands
+    (pdf-view-mode
+     pdf-loader-install
+     pdf-tools-install
+     pdf-tools-install-noverify)
     :mode ("\\.pdf\\'" . pdf-view-mode)
     :bind (:pdf-view-mode-map ("C-s" . ctrlf-forward-default))
     :setq-default (pdf-view-display-size . 'fit-page)
