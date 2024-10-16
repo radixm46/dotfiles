@@ -490,6 +490,13 @@ based on elfeed-search-browse-url"
                               ("V" (elfeed-search-set-filter "@4-weeks-ago +YouTube") "YouTube(all)")
                               ("s" (elfeed-search-set-filter "star")  "starred")))
 
+(leaf *elfeed-with-pocket
+  :doc "pocket-reader integration"
+  :config
+  (evil-define-key 'normal elfeed-search-mode-map
+    (kbd "p") 'pocket-reader-elfeed-search-add-link)
+  (evil-define-key 'normal elfeed-show-mode-map
+    (kbd "p") 'pocket-reader-elfeed-entry-add-link))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; conf-elfeed.el ends here
