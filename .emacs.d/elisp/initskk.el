@@ -28,7 +28,8 @@
            (skk-japanese-message-and-error           . t)
            (skk-delete-implies-kakutei               . nil)
            (skk-use-look                             . t)
-           (skk-auto-insert-paren                    . t)))
+           (skk-auto-insert-paren                    . t)
+           (skk-search-katakana                      . jisx0201-kana)))
   (customize-set-variable
    (car conf) (cdr conf) "configured at initskk.el")
   )
