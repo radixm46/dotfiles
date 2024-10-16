@@ -155,7 +155,8 @@
     :custom `((emojify-emojis-dir . ,(cache-sub-dir "emojify"))))
   :ensure t
   :custom
-  (mastodon-media--enable-image-caching . t)
+  `((mastodon-media--enable-image-caching . t)
+    (mastodon-client--token-file          . ,(cache-sub-file "mastodon.plstore")))
   :init (when (fboundp 'evil-lion-mode) (evil-lion-mode nil))
   :commands mastodon mastodon-toot
   :defvar

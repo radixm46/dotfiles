@@ -166,6 +166,18 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :tag "builtin"
     :custom
     `((bookmark-default-file . ,(cache-sub-file "bookmarks"))))
+
+  (leaf multisession :emacs>= "29.1"
+    :tag "builtin"
+    :custom
+    `((multisession-storage   . 'sqlite)
+      (multisession-directory . ,(cache-sub-dir "multisession"))))
+
+  (leaf persist
+    :ensure t
+    :defvar persist--directory-location
+    :setq
+    `((persist--directory-location . ,(cache-sub-dir "persist"))))
   )
 
 
@@ -2664,6 +2676,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (kbd "p")   'neotree-previous-line
       (kbd "A")   'neotree-stretch-toggle
       (kbd "H")   'neotree-hidden-file-toggle))
+
+  (leaf project
+    :tag "builtin"
+    :custom `((project-list-file . ,(cache-sub-file "projects"))))
 
   (leaf projectile
     :ensure t

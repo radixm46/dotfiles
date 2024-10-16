@@ -56,7 +56,9 @@ Each module name is expected to be a string."
 ;; setup .config/cache/emacs
 (prog1 '*cache-managing
   (defconst emacs-cache-root-dir
-    (!expand-file-name ".cache/emacs" (getenv "HOME"))
+    (!expand-file-name "emacs"
+                       (if (fboundp 'xdg-cache-home) (xdg-cache-home)
+                         (expand-file-name ".cache" (getenv "HOME"))))
     "emacs cache directory path (default: $HOME/.cache)")
 
   (defsubst cache-sub-dir (&optional name)
