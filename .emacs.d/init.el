@@ -152,7 +152,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (recentf-max-saved-items . 2000)
       (recentf-auto-cleanup    . 'never)
       (recentf-exclude         . '("/\\.cache/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:"
-                                   "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/")))
+                                   "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"
+                                   "/org/orgfiles/")))
     :defvar recentf-auto-save-timer
     :defun recentf-save-list
     :init
