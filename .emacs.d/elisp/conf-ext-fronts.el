@@ -285,4 +285,54 @@
                                              :engines (gt-chatgpt-engine :key (symbol-function #'rdm/openai-api-key))
                                              :render (gt-overlay-render))))))
     )
+
+(leaf *openai-things
+  :defun auth-source-pick-first-password
+  :config
+  (leaf chatgpt-shell
+    :ensure t
+    :commands chatgpt-shell
+    :defvar chatgpt-shell-openai-key
+    :custom
+    `((shell-maker-root-path                    . ,(cache-sub-dir "shell-maker"))
+      (chatgpt-shell-model-temperature          . 0.75)
+      (chatgpt-shell-streaming                  . t)
+      (chatgpt-shell-transmitted-context-length . 8)
+      ;; switch via `chatgpt-shell-swap-model-version'
+      (chatgpt-shell-model-version              . "chatgpt-4o-latest")
+      (chatgpt-shell-openai-key                 . ,(symbol-function #'rdm/openai-api-key)))
+    :init
+    (leaf *ob-openai-thins-setup :after org-mode
+      :load-path
+      `(,(!expand-file-name "straight/repos/chatgpt-shell" straight-base-dir))
+      :defun ob-chatgpt-shell-setup ob-dall-e-shell-setup
+      :require ob-chatgpt-shell ob-dall-e-shell
+      :config
+      (ob-chatgpt-shell-setup)
+      (ob-dall-e-shell-setup))
+    :config
+    ;; TODO: local-prompt.org のヘッダ構造をパースして、そこから各項目にプロンプトを適用してあげる感じにしたい
+    (let* ((key (assoc "Risa" chatgpt-shell-system-prompts))
+           ;; TODO: local-prompt を整理してパースできるようにする、もしくは代替手法を考える
+           (val (f-read "~/org/doc/local-prompt.org")))
+      (if key
+          (setf (cdr key) val)
+        (add-to-list 'chatgpt-shell-system-prompts `("Risa" . ,val))))
+    (leaf *chatgpt-custom-prompts
+      :custom
+      ;; TODO: 文字列を操作してsymbolにするやつを使えば、org-heading からsymbolを作ってbindとかもできるはず
+      ;; つまりorg-modeを設定ファイルできる……
+      ;; chatgpt-shell--append-system-info に変数の内容を渡すと加工されて返ってくる
+      (chatgpt-shell-prompt-header-describe-code . "このコードが何してるか教えてくれるかな？")
+      ;; (chatgpt-shell-prompt-header-refactor-code)
+      ;; (chatgpt-shell-prompt-header-proofread-region) ;; 校正
+      (chatgpt-shell-prompt-header-write-git-commit . "コミットメーセージを書きたいんだけど、手伝ってくれるかな？")
+      (chatgpt-shell-prompt-header-generate-unit-test . "このコードについて単体テストが要るんだけど、書けるかな？")
+      (chatgpt-shell-prompt-header-whats-wrong-with-last-command . "このコマンド何が間違ってるかわかる？")
+      (chatgpt-shell-prompt-header-eshell-summarize-last-command-output . "このコマンド出力の結果についてざっくり教えてくれるかな")
+      )
+    )
+
+  (leaf gptel :ensure t))
+
 ;;; conf-ext-fronts.el ends here
