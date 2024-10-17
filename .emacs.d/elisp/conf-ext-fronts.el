@@ -236,4 +236,53 @@
     (kbd "/") 'mastodon-search--query
     )
   )
+
+(leaf go-translate
+    :ensure t
+    :preface (leaf plz :ensure t)
+    :commands gt-do-translate
+    :defun request rdm/deepl-api-key
+    :config
+    (defun show-deepl-api-usage ()
+      "Show DeepL usage statistics on echo area."
+      (interactive)
+      (if-let (key (rdm/deepl-api-key))
+          (request
+            "https://api-free.deepl.com/v2/usage"
+            :type "GET"
+            :headers `(("Authorization" . ,(format "DeepL-Auth-Key %s" key)))
+            :success (cl-function
+                      (lambda (&key data &allow-other-keys)
+                        (let* ((usage (json-parse-string data))
+                               (used  (gethash "character_count" usage))
+                               (limit (gethash "character_limit" usage)))
+                          (message "DeepL API usage: %g %%  [ %s / %s chars ]"
+                                   (* 100 (/ (float used) limit))
+                                   used limit))))
+            :error (cl-function
+                    (lambda (&key error-thrown &allow-other-keys)
+                      (message "Got error during ruquest: %S" error-thrown))))
+        (user-error "DeepL API key not set")))
+    :defvar gt-preset-translators
+    :defun
+    gt-translator gt-taker gt-deepl-engine gt-overlay-render gt-insert-render
+    gt-google-engine gt-bing-engine gt-chatgpt-engine rdm/openai-api-key
+    :setq
+    ((gt-preset-translators . `((deepl   . ,(gt-translator
+                                             :taker (gt-taker :langs '(en ja) :text 'word)
+                                             :engines `,(gt-deepl-engine :key (rdm/deepl-api-key))
+                                             :render (gt-overlay-render)))
+                                (google  . ,(gt-translator
+                                             :taker (gt-taker :langs '(en ja) :text 'sentence)
+                                             :engines (gt-google-engine)
+                                             :render (gt-insert-render)))
+                                (bing    . ,(gt-translator
+                                             :taker (gt-taker :langs '(en ja) :text 'word)
+                                             :engines (gt-bing-engine)
+                                             :render (gt-overlay-render)))
+                                (chatgpt . ,(gt-translator
+                                             :taker (gt-taker :langs '(en ja) :text 'sentence)
+                                             :engines (gt-chatgpt-engine :key (symbol-function #'rdm/openai-api-key))
+                                             :render (gt-overlay-render))))))
+    )
 ;;; conf-ext-fronts.el ends here
