@@ -1856,6 +1856,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :doc "easy http request client"
     :custom `((request-storage-directory . ,(cache-sub-dir "request"))))
 
+  (leaf plz :ensure t
+    :doc "HTTP library for Emacs")
+
   (leaf eww
     :tag "builtin"
     :doc "text base web browser"
@@ -2328,34 +2331,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     ;; (pdf-tools-install t)  ; Standard activation command
     (pdf-loader-install) ; On demand loading, leads to faster startup time
     )
-
-  (leaf go-translate
-    :ensure t
-    :preface (leaf plz :ensure t)
-    :commands gts-do-translate
-    :defun request
-    :init (defvar deepl-api-key nil "API key for Deepl translation")
-    :config
-    (defun show-deepl-api-usage ()
-      "Show DeepL usage statistics on echo area."
-      (interactive)
-      (if deepl-api-key
-          (request
-            "https://api-free.deepl.com/v2/usage"
-            :type "GET"
-            :headers `(("Authorization" . ,(format "DeepL-Auth-Key %s"  deepl-api-key)))
-            :success (cl-function
-                      (lambda (&key data &allow-other-keys)
-                        (let* ((usage (json-parse-string data))
-                               (used  (gethash "character_count" usage))
-                               (limit (gethash "character_limit" usage)))
-                          (message "DeepL API usage: %g %%  [ %s / %s chars ]"
-                                   (* 100 (/ (float used) limit))
-                                   used limit))))
-            :error (cl-function
-                    (lambda (&key error-thrown &allow-other-keys)
-                      (message "Got error during ruquest: %S" error-thrown))))
-        (message "DeepL API key not set"))))
 
   (leaf *darwin-dictionary-integration :when (!system-type 'darwin)
     :doc "dictionary app integration on macOS"
