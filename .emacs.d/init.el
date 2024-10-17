@@ -1828,6 +1828,105 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   )
 
 
+(leaf *network-related
+  :config
+  (leaf auth-source
+    :tag "builtin"
+    :commands auth-source-pick-first-password
+    :custom
+    (auth-source-cache-expiry . 7200)
+    (auth-sources             . '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
+    :init
+    (defun rdm/deepl-api-key ()
+      "API key for Deepl translation"
+      (let ((auth-source-cache-expiry nil))
+        (auth-source-pick-first-password :host "api.deepl.com")))
+    (defun rdm/openai-api-key ()
+      "API key for OpenAI API"
+      (let ((auth-source-cache-expiry 86400))
+        (auth-source-pick-first-password :host "api.openai.com"))))
+
+  (leaf nsm
+    :tag "builtin"
+    :doc "network security manager"
+    :custom `((nsm-settings-file . ,(cache-sub-file "network-security.data"))))
+
+  (leaf request
+    :ensure t
+    :doc "easy http request client"
+    :custom `((request-storage-directory . ,(cache-sub-dir "request"))))
+
+  (leaf eww
+    :tag "builtin"
+    :doc "text base web browser"
+    :commands eww
+    :custom
+    `((shr-width                   . 85)
+      (shr-indentation             . 4)
+      (shr-use-fonts               . t)
+      (shr-max-image-proportion    . 0.6)
+      (url-configuration-directory . ,(cache-sub-dir "url"))
+      (eww-bookmarks-directory     . ,(cache-sub-dir "eww"))
+      (eww-search-prefix           . "https://www.google.com/search?q=")
+      (eww-bookmarks-directory     . ,(cache-sub-dir "eww")))
+    :mode-hook
+    (rdm/sw-lnsp 0.75)
+    (rdm/text-scale-adjust)
+    :init
+    (leaf *eww-with-xwidget :emacs>= "29.1"
+      :when (!sys-featurep "XWIDGETS")
+      :doc "use xwidgets for audio/movie rendering"
+      :custom (shr-use-xwidgets-for-media . nil))
+
+    :config
+    (leaf *eww-patch-faces
+      :hook
+      ((after-load-theme-hook
+        eww-mode-hook) . (lambda ()
+                           (custom-set-faces
+                            `(eww-form-text ((t :background ,(doom-color 'bg-alt))))))))
+
+    (leaf *eww-bind-nerd-icons
+      :custom
+      `((shr-bullet                        . ,(format "%s " (nerd-icons-octicon "nf-oct-square_fill")))
+        (eww-form-checkbox-symbol          . ,(nerd-icons-faicon "nf-fa-square_o"))
+        (eww-form-checkbox-selected-symbol . ,(nerd-icons-faicon "nf-fa-check_square_o"))))
+
+    (leaf *eww-toggle-inhibit-images :emacs>= "28.1"
+      :doc "disable image by default"
+      :custom (shr-inhibit-images . t)
+      :config
+      (evil-define-key 'normal eww-mode-map
+        "i" 'eww-toggle-images
+        "I" 'eww-toggle-images))
+
+    (leaf *eww-use-color-config
+      :doc "config colors in eww"
+      :custom (shr-use-colors . nil)
+      :config
+      (evil-define-key 'normal eww-mode-map
+        "c" 'eww-toggle-colors
+        "C" 'eww-toggle-colors))
+
+    (leaf *patch-eww-heading-size
+      :preface
+      (defun patch-eww-heading-size ()
+        (set-face-attribute 'shr-h1 nil :height 1.4)
+        (set-face-attribute 'shr-h2 nil :height 1.2)
+        (set-face-attribute 'shr-h3 nil :height 1.1)
+        (set-face-attribute 'shr-h4 nil :height 1.0))
+      :hook
+      (eww-mode-hook . patch-eww-heading-size)))
+
+  (leaf xwidget-webkit :when (!sys-featurep "XWIDGETS")
+    :tag "builtin"
+    :commands xwidget-webkit-browse-url
+    :config
+    (evil-define-key nil xwidget-webkit-mode-map
+      (kbd "SPC") 'evil-collection-xwidget-webkit-scroll-half-page-up))
+  )
+
+
 (leaf *helpful-things
   :config
   (leaf ibuffer
@@ -1910,11 +2009,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :mode-hook (after-init-hook . ((which-key-mode)))
     )
 
-  (leaf request
-    :ensure t
-    :doc "easy http request client"
-    :custom `((request-storage-directory . ,(cache-sub-dir "request"))))
-
   (leaf transient
     :ensure t
     :doc "required by magit, git-timemachine"
@@ -1923,13 +2017,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (transient-levels-file  . ,(!expand-file-name "levels.el"  (cache-sub-dir "transient")))
       (transient-values-file  . ,(!expand-file-name "values.el"  (cache-sub-dir "transient")))
       (transient-history-file . ,(!expand-file-name "history.el" (cache-sub-dir "transient")))))
-
-  (leaf xwidget-webkit :when (!sys-featurep "XWIDGETS")
-    :tag "builtin"
-    :commands xwidget-webkit-browse-url
-    :config
-    (evil-define-key nil xwidget-webkit-mode-map
-      (kbd "SPC") 'evil-collection-xwidget-webkit-scroll-half-page-up))
 
   (leaf *undo-fu-setup
     :config
@@ -2197,75 +2284,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :doc "gpg pinentry mode"
     :custom
     (epa-pinentry-mode . 'loopback))
-
-  (leaf nsm
-    :tag "builtin"
-    :doc "network security manager"
-    :custom `((nsm-settings-file . ,(cache-sub-file "network-security.data"))))
-
-  (leaf eww
-    :tag "builtin"
-    :doc "text base web browser"
-    :commands eww
-    :custom
-    `((shr-width                   . 85)
-      (shr-indentation             . 4)
-      (shr-use-fonts               . t)
-      (shr-max-image-proportion    . 0.6)
-      (url-configuration-directory . ,(cache-sub-dir "url"))
-      (eww-bookmarks-directory     . ,(cache-sub-dir "eww"))
-      (eww-search-prefix           . "https://www.google.com/search?q=")
-      (eww-bookmarks-directory     . ,(cache-sub-dir "eww")))
-    :mode-hook
-    (rdm/sw-lnsp 0.75)
-    (rdm/text-scale-adjust)
-    :init
-    (leaf *eww-with-xwidget :emacs>= "29.1"
-      :when (!sys-featurep "XWIDGETS")
-      :doc "use xwidgets for audio/movie rendering"
-      :custom (shr-use-xwidgets-for-media . nil))
-
-    :config
-    (leaf *eww-patch-faces
-      :hook
-      ((after-load-theme-hook
-        eww-mode-hook) . (lambda ()
-        (custom-set-faces
-         `(eww-form-text ((t :background ,(doom-color 'bg-alt))))))))
-
-    (leaf *eww-bind-nerd-icons
-      :custom
-      `((shr-bullet                        . ,(format "%s " (nerd-icons-octicon "nf-oct-square_fill")))
-        (eww-form-checkbox-symbol          . ,(nerd-icons-faicon "nf-fa-square_o"))
-        (eww-form-checkbox-selected-symbol . ,(nerd-icons-faicon "nf-fa-check_square_o"))))
-
-    (leaf *eww-toggle-inhibit-images :emacs>= "28.1"
-      :doc "disable image by default"
-      :custom
-      (shr-inhibit-images . t)
-      :config
-      (evil-define-key 'normal eww-mode-map
-        "i" 'eww-toggle-images
-        "I" 'eww-toggle-images))
-
-    (leaf *eww-use-color-config
-      :doc "config colors in eww"
-      :custom
-      (shr-use-colors . nil)
-      :config
-      (evil-define-key 'normal eww-mode-map
-        "c" 'eww-toggle-colors
-        "C" 'eww-toggle-colors))
-
-    (leaf *patch-eww-heading-size
-      :preface
-      (defsubst patch-eww-heading-size ()
-        (set-face-attribute 'shr-h1 nil :height 1.4)
-        (set-face-attribute 'shr-h2 nil :height 1.2)
-        (set-face-attribute 'shr-h3 nil :height 1.1)
-        (set-face-attribute 'shr-h4 nil :height 1.0))
-      :hook
-      (eww-mode-hook . patch-eww-heading-size)))
 
   (leaf load-conf-ext-fronts
     :doc "frontend of external apps"
