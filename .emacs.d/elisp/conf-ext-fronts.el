@@ -11,12 +11,11 @@
 (require 'straight)
 
 (leaf rg :if (!executable-find "rg")
-    :doc "Use ripgrep in Emacs. (binaries included)"
-    :ensure t
-    :defun rg-enable-default-bindings
-    :commands rg rg-menu
-    :config
-    (rg-enable-default-bindings))
+  :doc "Use ripgrep in Emacs. (binaries included)"
+  :ensure t
+  :defun rg-enable-default-bindings
+  :commands rg rg-menu
+  :config (rg-enable-default-bindings))
 
 (leaf emacs-w3m :if (!executable-find "w3m")
   :doc "w3m interface for emacs"
@@ -77,7 +76,7 @@
 
 (leaf mpv :when (!executable-find "mpv")
   :ensure t
-  :commands mpv-play mpv-play-url mpv-live-p; used to detect mpv running
+  :commands mpv-play mpv-play-url mpv-live-p ; used to detect mpv running
   :custom
   `((mpv-default-options   . `(,(if-let ((mpvconf (!expand-file-name "mpv" "~/.config")))
                                     (format "--config-dir=%s" mpvconf) "")
@@ -160,8 +159,8 @@
   :init (when (fboundp 'evil-lion-mode) (evil-lion-mode nil))
   :commands mastodon mastodon-toot
   :defvar
-  (mastodon-mode-map mastodon-toot-mode-map
-   mastodon-profile-mode-map mastodon-search-mode-map)
+  mastodon-mode-map mastodon-toot-mode-map
+  mastodon-profile-mode-map mastodon-search-mode-map
   :config
   ;; Timeline Mode Keybindings
   (evil-define-key 'normal mastodon-mode-map
