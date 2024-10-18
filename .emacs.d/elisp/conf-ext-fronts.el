@@ -10,6 +10,18 @@
             "elisp/conf-evil"))
 (require 'straight)
 
+(leaf daemons :when (or (!system-type 'gnu/linux)
+                        (!system-type 'darwin))
+  :ensure t
+  :custom (daemons-systemd-color . t)
+  :mode-hook (eldoc-mode +1)
+  :config
+  (evil-define-key 'normal daemons-mode-map
+    (kbd "e") 'daemons-enable-at-point
+    (kbd "d") 'daemons-disable-at-point
+    (kbd "u") 'daemons-systemd-toggle-user)
+  )
+
 (leaf rg :if (!executable-find "rg")
   :doc "Use ripgrep in Emacs. (binaries included)"
   :ensure t
