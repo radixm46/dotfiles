@@ -285,4 +285,32 @@
                                            :render (gt-overlay-render))))))
   )
 
+(leaf *openai-things
+  :defun auth-source-pick-first-password
+  :config
+  (leaf chatgpt-shell
+    :ensure t
+    :commands chatgpt-shell
+    :defvar chatgpt-shell-openai-key
+    :custom
+    `((shell-maker-root-path                    . ,(cache-sub-dir "shell-maker"))
+      (chatgpt-shell-model-temperature          . 0.75)
+      (chatgpt-shell-streaming                  . t)
+      (chatgpt-shell-transmitted-context-length . 8)
+      ;; switch via `chatgpt-shell-swap-model-version'
+      (chatgpt-shell-model-version              . "chatgpt-4o-latest")
+      (chatgpt-shell-openai-key                 . #'rdm/openai-api-key))
+    :init
+    (leaf *ob-openai-things-setup :after org-mode
+      :load-path
+      `(,(!expand-file-name "straight/repos/chatgpt-shell" straight-base-dir))
+      :defun ob-chatgpt-shell-setup ob-dall-e-shell-setup
+      :require ob-chatgpt-shell ob-dall-e-shell
+      :config
+      (ob-chatgpt-shell-setup)
+      (ob-dall-e-shell-setup))
+    )
+
+  (leaf gptel :ensure t))
+
 ;;; conf-ext-fronts.el ends here
