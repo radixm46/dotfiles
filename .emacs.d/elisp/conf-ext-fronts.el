@@ -166,8 +166,18 @@
     :custom `((emojify-emojis-dir . ,(cache-sub-dir "emojify"))))
   :ensure t
   :custom
-  `((mastodon-media--enable-image-caching . t)
-    (mastodon-client--token-file          . ,(cache-sub-file "mastodon.plstore")))
+  `((mastodon-tl--show-avatars                   . nil)
+    (mastodon-tl--enable-proportional-fonts      . t)
+    (mastodon-tl--enable-relative-timestamps     . nil)
+    (mastodon-tl--highlight-current-toot         . nil)
+    (mastodon-tl-position-after-update           . 'keep-point)
+    (mastodon-media--avatar-height               . 32)
+    (mastodon-media--preview-max-height          . 180)
+    (mastodon-media--hide-sensitive-media        . t)
+    (mastodon-media--enable-image-caching        . t)
+    (mastodon-toot-display-orig-in-reply-buffer  . t)
+    (mastodon-toot--enable-custom-instance-emoji . t)
+    (mastodon-client--token-file                 . ,(cache-sub-file "mastodon.plstore")))
   :init (when (fboundp 'evil-lion-mode) (evil-lion-mode nil))
   :commands mastodon mastodon-toot
   :defvar
