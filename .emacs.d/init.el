@@ -284,19 +284,39 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :commands editorconfig-mode
     :mode-hook (after-init-hook . ((editorconfig-mode))))
 
-  (leaf treesit-auto :emacs>= "29"
+  (leaf treesit-auto :emacs>= "29.1" :when (!sys-featurep "TREE_SITTER")
     :ensure t
     :doc "automatically install and enables treesit major modes"
     :custom (treesit-auto-install . t)
     :defvar treesit-auto-opt-out-list
-    :setq (treesit-auto-opt-out-list . '(protobuf))
-    :global-minor-mode global-treesit-auto-mode)
+    :global-minor-mode global-treesit-auto-mode
+    :config
+    (leaf treesit-fold
+      :doc "`ts-fold' port works for built-in `treesit' feature"
+      :straight
+      (treesit-fold
+       :type git :host github
+       :repo "abougouffa/treesit-fold")
+      :custom
+      (treesit-fold-indicators-fringe       . 'left-fringe)
+      (treesit-fold-indicators-priority     . 30)
+      (treesit-fold-summary-show            . nil)
+      (treesit-fold-summary-max-length      . 60)
+      (treesit-fold-summary-exceeded-string . "...")
+      (treesit-fold-summary-format          . " <S> %s ")
+      :global-minor-mode
+      global-treesit-fold-mode
+      global-treesit-fold-indicators-mode
+      )
+    )
 
   (leaf tree-sitter
+    :emacs< "29.1" :emacs>= "25.1"
     :doc "provides tree-sitter highlighting"
     :ensure t
     :commands (tree-sitter-hl-mode)
-    :hook (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+    :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode)
+           (after-init-hook           . global-tree-sitter-mode))
     :init (leaf tree-sitter-langs :ensure t)
     :global-minor-mode global-tree-sitter-mode
     :config
@@ -322,11 +342,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
         :after tree-sitter
         :doc "bind *-mode fold range to *-ts-mode until emacs29 support has come"
         :url "https://github.com/emacs-tree-sitter/ts-fold/issues/48"
+        :defvar ts-fold-range-alist
         :config
         (mapcar (lambda (a)
-                  (let ((matched (assoc (car a) ts-fold-range-alist)))
-                    (when matched
-                      (add-to-list 'ts-fold-range-alist (cons (cdr a) (cdr matched))))))
+                  (when-let ((matched (assoc (car a) ts-fold-range-alist)))
+                    (add-to-list 'ts-fold-range-alist (cons (cdr a) (cdr matched)))))
                 '((sh-mode         . bash-ts-mode)
                   (c++-mode        . c++-ts-mode)
                   (c++-mode        . c-or-c++-ts-mode)
@@ -350,6 +370,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
     (leaf *patch-major-ts-modes :emacs>= "29"
       :doc "bind major-ts-mode for tree-sitter syntax highlighting"
+      :defvar tree-sitter-major-mode-language-alist
       :config
       (dolist (mode-tsl '((bash-ts-mode       . bash)
                           (c++-ts-mode        . cpp)
@@ -368,7 +389,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                           (tsx-ts-mode        . typescript)
                           (typescript-ts-mode . typescript)
                           (yaml-ts-mode       . yaml)))
-        (add-to-list 'tree-sitter-major-mode-language-alist mode-tsl))))
+        (add-to-list 'tree-sitter-major-mode-language-alist mode-tsl)))
+    )
 
   (leaf origami
     :doc "folding blocks"
