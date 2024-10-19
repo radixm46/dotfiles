@@ -2005,7 +2005,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (leaf which-key-posframe
       :ensure t
       :custom
-      (which-key-posframe-poshandler . 'posframe-poshandler-frame-top-left-corner)
+      (which-key-posframe-poshandler . 'posframe-poshandler-window-center)
       (which-key-posframe-parameters . '((line-spacing . 0)))
       :defvar which-key-posframe-mode
       :defun
