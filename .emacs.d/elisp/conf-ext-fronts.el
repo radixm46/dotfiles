@@ -184,6 +184,25 @@
   mastodon-mode-map mastodon-toot-mode-map
   mastodon-profile-mode-map mastodon-search-mode-map
   :config
+  (leaf *mastodon-icons-faicon
+    :doc "use `nerd-icons'"
+    :defun nerd-icons-faicon
+    :custom*
+    ((mastodon-tl--symbols
+      (list
+       `(reply     . ,(cons (nerd-icons-faicon "nf-fa-reply")        "R"))
+       `(boost     . ,(cons (nerd-icons-faicon "nf-fa-retweet")      "B"))
+       `(favourite . ,(cons (nerd-icons-faicon "nf-fa-star")         "F"))
+       `(bookmark  . ,(cons (nerd-icons-faicon "nf-fa-bookmark")     "K"))
+       `(media     . ,(cons (nerd-icons-faicon "nf-fa-video")        "[media]"))
+       `(verified  . ,(cons (nerd-icons-faicon "nf-fa-check_circle") "V"))
+       `(locked    . ,(cons (nerd-icons-faicon "nf-fa-lock")         "[locked]"))
+       `(private   . ,(cons (nerd-icons-faicon "nf-fa-lock")         "[followers]"))
+       `(direct    . ,(cons (nerd-icons-faicon "nf-fa-at")           "[direct]"))
+       `(edited    . ,(cons (nerd-icons-faicon "nf-fa-pencil")       "[edited]"))
+       `(replied   . ,(cons (nerd-icons-faicon "nf-fa-arrow_down")   "↓"))
+       `(reply-bar . ,(cons "┃" "|")))))
+    )
   ;; Timeline Mode Keybindings
   (evil-define-key 'normal mastodon-mode-map
     (kbd "C-j") 'evil-next-line
