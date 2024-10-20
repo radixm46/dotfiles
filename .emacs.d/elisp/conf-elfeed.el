@@ -494,9 +494,9 @@ based on elfeed-search-browse-url"
   :doc "pocket-reader integration"
   :config
   (evil-define-key 'normal elfeed-search-mode-map
-    (kbd "p") 'pocket-reader-elfeed-search-add-link)
+    (kbd "p") 'pocket-reader-add-link)
   (evil-define-key 'normal elfeed-show-mode-map
-    (kbd "p") 'pocket-reader-elfeed-entry-add-link))
+    (kbd "p") 'pocket-reader-add-link))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; conf-elfeed.el ends here

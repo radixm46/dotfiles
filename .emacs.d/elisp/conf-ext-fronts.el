@@ -120,7 +120,6 @@
 
 (leaf pocket-reader
   :ensure t
-  :commands pocket-reader
   :custom
   `((pocket-lib-token-file         . ,(cache-sub-file "emacs-pocket-lib-token.json"))
     (pocket-reader-show-count      . 200)
@@ -135,7 +134,7 @@
     (kbd "y")   'pocket-reader-copy-url
     (kbd "RET") 'pocket-reader-open-url
     (kbd "o")   'pocket-reader-open-url
-    (kbd "p") 'pocket-reader-pop-to-url
+    (kbd "p")   'pocket-reader-pop-to-url
     (kbd "TAB") 'pocket-reader-excerpt
     (kbd "a")   'pocket-reader-toggle-archived
     (kbd "f")   'pocket-reader-toggle-favorite
