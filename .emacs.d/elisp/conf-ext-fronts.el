@@ -135,7 +135,7 @@
     (kbd "y")   'pocket-reader-copy-url
     (kbd "RET") 'pocket-reader-open-url
     (kbd "o")   'pocket-reader-open-url
-    (kbd "p") 'pocket-reader-pop-to-url
+    (kbd "p")   'pocket-reader-pop-to-url
     (kbd "TAB") 'pocket-reader-excerpt
     (kbd "a")   'pocket-reader-toggle-archived
     (kbd "f")   'pocket-reader-toggle-favorite
