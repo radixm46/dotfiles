@@ -171,6 +171,10 @@ argument NAME could be directory or filename"
     :custom (leaf-alias-keyword-alist . '((:ensure . :feather)))
     :config
     (feather-mode))
+
+  (leaf bytecomp
+    :tag "builtin"
+    :custom (byte-compile-docstring-max-column . 120))
   )
 
 ;; optional packages for leaf keywords (under straight.el)
