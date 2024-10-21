@@ -120,7 +120,6 @@
 
 (leaf pocket-reader
   :ensure t
-  :commands pocket-reader
   :custom
   `((pocket-lib-token-file         . ,(cache-sub-file "emacs-pocket-lib-token.json"))
     (pocket-reader-show-count      . 200)
