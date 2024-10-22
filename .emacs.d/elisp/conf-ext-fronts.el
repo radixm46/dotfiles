@@ -340,6 +340,7 @@
     :ensure t
     :commands chatgpt-shell
     :defvar chatgpt-shell-openai-key
+    :defun rdm/openai-api-key
     :custom
     `((shell-maker-root-path                    . ,(cache-sub-dir "shell-maker"))
       (chatgpt-shell-model-temperature          . 0.75)
@@ -349,14 +350,18 @@
       (chatgpt-shell-model-version              . "chatgpt-4o-latest")
       (chatgpt-shell-openai-key                 . #'rdm/openai-api-key))
     :init
-    (leaf *ob-openai-things-setup :after org-mode
+    (leaf ob-chatgpt-shell
       :load-path
       `(,(!expand-file-name "straight/repos/chatgpt-shell" straight-base-dir))
-      :defun ob-chatgpt-shell-setup ob-dall-e-shell-setup
-      :require ob-chatgpt-shell ob-dall-e-shell
-      :config
-      (ob-chatgpt-shell-setup)
-      (ob-dall-e-shell-setup))
+      :defun ob-chatgpt-shell-setup
+      :require ob-chatgpt-shell
+      :config (ob-chatgpt-shell-setup))
+    (leaf ob-dall-e-shell
+      :load-path
+      `(,(!expand-file-name "straight/repos/chatgpt-shell" straight-base-dir))
+      :defun ob-dall-e-shell-setup
+      :require ob-dall-e-shell
+      :config (ob-dall-e-shell-setup))
     )
 
   (leaf gptel :ensure t))
