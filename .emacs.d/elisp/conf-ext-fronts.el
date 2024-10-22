@@ -207,15 +207,21 @@
   (evil-define-key 'normal mastodon-mode-map
     (kbd "C-j") 'evil-next-line
     (kbd "C-k") 'evil-previous-line
-    (kbd "j") 'mastodon-tl--goto-next-item
-    (kbd "k") 'mastodon-tl--goto-prev-item
+    (kbd "j")   'mastodon-tl--goto-next-item
+    (kbd "k")   'mastodon-tl--goto-prev-item
+    (kbd "TAB") 'mastodon-tl--next-tab-item
     ;; operate on toot
     (kbd "t") 'mastodon-toot
     (kbd "e") 'mastodon-toot--edit-toot-at-point
     (kbd "r") 'mastodon-toot--reply
     (kbd "d") 'mastodon-toot--delete-toot
     (kbd "y") 'mastodon-toot--copy-toot-url
-    (kbd "o") 'mastodon-toot--open-toot-url
+    (kbd "O") 'mastodon-toot--open-toot-url
+    (kbd "o") #'(lambda () "Open URL with eww."
+                  (interactive)
+                  (if-let ((url (thing-at-point 'url)))
+                      (eww-browse-url url)
+                      (user-error "Seems not URL")))
     (kbd "f") 'mastodon-toot--toggle-favourite
     (kbd "b") 'mastodon-toot--toggle-boost
     (kbd "B") 'mastodon-toot--toggle-bookmark
@@ -257,24 +263,26 @@
     (kbd "q") 'mastodon-kill-window
     (kbd "Q") 'mastodon-kill-all-buffers
     ;; Leader key mappings
-    (kbd "z r") 'mastodon-tl--report-to-mods
-    (kbd "z z") 'mastodon-views--view-instance-description
+    (kbd "i r") 'mastodon-tl--report-to-mods
+    (kbd "i i") 'mastodon-views--view-instance-description
     )
 
   ;; Mastodon Profile Mode
   (evil-define-key 'normal mastodon-profile-mode-map
     (kbd "TAB") 'mastodon-profile--account-view-cycle
-    (kbd "/") 'mastodon-profile--account-search
+    (kbd "/")   'mastodon-profile--account-search
     (kbd ", #") 'mastodon-profile--open-statuses-tagged
     )
 
   ;; Mastodon Search Mode
   (evil-define-key 'normal mastodon-search-mode-map
-    (kbd "n") 'mastodon-search--next-result
-    (kbd "N") 'mastodon-search--previous-result
+    (kbd "n")   'mastodon-search--next-result
+    (kbd "N")   'mastodon-search--previous-result
     (kbd "TAB") 'mastodon-search--query-cycle
-    (kbd "/") 'mastodon-search--query
+    (kbd "/")   'mastodon-search--query
     )
+  (evil-define-key 'insert 'mastodon-toot-mode-map
+    (kbd "C-<return>") 'mastodon-toot--send)
   )
 
 (leaf go-translate
