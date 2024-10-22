@@ -207,8 +207,9 @@
   (evil-define-key 'normal mastodon-mode-map
     (kbd "C-j") 'evil-next-line
     (kbd "C-k") 'evil-previous-line
-    (kbd "j") 'mastodon-tl--goto-next-item
-    (kbd "k") 'mastodon-tl--goto-prev-item
+    (kbd "j")   'mastodon-tl--goto-next-item
+    (kbd "k")   'mastodon-tl--goto-prev-item
+    (kbd "TAB") 'mastodon-tl--next-tab-item
     ;; operate on toot
     (kbd "t") 'mastodon-toot
     (kbd "e") 'mastodon-toot--edit-toot-at-point
@@ -264,16 +265,16 @@
   ;; Mastodon Profile Mode
   (evil-define-key 'normal mastodon-profile-mode-map
     (kbd "TAB") 'mastodon-profile--account-view-cycle
-    (kbd "/") 'mastodon-profile--account-search
+    (kbd "/")   'mastodon-profile--account-search
     (kbd ", #") 'mastodon-profile--open-statuses-tagged
     )
 
   ;; Mastodon Search Mode
   (evil-define-key 'normal mastodon-search-mode-map
-    (kbd "n") 'mastodon-search--next-result
-    (kbd "N") 'mastodon-search--previous-result
+    (kbd "n")   'mastodon-search--next-result
+    (kbd "N")   'mastodon-search--previous-result
     (kbd "TAB") 'mastodon-search--query-cycle
-    (kbd "/") 'mastodon-search--query
+    (kbd "/")   'mastodon-search--query
     )
   )
 
