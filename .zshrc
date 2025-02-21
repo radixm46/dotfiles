@@ -109,6 +109,7 @@ is_available 'git' && {
 
 is_available 'fzf' && {
     zinit ice has'jq' depth=1 && zinit light reegnz/jq-zsh-plugin
+    zinit ice has'git' depth=1 && zinit light wfxr/forgit
 
     # page-up page-down temporary binded like emacs
     # NOTE: OneDark theme with bg+border
@@ -117,6 +118,12 @@ is_available 'fzf' && {
  --color=fg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe \
  --color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef \
  --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+    fzf_prev_opts="$(
+        if is_available 'bat'; then
+            printf 'bat --color=always --theme=OneHalfDark --style=header,grid --line-range :100 {}'
+        else
+            printf '"cat"'
+        fi)"
     function is_tmux_newer_than() { [[ $1 < ${${$(tmux -V)#tmux}%[a-z]} ]]; }
 
     # TODO: write own completion pattern -- how to works with zsh default completion?
