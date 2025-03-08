@@ -206,82 +206,82 @@
   (evil-define-key 'normal mastodon-mode-map
     (kbd "C-j") 'evil-next-line
     (kbd "C-k") 'evil-previous-line
-    (kbd "j")   'mastodon-tl--goto-next-item
-    (kbd "k")   'mastodon-tl--goto-prev-item
-    (kbd "TAB") 'mastodon-tl--next-tab-item
+    (kbd "j")   'mastodon-tl-goto-next-item
+    (kbd "k")   'mastodon-tl-goto-prev-item
+    (kbd "TAB") 'mastodon-tl-next-tab-item
     ;; operate on toot
     (kbd "t") 'mastodon-toot
-    (kbd "e") 'mastodon-toot--edit-toot-at-point
-    (kbd "r") 'mastodon-toot--reply
-    (kbd "d") 'mastodon-toot--delete-toot
-    (kbd "y") 'mastodon-toot--copy-toot-url
-    (kbd "O") 'mastodon-toot--open-toot-url
+    (kbd "e") 'mastodon-toot-edit-toot-at-point
+    (kbd "r") 'mastodon-toot-reply
+    (kbd "d") 'mastodon-toot-delete-toot
+    (kbd "y") 'mastodon-toot-copy-toot-url
+    (kbd "O") 'mastodon-toot-open-toot-url
     (kbd "o") #'(lambda () "Open URL with eww."
                   (interactive)
                   (if-let ((url (thing-at-point 'url)))
                       (eww-browse-url url)
                       (user-error "Seems not URL")))
-    (kbd "f") 'mastodon-toot--toggle-favourite
-    (kbd "b") 'mastodon-toot--toggle-boost
-    (kbd "B") 'mastodon-toot--toggle-bookmark
-    (kbd "P") 'mastodon-toot--pin-toot-toggle
+    (kbd "f") 'mastodon-toot-toggle-favourite
+    (kbd "b") 'mastodon-toot-toggle-boost
+    (kbd "B") 'mastodon-toot-toggle-bookmark
+    (kbd "P") 'mastodon-toot-pin-toot-toggle
     ;; threads
-    (kbd "RET") 'mastodon-tl--thread
-    (kbd "T t") 'mastodon-tl--thread
-    (kbd "T T") 'mastodon-tl--view-whole-thread
-    (kbd "T m") 'mastodon-tl--mute-thread
-    (kbd "T M") 'mastodon-tl--unmute-thread
-    (kbd "T s") 'mastodon-tl--toggle-spoiler-in-thread
+    (kbd "RET") 'mastodon-tl-thread
+    (kbd "T t") 'mastodon-tl-thread
+    (kbd "T T") 'mastodon-tl-view-whole-thread
+    (kbd "T m") 'mastodon-tl-mute-thread
+    (kbd "T M") 'mastodon-tl-unmute-thread
+    (kbd "T s") 'mastodon-tl-toggle-spoiler-in-thread
     ;; view
-    (kbd "s") 'mastodon-tl--toggle-spoiler-text-in-toot
-    (kbd "V") 'mastodon-tl--poll-vote
-    (kbd "/") 'mastodon-search--query
+    (kbd "s") 'mastodon-tl-toggle-spoiler-text-in-toot
+    (kbd "V") 'mastodon-tl-poll-vote
+    (kbd "/") 'mastodon-search-query
     ;; operate on user
-    (kbd "u p") 'mastodon-profile--show-user
-    (kbd "u d") 'mastodon-tl--dm-user
-    (kbd "u f") 'mastodon-tl--follow-user
-    (kbd "u F") 'mastodon-tl--unfollow-user
-    (kbd "u M") 'mastodon-tl--mute-user
-    (kbd "u m") 'mastodon-tl--unmute-user
-    (kbd "u B") 'mastodon-tl--block-user
-    (kbd "u b") 'mastodon-tl--unblock-user
+    (kbd "u p") 'mastodon-profile-show-user
+    (kbd "u d") 'mastodon-tl-dm-user
+    (kbd "u f") 'mastodon-tl-follow-user
+    (kbd "u F") 'mastodon-tl-unfollow-user
+    (kbd "u M") 'mastodon-tl-mute-user
+    (kbd "u m") 'mastodon-tl-unmute-user
+    (kbd "u B") 'mastodon-tl-block-user
+    (kbd "u b") 'mastodon-tl-unblock-user
     ;; timeline, lists
-    (kbd "g r") 'mastodon-tl--update
-    (kbd "g h") 'mastodon-tl--get-home-timeline
-    (kbd "g L") 'mastodon-tl--get-local-timeline
-    (kbd "g S") 'mastodon-tl--get-federated-timeline
-    (kbd "g #") 'mastodon-tl--get-tag-timeline
+    (kbd "g r") 'mastodon-tl-update
+    (kbd "g h") 'mastodon-tl-get-home-timeline
+    (kbd "g L") 'mastodon-tl-get-local-timeline
+    (kbd "g S") 'mastodon-tl-get-federated-timeline
+    (kbd "g #") 'mastodon-tl-get-tag-timeline
     (kbd "g n") 'mastodon-notifications-get
-    (kbd "g m") 'mastodon-notifications--get-mentions
-    (kbd "g l") 'mastodon-views--view-lists
-    (kbd "g f") 'mastodon-views--view-follow-suggestions
-    (kbd "g p") 'mastodon-profile--my-profile
-    (kbd "g b") 'mastodon-profile--view-bookmarks
-    (kbd "g v") 'mastodon-profile--view-favourites
+    (kbd "g m") 'mastodon-notifications-get-mentions
+    (kbd "g l") 'mastodon-views-view-lists
+    (kbd "g f") 'mastodon-views-view-follow-suggestions
+    (kbd "g p") 'mastodon-profile-my-profile
+    (kbd "g b") 'mastodon-profile-view-bookmarks
+    (kbd "g v") 'mastodon-profile-view-favourites
     ;; etc
     (kbd "q") 'mastodon-kill-window
     (kbd "Q") 'mastodon-kill-all-buffers
     ;; Leader key mappings
-    (kbd "i r") 'mastodon-tl--report-to-mods
-    (kbd "i i") 'mastodon-views--view-instance-description
+    (kbd "i r") 'mastodon-tl-report-to-mods
+    (kbd "i i") 'mastodon-views-view-instance-description
     )
 
   ;; Mastodon Profile Mode
   (evil-define-key 'normal mastodon-profile-mode-map
-    (kbd "TAB") 'mastodon-profile--account-view-cycle
-    (kbd "/")   'mastodon-profile--account-search
-    (kbd ", #") 'mastodon-profile--open-statuses-tagged
+    (kbd "TAB") 'mastodon-profile-account-view-cycle
+    (kbd "/")   'mastodon-profile-account-search
+    (kbd ", #") 'mastodon-profile-open-statuses-tagged
     )
 
   ;; Mastodon Search Mode
   (evil-define-key 'normal mastodon-search-mode-map
-    (kbd "n")   'mastodon-search--next-result
-    (kbd "N")   'mastodon-search--previous-result
-    (kbd "TAB") 'mastodon-search--query-cycle
-    (kbd "/")   'mastodon-search--query
+    (kbd "n")   'mastodon-search-next-result
+    (kbd "N")   'mastodon-search-previous-result
+    (kbd "TAB") 'mastodon-search-query-cycle
+    (kbd "/")   'mastodon-search-query
     )
   (evil-define-key 'insert 'mastodon-toot-mode-map
-    (kbd "C-<return>") 'mastodon-toot--send)
+    (kbd "C-<return>") 'mastodon-toot-send)
   )
 
 (leaf go-translate
