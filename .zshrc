@@ -41,6 +41,7 @@ zinit ice depth=1 && zinit wait lucid for \
 
 # load zsh modules -----------------------------------------------------------------------
 autoload -Uz \
+         is-at-least \
          chpwd_recent_dirs \
          cdr \
          add-zsh-hook \
@@ -117,50 +118,53 @@ is_available 'fzf' && {
  --border=bold --color=dark --color=bg:#282c34,border:#cd00cd \
  --color=fg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe \
  --color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef \
- --bind 'ctrl-v:page-down' --bind 'alt-v:page-up'"
+ --prompt='> ' --marker='▮' --pointer='▶' \
+ --bind 'ctrl-d:page-down' --bind 'ctrl-u:page-up' --bind 'alt-d:preview-page-down' --bind 'alt-u:preview-page-up'"
     fzf_prev_opts="$(
         if is_available 'bat'; then
             printf 'bat --color=always --theme=OneHalfDark --style=header,grid --line-range :100 {}'
         else
             printf '"cat"'
         fi)"
-    function is_tmux_newer_than() { [[ $1 < ${${$(tmux -V)#tmux}%[a-z]} ]]; }
 
     # TODO: write own completion pattern -- how to works with zsh default completion?
 
-    zinit ice depth=1 && zinit light mollifier/anyframe &&
-        autoload -Uz anyframe-init && anyframe-init
-
     alias -g F='| fzf --border=rounded'
-    alias -g Fp="| fzf --border=rounded --preview $(
-        if is_available 'bat'; then
-            printf '"bat --color=always --theme=OneHalfDark --style=header,grid --line-range :100 {}"'
-        else
-            printf '"cat"'
-        fi)"
-    if is_available 'tmux' && is_tmux_newer_than '3.2' && [ ! -z "${TMUX}" ]; then
-        zstyle ":anyframe:selector:" use fzf-tmux
-        zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85% --select-1'
-    elif is_available 'tmux'; then
-        zstyle ":anyframe:selector:" use fzf
-        zstyle ":anyframe:selector:fzf:" command 'fzf --border=rounded --select-1'
-    fi
-    # enable anyframe binding with prefix ctrl+f in vi cmd mode
-    bindkey -M vicmd '^fb'  anyframe-widget-cdr
-    bindkey -M vicmd '^fr'  anyframe-widget-execute-history
-    bindkey -M vicmd '^f^r' anyframe-widget-execute-history
-    bindkey -M vicmd '^fi'  anyframe-widget-put-history
-    bindkey -M vicmd '^f^i' anyframe-widget-put-history
-    bindkey -M vicmd '^fk'  anyframe-widget-kill
-    bindkey -M vicmd '^f^k' anyframe-widget-kill
-    bindkey -M vicmd '^fs'  anyframe-widget-checkout-git-branch
-    bindkey -M vicmd '^f^s' anyframe-widget-checkout-git-branch
-    bindkey -M vicmd '^fe'  anyframe-widget-insert-git-branch
-    bindkey -M vicmd '^f^e' anyframe-widget-insert-git-branch
-    is_available 'ghq' && {
-        bindkey -M vicmd '^fg'  anyframe-widget-cd-ghq-repository
-        bindkey -M vicmd '^f^g' anyframe-widget-cd-ghq-repository
-    }
+    alias -g Fp='| fzf --border=rounded --preview=${fzf_prev_opts}'
+
+
+    is-at-least 0.48 $(fzf --version) &&
+        FZF_CTRL_T_COMMAND='' source <(fzf --zsh) # 0.48以降必須
+
+    zinit ice depth=1 && zinit light mollifier/anyframe &&
+        autoload -Uz anyframe-init && {
+            anyframe-init
+            if is_available 'tmux' && is-at-least "$(tmux -V)" '3.2' && [ ! -z "${TMUX}" ]; then
+                zstyle ":anyframe:selector:" use fzf-tmux
+                zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85% -- --select-1'
+            elif is_available 'tmux'; then
+                zstyle ":anyframe:selector:" use fzf
+                zstyle ":anyframe:selector:fzf:" command 'fzf --border=rounded --select-1'
+                is_available 'tldr' &&
+                    function tldr_() {
+                        local prev=$( is_available 'mdcat' &&  printf '|mdcat -P')
+                        tldr $(tldr --list |
+                                   fzf -q "${1=}" --select-1 --border=rounded  --preview "tldr --raw {} ${prev}"
+                            ) 2>/dev/null ||
+                            printf 'require valid arg\n'
+                    }
+            fi
+            # enable anyframe binding with prefix ctrl+f in vi cmd mode
+            bindkey -M vicmd '^fb'  anyframe-widget-cdr
+            bindkey -M vicmd '^fs'  anyframe-widget-checkout-git-branch
+            bindkey -M vicmd '^f^s' anyframe-widget-checkout-git-branch
+            bindkey -M vicmd '^fe'  anyframe-widget-insert-git-branch
+            bindkey -M vicmd '^f^e' anyframe-widget-insert-git-branch
+            is_available 'ghq' && {
+                bindkey -M vicmd '^fg'  anyframe-widget-cd-ghq-repository
+                bindkey -M vicmd '^f^g' anyframe-widget-cd-ghq-repository
+            }
+        }
 }
 
 # ----------------------------------------------------------------------------------------
