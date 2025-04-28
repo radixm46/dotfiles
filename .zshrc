@@ -118,7 +118,7 @@ is_available 'fzf' && {
  --border=bold --color=dark --color=bg:#282c34,border:#cd00cd \
  --color=fg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe \
  --color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef \
- --prompt='> ' --marker='▮' --pointer='▶' \
+ --prompt='> ' --marker='❚' --pointer='▶' \
  --bind 'ctrl-d:page-down' --bind 'ctrl-u:page-up' --bind 'alt-d:preview-page-down' --bind 'alt-u:preview-page-up'"
     fzf_prev_opts="$(
         if is_available 'bat'; then
