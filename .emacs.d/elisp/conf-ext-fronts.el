@@ -10,6 +10,7 @@
             "elisp/conf-evil"))
 (require 'straight)
 
+;; local exec
 (leaf daemons :when (or (!system-type 'gnu/linux)
                         (!system-type 'darwin))
   :ensure t
@@ -118,6 +119,9 @@
       [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
        ("S" "Difftastic show" difftastic-magit-show)])))
 
+
+
+;; use web
 (leaf pocket-reader
   :ensure t
   :custom
@@ -336,6 +340,10 @@
   :defun auth-source-pick-first-password
   :config
   (leaf chatgpt-shell
+    :preface
+    (leaf shell-maker
+      :ensure t
+      :custom `((shell-maker-root-path . ,(cache-sub-dir "shell-maker"))))
     :ensure t
     :commands chatgpt-shell
     :defvar chatgpt-shell-openai-key
@@ -350,18 +358,13 @@
       (chatgpt-shell-openai-key                 . #'rdm/openai-api-key))
     :init
     (leaf ob-chatgpt-shell
-      :load-path
-      `(,(!expand-file-name "straight/repos/chatgpt-shell" straight-base-dir))
+      :ensure t
       :defun ob-chatgpt-shell-setup
-      :require ob-chatgpt-shell
       :config (ob-chatgpt-shell-setup))
     (leaf ob-dall-e-shell
-      :load-path
-      `(,(!expand-file-name "straight/repos/chatgpt-shell" straight-base-dir))
+      :ensure t
       :defun ob-dall-e-shell-setup
-      :require ob-dall-e-shell
-      :config (ob-dall-e-shell-setup))
-    )
+      :config (ob-dall-e-shell-setup)))
 
   (leaf gptel :ensure t))
 

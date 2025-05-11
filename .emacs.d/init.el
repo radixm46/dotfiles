@@ -2310,10 +2310,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :custom
     (epa-pinentry-mode . 'loopback))
 
-  (leaf load-conf-ext-fronts
-    :doc "frontend of external apps"
-    :config (load (!expand-file-name "elisp/conf-ext-fronts" user-emacs-directory)))
-
   (leaf pdf-tools
     :doc "require to execute `pdf-tools-install'"
     :ensure t
@@ -2399,6 +2395,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (evil-define-key '(normal visual) 'global
         (kbd "C-w f") 'macos-dict-lookup-word)))
   )
+
+
+(leaf *load-conf-ext-fronts
+  :doc "frontend of external apps"
+  :config (!el-load "elisp/conf-ext-fronts"))
 
 
 (leaf *git-related-packages
