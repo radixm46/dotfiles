@@ -22,6 +22,10 @@
   evil-global-set-key
   :commands evil-define-key
   :defvar evil-normal-state-map evil-insert-state-map
+  :custom
+  (evil-want-C-u-delete . nil)
+  (evil-want-C-u-scroll . t)
+  (evil-want-C-h-delete . t)
   :bind
   (:global-map
    ("<f4>" . hydra-manage-windows/body)
@@ -37,14 +41,8 @@
     :defun evil-collection-init
     :config
     (evil-collection-init)
-    (define-key evil-normal-state-map (kbd "C-u") 'scroll-down-command)
-    ;; enable emacs cursor movement in insert mode
-    (define-key evil-insert-state-map (kbd "C-h") 'delete-backward-char)
     (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
-    (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
-    ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-    ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
-    )
+    (define-key evil-insert-state-map (kbd "C-b") 'backward-char))
   (leaf evil-commentary :ensure t
     :doc "make easy to comment out."
     :url "https://github.com/linktohack/evil-commentary"
