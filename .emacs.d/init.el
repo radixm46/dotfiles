@@ -2101,7 +2101,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                            (registers . 5)))
       (initial-buffer-choice           . (lambda ()
                                            (dashboard-refresh-buffer)
-                                           (get-buffer "*dashboard*")))
+                                           (get-buffer "*dashboard*"))))
     :preface
     (defun dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
