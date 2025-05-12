@@ -91,7 +91,7 @@
   :ensure t
   :commands mpv-play mpv-play-url mpv-live-p ; used to detect mpv running
   :custom
-  `((mpv-default-options   . `(,(if-let ((mpvconf (!expand-file-name "mpv" "~/.config")))
+  `((mpv-default-options   . `(,(if-let* ((mpvconf (!expand-file-name "mpv" "~/.config")))
                                     (format "--config-dir=%s" mpvconf) "")
                                "--save-position-on-quit"
                                "--volume=80"))
@@ -222,7 +222,7 @@
     (kbd "O") 'mastodon-toot-open-toot-url
     (kbd "o") #'(lambda () "Open URL with eww."
                   (interactive)
-                  (if-let ((url (thing-at-point 'url)))
+                  (if-let* ((url (thing-at-point 'url)))
                       (eww-browse-url url)
                       (user-error "Seems not URL")))
     (kbd "f") 'mastodon-toot-toggle-favourite
@@ -296,7 +296,7 @@
   (defun show-deepl-api-usage ()
     "Show DeepL usage statistics on echo area."
     (interactive)
-    (if-let (key (rdm/deepl-api-key))
+    (if-let* ((key (rdm/deepl-api-key)))
         (request
           "https://api-free.deepl.com/v2/usage"
           :type "GET"

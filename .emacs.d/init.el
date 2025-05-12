@@ -1862,11 +1862,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (defun rdm/deepl-api-key ()
       "API key for Deepl translation"
       (let ((auth-source-cache-expiry nil))
-        (auth-source-pick-first-password :host "api.deepl.com")))
+        (if-let* ((key (auth-source-pick-first-password :host "api.deepl.com")))
+            key (user-error "Key not found"))))
     (defun rdm/openai-api-key ()
       "API key for OpenAI API"
       (let ((auth-source-cache-expiry 86400))
-        (auth-source-pick-first-password :host "api.openai.com"))))
+        (if-let* ((key (auth-source-pick-first-password :host "api.openai.com")))
+            key (user-error "Key not found")))))
 
   (leaf nsm
     :tag "builtin"
