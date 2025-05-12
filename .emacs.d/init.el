@@ -2104,7 +2104,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                            (dashboard-refresh-buffer)
                                            (get-buffer "*dashboard*")))
     :preface
-    (defsubst dashboard-banner-selector (&rest _args)
+    (defun dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
       (let ((banner-img (!expand-file-name "banner.png" user-emacs-directory)))
         (if (and (file-regular-p banner-img)
@@ -2377,7 +2377,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                  "mdfind 'kind:application' 'monokakido' 2>/dev/null")))))
 
       :config
-      (defsubst monokakido--lookup (word)
+      (defun monokakido--lookup (word)
         "Lookup word with Dictionaries.app by Monokakido."
         (call-process "open" nil 0 nil (concat "mkdictionaries:///?text=" word) "-g"))
 
