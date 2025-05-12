@@ -1852,7 +1852,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   :config
   (leaf auth-source
     :tag "builtin"
-    :commands auth-source-pick-first-password
     :custom
     (auth-source-cache-expiry . 7200)
     (auth-sources             . '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
