@@ -122,7 +122,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :custom (auto-revert-interval . 2)
     :global-minor-mode global-auto-revert-mode)
 
-
   (leaf *backup-files
     :doc "make backup files"
     :tag "builtin"
@@ -363,7 +362,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                   (conf-toml-mode  . toml-ts-mode)
                   (typescript-mode . typescript-ts-mode)
                   (yaml-mode       . yaml-ts-mode))))
-
       :hook
       (prog-mode-hook . ts-fold-mode)
       (prog-mode-hook . ts-fold-indicators-mode))
@@ -2102,8 +2100,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                            (projects  . 5)
                                            (registers . 5)))
       (initial-buffer-choice           . (lambda ()
-                                        (dashboard-refresh-buffer)
-                                        (get-buffer "*dashboard*"))))
+                                           (dashboard-refresh-buffer)
+                                           (get-buffer "*dashboard*")))
     :preface
     (defsubst dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"

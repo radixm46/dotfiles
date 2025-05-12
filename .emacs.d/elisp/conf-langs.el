@@ -29,13 +29,13 @@
   paredit-mode
   :mode-hook
   ;; (flycheck-mode +1)
-   (hs-minor-mode           +1)
-   (flymake-mode            +1)
-   (eldoc-mode              +1)
-   (highlight-symbol-mode   +1)
-   (smartparens-strict-mode +1)
-   (paredit-mode            +1)
-   (add-hook 'before-save-hook #'check-parens nil 'local)
+  (eldoc-mode              +1)
+  (flymake-mode            +1)
+  (highlight-symbol-mode   +1)
+  (hs-minor-mode           +1)
+  (paredit-mode            +1)
+  (smartparens-strict-mode +1)
+  (add-hook 'before-save-hook #'check-parens nil 'local)
   :init
   (leaf highlight-defined
     :ensure t

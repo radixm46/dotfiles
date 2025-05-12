@@ -311,7 +311,7 @@ based on elfeed-search-browse-url"
           (elfeed-search-browse-url use-generic-p))))
 
     (defun rdm/elfeed-show-w3m-open (&optional use-generic-p)
-      "open with eww"
+      "open with w3m"
       (interactive "P")
       (when (boundp 'w3m)
         (let ((browse-url-browser-function #'w3m-browse-url))
@@ -335,7 +335,7 @@ based on elfeed-search-browse-url"
           (message "Cannot playback media, deps not satisfied (mpv and yt-dlp). Abort.")
           (throw 'quit nil))
 
-        (if (mpv-live-p)          ; if mpv instance already exists, check options
+        (if (mpv-live-p) ;; if mpv instance already exists, check options
             (unless (string-equal
                      (cdr (assoc 'format
                                  (mpv-get-property "options/ytdl-raw-options")))
