@@ -359,10 +359,12 @@
     :init
     (leaf ob-chatgpt-shell
       :ensure t
+      :require t
       :defun ob-chatgpt-shell-setup
       :config (ob-chatgpt-shell-setup))
     (leaf ob-dall-e-shell
       :ensure t
+      :require t
       :defun ob-dall-e-shell-setup
       :config (ob-dall-e-shell-setup)))
 
