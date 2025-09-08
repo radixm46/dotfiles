@@ -677,7 +677,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :ensure t
     :defun nyan-start-animation nyan-stop-animation
     :defvar nyan-wavy-trail
-    :custom (nyan-cat-face-number . 4)
+    :custom
+    (nyan-cat-face-number . 4)
+    (nyan-wavy-trail      . nil)
+    (nyan-animate-nyancat . nil)
     :config
     (defun nyan-try ()
       (nyan-stop-animation)
@@ -685,7 +688,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (defun nyan-xit ()
       (nyan-start-animation)
       (setq nyan-wavy-trail t))
-    (nyan-xit)
     :hook
     ((evil-normal-state-entry-hook . nyan-try)
      (evil-normal-state-exit-hook . nyan-xit))
@@ -2844,6 +2846,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (!el-load "elisp/conf-org"
             "elisp/conf-langs"))
 
+
+;; emacs to load all pkgs for freezing versions
+(rdm/freeze-versions)
 
 (leaf *load-local-conf
   :config

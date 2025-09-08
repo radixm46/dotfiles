@@ -1,0 +1,88 @@
+name: Syntax check
+
+on:
+  pull_request:
+    branches: [ dev, master ]
+    types: [ opened, reopened, synchronize, ready_for_review ]
+
+jobs:
+  emacs-parens-and-byte-compile:
+    name: Emacs parens & byte-compile (matrix)
+    runs-on: ubuntu-latest
+    env:
+      RUNNER_TOOL_CACHE: /toolcache
+      HOME: ${{ github.workspace }}
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs: ["29.4", "30.2"]
+    container:
+      image: silex/emacs:${{ matrix.emacs }}-alpine-eldev
+    steps:
+      - name: Install requirements
+        run: |
+          apk add --no-cache nodejs git tar make
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache straight
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.emacs.d/straight/repos
+            ~/.emacs.d/straight/build
+            ~/.emacs.d/straight/build-cache.el
+          key: elisp-${{ runner.os }}-emacs${{ matrix.emacs }}-${{ hashFiles('.emacs.d/straight/versions/default.el') }}
+          restore-keys: |
+            elisp-${{ runner.os }}-emacs${{ matrix.emacs }}-
+
+
+      - name: Parens check
+        run: |
+          cd .emacs.d
+          make parens-check
+
+      - name: Byte-compile check
+        run: |
+          cd .emacs.d
+          make compile-all
+
+
+  shellcheck:
+    name: Check shell env & scripts
+    runs-on: ubuntu-latest
+    env:
+      RUNNER_TOOL_CACHE: /toolcache
+      HOME: ${{ github.workspace }}
+    strategy:
+      fail-fast: false
+    container:
+      image: alpine
+    steps:
+      - name: Install requirements
+        run: |
+          apk add --no-cache make nodejs git zsh bash shellcheck
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Execute shellcheck(zsh)
+        run: make lint-shellenv
+        continue-on-error: true
+
+      - name: Execute shellcheck(bash)
+        run: make lint-bash
+        continue-on-error: true
+
+      - name: Read test zsh config
+        run: |
+          zsh -n .zshenv
+          zsh -n .zshrc
+
+      - name: Read test scripts
+        run: |
+          for f in bin/*; do
+            bash -n $f
+          done
+

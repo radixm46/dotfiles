@@ -33,7 +33,7 @@
 (leaf emacs-w3m :if (!executable-find "w3m")
   :doc "w3m interface for emacs"
   :commands w3m w3m-browse-url
-  :straight
+  :ensure
   (emacs-w3m
    :type git :host github
    :repo "emacs-w3m/emacs-w3m")
@@ -122,13 +122,15 @@
 
 
 ;; use web
-(leaf pocket-reader
+(leaf pocket-reader :disabled t
   :ensure t
   :custom
-  `((pocket-lib-token-file         . ,(cache-sub-file "emacs-pocket-lib-token.json"))
-    (pocket-reader-show-count      . 200)
-    (pocket-reader-url-priorities  . '(amp_url resolved_url given_url))
-    (pocket-reader-default-queries . '(":unread")))
+  `((pocket-lib-token-file                   . ,(cache-sub-file "emacs-pocket-lib-token.json"))
+    (pocket-reader-show-count                . 200)
+    (pocket-reader-url-priorities            . '(amp_url resolved_url given_url))
+    (pocket-reader-default-queries           . '(":unread"))
+    ;; default org-web-tools-read-url-as-org
+    (pocket-reader-open-url-default-function . 'eww-browse-url))
   :defvar pocket-reader-mode-map elfeed-search-mode-map elfeed-show-mode-map
   :config
   (evil-define-key 'normal pocket-reader-mode-map

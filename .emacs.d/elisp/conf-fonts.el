@@ -157,7 +157,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
   (leaf ligature :emacs>= "28"
     :doc "configure ligatures"
-    :straight
+    :ensure
     (ligature-mode :type git :host github
                    :repo "mickeynp/ligature.el" :branch "master")
     :defun ligature-set-ligatures

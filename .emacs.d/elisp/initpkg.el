@@ -106,6 +106,10 @@ argument NAME could be directory or filename"
   (prog1 '*straight-setup
     (customize-set-variable
      'straight-vc-git-default-clone-depth 1 "customized at initpkg")
+    (customize-set-variable
+     'straight-enable-use-package-integration nil "customized at initpkg")
+    (customize-set-variable
+     'straight-enable-package-integration nil "customized at initpkg")
     (defvar bootstrap-version)
     (let ((bootstrap-file
            (!expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -149,7 +153,39 @@ argument NAME could be directory or filename"
     (leaf-keywords-init)
     (customize-set-variable 'leaf-alias-keyword-alist
                             '((:ensure . :straight))
-                            "customized at initpkg")))
+                            "customized at initpkg"))
+
+  (prog1 '*leaf-with-straight-freeze
+    ;; emacs to load all pkgs for freezing versions
+    (defun rdm/freeze-vers-p ()
+      (and noninteractive (getenv "FREEZE_EMACS")))
+
+    (defun rdm/freeze-versions ()
+      (when (rdm/freeze-vers-p)
+        (message "*** Loading init.el done, freezing %s... ***"
+                 straight-current-profile)
+        (straight-check-all)
+        (when (equal "2" (rdm/freeze-vers-p))
+          (message "*** Updating pkgs. ***")
+          (straight-pull-all))
+        (straight-freeze-versions t)
+        (message "*** Freezing %s done! ***" straight-current-profile)))
+
+    (if (rdm/freeze-vers-p)
+        (progn
+          (message "*** Loading init in freeze versions mode. ***")
+
+          (setq
+           straight-disable-native-compile  t
+           native-comp-deferred-compilation nil
+           garbage-collection-messages      nil
+           leaf-defaults                    '(:leaf-defer nil)
+           leaf-alias-keyword-alist         '((:ensure . :straight)
+                                              (:after  . :doc) ;; disable after keyword
+                                              (:config . :init))))
+      (when (and (null after-init-time) (not "0" (rdm/freeze-vers-p)))
+        (message "*** straight.el thaw versions. ***")
+        (straight-thaw-versions)))))
 
 (leaf *leaf-configure
   :doc "configure leaf related packages"

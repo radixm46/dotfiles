@@ -16,6 +16,14 @@ CFG_TARGET := $(shell \
 BACKUP_TARGET = ${HOME}/dotfiles_backup
 CHK_TARGET   := $(PWD)/bin/make_chkfile.sh
 
+.PHONY: lint_shellenv lint_bash
+lint-shellenv:
+	@shellcheck --check-sourced .shellcheckrc -f gcc -S warning \
+      .zshrc .zshenv
+lint-bash:
+	@shellcheck -S warning -f gcc --shell=bash bin/*
+
+
 .PHONY: install
 install:
 	@echo 'execute "make link-all" or "make link-core" instead install'

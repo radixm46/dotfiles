@@ -27,6 +27,9 @@ banner.*
 
 # straight
 /straight/*
+!/straight/versions
+/straight/versions/*
+!/straight/versions/default.el
 
 # eshell files
 /eshell/*
