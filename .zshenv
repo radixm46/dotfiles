@@ -77,26 +77,10 @@ case "$(uname)" in
         ;;
 esac
 
-# check ghcup/stack installed and add path
-function() {
-    local ghcup_path="${HOME}/.ghcup/bin"
-    if [ -d ${ghcup_path} ]; then
-        path=("${ghcup_path}"(N-/) ${path})
-    elif is_available 'stack'; then
-        path=($(stack path --local-bin)(N-/) ${path})
-    fi
-}
 
 # check rust environment
 path=("${HOME}/.cargo/bin"(N-/) ${path})
 path=("${HOME}/.local/bin"(N-/) ${path})
-
-# configure pyenv
-if is_available 'pyenv' || [ -d ${HOME}/.pyenv/bin ]; then
-    path=("${HOME}/.pyenv/bin"(N-/) ${path}) # if pyenv dir found at $HOME
-    export PIPENV_VENV_IN_PROJECT=true
-    eval "$(pyenv init --path)"
-fi
 
 # configure node environment
 is_available 'npm' && [ -d "${HOME}/.npm-global" ] && {
@@ -104,4 +88,39 @@ is_available 'npm' && [ -d "${HOME}/.npm-global" ] && {
     path=("${NPM_CONFIG_PREFIX}/bin"(N-/) ${path})
 }
 
+# do when interactive with command execution
+[[ -o interactive ]] && {
 
+    # check ghcup/stack installed and add path
+    function() {
+        local ghcup_path="${HOME}/.ghcup/bin"
+        if [ -d ${ghcup_path} ]; then
+            path=("${ghcup_path}"(N-/) ${path})
+        elif is_available 'stack'; then
+            path=($(stack path --local-bin)(N-/) ${path})
+        fi
+    }
+
+    is_available 'dotnet' && {
+        case ${OSTYPE} in
+            darwin* )
+                export DOTNET_ROOT="$(brew --prefix)/opt/dotnet/libexec"
+                ;;
+            linux* )
+                # NOTE: temporary configured for test (not checked yet!!)
+                if is_available brew; then
+                    export DOTNET_ROOT="/home/linuxbrew/.linuxbrew/opt/dotnet/libexec"
+                else
+                    :
+                fi
+                ;;
+        esac
+    }
+
+    # configure pyenv
+    if is_available 'pyenv' || [ -d ${HOME}/.pyenv/bin ]; then
+        path=("${HOME}/.pyenv/bin"(N-/) ${path}) # if pyenv dir found at $HOME
+        export PIPENV_VENV_IN_PROJECT=true
+        eval "$(pyenv init --path)"
+    fi
+}
