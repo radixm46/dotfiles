@@ -350,6 +350,13 @@ esac
 
 alias -g TC='COLORTERM=truecolor'
 
+# set manpager as bat or nvim if available
+if is_available 'bat'; then
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+elif is_available 'nvim'; then
+    export MANPAGER="nvim -c 'set ft=man' -"
+fi
+
 # ----------------------------------------------------------------------------------------
 # define functions
 # print os glyph from nerd fonts

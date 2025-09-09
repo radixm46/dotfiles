@@ -4,6 +4,7 @@
     zcompile "${HOME}/.zshenv"
     [[ -o interactive ]] && printf 'done!\n'
 }
+
 export LANG=ja_JP.UTF-8
 export XDG_CONFIG_HOME="${HOME}/.config"
 # export LANGUAGE=en_US.UTF-8
@@ -102,13 +103,6 @@ is_available 'npm' && [ -d "${HOME}/.npm-global" ] && {
     export NPM_CONFIG_PREFIX="${HOME}/.npm-global"
     path=("${NPM_CONFIG_PREFIX}/bin"(N-/) ${path})
 }
-
-# set manpager as bat or nvim if available
-if is_available 'bat'; then
-    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-elif is_available 'nvim'; then
-    export MANPAGER="nvim -c 'set ft=man' -"
-fi
 
 
 # simple timer function for tea preparation
