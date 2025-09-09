@@ -101,6 +101,10 @@
     :ensure t
     :hook (rust-mode-hook . cargo-minor-mode)))
 
+(leaf ron-mode :ensure t
+  :mode ("\\.ron\\'" . ron-mode)
+  :url "https://chiselapp.com/user/Hutzdog/repository/ron-mode/home")
+
 (leaf *python-config
   :doc "python related configuration"
   :config
