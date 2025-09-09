@@ -105,36 +105,3 @@ is_available 'npm' && [ -d "${HOME}/.npm-global" ] && {
 }
 
 
-# simple timer function for tea preparation
-function ktimer() {
-    local wait_min=${1:-'5'}
-    local wait_sec=${2:-'0'}
-    printf "Counting down %01d:%02d\n" ${wait_min} ${wait_sec}
-    local remaining=$((60 * ${wait_min} + ${wait_sec}))
-    while [ ${remaining} -gt 0 ]
-    do
-        if (( ${remaining} > 60 )); then
-            printf "\r\033[KRemaining... %01d:%02d" $((remaining / 60)) $((remaining % 60))
-        elif (( ${remaining} > 10 )); then
-            printf "\r\033[KRemaining... \033[31m%01d:%02d\033[m" $((remaining / 60)) $((remaining % 60))
-        else
-            printf "\r\033[KRemaining... \033[31m\033[1m%01d:%02d\033[m" $((remaining / 60)) $((remaining % 60))
-        fi
-        ((remaining-=1))
-        sleep 1
-    done
-    printf "\r\033[KRemaining... \033[31m\033[1mdone!\033[m\n"
-
-    case ${OSTYPE} in
-        darwin*)
-            (say --voice=Samantha \
-                "$(case ${wait_min} in; 0) ;; 1) printf "1 minute" ;; *) printf "%.d minutes" ${wait_min} ;; esac)" \
-                "$(case ${wait_sec} in; 0) ;; 1) printf "1 second" ;; *) printf "%.d seconds" ${wait_sec} ;; esac)" \
-                "passed" &)
-            ;;
-        linux*)
-            printf "\a" # ring a terminal bell
-            ;;
-        *);;
-    esac
-}
