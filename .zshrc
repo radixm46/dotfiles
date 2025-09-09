@@ -576,6 +576,34 @@ function _update_vcs_info() {
 add-zsh-hook precmd _update_vcs_info
 
 
+
+# Local machine configuration via ~/.zshrc.local
+# If missing, create a minimal template and source it.
+function() {
+    local local_rc="$HOME/.zshrc.local"
+
+    if [ ! -e "$local_rc" ]; then
+        (
+            umask 077
+            cat > "$local_rc" <<'EOF'
+# -*- mode:shell-script; -*-
+# ~/.zshrc.local — machine-local Zsh configuration
+# This file is sourced at the end of ~/.zshrc.
+# Add overrides, secrets, and host-specific tweaks here.
+EOF
+        )
+        # Ensure strict permissions for local overrides
+        chmod 600 "$local_rc" 2>/dev/null || {
+            printf '\033[31m[WARN]\033[0m Failed to set permissions on %s\n' "$_local_rc" >&2
+        }
+    fi
+
+    if [ -r "$local_rc" ]; then
+        # shellcheck disable=SC1090
+        . "$local_rc"
+    fi
+}
+
 # ----------------------------------------------------------------------------------------
 # based on http://qiita.com/b4b4r07/items/01359e8a3066d1c37edc
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
