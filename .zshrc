@@ -465,73 +465,103 @@ setopt prompt_subst
 function prompt_rdm46theme_setup() {
     local _isign=$'\UF10C'
     local _csign=$'\UF111'
-    _vi_ins="%{${fg[blue]}%} ${_isign} %{${reset_color}%}"
-    _vi_nor="%{${fg[green]}%} ${_csign} %{${reset_color}%}"
-    _vi_vis="%{${fg[magenta]}%} ${_csign} %{${reset_color}%}"
-    _vi_rep="%{${fg[yellow]}%} ${_isign} %{${reset_color}%}"
+    vi_mode=''
+    typeset -gA VI_INDS
+    VI_INDS=(
+        # old syntax for compat
+        'normal'   "%{${fg[green]}%} $_csign %{${reset_color}%}"
+        'ins'      "%{${fg[blue]}%} $_isign %{${reset_color}%}"
+        'visual'   "%{${fg[magenta]}%} $_csign %{${reset_color}%}"
+        'visual_l' "%{${fg[magenta]}%} $_csign %{${reset_color}%}"
+        'replace'  "%{${fg[yellow]}%} $_isign %{${reset_color}%}"
+    )
     # for zsh jeffreytse/zsh-vi-mode -----------------------------------------------------
     function rdm_zvm_update_indicator() {
         case $ZVM_MODE in
-            $ZVM_MODE_NORMAL)
-                vi_mode=${_vi_nor} ;;
-            $ZVM_MODE_INSERT)
-                vi_mode=${_vi_ins} ;;
-            $ZVM_MODE_VISUAL)
-                vi_mode=${_vi_vis} ;;
-            $ZVM_MODE_VISUAL_LINE)
-                vi_mode=${_vi_vis} ;;
-            $ZVM_MODE_REPLACE)
-                vi_mode=${_vi_rep} ;;
+            "$ZVM_MODE_NORMAL")      vi_mode=${VI_INDS[normal]} ;;
+            "$ZVM_MODE_INSERT")      vi_mode=${VI_INDS[ins]} ;;
+            "$ZVM_MODE_VISUAL")      vi_mode=${VI_INDS[visual]} ;;
+            "$ZVM_MODE_VISUAL_LINE") vi_mode=${VI_INDS[visual_l]} ;;
+            "$ZVM_MODE_REPLACE")     vi_mode=${VI_INDS[replace]} ;;
         esac
     }
     zvm_after_select_vi_mode_commands+=(rdm_zvm_update_indicator)
     # for zsh builtin bindkey -v ---------------------------------------------------------
     # if zvm not loaded
     [[ $(type zvm_init) == 'zvm_init not found' ]] && {
-        vi_mode=${_vi_ins}
+        vi_mode=${VI_INDS[ins]} # init
+        # update on select
         function zle-keymap-select {
-            vi_mode="${${KEYMAP/vicmd/${_vi_nor}}/(main|viins)/${_vi_ins}}"
+            # vicmd as normal / main as ins
+            case $KEYMAP in
+                'vicmd') vi_mode=${VI_INDS[normal]} ;;
+                'main')  vi_mode=${VI_INDS[ins]} ;;
+            esac
             zle reset-prompt
         }
         zle -N zle-keymap-select
-        function zle-line-finish { vi_mode=${_vi_ins}; }
+        # reset to ins when finish
+        function zle-line-finish { vi_mode=${VI_INDS[ins]}; }
         zle -N zle-line-finish
     }
-    local P_PROM=''
+    local p_prom=''
     # with nerd fonts
-    local P_LOGIN=$'\UF2BD'
-    local P_BEGINR=$'\UE0C7'
-    local P_BEGIN=$'\UE0C6'
-    local P_MIDTEX=$'\UE0C4'
-    local P_END=$'\UE0C6'
-    local P_DIR=$'\UF07C'
-    local P_CLOCK=$'\UF017'
-    local P_CONN=$'\UF438'
-    [ ! -z ${SSH_CONNECTION} ] && local P_CONN_ST="\
-${fg[red]}${P_CONN}[${fg[black]}${${SSH_CONNECTION%%\ *}/\%/@}${fg[red]}] "
+    local p_login=$'\UF2BD'
+    local p_beginr=$'\UE0C7'
+    local p_begin=$'\UE0C6'
+    local p_midtex=$'\UE0C4'
+    local p_end=$'\UE0C6'
+    local p_dir=$'\UF07C'
+    local p_clock=$'\UF017'
+    local p_conn=$'\UF438'
+    [ ! -z "$SSH_CONNECTION" ] && {
+        IFS=' ' read -r _ssh_raw _ <<< "$SSH_CONNECTION"
+        local _ssh_src="${_ssh_raw//\%/%%}"
+        local p_conn_st="%F{red}${p_conn}[%F{black}${_ssh_src}%F{red}] "
+    }
 
     PROMPT="\
-%{${bg[green]}%}%{${fg[red]}%} ${P_LOGIN}%{${reset_color}%}\
+%{${bg[green]}%}%{${fg[red]}%} ${p_login}%{${reset_color}%}\
 %{${bg[green]}%}%{${fg_bold[black]}%} %n %{${reset_color}%}\
 \
-%{${bg[blue]}%}%{${fg[green]}%}${P_MIDTEX}%{${reset_color}%}\
+%{${bg[blue]}%}%{${fg[green]}%}${p_midtex}%{${reset_color}%}\
 %{${bg[blue]}%}%{${fg[red]}%} $(print_os_glyph)%{${reset_color}%}\
-%{${bg[blue]}%}%{${fg_bold[black]}%} %m ${P_CONN_ST:=}%{${reset_color}%}\
-%{${bg[black]}%}%{${fg[blue]}%}${P_BEGIN}%{${reset_color}%}\
-%{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
+%{${bg[blue]}%}%{${fg_bold[black]}%} %m ${p_conn_st:=}%{${reset_color}%}\
+%{${bg[black]}%}%{${fg[blue]}%}${p_begin}%{${reset_color}%}\
+%{${fg[black]}%}${p_midtex}%{${reset_color}%}
 \
-%{${bg[black]}%}%{${fg[green]}%} ${P_CLOCK}%{${reset_color}%}\
+%{${bg[black]}%}%{${fg[green]}%} ${p_clock}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[brblack]}%} %D %T%{${reset_color}%}\
-%{${bg[black]}%}%{${fg[green]}%} ${P_DIR}%{${reset_color}%}\
+%{${bg[black]}%}%{${fg[green]}%} ${p_dir}%{${reset_color}%}\
 %{${bg[black]}%}%{${fg[brblack]}%} %~  %{${reset_color}%}\
-%{${fg[black]}%}${P_MIDTEX}%{${reset_color}%}
+%{${fg[black]}%}${p_midtex}%{${reset_color}%}
 \
-%{${fg[black]}%}${P_PROM}%{${reset_color}%}"'${vi_mode}'\
+%{${fg[black]}%}${p_prom}%{${reset_color}%}"'${vi_mode}'\
 "%(?.%{${fg[brblack]}%}.%{${fg[red]}%})%#%{${reset_color}%} "
 
     PROMPT2="\
 %{${bg[black]}%}%{${fg[green]}%} %_ >%{${reset_color}%}\
-%{${fg[black]}%}${P_MIDTEX}%{${reset_color}%} "
+%{${fg[black]}%}${p_midtex}%{${reset_color}%} "
+
+    # -- vcs info --
+    local p_gitbranch=$'\UF418'
+    local p_vcsico=$'\UE702'
+    local p_endr=$'\UE0C7'
+    local p_midtexr=$'\UE0C5'
+    zstyle ':vcs_info:*' formats \
+           "%F{black}${p_midtexr}\
+%K{black}%F{green} ${p_vcsico} %F{brblack}%s %F{magenta}${p_endr}\
+%{${bg[magenta]}%}%{${fg[white]}%} ${p_gitbranch}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
+    zstyle ':vcs_info:*' actionformats \
+           "%F{black}${p_midtexr}\
+%K{black}%F{green} ${p_vcsico} %F{brblack}%s %F{magenta}${p_endr}\
+%{${bg[magenta]}%}%{${fg[white]}%} ${p_gitbranch}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
+
+    function rdm_update_vcs_info() {
+        LANG=en_US.UTF-8 vcs_info
+        RPROMPT="${vcs_info_msg_0_}"
+    }
+    add-zsh-hook precmd rdm_update_vcs_info
 
     # NOTE: initialize zvm indicator if zvm available on load
     [[ $(type zvm_init) != 'zvm_init not found' ]] && rdm_zvm_update_indicator
@@ -554,27 +584,6 @@ function TRAPINT() {
 }
 
 # ----------------------------------------------------------------------------------------
-# vcs info TODO: include vcs prompt to theme
-function() {
-    local P_GITBRANCH=$'\UF418'
-    local P_VCSICO=$'\UE702'
-    local P_ENDR=$'\UE0C7'
-    local P_MIDTEXR=$'\UE0C5'
-    zstyle ':vcs_info:*' formats \
-           "%F{black}${P_MIDTEXR}\
-%K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
-%{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %f%k%{${reset_color}%}"
-    zstyle ':vcs_info:*' actionformats \
-           "%F{black}${P_MIDTEXR}\
-%K{black}%F{green} ${P_VCSICO} %F{brblack}%s %F{magenta}${P_ENDR}\
-%{${bg[magenta]}%}%{${fg[white]}%} ${P_GITBRANCH}%{${fg[white]}%} %b %a %f%k%{${reset_color}%}"
-}
-function _update_vcs_info() {
-    LANG=en_US.UTF-8 vcs_info
-    RPROMPT="${vcs_info_msg_0_}"
-}
-add-zsh-hook precmd _update_vcs_info
-
 
 # simple timer function for tea preparation
 function ktimer() {
@@ -649,7 +658,7 @@ function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 # detect if tmux is running and attach
 function() {
     # check tmux or screen available, if not, abort
-    ! { is_available 'tmux' || is_available 'screen' } && return 1
+    ! { is_available 'tmux' || is_available 'screen'; } && return 1
 
     if is_screen_or_tmux_running; then
         if is_tmux_running; then
@@ -665,7 +674,7 @@ function() {
     else
         if shell_has_started_interactively && ! is_ssh_running; then
             # if tmux already started
-            [ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ] && {
+            [ "$(tmux list-sessions 2>/dev/null | wc -l)" -gt 0 ] && {
                 # if emacs vterm running, try to attach session 'vterm'
                 is_emacs_vterm_running && {
                     echo "detect emacs vterm!"
