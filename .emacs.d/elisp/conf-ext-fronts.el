@@ -290,9 +290,9 @@
     (kbd "C-<return>") 'mastodon-toot-send)
   )
 
-(leaf go-translate
+(leaf gt
   :ensure t
-  :commands gt-do-translate
+  :commands gt-translate
   :defun request rdm/deepl-api-key
   :config
   (defun show-deepl-api-usage ()
