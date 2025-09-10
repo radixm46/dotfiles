@@ -371,9 +371,8 @@ function print_os_glyph() {
             ;;
         Linux*)
             if [[ -e '/etc/os-release' ]]; then
-                local distro_id=$(for l in $(<'/etc/os-release'); \
-                                  do [[ "${l}" == ID* ]] && echo "${${l#'ID='}:Q:l}" \
-                                         && break; done)
+                local -l distro_id
+                distro_id=$(. /etc/os-release; print -r -- "$ID")
                 case "${distro_id}" in
                     arch*)     printf $'\UF303' ;;
                     centos*)   printf $'\UF304' ;;
