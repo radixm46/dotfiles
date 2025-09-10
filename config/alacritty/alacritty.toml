@@ -1,0 +1,157 @@
+live_config_reload = true
+working_directory = "None"
+import = [
+    "~/.config/alacritty/alacritty-theme/themes/nord.toml"
+]
+
+[bell]
+animation = "EaseOutExpo"
+color     = "0xffffff"
+duration  = 0
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+# [colors.bright]
+# black   = "0x002b36"
+# blue    = "0x839496"
+# cyan    = "0x93a1a1"
+# green   = "0x586e75"
+# magenta = "0x6c71c4"
+# red     = "0xcb4b16"
+# white   = "0xfdf6e3"
+# yellow  = "0x657b83"
+
+# [colors.normal]
+# black   = "0x073642"
+# blue    = "0x268bd2"
+# cyan    = "0x2aa198"
+# green   = "0x859900"
+# magenta = "0xd33682"
+# red     = "0xdc322f"
+# white   = "0xeee8d5"
+# yellow  = "0xb58900"
+
+# [colors.primary]
+# background = "0x002b36"
+# foreground = "0x839496"
+
+# [colors.selection]
+# background = "0xfdf6e3"
+# text       = "0x586e75"
+
+[cursor]
+style            = "Block"
+unfocused_hollow = true
+
+[debug]
+log_level          = "Warn"
+persistent_logging = false
+print_events       = false
+render_timer       = false
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 14.0
+
+[font.normal]
+style  = "Regular"
+family = "UDEV Gothic NF"
+
+[font.bold]
+style  = "Bold"
+family = "UDEV Gothic NF"
+
+[font.italic]
+style  = "Italic"
+family = "UDEV Gothic NF"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.offset]
+x = 0
+y = 0
+
+[[keyboard.bindings]]
+action = "Paste"
+key    = "Paste"
+
+[[keyboard.bindings]]
+action = "Copy"
+key    = "Copy"
+
+[[keyboard.bindings]]
+action = "ClearLogNotice"
+key    = "L"
+mods   = "Control"
+
+[[keyboard.bindings]]
+chars = "\f"
+key   = "L"
+mods  = "Control"
+
+[[keyboard.bindings]]
+action = "ScrollPageUp"
+key    = "PageUp"
+mode   = "~Alt"
+mods   = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollPageDown"
+key    = "PageDown"
+mode   = "~Alt"
+mods   = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollToTop"
+key    = "Home"
+mode   = "~Alt"
+mods   = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollToBottom"
+key    = "End"
+mode   = "~Alt"
+mods   = "Shift"
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key    = "N"
+mods   = "Command"
+
+[mouse]
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse  = "Middle"
+
+[scrolling]
+history    = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard     = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
+[window]
+startup_mode    = "Windowed"
+blur            = true
+opacity         = 0.60
+decorations     = "Full"
+dynamic_padding = false
+dynamic_title   = true
+option_as_alt   = "Both"
+# gtk_theme_variant = "None"
+
+[window.dimensions]
+columns = 0
+lines   = 0
+
+[window.padding]
+x = 0
+y = 0
