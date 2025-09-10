@@ -1,3 +1,6 @@
+# shellcheck disable=SC1036 # disable "use parens inside array"
+# shellcheck disable=SC2128 # disable "expanding an array without an index"
+# shellcheck disable=SC2206 # disable "quote to prevent word split"
 # compile when update
 [ ! -f "${HOME}/.zshenv.zwc" -o "${HOME}/.zshenv" -nt "${HOME}/.zshenv.zwc" ] && {
     [[ -o interactive ]] && printf 'compile zshrc...'
@@ -43,7 +46,9 @@ case "$(uname)" in
             if runs_on_macARM64 && brew_exists_at_opt; then
                 fpath=(${BREW_PATH_OPT}/share/zsh/site-functions(N-/) ${fpath})
                 # switch arch
+                # shellcheck disable=SC2068
                 function x86() { arch -x86_64 $@; }
+                # shellcheck disable=SC2068
                 function arm() { arch -arm64 $@; }
                 # launch zsh on rosetta2
                 function zsh_ovrst2() {

@@ -1,4 +1,23 @@
 # -*- mode:conf; -*-
 # use ksh instead zsh
 shell=ksh
-disable=SC1009,SC1036,SC1090,SC1091,SC2206,SC2034,SC2111,SC2154,SC2190,SC2298,SC2329
+# source follow
+disable=SC1090,SC1091
+# shebang
+disable=SC2148
+# variable
+disable=SC2154,SC2034
+# expansions
+disable=SC2295,SC2296
+# enable "local" keyword
+disable=SC3043
+# enable function () {...} style
+disable=SC2111
+# allow expand on define
+disable=SC2139
+# suppress association array key warn
+disable=SC2190
+# ${$x} is invalid.
+disable=SC2298
+# This function is never invoked.
+disable=SC2329
