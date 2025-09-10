@@ -1,5 +1,5 @@
 # compile when update
-[ ! -f "${HOME}/.zshrc.zwc" -o "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ] && {
+[ ! -f "${HOME}/.zshrc.zwc" ] || [ "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ] && {
     [[ -o interactive ]] && printf 'compile zshrc...'
     zcompile "${HOME}/.zshrc"
     [[ -o interactive ]] && printf 'done!\n'
@@ -14,8 +14,8 @@ ZINITDIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ -z $NO_ZINIT ] && {
     [[ ! -d ${ZINITDIR} ]] && {
     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
-    command mkdir -p "$(dirname $ZINITDIR)" && command chmod g-rwX $(dirname ${ZINITDIR})
-    command git clone https://github.com/zdharma-continuum/zinit.git "${ZINITDIR}" && \
+    command mkdir -p "$(dirname "$ZINITDIR")" && command chmod g-rwX "$(dirname "$ZINITDIR")"
+    command git clone https://github.com/zdharma-continuum/zinit.git "$ZINITDIR" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
             print -P "%F{160}▓▒░ The clone has failed.%f%b"
     }
@@ -133,7 +133,7 @@ is_available 'fzf' && {
     alias -g Fp='| fzf --border=rounded --preview=${fzf_prev_opts}'
 
 
-    is-at-least 0.48 $(fzf --version) &&
+    is-at-least 0.48 "$(fzf --version)" &&
         FZF_CTRL_T_COMMAND='' source <(fzf --zsh) # 0.48以降必須
 
     zinit ice depth=1 && zinit light mollifier/anyframe &&
@@ -418,9 +418,13 @@ function get_weather() {
                ;;
             f) local format=''"${OPTARG}"
                ;;
+            *)
+                echo invalid arg, exit
+                return 1
+                ;;
         esac
     done
-    curl -s "wttr.in/${target_loc}"\?"${days:=1n}qA&lang=${lang_:=ja}&format=${format:=}"
+    curl -s "wttr.in/${target_loc}?${days:=1n}qA&lang=${lang_:=ja}&format=${format:=}"
 }
 alias wttr='get_weather'
 

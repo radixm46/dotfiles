@@ -2,7 +2,7 @@
 # shellcheck disable=SC2128 # disable "expanding an array without an index"
 # shellcheck disable=SC2206 # disable "quote to prevent word split"
 # compile when update
-[ ! -f "${HOME}/.zshenv.zwc" -o "${HOME}/.zshenv" -nt "${HOME}/.zshenv.zwc" ] && {
+[ ! -f "${HOME}/.zshenv.zwc" ] || [ "${HOME}/.zshenv" -nt "${HOME}/.zshenv.zwc" ] && {
     [[ -o interactive ]] && printf 'compile zshrc...'
     zcompile "${HOME}/.zshenv"
     [[ -o interactive ]] && printf 'done!\n'
@@ -102,14 +102,16 @@ is_available 'npm' && [ -d "${HOME}/.npm-global" ] && {
         if [ -d ${ghcup_path} ]; then
             path=("${ghcup_path}"(N-/) ${path})
         elif is_available 'stack'; then
-            path=($(stack path --local-bin)(N-/) ${path})
+            path=("$(stack path --local-bin)"(N-/) ${path})
         fi
     }
 
     is_available 'dotnet' && {
         case ${OSTYPE} in
             darwin* )
-                export DOTNET_ROOT="$(brew --prefix)/opt/dotnet/libexec"
+                # shellcheck disable=SC2155
+                is_available 'brew' && \
+                    export DOTNET_ROOT="$(brew --prefix)/opt/dotnet/libexec"
                 ;;
             linux* )
                 # NOTE: temporary configured for test (not checked yet!!)
