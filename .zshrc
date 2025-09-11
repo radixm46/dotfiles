@@ -145,14 +145,6 @@ is_available 'fzf' && {
             elif is_available 'tmux'; then
                 zstyle ":anyframe:selector:" use fzf
                 zstyle ":anyframe:selector:fzf:" command 'fzf --border=rounded --select-1'
-                is_available 'tldr' &&
-                    function tldr_() {
-                        local prev=$( is_available 'mdcat' &&  printf '|mdcat -P')
-                        tldr $(tldr --list |
-                                   fzf -q "${1=}" --select-1 --border=rounded  --preview "tldr --raw {} ${prev}"
-                            ) 2>/dev/null ||
-                            printf 'require valid arg\n'
-                    }
             fi
             # enable anyframe binding with prefix ctrl+f in vi cmd mode
             bindkey -M vicmd '^fb'  anyframe-widget-cdr
@@ -164,6 +156,17 @@ is_available 'fzf' && {
                 bindkey -M vicmd '^fg'  anyframe-widget-cd-ghq-repository
                 bindkey -M vicmd '^f^g' anyframe-widget-cd-ghq-repository
             }
+        }
+
+    is_available 'tldr' &&
+        function tldr_() {
+            # shellcheck disable=2155
+            local prev=$( is_available 'mdcat' &&  printf '|mdcat -P')
+            tldr "$(tldr --list |
+                      fzf -q "${1=}" --select-1 --border=rounded --height=~45% \
+                        --preview "tldr --raw {} ${prev}"
+              )" 2>/dev/null ||
+                printf 'require valid arg\n'
         }
 }
 
