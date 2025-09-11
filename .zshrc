@@ -334,6 +334,12 @@ case ${OSTYPE} in
     darwin* )
         alias log-darwin='/usr/bin/log'
         is_available 'pbcopy' && alias -g C='| pbcopy'
+
+        # if macvim available, alias vim to macvim
+        [ -d '/Applications/MacVim.app' ] && {
+            alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
+            alias vi='vim'
+        }
         ;;
     linux* )
         is_available 'ip' && \

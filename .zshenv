@@ -63,12 +63,6 @@ case "$(uname)" in
                                     ${path})
             fi
         }
-
-        # if macvim available, alias vim to macvim
-        [ -d '/Applications/MacVim.app' ] && {
-            alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-            alias vi='vim'
-        }
         ;;
     Linux*)
         function() {
