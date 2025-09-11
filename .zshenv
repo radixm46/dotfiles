@@ -8,17 +8,34 @@
     [[ -o interactive ]] && printf 'done!\n'
 }
 
-export LANG=ja_JP.UTF-8
-export XDG_CONFIG_HOME="${HOME}/.config"
-# export LANGUAGE=en_US.UTF-8
-# export LC_ALL=en_US.UTF-8
-# export LC_CTYPE=en_US.UTF-8
 # ------------------------------------------------------------------------------
 # define functions
+function() {
+    if (( $+commands[locale] )); then
+        # filter locales containing UTF-8 / utf8
+        local -ra loc_u=(${(M)$(locale -a)#*(UTF-8|utf8)*})
+        local l
+        for pt in ja_JP en_US C; do
+            [[ ${l:=${loc_u[(R)$pt*]}} ]] && {
+                export LANG=$l
+                return 0
+            }
+        done
+    fi
+    : ${LANG:=C}
+    export LANG
+}
 
 # check given command is available via 'hash
 function is_available() { hash "$1" >/dev/null 2>&1; return $?; }
+export LC_CTYPE=en_JP.UTF-8
+export LANGUAGE="ja:en_US:en"
+: "${XDG_CONFIG_HOME:=$HOME/.config}"
+: "${XDG_CACHE_HOME:=$HOME/.cache}"
+: "${XDG_DATA_HOME:=$HOME/.local/share}"
+export XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME
 
+# ------------------------------------------------------------------------------
 # setup path, environment
 typeset -U path PATH
 
