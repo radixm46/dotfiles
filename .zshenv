@@ -3,7 +3,7 @@
 # shellcheck disable=SC2206 # disable "quote to prevent word split"
 # compile when update
 [ ! -f "${HOME}/.zshenv.zwc" ] || [ "${HOME}/.zshenv" -nt "${HOME}/.zshenv.zwc" ] && {
-    [[ -o interactive ]] && printf 'compile zshrc...'
+    [[ -o interactive ]] && printf 'compile zshenv...'
     zcompile "${HOME}/.zshenv"
     [[ -o interactive ]] && printf 'done!\n'
 }
