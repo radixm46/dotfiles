@@ -67,14 +67,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Execute shellcheck(zsh)
-        run: make lint-shellenv
-        continue-on-error: true
-
-      - name: Execute shellcheck(bash)
-        run: make lint-bash
-        continue-on-error: true
-
       - name: Read test zsh config
         run: |
           zsh -n .zshenv
@@ -85,4 +77,12 @@ jobs:
           for f in bin/*; do
             bash -n $f
           done
+
+      - name: Execute shellcheck(zsh)
+        run: make lint-shellenv
+        continue-on-error: true
+
+      - name: Execute shellcheck(bash)
+        run: make lint-bash
+        continue-on-error: true
 
