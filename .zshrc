@@ -102,13 +102,13 @@ zinit ice has'emacs' depth=1 && zinit light Flinner/zsh-emacs # alias
 zinit ice has'systemctl' depth=1 && zinit light le0me55i/zsh-systemd # alias
 zinit ice has'docker' depth=1 && zinit light akarzim/zsh-docker-aliases #alias
 
-is_available 'git' && {
+(( $+commands[git] )) && {
     zinit ice depth=1 && zinit light mdumitru/git-aliases # alias
     zinit ice depth=1 && zinit light paulirish/git-open # open homepage of repo
     zinit ice depth=1 && zinit light mollifier/cd-gitroot # move to root dir of repo
 }
 
-is_available 'fzf' && {
+(( $+commands[fzf] )) && {
     zinit ice has'jq' depth=1 && zinit light reegnz/jq-zsh-plugin
     zinit ice has'git' depth=1 && zinit light wfxr/forgit
 
@@ -121,7 +121,7 @@ is_available 'fzf' && {
  --prompt='> ' --marker='❚' --pointer='▶' \
  --bind 'ctrl-d:page-down' --bind 'ctrl-u:page-up' --bind 'alt-d:preview-page-down' --bind 'alt-u:preview-page-up'"
     fzf_prev_opts="$(
-        if is_available 'bat'; then
+        if (( $+commands[bat] )); then
             printf 'bat --color=always --theme=OneHalfDark --style=header,grid --line-range :100 {}'
         else
             printf '"cat"'
@@ -139,10 +139,10 @@ is_available 'fzf' && {
     zinit ice depth=1 && zinit light mollifier/anyframe &&
         autoload -Uz anyframe-init && {
             anyframe-init
-            if is_available 'tmux' && is-at-least "$(tmux -V)" '3.2' && [ ! -z "${TMUX}" ]; then
+            if (( $+commands[tmux] )) && is-at-least "$(tmux -V)" '3.2' && [ ! -z "${TMUX}" ]; then
                 zstyle ":anyframe:selector:" use fzf-tmux
                 zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -h60% -w85% -- --select-1'
-            elif is_available 'tmux'; then
+            elif (( $+commands[tmux] )); then
                 zstyle ":anyframe:selector:" use fzf
                 zstyle ":anyframe:selector:fzf:" command 'fzf --border=rounded --select-1'
             fi
@@ -152,16 +152,16 @@ is_available 'fzf' && {
             bindkey -M vicmd '^f^s' anyframe-widget-checkout-git-branch
             bindkey -M vicmd '^fe'  anyframe-widget-insert-git-branch
             bindkey -M vicmd '^f^e' anyframe-widget-insert-git-branch
-            is_available 'ghq' && {
+            (( $+commands[ghq] )) && {
                 bindkey -M vicmd '^fg'  anyframe-widget-cd-ghq-repository
                 bindkey -M vicmd '^f^g' anyframe-widget-cd-ghq-repository
             }
         }
 
-    is_available 'tldr' &&
+    (( $+commands[tldr] )) &&
         function tldr_() {
             # shellcheck disable=2155
-            local prev=$( is_available 'mdcat' &&  printf '|mdcat -P')
+            local prev=$( (( $+commands[mdcat] )) &&  printf '|mdcat -P')
             tldr "$(tldr --list |
                       fzf -q "${1=}" --select-1 --border=rounded --height=~45% \
                         --preview "tldr --raw {} ${prev}"
@@ -311,21 +311,21 @@ function() {
 }
 
 # enable alias with sudo
-is_available 'sudo' && \
+(( $+commands[sudo] )) && \
     alias sudo='sudo '
 
-is_available 'fd' && \
+(( $+commands[fd] )) && \
     alias fd='fd --color=auto'
-is_available 'bat' && {
+(( $+commands[bat] )) && {
     alias -g B='| bat'
     alias -g Ba='| bat --show-all'
     alias -g Bap='| bat --show-all --plain'
 }
 
-is_available 'duf' && \
+(( $+commands[duf] )) && \
     alias duf='duf -all -style=unicode -theme=dark'
 
-is_available 'rg' && {
+(( $+commands[rg] )) && {
     alias rg='rg --color=auto'
     alias -g R='| rg --color=auto'
 }
@@ -333,7 +333,7 @@ is_available 'rg' && {
 case ${OSTYPE} in
     darwin* )
         alias log-darwin='/usr/bin/log'
-        is_available 'pbcopy' && alias -g C='| pbcopy'
+        (( $+commands[pbcopy] )) && alias -g C='| pbcopy'
 
         # if macvim available, alias vim to macvim
         [ -d '/Applications/MacVim.app' ] && {
@@ -342,15 +342,15 @@ case ${OSTYPE} in
         }
         ;;
     linux* )
-        is_available 'ip' && \
+        (( $+commands[ip] )) && \
             alias ip='ip -color'
 
         # clipboard manager
-        if is_available 'wl-copy'; then
+        if (( $+commands[wl-copy] )); then
             alias -g C='| wl-copy --trim-newline'
-        elif is_available 'xsel'; then
+        elif (( $+commands[xsel] )); then
             alias -g C='| xsel --input --clipboard'
-        elif is_available 'putclip'; then
+        elif (( $+commands[putclip] )); then
             alias -g C='| putclip'
         fi
         ;;
@@ -360,9 +360,9 @@ esac
 alias -g TC='COLORTERM=truecolor'
 
 # set manpager as bat or nvim if available
-if is_available 'bat'; then
+if (( $+commands[bat] )); then
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-elif is_available 'nvim'; then
+elif (( $+commands[nvim] )); then
     export MANPAGER="nvim -c 'set ft=man' -"
 fi
 
@@ -438,7 +438,7 @@ function get_weather() {
 alias wttr='get_weather'
 
 # launch emacs magit from shell
-is_available emacs && {
+(( $+commands[emacs] )) && {
     function tdired() {
         emacsclient -nw --eval "(dired \"$1\")"
     }
@@ -670,7 +670,7 @@ function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 # detect if tmux is running and attach
 function() {
     # check tmux or screen available, if not, abort
-    ! { is_available 'tmux' || is_available 'screen'; } && return 1
+    ! { (( $+commands[tmux] )) || (( $+commands[screen] )); } && return 1
 
     if is_screen_or_tmux_running; then
         if is_tmux_running; then
