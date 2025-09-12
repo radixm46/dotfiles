@@ -368,7 +368,7 @@ fi
 
 # ----------------------------------------------------------------------------------------
 typeset -gA nf_tbl
-if [[ ${(L)LANG} == *utf?8* ]]; then
+if [[ $LANG == *(utf8|UTF-8) ]]; then
     nf_tbl=(
         fa-folder_open      $'\UF07C'     fa-clock_o         $'\UF017'
         fa-circle_o         $'\UF10C'     fa-circle          $'\UF111'
@@ -549,13 +549,13 @@ function prompt_rdm46theme_setup() {
     }
     local p_prom=''
     # with nerd fonts
-    local p_login=${nf_tbl[fa-circle_user]:-'[usr]'}
+    local p_login=${nf_tbl[fa-circle_user]:-'[U]'}
     local p_beginr=${nf_tbl[ple-pixelated_squares_big_mirrored]}
     local p_begin=${nf_tbl[ple-pixelated_squares_big]}
     local p_midtex=${nf_tbl[ple-pixelated_squares_small]}
     local p_end=${nf_tbl[ple-pixelated_squares_big]}
-    local p_dir=${nf_tbl[fa-folder_open]:-'[dir]'}
-    local p_clock=${nf_tbl[fa-clock_o]:-'[time]'}
+    local p_dir=${nf_tbl[fa-folder_open]:-'[D]'}
+    local p_clock=${nf_tbl[fa-clock_o]:-'[T]'}
     local p_conn=${nf_tbl[oct-triangle_left]:-'<<'}
     [ ! -z "$SSH_CONNECTION" ] && {
         IFS=' ' read -r _ssh_raw _ <<< "$SSH_CONNECTION"
