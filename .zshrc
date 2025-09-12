@@ -367,15 +367,46 @@ elif (( $+commands[nvim] )); then
 fi
 
 # ----------------------------------------------------------------------------------------
+typeset -gA nf_tbl
+if [[ ${(L)LANG} == *utf?8* ]]; then
+    nf_tbl=(
+        fa-folder_open      $'\UF07C'     fa-clock_o         $'\UF017'
+        fa-circle_o         $'\UF10C'     fa-circle          $'\UF111'
+        fa-info             $'\UF129'     fa-steam           $'\UF1B6'
+        fa-circle_user      $'\UF2BD'
+        linux-apple         $'\UF302'     linux-arch         $'\UF303'
+        linux-centos        $'\UF304'     linux-debian       $'\UF306'
+        linux-fedora        $'\UF30A'     linux-linuxmint    $'\UF30E'
+        linux-manjaro       $'\UF312'     linux-nixos        $'\UF313'
+        linux-opensuse      $'\UF314'     linux-raspberry_pi $'\UF315'
+        linux-redhat        $'\UF316'     linux-slackware    $'\UF318'
+        linux-tux           $'\UF31A'     linux-ubuntu       $'\UF31C'
+        linux-endeavour     $'\UF322'     linux-kali_linux   $'\UF327'
+        # md
+        md-login            $'\UF841'     md-linux           $'\UF033D'
+        # oct
+        oct-triangle_left   $'\UF438'     oct-git_branch     $'\UF418'
+        dev-git             $'\UE702'
+        # prompt border
+        ple-pixelated_squares_small          $'\UE0C4'
+        ple-pixelated_squares_small_mirrored $'\UE0C5'
+        ple-pixelated_squares_big            $'\UE0C6'
+        ple-pixelated_squares_big_mirrored   $'\UE0C7'
+    )
+else
+    nf_tbl=() # empty
+fi
+
+# ----------------------------------------------------------------------------------------
 # define functions
 # print os glyph from nerd fonts
 function print_os_glyph() {
     case "$(uname)" in
         Darwin)
             if runs_on_macX86_64; then
-                printf $'\UF302 \UF129'
+                echo -n "${nf_tbl[linux-apple]} ${nf_tbl[fa-info]}"
             else
-                printf $'\UF302'
+                echo -n "${nf_tbl[linux-apple]}"
             fi
             ;;
         Linux*)
@@ -383,30 +414,30 @@ function print_os_glyph() {
                 local -l distro_id
                 distro_id=$(. /etc/os-release; print -r -- "$ID")
                 case "${distro_id}" in
-                    arch*)     printf $'\UF303' ;;
-                    centos*)   printf $'\UF304' ;;
-                    debian*)   printf $'\UF306' ;;
-                    fedora*)   printf $'\UF30A' ;;
-                    manjaro*)  printf $'\UF312' ;;
-                    opensuse*) printf $'\UF314' ;;
-                    raspbian*) printf $'\UF315' ;;
-                    sles*)     printf $'\UF314' ;;
-                    ubuntu*)   printf $'\UF31C' ;;
-                    steamos*)  printf $'\UF1B6' ;;
-                    kali*)     printf $'\UF327' ;;
-                    ende*)     printf $'\UF322' ;;
-                    # slackware) printf $'\UF318' ;;
-                    # nixos) printf $'\UF313' ;;
-                    # mint) printf $'\UF30F' ;;
-                    # redhat) printf $'\UF316' ;;
-                    *) printf $'\UF31A' ;;
+                    arch*)     echo -n "${nf_tbl[linux-arch]}" ;;
+                    centos*)   echo -n "${nf_tbl[linux-centos]}" ;;
+                    debian*)   echo -n "${nf_tbl[linux-debian]}" ;;
+                    fedora*)   echo -n "${nf_tbl[linux-fedora]}" ;;
+                    manjaro*)  echo -n "${nf_tbl[linux-manjaro]}" ;;
+                    opensuse*) echo -n "${nf_tbl[linux-opensuse]}" ;;
+                    raspbian*) echo -n "${nf_tbl[linux-raspberry_pi]}" ;;
+                    sles*)     echo -n "${nf_tbl[linux-opensuse]}" ;;
+                    ubuntu*)   echo -n "${nf_tbl[linux-ubuntu]}" ;;
+                    steamos*)  echo -n "${nf_tbl[fa-steam]}" ;;
+                    kali*)     echo -n "${nf_tbl[linux-kali_linux]}" ;;
+                    ende*)     echo -n "${nf_tbl[linux-endeavour]}" ;;
+                    slackware) echo -n "${nf_tbl[linux-slackware]}" ;;
+                    nixos)     echo -n "${nf_tbl[linux-nixos]}" ;;
+                    mint)      echo -n "${nf_tbl[linux-linuxmint]}" ;;
+                    redhat)    echo -n "${nf_tbl[linux-redhat]}" ;;
+                    *)         echo -n "${nf_tbl[linux-tux]}" ;;
                 esac
             else
-                printf $'\UF83C'
+                echo -n "${nf_tbl[md-linux]}"
             fi
             ;;
         *)
-            printf $'\UF841'
+            echo -n "${nf_tbl[md-login]}"
             ;;
     esac
 }
@@ -475,8 +506,8 @@ autoload -Uz promptinit && promptinit
 setopt prompt_subst
 
 function prompt_rdm46theme_setup() {
-    local _isign=$'\UF10C'
-    local _csign=$'\UF111'
+    local _isign=${nf_tbl[fa-circle_o]:-'[ ]'}
+    local _csign=${nf_tbl[fa-circle]:-'[*]'}
     vi_mode=''
     typeset -gA VI_INDS
     VI_INDS=(
@@ -518,14 +549,14 @@ function prompt_rdm46theme_setup() {
     }
     local p_prom=''
     # with nerd fonts
-    local p_login=$'\UF2BD'
-    local p_beginr=$'\UE0C7'
-    local p_begin=$'\UE0C6'
-    local p_midtex=$'\UE0C4'
-    local p_end=$'\UE0C6'
-    local p_dir=$'\UF07C'
-    local p_clock=$'\UF017'
-    local p_conn=$'\UF438'
+    local p_login=${nf_tbl[fa-circle_user]:-'[usr]'}
+    local p_beginr=${nf_tbl[ple-pixelated_squares_big_mirrored]}
+    local p_begin=${nf_tbl[ple-pixelated_squares_big]}
+    local p_midtex=${nf_tbl[ple-pixelated_squares_small]}
+    local p_end=${nf_tbl[ple-pixelated_squares_big]}
+    local p_dir=${nf_tbl[fa-folder_open]:-'[dir]'}
+    local p_clock=${nf_tbl[fa-clock_o]:-'[time]'}
+    local p_conn=${nf_tbl[oct-triangle_left]:-'<<'}
     [ ! -z "$SSH_CONNECTION" ] && {
         IFS=' ' read -r _ssh_raw _ <<< "$SSH_CONNECTION"
         local _ssh_src="${_ssh_raw//\%/%%}"
@@ -556,10 +587,10 @@ function prompt_rdm46theme_setup() {
 %{${fg[black]}%}${p_midtex}%{${reset_color}%} "
 
     # -- vcs info --
-    local p_gitbranch=$'\UF418'
-    local p_vcsico=$'\UE702'
-    local p_endr=$'\UE0C7'
-    local p_midtexr=$'\UE0C5'
+    local p_gitbranch=${nf_tbl[oct-git_branch]:-'[branch]'}
+    local p_vcsico=${nf_tbl[dev-git]:-'[vcs]'}
+    local p_endr=${nf_tbl[ple-pixelated_squares_big_mirrored]}
+    local p_midtexr=${nf_tbl[ple-pixelated_squares_small_mirrored]}
     zstyle ':vcs_info:*' formats \
            "%F{black}${p_midtexr}\
 %K{black}%F{green} ${p_vcsico} %F{brblack}%s %F{magenta}${p_endr}\
