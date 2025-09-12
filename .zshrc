@@ -403,10 +403,10 @@ fi
 function print_os_glyph() {
     case "$(uname)" in
         Darwin)
-            if runs_on_macX86_64; then
-                echo -n "${nf_tbl[linux-apple]} ${nf_tbl[fa-info]}"
-            else
+            if [ "$(uname -m)" = 'arm64' ]; then
                 echo -n "${nf_tbl[linux-apple]}"
+            else
+                echo -n "${nf_tbl[linux-apple]} ${nf_tbl[fa-info]}"
             fi
             ;;
         Linux*)

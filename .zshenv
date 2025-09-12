@@ -36,28 +36,22 @@ export XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME
 # setup path, environment
 typeset -U path PATH
 
-case "$(uname)" in
-    Darwin)
-        setopt no_global_rcs #disable path helper
-        path=(${path} '/usr/sbin'(N-/) '/sbin'(N-/)) # init path
+function() {
+    case "$(uname)" in
+        Darwin)
+            setopt no_global_rcs #disable path helper
+            path=(${path} '/usr/sbin'(N-/) '/sbin'(N-/)) # init path
 
-        # return true if macOS runs on certain arch
-        function runs_on_macARM64() { [ "$(uname -m)" = 'arm64' ]; }
-        function runs_on_macX86_64() { [ "$(uname -m)" = 'x86_64' ]; }
-
-        # path of hoembrew on /opt/homebrew
-        function() {
+            # path of hoembrew on /opt/homebrew
             local BREW_PATH_OPT='/opt/homebrew'
-            function brew_exists_at_opt() { [ -d "${BREW_PATH_OPT}/bin" ]; }
-            # path of hoembrew on /usr/local/Homebrew
-            function brew_exists_at_local() { [ -d '/usr/local/Homebrew' ]; }
-
             # path add BREW_PATH_OPT/zsh to fpath
-            path=(${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
-                                  /usr/local/bin(N-/) /usr/local/sbin(N-/) \
-                                  ${path})
+            path=(
+                ${BREW_PATH_OPT}/bin(N-/) ${BREW_PATH_OPT}/sbin(N-/) \
+                /usr/local/bin(N-/) /usr/local/sbin(N-/) \
+                ${path}
+            )
             # switch homebrew dir by arch
-            if runs_on_macARM64 && brew_exists_at_opt; then
+            if [ "$(uname -m)" = 'arm64' ] && [ -d "${BREW_PATH_OPT}/bin" ]; then
                 fpath=(${BREW_PATH_OPT}/share/zsh/site-functions(N-/) ${fpath})
                 # switch arch
                 # shellcheck disable=SC2068
@@ -72,23 +66,20 @@ case "$(uname)" in
                         x86 '/bin/zsh'
                     fi
                 }
-            elif runs_on_macX86_64 && brew_exists_at_local; then
-                path=(/usr/local/bin(N-/) /usr/local/sbin(N-/) \
-                                    ${path})
+            elif [ "$(uname -m)" = 'x86_64' ] && [ -d '/usr/local/Homebrew' ]; then
+                path=(/usr/local/bin(N-/) /usr/local/sbin(N-/) ${path})
             fi
-        }
-        ;;
-    Linux*)
-        function() {
+
+            ;;
+        Linux*)
             local BREW_PATH='/home/linuxbrew/.linuxbrew'
             [ -d "${BREW_PATH}" ] && {
-                path=(${BREW_PATH}/bin(N-/) ${BREW_PATH}/sbin(N-/) \
-                                  ${path})
+                path=(${BREW_PATH}/bin(N-/) ${BREW_PATH}/sbin(N-/) ${path})
                 fpath=(${BREW_PATH}/share/zsh/site-functions(N-/) ${fpath})
             }
-        }
-        ;;
-esac
+            ;;
+    esac
+}
 
 
 # check rust environment
