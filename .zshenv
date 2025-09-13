@@ -12,7 +12,7 @@
 function() {
     if (( $+commands[locale] )); then
         # filter locales containing UTF-8 / utf8
-        local -ra loc_u=(${(M)$(locale -a)#*(UTF-8|utf8)*})
+        local -ra loc_u=(${(@fM)$(locale -a):#*(UTF-8|utf8)})
         local l
         for pt in ja_JP en_US C; do
             [[ ${l:=${loc_u[(R)$pt*]}} ]] && {
