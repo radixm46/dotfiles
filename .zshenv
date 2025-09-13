@@ -16,16 +16,16 @@ function() {
         local l
         for pt in ja_JP en_US C; do
             [[ ${l:=${loc_u[(R)$pt*]}} ]] && {
-                export LANG=$l
+                export LANG=$l LC_CTYPE=$l
                 return 0
             }
         done
     fi
     : ${LANG:=C}
-    export LANG
+    : ${LC_CTYPE:=C}
+    export LANG LC_CTYPE
 }
 
-export LC_CTYPE=en_JP.UTF-8
 export LANGUAGE="ja:en_US:en"
 : "${XDG_CONFIG_HOME:=$HOME/.config}"
 : "${XDG_CACHE_HOME:=$HOME/.cache}"
