@@ -874,7 +874,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                    (unless (frame-list) (load-theme 'doom-spacegrey t))
                                    (if (display-graphic-p)
                                        (conf-on-gui) (conf-on-term))))
-  (after-init-hook              . ((load-theme 'doom-spacegrey t)
+  (after-init-hook              . ((load-theme 'doom-oksolar-dark t)
                                    (if (display-graphic-p)
                                        (conf-on-gui) (conf-on-term)))))
 
