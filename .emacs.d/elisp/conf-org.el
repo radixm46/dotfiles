@@ -238,7 +238,7 @@
         org-mode-hook) . patch-org-todo-faces))
 
     (leaf org-modern
-      :straight
+      :ensure
       (org-modern :type git :host github
                   :repo "minad/org-modern" :branch "main")
       :doc "better looking org mode"
