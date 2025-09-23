@@ -689,7 +689,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :config
     (defun nyan-try ()
       (nyan-stop-animation)
-      (setq nyan-wavy-trail nil))
+      (setq nyan-wavy-trail nil
+            nyan-animate-nyancat nil))
     (defun nyan-xit ()
       (nyan-start-animation)
       (setq nyan-wavy-trail t))
@@ -749,7 +750,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       text-mode-hook
       git-timemachine-mode-hook) . whitespace-mode)
     :custom
-    (whitespace-global-modes . '(not dired-mode tar-mode neotree magit-status-mode magit-revision-mode hexl-mode))
+    (whitespace-global-modes . '(not dired-mode tar-mode neotree
+                                     magit-status-mode magit-revision-mode
+                                     hexl-mode lsp-ui-doc-mode))
     (whitespace-line-column . 80)
     (whitespace-style . '(face ;; enable
                           trailing
