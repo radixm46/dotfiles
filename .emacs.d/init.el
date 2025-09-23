@@ -2001,6 +2001,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :custom
     (minimap-major-modes     . '(prog-mode))
     (minimap-window-location . 'right)
+    (minimap-recenter-type   . 'middle)
     (minimap-update-delay    . 0.20)
     (minimap-minimum-width   . 15))
 
@@ -2107,7 +2108,14 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                            (registers . 5)))
       (initial-buffer-choice           . (lambda ()
                                            (dashboard-refresh-buffer)
-                                           (get-buffer "*dashboard*"))))
+                                           (get-buffer "*dashboard*")))
+      (dashboard-item-generators       . '((uptime    . dashboard-insert-uptime)
+                                           (recents   . dashboard-insert-recents)
+                                           (bookmarks . dashboard-insert-bookmarks)
+                                           (projects  . dashboard-insert-projects)
+                                           (agenda    . dashboard-insert-agenda)
+                                           (registers . dashboard-insert-registers)))
+      (dashboard-agenda-sort-strategy  . '(time-up priority-up)))
     :preface
     (defun dashboard-banner-selector (&rest _args)
       "choose banner before refreshing dashboard"
@@ -2116,9 +2124,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                  (display-graphic-p))
             (customize-set-variable 'dashboard-startup-banner banner-img)
           (customize-set-variable 'dashboard-startup-banner 3))))
-    :advice
-    (:before dashboard-refresh-buffer
-             dashboard-banner-selector)
+    :advice (:before dashboard-refresh-buffer dashboard-banner-selector)
     :bind ("<f12>" . dashboard-refresh-buffer))
 
   (leaf calendar
@@ -2245,9 +2251,12 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (global-unset-key "\M-2")
     :commands vterm
     :mode-hook
-    (vterm-mode-hook . ((rdm/sw-lnsp 1)
-                        (set (make-local-variable 'buffer-face-mode-face) 'fixed-pitch)
-                        (buffer-face-mode t)))
+    (rdm/sw-lnsp 1)
+    (remap-font-to-term)
+    (when (and (window-system)
+               (equal font-for-term "Explex Console NF"))
+      (ligature-set-ligatures '(vterm-mode) rdm/ligature-0xProto-all))
+    (buffer-face-mode t)
     :custom
     (vterm-max-scrollback     . 10000)
     (vterm-buffer-name-string . "vterm: %s")
@@ -2304,9 +2313,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       ;; (tramp-chunksize             . 2000)
       )
     :config
-    (leaf *tramp-customize :emacs>= "28"
+    (leaf *tramp-customize<=30.1 :emacs>= "28" :emacs< "30.1"
       :custom
-      (tramp-use-ssh-controlmaster-options . nil))
+      (tramp-use-ssh-controlmaster-options . nil)
+      (tramp-use-connection-share . t))
 
     )
 
@@ -2610,7 +2620,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                                  (t 'pdf-preface)))))
       :preface
       ;; load dirvish on compile to expand macros
-      (eval-and-compile (leaf dirvish :ensure t :require t))
+      (eval-when-compile (leaf dirvish :ensure t :require t))
 
       ;; define preview
       (dirvish-define-preview eza (file)
