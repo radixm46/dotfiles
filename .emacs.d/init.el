@@ -272,6 +272,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (defun ediff-window-display-p ()
       "overwritten ediff builtin function, for not generate new frame" nil))
 
+  (leaf xref :when (!executable-find "rg")
+    :tag "builtin"
+    :doc "use ripgrep if available"
+    :custom (xref-search-program . 'ripgrep))
+
   (leaf *load-evil-conf
     :doc "load evil"
     :preface
