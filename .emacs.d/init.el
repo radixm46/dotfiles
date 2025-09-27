@@ -1984,6 +1984,11 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :commands rainbow-mode
     :doc "preview colors from hex values")
 
+  (leaf windmove-mode :emacs>= "28.1"
+    :tag "builtin"
+    :doc "default windowmove function"
+    :config (windmove-mode -1))
+
   (leaf ace-window
     :ensure t
     :commands ace-window
