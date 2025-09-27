@@ -520,10 +520,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
             run-after-load-theme-hook)
     )
 
-  (leaf *config-doom-modeline
+  (leaf *config-doom-things
+    :doc "load required for doom-* functions"
     :config
-    (eval-and-compile ;; load required for doom-* functions
-      (load (!expand-file-name "elisp/doom" user-emacs-directory))))
+    (!el-load "elisp/doom"))
 
   (leaf solaire-mode :after doom-themes
     :doc "alternate bg color for 'unreal buffers'"
