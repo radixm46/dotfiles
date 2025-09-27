@@ -1104,8 +1104,13 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
                                                "-e ARG OPTS")))
     (evil-ex-define-cmd "ls" 'consult-buffer)
     (evil-ex-define-cmd "reg" 'consult-yank-from-kill-ring)
-    (leaf consult-dir :ensure t))
+    (leaf consult-dir
+      :ensure t
+      ;; launch by M-g d
+      :defun consult-dir-projectile-dirs
+      :custom (consult-dir-project-list-function . #'consult-dir-projectile-dirs))
 
+    )
   (leaf marginalia
     :ensure t
     :doc "Rich annotations in the minibuffer"
