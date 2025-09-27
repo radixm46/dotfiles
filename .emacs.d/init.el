@@ -2674,34 +2674,34 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (kbd "Q")   'dirvish-quit
       (kbd "q")   'dirvish-quick-access
       (kbd "l")   'dirvish-subtree-toggle
-      (kbd "h")   'dirvish-subtree-menu
       ;; dirvish fd
       (kbd "ff")  'dirvish-fd
-      (kbd "fj")  'dirvish-fd-jump
-      (kbd "fr")  'dirvish-fd-roam
-      (kbd "fk")  'dirvish-fd-kill
       (kbd ";")   'dirvish-layout-toggle
-      ;; dirvish menus
-      (kbd "Mf")  'dirvish-fd-switches-menu
-
-      (kbd "MM")  'dirvish-chxxx-menu
-      (kbd "MO")  'dirvish-chxxx-menu
-
+      ;; dirvish switches
+      (kbd "M-s f")  'dirvish-fd-switches-menu
+      (kbd "M-s r")  'dirvish-rsync-switches-menu
+      (kbd "M-s l")  'dirvish-ls-switches-menu
+      ;; dirvish menues
+      (kbd "Mt")   'dirvish-subtree-menu
+      (kbd "Mc")  'dirvish-chxxx-menu
       (kbd "Me")  'dirvish-emerge-menu
       (kbd "Mh")  'dirvish-dispatch
       (kbd "Mi")  'dirvish-file-info-menu
-      (kbd "Ml")  'dirvish-ls-switches-menu
       (kbd "Mm")  'dirvish-mark-menu
-      (kbd "Ms")  'dirvish-setup-menu
+      (kbd "MM")  'dirvish-setup-menu
       (kbd "My")  'dirvish-yank-menu
-      (kbd "MH")  'dirvish-history-menu
-
-      (kbd "Md")  'dirvish-subdir-menu ;; dirvish subdir-menu
-      (kbd "Mv")  'dirvish-vc-menu ;; dirvish vc-menu
-      (kbd "Mg")  'dirvish-epa-dired-menu ;; dirvish epa-dired-menu
-      (kbd "Mr")  'dirvish-renaming-menu ;; dirvish renaming-menu
-      )
-    )
+      (kbd "Mh")  'dirvish-history-menu
+      (kbd "Mv")  'dirvish-vc-menu
+      (kbd "Mr")  'dirvish-renaming-menu
+      (kbd "Md")  'dirvish-subdir-menu
+      (kbd "Mg")  'dirvish-epa-dired-menu
+      ;; dirvish subtree
+      (kbd "M-n") 'dirvish-narrow
+      (kbd "o")   'dirvish-quicksort ;; remapped `dired-sort-toggle-or-edit'
+      ;; ("^"   . dirvish-history-last)
+      (kbd "M-h") 'dirvish-history-jump
+      (kbd ">")   'dirvish-history-go-forward
+      (kbd "<")   'dirvish-history-go-backward))
 
   (leaf neotree :disabled t
     :ensure t
