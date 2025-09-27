@@ -14,7 +14,7 @@ default: compile-all
 	$(COMPILE) $<
 
 
-parens-check:
+check-parens:
 	@set -euo pipefail; \
 	if [ -z "$(ELFILES)" ]; then echo "No .el files"; exit 0; fi; \
 	for f in $(ELFILES); do \

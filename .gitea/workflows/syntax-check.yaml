@@ -41,7 +41,7 @@ jobs:
       - name: Parens check
         run: |
           cd .emacs.d
-          make parens-check
+          make check-parens
 
       - name: Byte-compile check
         run: |
