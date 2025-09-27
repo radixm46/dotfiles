@@ -74,8 +74,9 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
 
       (setq font-for-term
             (rdm/apply-func-in-fonts
-             '("UDEV Gothic NFLG"
+             '("Explex Console NF"
                "HackGen Console NF"
+               "UDEV Gothic NFLG"
                "Noto Sans Mono CJK JP")
              nil #'(lambda () font-for-tables)))
 
@@ -165,25 +166,86 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
     :config
     ;; all Jetbrains Mono Ligatures
     ;; TODO: xml系がtext-modeベースなので、htmlでリガチャ反映されないのをなんとかする
-    (ligature-set-ligatures '(prog-mode
-                              comint-mode)
-                            '("--" "---" "==" "===" "!=" "!==" "=!=" "=:=" "=/=" "<=" ">=" "&&" "&&&" "&="
-                              "++" "+++" "***" ";;" "!!" "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>"
-                              "<<<" ">>>" "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
-                              "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$" "$>" "<+>"
-                              "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--" "-->" "->" "->>" "<<-" "<-"
-                              "<=<" "=<<" "<<=" "<==" "<=>" "<==>" "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<"
-                              ">->" "<-<" "<-|" "<=|" "|=>" "|->" "<->" "<<~" "<~~" "<~" "<~>" "~~" "~~>" "~>"
-                              "~-" "-~" "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||" "|||>" "<|||"
-                              "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::=" ":?" ":?>" "//" "///" "/*" "*/"
-                              "/=" "//=" "/==" "@_" "__" "???" ";;;"))
+    (eval-and-compile
+      ;; require eval when compile
+      (defconst rdm/ligature--font-set
+        '((jetbrains-mono-all . ("--" "---" "==" "===" "!=" "!==" "=!=" "=:=" "=/=" "<=" ">=" "&&" "&&&" "&="
+                                 "++" "+++" "***" ";;" "!!" "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>"
+                                 "<<<" ">>>" "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
+                                 "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$" "$>" "<+>"
+                                 "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--" "-->" "->" "->>" "<<-" "<-"
+                                 "<=<" "=<<" "<<=" "<==" "<=>" "<==>" "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<"
+                                 ">->" "<-<" "<-|" "<=|" "|=>" "|->" "<->" "<<~" "<~~" "<~" "<~>" "~~" "~~>" "~>"
+                                 "~-" "-~" "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||" "|||>" "<|||"
+                                 "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::=" ":?" ":?>" "//" "///" "/*" "*/"
+                                 "/=" "//=" "/==" "@_" "__" "???" ";;;"))
+          (jetbrains-mono-default . ("<-" "->" "->>" "-->" "<=" "=>" "==>" ">="
+                                     "::" ":::" "~>"
+                                     "==" "!=" "===" "!=="
+                                     ;; c-like
+                                     "//" "///" "/*" "*/" "&&" "!!" "||" "/=" "++" "+++"
+                                     ;; html-javascript
+                                     "</" "</>" "/>" "<!--"))
+          (0xProto-all . ("->" "<-" "=>" "=>>" ">=>" "=>=" "=<<" "=<=" "<=<" "<=>"
+                          ">>" ">>>" "<<" "<<<" "<>" "<|>" "==" "===" ".=" ":="
+                          "#=" "!=" "!==" "=!=" "=:=" "::" ":::" ":<:" ":>:" "||"
+                          "|>" "||>" "|||>" "<|" "<||" "<|||" "**" "***" "<*" "<*>"
+                          "*>" "<+" "<+>" "+>" "<$" "<$>" "$>" "&&" "??" "%%"
+                          "|]" "[|" "//" "///")))
+        "ligature support table per font-family")
 
-    (defun activate-ligature-on-window-system ()
+      (defmacro !rdm/ligature-font (font)
+        "Return a QUOTED ligature list for FONT at macroexpansion time."
+        (if-let* ((val (alist-get font rdm/ligature--font-set)))
+            `',val
+          (error "rdm/ligature-font: Unknown font %S" font)))
+
+      (defconst rdm/ligature--usage-set
+        '((haskell   . (">>=" "=<<" ">>" "<<<" ">>>"
+                        "<*>" "<*" "*>" "<$>" "<$" "$>" "<|>" "<+>" "<&>"
+                        ">>-" "-<<" "<-<" ">->"))
+          (lisp-like . ("#(" "#'" "#_" "#?@" "#?" "#{" ";;" ";;;" "#[" "]#" "#:" "~@"))
+          (c-like    . ("//" "///" "/*" "*/" "&&" "!!" "||" "/=" "++" "--" "+++"
+                        ">>" "<<"))
+          (xml       . ("</" "</>" "/>" "<!--" "-->"))
+          (json-ts   . ("===" "!==")) ;; triple eq, neq
+          (shell     . ("&&" "||" "|&" ">>" "<<<" "..." ".." "==" "!=" ";;"))
+          (logic     . ("|-" "||-" "|=" "||=" "<->" "=>"))
+          (compare   . ("<=" ">=" "==" "!="))
+          (arrow     . ("<-" "->" "<--" "-->")))
+        "Ligature set for usage")
+
+      (defmacro !rdm/ligature-set (&rest set-names)
+        "Helper for ligature config.
+
+Merge set of ligature chars by `set-names'."
+        (eval `(let (result)
+                 (dolist (lset (quote ,set-names))
+                   (setq result
+                         (append result
+                                 (if-let* ((lset-l (alist-get lset rdm/ligature--usage-set)))
+                                     lset-l
+                                   (error "rdm/ligature-set: Unknown set %S" lset)))))
+                 `',(seq-uniq result)))))
+
+    (ligature-set-ligatures '(lisp-mode
+                              scheme-mode
+                              racket-mode
+                              common-lisp-mode
+                              emacs-lisp-mode
+                              lisp-interaction-mode)
+                            (append
+                             (!rdm/ligature-font jetbrains-mono-default)
+                             (!rdm/ligature-set lisp-like)))
+
+    (ligature-set-ligatures '(prog-mode comint-mode)
+                            (!rdm/ligature-font jetbrains-mono-default))
+    (defun rdm/activate-ligature-on-window-system ()
       "enable ligature on window system"
       (when (window-system) (ligature-mode)))
     :hook
     ((prog-mode-hook
-      comint-mode-hook) . activate-ligature-on-window-system))
+      comint-mode-hook) . rdm/activate-ligature-on-window-system))
 
   (leaf *hide-nobreak-whitespace :emacs>= "28"
     :doc "hack to disable face for double byte space"

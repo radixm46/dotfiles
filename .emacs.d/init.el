@@ -2258,7 +2258,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     (remap-font-to-term)
     (when (and (window-system)
                (equal font-for-term "Explex Console NF"))
-      (ligature-set-ligatures '(vterm-mode) rdm/ligature-0xProto-all))
+      (ligature-set-ligatures '(vterm-mode) (!rdm/ligature-font 0xProto-all))
+      (ligature-mode +1))
     (buffer-face-mode t)
     :custom
     (vterm-max-scrollback     . 10000)
