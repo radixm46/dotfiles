@@ -2259,17 +2259,16 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf vterm
     :ensure t
-    :preface ; release keys for binding
+    :preface ;; release keys for binding
     (global-unset-key [f2])
     (global-unset-key "\M-2")
+    (when (equal font-for-term "Explex Console NF")
+      (!rdm/ligature-font '(vterm-mode) 0xProto-all))
     :commands vterm
     :mode-hook
     (rdm/sw-lnsp 1)
     (remap-font-to-term)
-    (when (and (window-system)
-               (equal font-for-term "Explex Console NF"))
-      (ligature-set-ligatures '(vterm-mode) (!rdm/ligature-font 0xProto-all))
-      (ligature-mode +1))
+    (ligature-mode +1)
     (buffer-face-mode t)
     :custom
     (vterm-max-scrollback     . 10000)

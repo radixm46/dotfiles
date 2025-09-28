@@ -182,6 +182,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
           (jetbrains-mono-default . ("<-" "->" "->>" "-->" "<=" "=>" "==>" ">="
                                      "::" ":::" "~>"
                                      "==" "!=" "===" "!=="
+                                     "##" "###" "####"
                                      ;; c-like
                                      "//" "///" "/*" "*/" "&&" "!!" "||" "/=" "++" "+++"
                                      ;; html-javascript
@@ -194,52 +195,52 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                           "|]" "[|" "//" "///")))
         "ligature support table per font-family")
 
-      (defmacro !rdm/ligature-font (font)
-        "Return a QUOTED ligature list for FONT at macroexpansion time."
-        (if-let* ((val (alist-get font rdm/ligature--font-set)))
-            `',val
-          (error "rdm/ligature-font: Unknown font %S" font)))
+      (defmacro !rdm/ligature-font (modes font-set)
+        "Configure ligatures for MODES using FONT.
+
+FONT should be a symbol identifying a font family defined in
+`rdm/ligature--font-set'.  If the font is not found, an error is raised."
+        `(ligature-set-ligatures
+          ,modes
+          ,(if-let* ((val (alist-get font-set rdm/ligature--font-set)))
+               `',val
+             (error "rdm/ligature-font: Unknown font %S" font-set))))
 
       (defconst rdm/ligature--usage-set
-        '((haskell   . (">>=" "=<<" ">>" "<<<" ">>>"
-                        "<*>" "<*" "*>" "<$>" "<$" "$>" "<|>" "<+>" "<&>"
-                        ">>-" "-<<" "<-<" ">->"))
-          (lisp-like . ("#(" "#'" "#_" "#?@" "#?" "#{" ";;" ";;;" "#[" "]#" "#:" "~@"))
-          (c-like    . ("//" "///" "/*" "*/" "&&" "!!" "||" "/=" "++" "--" "+++"
-                        ">>" "<<"))
-          (xml       . ("</" "</>" "/>" "<!--" "-->"))
-          (json-ts   . ("===" "!==")) ;; triple eq, neq
-          (shell     . ("&&" "||" "|&" ">>" "<<<" "..." ".." "==" "!=" ";;"))
-          (logic     . ("|-" "||-" "|=" "||=" "<->" "=>"))
-          (compare   . ("<=" ">=" "==" "!="))
-          (arrow     . ("<-" "->" "<--" "-->")))
+        '((haskell    . (">>=" "=<<" ">>" "<<<" ">>>"
+                         "<*>" "<*" "*>" "<$>" "<$" "$>" "<|>" "<+>" "<&>"
+                         ">>-" "-<<" "<-<" ">->"))
+          (lisp-like  . ("#(" "#'" "#_" "#?@" "#?" "#{" ";;" ";;;" "#[" "]#" "#:" "~@"))
+          (c-like     . ("//" "///" "/*" "*/" "&&" "!!" "||" "/=" "++" "--" "+++"
+                         ">>" "<<"))
+          (xml        . ("</" "</>" "/>" "<!--" "-->"))
+          (json-ts    . ("===" "!==")) ;; triple eq, neq
+          (python     . ("/=" "//=" "&=" "|=" "^=" ">>=" "<<=" ":=" "..." "::"))
+          (shell      . ("&&" "||" "|&" ">>" "<<<" "..." ".." "==" "!=" ";;" ))
+          (logic      . ("|-" "||-" "|=" "||=" "<->" "=>"))
+          (compare    . ("<=" ">=" "==" "!="))
+          (arithmetic . ("//" "**" "++" "--"))
+          (arrow      . ("<-" "->" "<--" "-->"))
+          (shebang    . ("#!")))
         "Ligature set for usage")
 
-      (defmacro !rdm/ligature-set (&rest set-names)
-        "Helper for ligature config.
+      (defmacro !rdm/ligature-set (modes &rest set-names)
+        "Configure ligatures for MODES using SET-NAMES.
 
-Merge set of ligature chars by `set-names'."
-        (eval `(let (result)
-                 (dolist (lset (quote ,set-names))
-                   (setq result
-                         (append result
-                                 (if-let* ((lset-l (alist-get lset rdm/ligature--usage-set)))
-                                     lset-l
-                                   (error "rdm/ligature-set: Unknown set %S" lset)))))
-                 `',(seq-uniq result)))))
+SET-NAMES should be a list of symbols identifying ligature sets
+defined in `rdm/ligature--usage-set'.  If a set is not found, an error
+is raised."
+        `(ligature-set-ligatures
+          ,modes
+          ,(eval `(let (result)
+                    (dolist (lset (quote ,set-names))
+                      (setq result
+                            (append result
+                                    (if-let* ((lset-l (alist-get lset rdm/ligature--usage-set)))
+                                        lset-l
+                                      (error "rdm/ligature-set: Unknown set %S" lset)))))
+                    `',(seq-uniq result))))))
 
-    (ligature-set-ligatures '(lisp-mode
-                              scheme-mode
-                              racket-mode
-                              common-lisp-mode
-                              emacs-lisp-mode
-                              lisp-interaction-mode)
-                            (append
-                             (!rdm/ligature-font jetbrains-mono-default)
-                             (!rdm/ligature-set lisp-like)))
-
-    (ligature-set-ligatures '(prog-mode comint-mode)
-                            (!rdm/ligature-font jetbrains-mono-default))
     (defun rdm/activate-ligature-on-window-system ()
       "enable ligature on window system"
       (when (window-system) (ligature-mode)))
