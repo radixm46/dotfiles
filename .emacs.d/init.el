@@ -2097,7 +2097,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       `((undo-fu-session-directory                . ,(cache-sub-dir "undo-fu-session"))
         (undo-fu-session-incompatible-files       . '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
         (undo-fu-session-incompatible-major-modes . '(comint-mode image-mode term-mode)))
-      :global-minor-mode undo-fu-session-global-mode)
+      :global-minor-mode undo-fu-session-global-mode
+      :config (add-to-list 'undo-fu-session-temp-directories emacs-cache-root-dir))
 
     (leaf vundo
       :ensure t
