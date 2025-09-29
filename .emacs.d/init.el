@@ -1979,6 +1979,28 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :ensure t
       :hook (ibuffer-mode-hook . nerd-icons-ibuffer-mode)))
 
+  (leaf helpful :ensure t
+    :doc "an alternative to the built-in Emacs help that provides much more contextual information"
+    :defun
+    helpful-callable helpful-variable helpful-key
+    helpful-command  helpful-at-point helpful-function
+    :bind
+    (:global-map
+     ;; Note that the built-in `describe-function' includes both functions
+     ;; and macros. `helpful-function' is functions only, so we provide
+     ;; `helpful-callable' as a drop-in replacement.
+     ("C-h f" . helpful-callable)
+     ("C-h v" . helpful-variable)
+     ("C-h k" . helpful-key)
+     ("C-h x" . helpful-command)
+     ;; Lookup the current symbol at point. C-c C-d is a common keybinding
+     ;; for this in lisp modes.
+     ("C-c C-d" . helpful-at-point)
+     ;; Look up *F*unctions (excludes macros).
+     ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+     ;; already links to the manual, if a function is referenced there.
+     ("C-h F" . helpful-function)))
+
   (leaf rainbow-mode
     :ensure t
     :commands rainbow-mode
