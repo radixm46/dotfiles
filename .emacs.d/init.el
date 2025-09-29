@@ -2572,6 +2572,10 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))
       :hook (magit-section-mode-hook . magit-todos-mode))
 
+    (leaf gptel-magit
+      :ensure t
+      :hook (magit-mode-hook . gptel-magit-install))
+
     (leaf *magit-git-gutter-integration :disabled t
       :doc "refresh git-gutter on magit operation"
       :url "https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit"

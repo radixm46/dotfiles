@@ -370,6 +370,17 @@
       :defun ob-dall-e-shell-setup
       :config (ob-dall-e-shell-setup)))
 
-  (leaf gptel :ensure t))
+  (leaf gptel
+    :ensure t
+    :preface
+    ;; NOTE: requires org when compile
+    (eval-when-compile (!el-load "elisp/conf-org"))
+    :custom
+    (gptel-default-mode          . #'org-mode)
+    (gptel-org-branching-context . t)
+    (gptel-prompt-prefix-alist   . '((markdown-mode . "### USER: ")
+                                     (org-mode      . "*** USER: ")
+                                     (text-mode     . "### USER: ")))
+    :hook (gptel-post-stream-hook . gptel-auto-scroll)))
 
 ;;; conf-ext-fronts.el ends here
