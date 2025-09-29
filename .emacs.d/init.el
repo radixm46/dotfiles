@@ -2455,7 +2455,30 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
 (leaf *git-related-packages
   :config
-  (leaf git-gutter
+  (leaf diff-hl
+    :ensure t
+    :custom
+    (diff-hl-update-async        . t)
+    (diff-hl-draw-borders        . nil)
+    (diff-hl-disable-on-remote   . nil)
+    (diff-hl-show-staged-changes . nil)
+    :config
+    (leaf *patch-diff-hl-color
+      :preface
+      (defun patch-diff-hl-color ()
+        (custom-set-faces ;; modify bg fg
+         `(diff-hl-change ((t (:background ,(doom-color 'blue)))))
+         `(diff-hl-insert ((t (:background ,(doom-color 'green)))))
+         `(diff-hl-delete ((t (:foreground ,(doom-color 'red)))))))
+      :hook
+      (after-load-theme-hook . patch-diff-hl-color))
+    :bind
+    (:global-map
+     ("<f3>" . hydra-git-cmds/body)
+     ("M-3"  . hydra-git-cmds/body))
+    :global-minor-mode (global-diff-hl-mode t))
+
+  (leaf git-gutter :disabled t
     :ensure t
     :commands
     (global-git-gutter-mode git-gutter-mode)
@@ -2511,6 +2534,30 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :ensure t
     ;:custom (magit-completing-read-function . 'magit-ido-completing-read)
     :mode-hook (magit-section-mode-hook . ((whitespace-mode -1)))
+    :hook
+    (magit-pre-refresh-hook  . diff-hl-magit-pre-refresh)
+    (magit-post-refresh-hook . diff-hl-magit-post-refresh)
+    :hydra
+    (hydra-git-cmds
+     (:hint nil)
+     (format "\
+                                 ^^^%s git^^^
+^^^^^^--------------------------------------------------------------------------------
+ ^move to hunk^              ^act on hunk^               ^etc^
+^^^^^^................................................................................
+ _j_: next                   _d_: show hunk              _b_: magit blame
+ _k_: previous               _s_: stage                  _h_: open git timemachine
+ ^ ^                         _x_: revert        _<f3>_ / _M-3_: open magit mode
+" (nerd-icons-faicon "nf-fa-code_fork"))
+     ("j" diff-hl-next-hunk)
+     ("k" diff-hl-previous-hunk)
+     ("d" diff-hl-show-hunk :exit t)
+     ("x" diff-hl-revert-hunk)
+     ("s" diff-hl-stage-current-hunk)
+     ("b" magit-blame)
+     ("h" git-timemachine :exit t)
+     ("<f3>" magit :exit t)
+     ("M-3"  magit :exit t))
     :config
     (leaf magit-todos
       :ensure t
@@ -2521,7 +2568,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (magit-todos-exclude-globs . '(".git/" ".node_modules/" ".venv/"))
       :hook (magit-section-mode-hook . magit-todos-mode))
 
-    (leaf *magit-git-gutter-integration
+    (leaf *magit-git-gutter-integration :disabled t
       :doc "refresh git-gutter on magit operation"
       :url "https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit"
       :defvar git-gutter-mode
