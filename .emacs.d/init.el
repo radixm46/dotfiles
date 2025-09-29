@@ -1072,7 +1072,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
      ("M-g f"   . consult-find)
      ("M-g M-f" . consult-find)
      ("M-g b"   . consult-buffer)
-     ("M-g M-b" . consult-buffer)
+     ("M-g M-b" . consult-project-buffer)
      ("M-g a"   . consult-org-agenda)
      ("M-g M-a" . consult-org-agenda)
      ("M-g M-y" . consult-yank-from-kill-ring)
