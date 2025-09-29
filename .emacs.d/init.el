@@ -2283,6 +2283,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
 
   (leaf vterm
     :ensure t
+    :defun !rdm/ligature-font :defvar 0xProto-all
     :preface ;; release keys for binding
     (global-unset-key [f2])
     (global-unset-key "\M-2")
@@ -2324,6 +2325,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       "vterm toggle into full screen"
       (interactive)
       (let ((vterm-toggle-fullscreen-p t)) (vterm-toggle)))
+    :defvar vterm-toggle-fullscreen-p
     :bind
     (("M-2"   . vterm-toggle)
      ("<f2>"  . vterm-toggle)
