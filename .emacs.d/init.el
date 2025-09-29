@@ -2115,7 +2115,8 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     `((undo-tree-visualizer-timestamps   . t)
       (undo-tree-auto-save-history       . t)
       (undo-tree-visualizer-diff         . t)
-      (undo-tree-history-directory-alist . `(("[^\\.cache\\/emacs\\/.*]" . ,(cache-sub-dir "undo-tree")))))
+      (undo-tree-history-directory-alist . `(("[^\\.cache\\/emacs\\/.*]" . ,(cache-sub-dir "undo-tree"))))
+      (evil-undo-system                  . 'undo-tree))
     :hook
     ((prog-mode-hook
       conf-mode-hook
