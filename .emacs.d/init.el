@@ -667,9 +667,9 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
   (leaf spacious-padding
     :ensure t
     :custom
-    (spacious-padding-widths           . '(:internal-border-width 15
+    (spacious-padding-widths           . '(:internal-border-width 10
                                            :header-line-width     4
-                                           :mode-line-width       6
+                                           :mode-line-width       0
                                            :tab-width             4
                                            :right-divider-width   30
                                            :scroll-bar-width      8))
@@ -2847,7 +2847,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       :custom
       `(;; display
         (treemacs-position                      . 'left)
-        (treemacs-collapse-dirs                 . 3)
+        (treemacs-collapse-dirs                 . 4)
         (treemacs-eldoc-display                 . t)
         (treemacs-indentation                   . 2)
         (treemacs-indentation-string            . " ")
