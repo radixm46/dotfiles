@@ -357,7 +357,7 @@
 
     (leaf org-roam-ui :after org-roam
       :doc "org-roam frontend package"
-      :straight
+      :ensure
       (org-roam-ui :type git :host github
                    :repo "org-roam/org-roam-ui" :branch "main"
                    :files ("*.el" "out"))

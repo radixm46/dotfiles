@@ -6,78 +6,110 @@
 
 ;;; Code:
 (eval-when-compile
-  (load (expand-file-name "elisp/initpkg"   user-emacs-directory))
+  (load (expand-file-name "elisp/initpkg" user-emacs-directory))
   (!el-load "elisp/util"
-            "elisp/conf-evil"))
+            "elisp/conf-evil"
+            "elisp/conf-fonts"))
 
 
 (leaf text-mode
   :tag "builtin"
   :commands text-mode
-  :init
-  (leaf *font-remap-text-mode
-    :defvar remap-font-to-doc-modes-list
-    :hook (text-mode-hook . remap-font-to-doc)
-    :preface (push #'text-mode remap-font-to-doc-modes-list)))
+  :defvar remap-font-to-doc-modes-list
+  :hook (text-mode-hook . remap-font-to-doc)
+  :preface (push #'text-mode remap-font-to-doc-modes-list))
 
-(leaf emacs-lisp-mode
-  :tag "builtin"
-  :commands emacs-lisp-mode
-  :defun
-  highlight-symbol-mode
-  smartparens-strict-mode
-  paredit-mode
-  :mode-hook
-  ;; (flycheck-mode +1)
-  (eldoc-mode              +1)
-  (flymake-mode            +1)
-  (highlight-symbol-mode   +1)
-  (hs-minor-mode           +1)
-  (paredit-mode            +1)
-  (smartparens-strict-mode +1)
-  (add-hook 'before-save-hook #'check-parens nil 'local)
-  :init
-  (leaf highlight-defined
-    :ensure t
-    :defun straight-use-package
-    :config
-    (leaf *patch-highlight-defined-faces :after doom-themes
-      :doc "patch face color from font-lock-face"
-      :preface
-      (defun patch-highlight-defined-faces ()
-        (custom-set-faces
-         `(highlight-defined-function-name-face
-           ((t (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
-         `(highlight-defined-builtin-function-name-face
-           ((t (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
-         `(highlight-defined-special-form-name-face
-           ((t (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
-         `(highlight-defined-macro-name-face
-           ((t (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
-         `(highlight-defined-variable-name-face
-           ((t (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
-         ))
-      :hook
-      ((highlight-defined-mode-hook
-        after-load-theme-hook) . patch-highlight-defined-faces))
 
-    (leaf *highlight-symbol-evil-bind
-      :config
-      (evil-define-key 'normal emacs-lisp-mode-map
-        (kbd "M-n") 'highlight-symbol-next
-        (kbd "M-p") 'highlight-symbol-prev
-        "gn" 'highlight-symbol-next
-        "gp" 'highlight-symbol-prev
-        "gN" 'highlight-symbol-next-in-defun
-        "gP" 'highlight-symbol-prev-in-defun))
-
-    :hook (emacs-lisp-mode-hook . highlight-defined-mode)
-    :custom (highlight-defined-face-use-itself . t))
-
+(leaf *lisp-like-modes
   :config
-  ;; add original C-j behavior to M-RET
-  (evil-define-key '(normal insert) lisp-interaction-mode-map
-    (kbd "M-RET") 'eval-print-last-sexp))
+  (!rdm/ligature-set
+   '(lisp-mode scheme-mode racket-mode common-lisp-mode
+               emacs-lisp-mode lisp-interaction-mode)
+   lisp-like compare arrow shebang)
+
+  (leaf emacs-lisp-mode
+    :tag "builtin"
+    :commands emacs-lisp-mode
+    :defun
+    highlight-symbol-mode
+    smartparens-strict-mode
+    paredit-mode
+    :mode-hook
+    ;; (flycheck-mode +1)
+    (eldoc-mode              +1)
+    (flymake-mode            +1)
+    (highlight-symbol-mode   +1)
+    (hs-minor-mode           +1)
+    (paredit-mode            +1)
+    (smartparens-strict-mode +1)
+    ;; use common lisp indentation for plist alignment
+    ;; (setq-local lisp-indent-function
+    ;;             #'common-lisp-indent-function)
+    ;; check parens before save
+    (add-hook 'before-save-hook #'check-parens nil 'local)
+    :init
+    (leaf highlight-defined
+      :ensure t
+      :defun straight-use-package
+      :config
+      (leaf *patch-highlight-defined-faces :after doom-themes
+        :doc "patch face color from font-lock-face"
+        :preface
+        (defun patch-highlight-defined-faces ()
+          (custom-set-faces
+           `(highlight-defined-function-name-face
+             ((t (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+           `(highlight-defined-builtin-function-name-face
+             ((t (:foreground ,(face-attribute 'font-lock-keyword-face :foreground)))))
+           `(highlight-defined-special-form-name-face
+             ((t (:foreground ,(face-attribute 'font-lock-type-face :foreground)))))
+           `(highlight-defined-macro-name-face
+             ((t (:foreground ,(face-attribute 'font-lock-preprocessor-face :foreground)))))
+           `(highlight-defined-variable-name-face
+             ((t (:foreground ,(face-attribute 'font-lock-variable-name-face :foreground)))))
+           ))
+        :hook
+        ((highlight-defined-mode-hook
+          after-load-theme-hook) . patch-highlight-defined-faces))
+
+      (leaf *highlight-symbol-evil-bind
+        :config
+        (evil-define-key 'normal emacs-lisp-mode-map
+          (kbd "M-n") 'highlight-symbol-next
+          (kbd "M-p") 'highlight-symbol-prev
+          "gn" 'highlight-symbol-next
+          "gp" 'highlight-symbol-prev
+          "gN" 'highlight-symbol-next-in-defun
+          "gP" 'highlight-symbol-prev-in-defun))
+
+      :hook (emacs-lisp-mode-hook . highlight-defined-mode)
+      :custom (highlight-defined-face-use-itself . t))
+
+
+    :config
+    ;; add original C-j behavior to M-RET
+    (evil-define-key '(normal insert) lisp-interaction-mode-map
+      (kbd "M-RET") 'eval-print-last-sexp))
+
+  (leaf racket-mode :if (!executable-find "raco")
+    :ensure t
+    :commands racket-mode
+    :custom
+    `((racket-memory-limit . 2048)
+      ;; racket-error-context
+      ;; racket-user-command-line-arguments
+      ;; racket-browse-url-function
+      ;; racket-xp-after-change-refresh-delay
+      ;; racket-hash-lang-pairs
+      ;; ----repl
+      ;; racket-repl-buffer-name-function
+      (racket-images-inline . t)
+      (racket-pretty-lambda . t)
+      (racket-lambda-char   . ?λ))
+    :defun racket-xp-mode
+    :mode-hook (when (executable-find "drracket")
+               (racket-xp-mode 1)))
+  )
 
 (leaf conf-mode
   :tag "builtin"
@@ -108,6 +140,8 @@
 (leaf *python-config
   :doc "python related configuration"
   :config
+  ;; ligature
+  (!rdm/ligature-set '(python-mode) compare arrow arithmetic python)
   (leaf poetry
     :ensure t
     :hook (python-mode-hook . poetry-tracking-mode)
@@ -147,6 +181,8 @@
     (smartparens-strict-mode +1)
     (paredit-mode            +1)
     (eglot-ensure            +1)
+    :preface
+    (!rdm/ligature-set '(hy-mode) lisp-like compare arrow arithmetic python)
     :init
     (leaf *eglot-hyls-config :disabled t
       :doc "enable hy-lang language server with eglot"
@@ -301,7 +337,8 @@
 
 (leaf csv-mode
   :ensure t
-  :commands csv-mode)
+  :commands csv-mode
+  :mode-hook (csv-align-mode +1))
 
 (leaf json-mode :emacs< "29"
   :ensure t
@@ -320,7 +357,8 @@
   :commands systemd-mode)
 
 (leaf lua-mode :ensure t
-  :commands lua-mode)
+  :commands lua-mode
+  :mode ("\\.lua\\'" . lua-mode))
 
 (leaf *docker-env
   :doc "docker related modes"
@@ -441,6 +479,10 @@
   :hook (elm-mode-hook . lsp))
 
 (leaf haskell-mode
+  :preface
+  (!rdm/ligature-set
+   '(haskell-mode inferior-haskell-mode haskell-literate-mode)
+    haskell)
   :ensure t
   :commands haskell-mode
   :mode
@@ -448,14 +490,12 @@
     "\\.lhs\\'"
     "\\.cabal\\'") . haskell-mode)
   :config
-  (leaf lsp-haskell :if (executable-find "haskell-language-server-wrapper")
+  (leaf lsp-haskell :if (!executable-find "haskell-language-server-wrapper")
     :ensure t
     :doc "if haskell-language-server available in PATH, enable lsp-haskell"
     :hook
     ((haskell-mode-hook
-      haskell-literate-mode-hook) . lsp)
-    )
-  )
+      haskell-literate-mode-hook) . lsp)))
 
 (leaf *mermaid-setup :when (!executable-find "mmdc")
   :config
