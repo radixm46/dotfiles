@@ -1906,7 +1906,7 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
       (shr-max-image-proportion    . 0.6)
       (url-configuration-directory . ,(cache-sub-dir "url"))
       (eww-bookmarks-directory     . ,(cache-sub-dir "eww"))
-      (eww-search-prefix           . "https://www.google.com/search?q=")
+      (eww-search-prefix           . "https://duckduckgo.com/html/?q=")
       (eww-bookmarks-directory     . ,(cache-sub-dir "eww")))
     :mode-hook
     (rdm/sw-lnsp 0.75)
