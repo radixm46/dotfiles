@@ -84,6 +84,7 @@ function() {
 
 # check rust environment
 path=("${HOME}/.cargo/bin"(N-/) ${path})
+# add .local/bin
 path=("${HOME}/.local/bin"(N-/) ${path})
 
 # configure node environment
@@ -92,18 +93,20 @@ path=("${HOME}/.local/bin"(N-/) ${path})
     path=("${NPM_CONFIG_PREFIX}/bin"(N-/) ${path})
 }
 
+# setup haskell with ghcup
+function() {
+    local ghcup_path="${HOME}/.ghcup/bin"
+    if [ -d "$ghcup_path" ]; then
+        path=("$ghcup_path"(N-/) ${path})
+    elif (( $+commands[stack] )); then
+        path=("$(stack path --local-bin)"(N-/) ${path})
+    fi
+}
+
 # do when interactive with command execution
 [[ -o interactive ]] && {
 
     # check ghcup/stack installed and add path
-    function() {
-        local ghcup_path="${HOME}/.ghcup/bin"
-        if [ -d ${ghcup_path} ]; then
-            path=("${ghcup_path}"(N-/) ${path})
-        elif (( $+commands[stack] )); then
-            path=("$(stack path --local-bin)"(N-/) ${path})
-        fi
-    }
 
     (( $+commands[dotnet] )) && {
         case ${OSTYPE} in
