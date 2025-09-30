@@ -2293,7 +2293,6 @@ Enforce a sneaky Garbage Collection strategy to minimize GC interference with us
     :mode-hook
     (rdm/sw-lnsp 1)
     (remap-font-to-term)
-    (ligature-mode +1)
     (buffer-face-mode t)
     :custom
     (vterm-max-scrollback     . 10000)
