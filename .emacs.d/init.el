@@ -82,14 +82,6 @@
                                 '((30.0 . 1) (60.0 . 3))))
                         (garbage-collect-maybe 2))))
 
-  (leaf gcmh :disabled t
-    :doc "gcmh works after startup
-Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity."
-    :ensure t
-    :custom (gcmh-verbose . t)
-    :defun gcmh-mode
-    :mode-hook (emacs-startup-hook . ((gcmh-mode 1))))
-
   (leaf xt-mouse
     :doc "mouse support on terminal"
     :tag "builtin"
