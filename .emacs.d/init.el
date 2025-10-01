@@ -2442,6 +2442,9 @@
         (kbd "C-w f") 'macos-dict-lookup-word)))
   )
 
+(leaf *load-org-config
+  :doc "Load org-mode related."
+  :config (!el-load "elisp/conf-org"))
 
 (leaf *load-conf-ext-fronts
   :doc "frontend of external apps"
@@ -2941,9 +2944,7 @@
 
 (leaf *load-major-modes
   :doc "load some major modes"
-  :config
-  (!el-load "elisp/conf-org"
-            "elisp/conf-langs"))
+  :config (!el-load "elisp/conf-langs"))
 
 
 ;; emacs to load all pkgs for freezing versions
