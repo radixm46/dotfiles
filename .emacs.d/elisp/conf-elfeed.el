@@ -61,7 +61,7 @@
   :custom
   `((elfeed-db-directory           . ,(!expand-file-name ".db" elfeed-dir-path))
     (elfeed-enclosure-default-dir  . ,(!expand-file-name elfeed-dir-path))
-    (elfeed-search-filter          . "@1-months-ago +unread -later -junk")
+    (elfeed-search-filter          . "@1-months-ago +unread -news -later -junk")
     (elfeed-search-title-max-width . 95)
     (elfeed-search-date-format     . '("%Y-%m-%d (%a) %k:%M" 22 :left)))
 
@@ -246,15 +246,19 @@ based on elfeed-search-browse-url"
     :config
     ;; eww
     (defun rdm/elfeed-show-eww-open (&optional use-generic-p)
-      "open with eww"
+      "open with eww, untag \\='later\\='"
       (interactive "P")
-      (let ((browse-url-browser-function #'eww-browse-url))
+      (let ((browse-url-browser-function #'eww-browse-url)
+            (entry (elfeed-search-selected t)))
+        (elfeed-untag entry 'later)
         (elfeed-show-visit use-generic-p)))
 
     (defun rdm/elfeed-search-eww-open (&optional use-generic-p)
-      "open with eww"
+      "open with eww, untag \\='later\\='"
       (interactive "P")
-      (let ((browse-url-browser-function #'eww-browse-url))
+      (let ((browse-url-browser-function #'eww-browse-url)
+            (entry (elfeed-search-selected t)))
+        (elfeed-untag entry 'later)
         (elfeed-search-browse-url use-generic-p)))
 
     (evil-define-key 'normal elfeed-show-mode-map
@@ -270,9 +274,10 @@ based on elfeed-search-browse-url"
       "open with xwidget webkit browser"
       (interactive "P")
       (if (featurep 'xwidget-internal)
-          (progn
-            (let ((browse-url-browser-function #'xwidget-webkit-browse-url))
-              (elfeed-search-browse-url use-generic-p))
+          (let ((browse-url-browser-function #'xwidget-webkit-browse-url)
+                (entry (elfeed-search-selected t)))
+            (elfeed-untag entry 'later)
+            (elfeed-search-browse-url use-generic-p)
             ;; switch buffer
             (dolist (buff (buffer-list))
               (with-current-buffer buff
@@ -285,15 +290,16 @@ based on elfeed-search-browse-url"
       "open with xwidget webkit browser"
       (interactive "P")
       (if (featurep 'xwidget-internal)
-          (progn
-            (let ((browse-url-browser-function #'xwidget-webkit-browse-url))
-              (elfeed-show-visit use-generic-p))
+          (let ((browse-url-browser-function #'xwidget-webkit-browse-url)
+                (entry (elfeed-search-selected t)))
+            (elfeed-untag entry 'later)
+            (elfeed-show-visit use-generic-p)
             ;; switch buffer
-            (dolist (buff (buffer-list))
-              (with-current-buffer buff
-                (when (eq major-mode
-                          #'xwidget-webkit-mode)
-                  (switch-to-buffer buff)))))
+            (dolist (buff (buffer-list)
+                          (with-current-buffer buff
+                            (when (eq major-mode
+                                      #'xwidget-webkit-mode)
+                              (switch-to-buffer buff))))))
         (message "xwidget-webkit-mode seems not available")))
 
     (evil-define-key 'normal elfeed-show-mode-map
@@ -490,7 +496,7 @@ based on elfeed-search-browse-url"
                               ("V" (elfeed-search-set-filter "@4-weeks-ago +YouTube") "YouTube(all)")
                               ("s" (elfeed-search-set-filter "star")  "starred")))
 
-(leaf *elfeed-with-pocket
+(leaf *elfeed-with-pocket :disabled t
   :doc "pocket-reader integration"
   :config
   (evil-define-key 'normal elfeed-search-mode-map
