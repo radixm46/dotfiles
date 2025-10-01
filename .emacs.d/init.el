@@ -514,8 +514,7 @@
 
   (leaf *config-doom-things
     :doc "load required for doom-* functions"
-    :config
-    (!el-load "elisp/doom"))
+    :config (eval-and-compile (!el-load "elisp/doom")))
 
   (leaf solaire-mode :after doom-themes
     :doc "alternate bg color for 'unreal buffers'"
