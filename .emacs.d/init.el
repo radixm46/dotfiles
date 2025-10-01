@@ -443,7 +443,6 @@
     :doc "automatic and manual symbol highlighting for Emacs"
     :custom (highlight-symbol-idle-delay . 1.0)
     :commands highlight-symbol-mode
-    :defun doom-color
     :init
     (leaf *patch-highlight-symbol
       :preface
@@ -572,7 +571,6 @@
     (display-line-numbers-width . 4)
     :hook
     ((conf-mode-hook
-      fundamental-mode-hook
       outline-mode-hook
       prog-mode-hook
       text-mode-hook
