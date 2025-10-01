@@ -163,6 +163,7 @@ If no font in `fonts' matches and `func-fail' is given, invoke `func-fail'.
                    :repo "mickeynp/ligature.el" :branch "master")
     :defun ligature-set-ligatures
     :commands ligature-mode
+    :global-minor-mode global-ligature-mode
     :config
     ;; all Jetbrains Mono Ligatures
     ;; TODO: xml系がtext-modeベースなので、htmlでリガチャ反映されないのをなんとかする
@@ -210,7 +211,7 @@ FONT should be a symbol identifying a font family defined in
         '((haskell    . (">>=" "=<<" ">>" "<<<" ">>>"
                          "<*>" "<*" "*>" "<$>" "<$" "$>" "<|>" "<+>" "<&>"
                          ">>-" "-<<" "<-<" ">->"))
-          (lisp-like  . ("#(" "#'" "#_" "#?@" "#?" "#{" ";;" ";;;" "#[" "]#" "#:" "~@"))
+          (lisp-like  . ("#(" "#'" "#_" "#?@" "#?" "#{" ";;" ";;;" "#[" "]#" "#:" "~@" "->>"))
           (c-like     . ("//" "///" "/*" "*/" "&&" "!!" "||" "/=" "++" "--" "+++"
                          ">>" "<<"))
           (xml        . ("</" "</>" "/>" "<!--" "-->"))
