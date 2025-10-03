@@ -1974,8 +1974,7 @@
     helpful-callable helpful-variable helpful-key
     helpful-command  helpful-at-point helpful-function
     :bind
-    (:global-map
-     ;; Note that the built-in `describe-function' includes both functions
+    (;; Note that the built-in `describe-function' includes both functions
      ;; and macros. `helpful-function' is functions only, so we provide
      ;; `helpful-callable' as a drop-in replacement.
      ("C-h f" . helpful-callable)
