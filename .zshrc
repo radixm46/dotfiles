@@ -476,6 +476,7 @@ alias wttr='get_weather'
     function dired() {
         emacsclient -c --eval "(dired \"$1\")" &
     }
+    export EDITOR='emacsclient -c -a "vim"'
 }
 
 # ----------------------------------------------------------------------------------------
