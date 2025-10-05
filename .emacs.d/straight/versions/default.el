@@ -201,7 +201,7 @@
  ("svg-lib" . "341b6d13f313ae8fb1a3f6d0a3fb27c02f3925d8")
  ("systemd-mode" . "8742607120fbc440821acbc351fda1e8e68a8806")
  ("tablist" . "fcd37147121fabdf003a70279cf86fbe08cfac6f")
- ("themes" . "3152c60bb55365ebd3b042a40aa68c9b756667f7")
+ ("themes" . "376cf4bdd7d296a3da94aa9a6c68761e7c38a252")
  ("tldr.el" . "1b09d2032491d3904bd7ee9bf5ba7c7503db6593")
  ("tp.el" . "cce2dfe0ec2b5c070cb13a7bdf95695eeb6e3caf")
  ("transient" . "c9aa876b4cc679b19c736acc5951f6e640bcbbf2")
