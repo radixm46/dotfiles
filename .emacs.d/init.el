@@ -2573,8 +2573,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
     (magit-pre-refresh-hook  . diff-hl-magit-pre-refresh)
     (magit-post-refresh-hook . diff-hl-magit-post-refresh)
     :bind
-    (:global-map
-     ("<f3>" . hydra-git-cmds/body)
+    (("<f3>" . hydra-git-cmds/body)
      ("M-3"  . hydra-git-cmds/body))
     :hydra
     (hydra-git-cmds
