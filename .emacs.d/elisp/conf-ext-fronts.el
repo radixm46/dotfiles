@@ -378,6 +378,16 @@
     (gptel-prompt-prefix-alist   . '((markdown-mode . "### USER: ")
                                      (org-mode      . "*** USER: ")
                                      (text-mode     . "### USER: ")))
-    :hook (gptel-post-stream-hook . gptel-auto-scroll)))
+    :hook (gptel-post-stream-hook . gptel-auto-scroll)
+    :config
+    (leaf mcp :emacs>= "30"
+      :ensure t
+      :url "https://github.com/lizqwerscott/mcp.el"
+      :config
+      ;; configure gptel
+      (require 'gptel-integrations)
+      ;; disconnect at startup
+      (mcp-hub-close-all-server))
+    ))
 
 ;;; conf-ext-fronts.el ends here
