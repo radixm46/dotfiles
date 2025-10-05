@@ -866,7 +866,6 @@
   :mode-hook
   (server-after-make-frame-hook . (;; NOTE: to activate solaire-mode on launch
                                    ;; https://github.com/hlissner/emacs-solaire-mode/issues/46
-                                   (unless (frame-list) (load-theme 'doom-oksolar-dark t))
                                    (if (display-graphic-p)
                                        (conf-on-gui) (conf-on-term))))
   (after-init-hook              . ((load-theme 'doom-oksolar-dark t)
@@ -2066,7 +2065,7 @@
            `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
         :hook
         (after-load-theme-hook . patch-which-key-posframe-faces)))
-    :mode-hook (after-init-hook . ((unless after-init-time (which-key-mode))))
+    :mode-hook (after-init-hook . ((which-key-mode +1)))
     )
 
   (leaf transient
@@ -2680,12 +2679,10 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
               (!executable-find "gls"))
     :ensure t
     :commands dirvish dirvish-override-dired-mode
-    :mode-hook (dired-mode-hook . ((when (and window-system
-                                              (fboundp 'pdf-tools-install))
-                                     (pdf-tools-install t))))
-    :hook (after-init-hook . (lambda ()
-                               (unless dirvish-override-dired-mode
-                                 (dirvish-override-dired-mode +1))))
+    :mode-hook
+    (dired-mode-hook . ((when (and window-system (fboundp 'pdf-tools-install))
+                          (pdf-tools-install t))))
+    (after-init-hook . ((dirvish-override-dired-mode +1)))
     :custom
     `(
       ;; kill all session buffers on quit
