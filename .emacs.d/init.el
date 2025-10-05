@@ -246,7 +246,7 @@
     :doc "an intuitive and efficient solution for single-buffer text search in Emacs"
     :ensure t
     :commands ctrlf-mode
-    :mode-hook (after-init-hook . ((unless after-init-time (ctrlf-mode +1)))))
+    :global-minor-mode ctrlf-mode)
 
   (leaf ediff
     :ensure t
@@ -280,7 +280,7 @@
     :doc "load editorconfig"
     :ensure t
     :commands editorconfig-mode
-    :mode-hook (after-init-hook . ((unless after-init-time (editorconfig-mode +1)))))
+    :global-minor-mode editorconfig-mode)
 
   (leaf treesit-auto :emacs>= "29.1" :when (!sys-featurep "TREE_SITTER")
     :ensure t
@@ -313,9 +313,7 @@
     :doc "provides tree-sitter highlighting"
     :ensure t
     :commands (tree-sitter-hl-mode)
-    :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode)
-           (after-init-hook           . (lambda ()
-                                          (unless after-init-time (global-tree-sitter-mode +1)))))
+    :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode))
     :init (leaf tree-sitter-langs :ensure t)
     :global-minor-mode global-tree-sitter-mode
     :config
@@ -2065,8 +2063,7 @@
            `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
         :hook
         (after-load-theme-hook . patch-which-key-posframe-faces)))
-    :mode-hook (after-init-hook . ((which-key-mode +1)))
-    )
+    :global-minor-mode which-key-mode)
 
   (leaf transient
     :ensure t
@@ -2514,10 +2511,6 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
          `(diff-hl-delete ((t (:foreground ,(doom-color 'red)))))))
       :hook
       (after-load-theme-hook . patch-diff-hl-color))
-    :bind
-    (:global-map
-     ("<f3>" . hydra-git-cmds/body)
-     ("M-3"  . hydra-git-cmds/body))
     :global-minor-mode (global-diff-hl-mode t))
 
   (leaf git-gutter :disabled t
@@ -2579,6 +2572,10 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
     :hook
     (magit-pre-refresh-hook  . diff-hl-magit-pre-refresh)
     (magit-post-refresh-hook . diff-hl-magit-post-refresh)
+    :bind
+    (:global-map
+     ("<f3>" . hydra-git-cmds/body)
+     ("M-3"  . hydra-git-cmds/body))
     :hydra
     (hydra-git-cmds
      (:hint nil)
@@ -2679,10 +2676,10 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
               (!executable-find "gls"))
     :ensure t
     :commands dirvish dirvish-override-dired-mode
+    :global-minor-mode dirvish-override-dired-mode
     :mode-hook
     (dired-mode-hook . ((when (and window-system (fboundp 'pdf-tools-install))
                           (pdf-tools-install t))))
-    (after-init-hook . ((dirvish-override-dired-mode +1)))
     :custom
     `(
       ;; kill all session buffers on quit

@@ -28,7 +28,7 @@
  ("darkroom" . "a1f7313a1288df643023782b3e1689d0cceb4410")
  ("dash.el" . "af5ea5d8a13735fa27d2c3e6f756d065639a7b45")
  ("ddskk" . "f81ed803e617ccd8175d4bf57a3062bc5ffe1945")
- ("diff-hl" . "c1cecb20ce345d24c31cb986d4d2599e3dc7b6a7")
+ ("diff-hl" . "a44db7a69a17a39d5c51bcf22de4decabf0183ad")
  ("difftastic.el" . "d149a37c93d492a29073451cf07c86fc42b335fe")
  ("dirvish" . "d877433f957a363ad78b228e13a8e5215f2d6593")
  ("docker-compose-mode" . "abaa4f3aeb5c62d7d16e186dd7d77f4e846e126a")
