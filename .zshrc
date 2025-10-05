@@ -701,7 +701,7 @@ function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
 # detect if tmux is running and attach
 function() {
     # check tmux or screen available, if not, abort
-    ! { (( $+commands[tmux] )) || (( $+commands[screen] )); } && return 1
+    ! { (( $+commands[tmux] || $+commands[screen] )); } && return 1
 
     if is_screen_or_tmux_running; then
         if is_tmux_running; then
