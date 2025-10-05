@@ -290,8 +290,8 @@ is raised."
     :config
     (leaf *emojify-init :emacs< "28"
       :custom (emojify-display-style . 'ascii)
-      :hook (after-init-hook . global-emojify-mode)))
-  )
+      :hook (after-init-hook . (lambda ()
+                                 (unless after-init-hook (global-emojify-mode +1)))))))
 
 (provide 'rdm/conf-fonts)
 

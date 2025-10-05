@@ -47,7 +47,8 @@
   (require 'profiler)
   (profiler-start 'cpu)
   (add-hook 'after-init-hook
-            #'(lambda () (profiler-report) (profiler-stop))))
+            #'(lambda ()
+                (unless after-init-time (profiler-report) (profiler-stop)))))
 
 ;; ---------------  load package ---------------
 (eval-and-compile
@@ -70,17 +71,18 @@
       (garbage-collection-messages . t))
     :mode-hook
     (after-init-hook . (;; set garbage collection with timer (if available, use `garbage-collect-maybe')
-                        (let ((gc-func (if (functionp 'garbage-collect-maybe)
-                                           (lambda (fact)
-                                             (when (garbage-collect-maybe fact)
-                                               (message "garbage-collect-maybe done! (fact: %d)" fact)))
-                                         (lambda (_) (garbage-collect)))))
-                          (mapc (lambda (arg)
-                                  (run-with-idle-timer
-                                   (car arg) t
-                                   (lambda () (funcall gc-func (cdr arg)))))
-                                '((30.0 . 1) (60.0 . 3))))
-                        (garbage-collect-maybe 2))))
+                        (unless after-init-time
+                          (let ((gc-func (if (functionp 'garbage-collect-maybe)
+                                             (lambda (fact)
+                                               (when (garbage-collect-maybe fact)
+                                                 (message "garbage-collect-maybe done! (fact: %d)" fact)))
+                                           (lambda (_) (garbage-collect)))))
+                            (mapc (lambda (arg)
+                                    (run-with-idle-timer
+                                     (car arg) t
+                                     (lambda () (funcall gc-func (cdr arg)))))
+                                  '((30.0 . 1) (60.0 . 3))))
+                          (garbage-collect-maybe 2)))))
 
   (leaf xt-mouse
     :doc "mouse support on terminal"
@@ -244,7 +246,7 @@
     :doc "an intuitive and efficient solution for single-buffer text search in Emacs"
     :ensure t
     :commands ctrlf-mode
-    :mode-hook (after-init-hook . ((ctrlf-mode +1))))
+    :mode-hook (after-init-hook . ((unless after-init-time (ctrlf-mode +1)))))
 
   (leaf ediff
     :ensure t
@@ -278,7 +280,7 @@
     :doc "load editorconfig"
     :ensure t
     :commands editorconfig-mode
-    :mode-hook (after-init-hook . ((editorconfig-mode))))
+    :mode-hook (after-init-hook . ((unless after-init-time (editorconfig-mode +1)))))
 
   (leaf treesit-auto :emacs>= "29.1" :when (!sys-featurep "TREE_SITTER")
     :ensure t
@@ -312,7 +314,8 @@
     :ensure t
     :commands (tree-sitter-hl-mode)
     :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode)
-           (after-init-hook           . global-tree-sitter-mode))
+           (after-init-hook           . (lambda ()
+                                          (unless after-init-time (global-tree-sitter-mode +1)))))
     :init (leaf tree-sitter-langs :ensure t)
     :global-minor-mode global-tree-sitter-mode
     :config
@@ -867,7 +870,8 @@
                                    (if (display-graphic-p)
                                        (conf-on-gui) (conf-on-term))))
   (after-init-hook              . ((load-theme 'doom-oksolar-dark t)
-                                   (if (display-graphic-p)
+                                   (if (and (not (null after-init-time))
+                                            (display-graphic-p))
                                        (conf-on-gui) (conf-on-term)))))
 
 
@@ -2062,7 +2066,7 @@
            `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
         :hook
         (after-load-theme-hook . patch-which-key-posframe-faces)))
-    :mode-hook (after-init-hook . ((which-key-mode)))
+    :mode-hook (after-init-hook . ((unless after-init-time (which-key-mode))))
     )
 
   (leaf transient
@@ -2638,7 +2642,8 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
     (leaf osx-trash :when (!system-type 'darwin)
       :ensure t
       :commands osx-trash-setup
-      :hook (after-init-hook . osx-trash-setup))
+      :hook (after-init-hook . (lambda ()
+                                 (unless after-init-time (osx-trash-setup)))))
     :custom
     `(;; use gnu-ls if available on macOS
       (insert-directory-program  . ,(if (and (!system-type 'darwin)
@@ -2678,7 +2683,8 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
     :mode-hook (dired-mode-hook . ((when (and window-system
                                               (fboundp 'pdf-tools-install))
                                      (pdf-tools-install t))))
-    :hook (after-init-hook . dirvish-override-dired-mode)
+    :hook (after-init-hook . (lambda ()
+                               (unless after-init-time (dirvish-override-dired-mode))))
     :custom
     `(
       ;; kill all session buffers on quit
