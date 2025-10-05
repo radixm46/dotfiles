@@ -52,7 +52,8 @@ pkgs-setup: init.elc
 
 
 LOCKFILE_DIR  := straight/versions
-.PHONY: lockfile-gen
+
+.PHONY: lockfile-gen lockfile-gen-update
 lockfile-gen: clean-elc lockfile-backup
 	@echo [Straight freeze versions] - `date +%Y/%m/%d-%H:%M:%S`
 	@FREEZE_EMACS=0 $(MAKE) compile-all
@@ -61,6 +62,10 @@ lockfile-gen: clean-elc lockfile-backup
 	@echo [Straight freeze versions] - freeze done, rebuild elcs
 	$(MAKE) clean-elc
 	$(MAKE) compile-all
+
+lockfile-gen-update: clean-elc lockfile-backup
+	@echo [Straight freeze versions] - `date +%Y/%m/%d-%H:%M:%S`
+	@FREEZE_EMACS=2 $(EMACS) --batch \
 	  --load init.el
 	@echo [Straight freeze versions] - freeze done, rebuild elcs
 	$(MAKE) clean-elc
