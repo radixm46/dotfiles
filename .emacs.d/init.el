@@ -1492,8 +1492,8 @@
     :defvar lsp-prefer-flymake
     :defun flycheck-posframe-mode eldoc-box-hover-at-point-mode
     :mode-hook
-    (lsp-mode-hook . ((eldoc-box-hover-at-point-mode -1)
-                      (flycheck-posframe-mode -1))) ; disable flycheck-posframe
+    (eldoc-box-hover-at-point-mode -1)
+    ;; (flycheck-posframe-mode -1) ; disable flycheck-posframe
     :setq (lsp-prefer-flymake . t)
     :config
     (leaf lsp-ui
