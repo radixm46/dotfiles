@@ -2285,18 +2285,62 @@
     (buffer-face-mode t)
     :custom
     (vterm-max-scrollback     . 10000)
-    (vterm-buffer-name-string . "vterm: %s")
+    (vterm-buffer-name-string . "*vterm: %s*")
     :config
     (evil-set-initial-state 'vterm-mode 'emacs)
     (defun rdm/vterm-new-buffer-in-current-window()
       "new vterm on current window"
       (interactive)
       (let ((display-buffer-alist nil)) (vterm)))
+
+    (defun vterm-ddskk-input (send-newline)
+      "一時バッファ *vterm-ddskk* で ddskk 入力し、C-c C-c で vterm へ送信する。
+C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルして閉じる。"
+      (interactive "P")
+      (unless (derived-mode-p 'vterm-mode)
+        (user-error "vterm バッファ外です"))
+      (let* ((vterm-buf (current-buffer))
+             (buf (get-buffer-create "*vterm-ddskk*"))
+             (winconf (current-window-configuration)))
+        (with-current-buffer buf
+          (erase-buffer)
+          (text-mode)
+          (setq-local truncate-lines t)
+          ;; ヘッダに操作案内
+          (setq-local header-line-format "C-c C-c: 送信 / C-c C-k: キャンセル")
+          ;; 入力メソッド有効化（ddskk）
+          (activate-input-method "japanese-skk")
+          ;; 現在のローカルキーマップを継承した上で C-c C-c / C-c C-k を足す
+          (use-local-map
+           (let ((map (make-sparse-keymap)))
+             (set-keymap-parent map (current-local-map))
+             (define-key map (kbd "C-c C-c")
+                         (lambda ()
+                           (interactive)
+                           (let* ((raw (buffer-substring-no-properties (point-min) (point-max)))
+                                  ;; 行末や末尾の空白は落として送る
+                                  (str (replace-regexp-in-string "\\s-+\\'" "" raw)))
+                             (when (> (length str) 0)
+                               (with-current-buffer vterm-buf
+                                 (vterm-send-string str t)
+                                 (when send-newline (vterm-send-return)))))
+                           (kill-buffer buf)
+                           (when (window-configuration-p winconf)
+                             (set-window-configuration winconf))))
+             (define-key map (kbd "C-c C-k")
+                         (lambda ()
+                           (interactive)
+                           (kill-buffer buf)
+                           (when (window-configuration-p winconf)
+                             (set-window-configuration winconf))))
+             map)))
+        (pop-to-buffer buf)))
     (leaf vterm-toggle
       :ensure t
       :commands vterm-toggle
       :custom
       (vterm-toggle-fullscreen-p . nil)
+      (vterm-toggle-scope . 'project)
       (vterm-toggle-scope-p . 'project)
       :config
       (add-to-list 'display-buffer-alist
