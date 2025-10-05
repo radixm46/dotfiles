@@ -1211,13 +1211,13 @@
   (leaf eldoc
     :tag "builtin"
     :commands eldoc
-    :config
+    :init
     (leaf eldoc-box
       :ensure t
-      :defun eldoc-box-hover-mode
-      :mode-hook (when (display-graphic-p) (eldoc-box-hover-mode))
+      :defun eldoc-box-hover-at-point-mode
+      :mode-hook (when (display-graphic-p) (eldoc-box-hover-at-point-mode +1))
       :custom
-      (eldoc-box-only-multi-line    . nil)
+      (eldoc-box-only-multi-line    . t)
       (eldoc-box-fringe-use-same-bg . t)
       (eldoc-box-clear-with-C-g     . t)
       (eldoc-box-cleanup-interval   . 0.5)
