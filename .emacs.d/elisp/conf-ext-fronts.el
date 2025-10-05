@@ -372,11 +372,8 @@
 
   (leaf gptel
     :ensure t
-    :preface
-    ;; NOTE: requires org when compile
-    (eval-when-compile (!el-load "elisp/conf-org"))
     :custom
-    (gptel-default-mode          . #'org-mode)
+    (gptel-default-mode          . #'markdown-mode)
     (gptel-org-branching-context . t)
     (gptel-prompt-prefix-alist   . '((markdown-mode . "### USER: ")
                                      (org-mode      . "*** USER: ")
