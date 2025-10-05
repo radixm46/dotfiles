@@ -85,7 +85,7 @@ argument NAME could be directory or filename"
 ;; use `custom-file' for package-selected-packages
 (prog1 '*customize-file-handling
   (customize-set-variable
-   'custom-file (!expand-file-name "elisp/local-custom.el" user-emacs-directory)
+   'custom-file ""
    "customized at initpkg")
   ;; load `custom-file' if exists and save before quit
   ;; (when (and (not noninteractive)

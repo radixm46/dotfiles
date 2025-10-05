@@ -2684,7 +2684,8 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
                                               (fboundp 'pdf-tools-install))
                                      (pdf-tools-install t))))
     :hook (after-init-hook . (lambda ()
-                               (unless after-init-time (dirvish-override-dired-mode))))
+                               (unless dirvish-override-dired-mode
+                                 (dirvish-override-dired-mode +1))))
     :custom
     `(
       ;; kill all session buffers on quit
