@@ -863,7 +863,7 @@
   :mode-hook
   (server-after-make-frame-hook . (;; NOTE: to activate solaire-mode on launch
                                    ;; https://github.com/hlissner/emacs-solaire-mode/issues/46
-                                   (unless (frame-list) (load-theme 'doom-spacegrey t))
+                                   (unless (frame-list) (load-theme 'doom-oksolar-dark t))
                                    (if (display-graphic-p)
                                        (conf-on-gui) (conf-on-term))))
   (after-init-hook              . ((load-theme 'doom-oksolar-dark t)
