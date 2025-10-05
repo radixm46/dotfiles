@@ -1858,7 +1858,8 @@
     :tag "builtin"
     :custom
     (auth-source-cache-expiry . 7200)
-    (auth-sources             . '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
+    (auth-sources             . '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+    :preface (when (rdm/freeze-vers-p) (setq auth-sources nil))
     :init
     (defun rdm/deepl-api-key ()
       "API key for Deepl translation"
