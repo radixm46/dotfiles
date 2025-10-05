@@ -51,6 +51,8 @@ Each module name is expected to be a string."
     (eval (string-match-p feat system-configuration-features)))
   )
 
+;; eval early-init for package compile + setup
+(eval-when-compile (!el-load "early-init"))
 
 ;; define cache related functions
 ;; setup .config/cache/emacs
