@@ -519,7 +519,7 @@
   (leaf solaire-mode :after doom-themes
     :doc "alternate bg color for 'unreal buffers'"
     :ensure t
-    :custom (solaire-global-mode . 1)
+    :commands solaire-global-mode
     :global-minor-mode solaire-global-mode)
 
   (leaf *parenthesis-related-things
@@ -1099,8 +1099,8 @@
       ;; launch by M-g d
       :defun consult-dir-projectile-dirs
       :custom (consult-dir-project-list-function . #'consult-dir-projectile-dirs))
-
     )
+
   (leaf marginalia
     :ensure t
     :doc "Rich annotations in the minibuffer"
