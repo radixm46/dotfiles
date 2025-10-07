@@ -1855,13 +1855,23 @@
 
 (leaf *network-related
   :config
+  ;; currently requires explicit epa-file-enable
+  ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-11/msg01159.html
+  (leaf auth-source-pass :when (!executable-find "pass")
+    :doc "when `pass' found, enable"
+    :tag "builtin"
+    :init (auth-source-pass-enable))
+
   (leaf auth-source
+    :unless (!executable-find "pass")
+    :doc "if bw and pass not found, fallback"
     :tag "builtin"
     :custom
     (auth-source-cache-expiry . 7200)
-    (auth-sources             . '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
-    :preface (when (rdm/freeze-vers-p) (setq auth-sources nil))
-    :init
+    (auth-sources             . '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")))
+
+  (leaf *auth-helpers
+    :config
     (defun rdm/deepl-api-key ()
       "API key for Deepl translation"
       (let ((auth-source-cache-expiry nil))
