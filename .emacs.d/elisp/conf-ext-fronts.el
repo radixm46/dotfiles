@@ -122,48 +122,6 @@
 
 
 ;; use web
-(leaf pocket-reader :disabled t
-  :ensure t
-  :custom
-  `((pocket-lib-token-file                   . ,(cache-sub-file "emacs-pocket-lib-token.json"))
-    (pocket-reader-show-count                . 200)
-    (pocket-reader-url-priorities            . '(amp_url resolved_url given_url))
-    (pocket-reader-default-queries           . '(":unread"))
-    ;; default org-web-tools-read-url-as-org
-    (pocket-reader-open-url-default-function . 'eww-browse-url))
-  :defvar pocket-reader-mode-map elfeed-search-mode-map elfeed-show-mode-map
-  :config
-  (evil-define-key 'normal pocket-reader-mode-map
-    (kbd "r")   'pocket-reader-resort
-    (kbd "D")   'pocket-reader-delete
-    (kbd "/")   'pocket-reader-search
-    (kbd "y")   'pocket-reader-copy-url
-    (kbd "RET") 'pocket-reader-open-url
-    (kbd "o")   'pocket-reader-open-url
-    (kbd "p")   'pocket-reader-pop-to-url
-    (kbd "TAB") 'pocket-reader-excerpt
-    (kbd "a")   'pocket-reader-toggle-archived
-    (kbd "f")   'pocket-reader-toggle-favorite
-    (kbd "b")   'pocket-reader-open-in-external-browser
-    ;; mark
-    (kbd "m")   'pocket-reader-toggle-mark
-    (kbd "M")   'pocket-reader-mark-all
-    (kbd "U")   'pocket-reader-unmark-all
-    ;; view
-    (kbd "g m") 'pocket-reader-more
-    (kbd "g l") 'pocket-reader-limit
-    (kbd "g r") 'pocket-reader-refresh
-    (kbd "g e") 'pocket-reader-excerpt
-    (kbd "g E") 'pocket-reader-excerpt-all
-    (kbd "g R") 'pocket-reader-random-item
-    (kbd "g f") 'pocket-reader-show-unread-favorites
-    ;; tags
-    (kbd "t a") 'pocket-reader-add-tags
-    (kbd "t t") 'pocket-reader-set-tags
-    (kbd "t r") 'pocket-reader-remove-tags
-    (kbd "t s") 'pocket-reader-tag-search)
-  )
-
 (leaf mastodon
   :preface
   (leaf emojify
