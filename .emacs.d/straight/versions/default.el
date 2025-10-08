@@ -130,7 +130,7 @@
  ("map" . "8dc8c119d92ad61f352134e3078e32b2c6cb0719")
  ("marginalia" . "a975ac0bfe927f46cd179a7e4899bf52fd7a6ea2")
  ("markdown-mode" . "d51c469133d220823cc6ab50ff8e8743ed6e42fb")
- ("mastodon.el" . "3e05dc0952c9d34d918e629a80492462adb7aa15")
+ ("mastodon.el" . "9319d0647755e1d9dfc081241bfcb2ef3ec96be3")
  ("mcp.el" . "b9782bb80027c13a84ae3ffff1e363a674ed6cf1")
  ("melpa" . "1aebea30f9bfbf78ec392b118399fc2e45c778e6")
  ("mermaid-mode" . "9535d513b41ed11bcd91f644815e2db6430c1560")
