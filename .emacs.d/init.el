@@ -514,7 +514,35 @@
 
   (leaf *config-doom-things
     :doc "load required for doom-* functions"
-    :config (eval-and-compile (!el-load "elisp/doom")))
+    :config
+    (eval-and-compile (!el-load "elisp/doom"))
+    ;; modify builtin faces here
+    (leaf *patch-builtin-face
+      :preface
+      (defun patch-builtin-face ()
+        "patch builtin faces with doom-themes"
+        (custom-set-faces
+         ;; highlight-symbol
+         `(bookmark-face
+           ((t (:foreground ,(doom-color 'red)))))
+         ;; paren
+         `(show-paren-match
+           ((t (:background ,(doom-color 'green)))))
+         ;; display-line-numbers-current
+         `(line-number-current-line
+           ((t (:foreground ,(doom-color 'fg) :background ,(doom-color 'bg)))))
+         ;; whitespace-mode
+         `(whitespace-trailing
+           ((nil ( :background ,(doom-color 'bg) ;:inherit 'default
+                              :foreground ,(doom-color 'magenta)
+                              :underline (:style wave)))))
+         ;; calendar
+         `(holiday
+           ((t (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
+         `(calendar-today
+           ((t (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))
+         ))
+      :hook (after-load-theme-hook . patch-builtin-face)))
 
   (leaf solaire-mode :after doom-themes
     :doc "alternate bg color for 'unreal buffers'"
@@ -528,13 +556,6 @@
     (leaf paren
       :doc "configure show-paren-mode"
       :tag "builtin"
-      :config
-      (leaf *patch-paren-face
-        :preface
-        (defsubst patch-paren-face ()
-          (custom-set-faces
-           `(show-paren-match  ((t (:background ,(doom-color 'green)))))))
-        :hook (after-load-theme-hook . patch-paren-face))
       :hook
       (prog-mode-hook
        conf-mode-hook . show-paren-mode))
@@ -586,16 +607,6 @@
           (customize-set-variable 'display-line-numbers-type  t)
         (customize-set-variable 'display-line-numbers-type  'relative))
       (display-line-numbers--turn-on)) ;; read config
-
-    (leaf *patch-display-line-numbers-current
-      :preface
-      (defsubst patch-display-line-numbers-current ()
-        "patch `line-number-current-line'"
-        (custom-set-faces
-         `(line-number-current-line ((t (:foreground ,(doom-color 'fg) :background ,(doom-color 'bg))))))
-        )
-      :hook
-      (after-load-theme-hook . patch-display-line-numbers-current))
     )
 
   (leaf display-fill-column-indicator
@@ -768,18 +779,6 @@
     ;;  :weight 'bold)
     ;;(set-face-attribute 'whitespace-empty nil
     ;;  :background rdm/bg-color)
-    :config
-    (leaf *patch-whitespace-face
-      :preface
-      (defsubst patch-whitespace-face ()
-        (custom-set-faces
-         `(whitespace-trailing
-           ((nil (:background ,(doom-color 'bg) ;:inherit 'default
-                              :foreground ,(doom-color 'magenta)
-                              :underline (:style wave)))))))
-      :hook
-      (after-load-theme-hook . patch-whitespace-face)
-      )
     :global-minor-mode global-whitespace-mode
     )
 
@@ -2174,17 +2173,6 @@
     :hook
     (calendar-today-visible-hook   . calendar-mark-today)
     :config
-    (leaf *patch-calendar-faces
-      :preface
-      (defsubst patch-calendar-faces ()
-        (custom-set-faces
-         `(holiday
-           ((t (:foreground ,(doom-color 'orange) :background ,(doom-color 'bg)))))
-         `(calendar-today
-           ((t (:foreground ,(doom-color 'base3) :background ,(doom-color 'green) :underline nil))))))
-      :hook
-      (after-load-theme-hook . patch-calendar-faces))
-
     (leaf japanese-holidays
       :ensure t
       :custom
