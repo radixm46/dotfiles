@@ -296,38 +296,9 @@
                                            :render (gt-overlay-render))))))
   )
 
-(leaf *openai-things
-  :defun auth-source-pick-first-password
+(leaf *ai-related-things
+  :doc "ai related packages, config"
   :config
-  (leaf chatgpt-shell
-    :preface
-    (leaf shell-maker
-      :ensure t
-      :custom `((shell-maker-root-path . ,(cache-sub-dir "shell-maker"))))
-    :ensure t
-    :commands chatgpt-shell
-    :defvar chatgpt-shell-openai-key
-    :defun rdm/openai-api-key
-    :custom
-    `((shell-maker-root-path                    . ,(cache-sub-dir "shell-maker"))
-      (chatgpt-shell-model-temperature          . 0.75)
-      (chatgpt-shell-streaming                  . t)
-      (chatgpt-shell-transmitted-context-length . 8)
-      ;; switch via `chatgpt-shell-swap-model-version'
-      (chatgpt-shell-model-version              . "chatgpt-4o-latest")
-      (chatgpt-shell-openai-key                 . #'rdm/openai-api-key))
-    :init
-    (leaf ob-chatgpt-shell
-      :ensure t
-      :require t
-      :defun ob-chatgpt-shell-setup
-      :config (ob-chatgpt-shell-setup))
-    (leaf ob-dall-e-shell
-      :ensure t
-      :require t
-      :defun ob-dall-e-shell-setup
-      :config (ob-dall-e-shell-setup)))
-
   (leaf gptel
     :ensure t
     :custom
