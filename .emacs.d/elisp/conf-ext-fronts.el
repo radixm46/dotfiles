@@ -140,6 +140,7 @@
     (mastodon-media--enable-image-caching        . t)
     (mastodon-toot-display-orig-in-reply-buffer  . t)
     (mastodon-toot--enable-custom-instance-emoji . t)
+    (mastodon-auth-use-auth-source               . t)
     (mastodon-client--token-file                 . ,(cache-sub-file "mastodon.plstore")))
   :init (when (fboundp 'evil-lion-mode) (evil-lion-mode nil))
   :commands mastodon mastodon-toot
