@@ -858,6 +858,7 @@
     )
   )
 
+
 (leaf *conf-appearance-on-state
   :doc "apply theme and frame state hooks after init"
   :mode-hook
@@ -1852,7 +1853,7 @@
   )
 
 
-(leaf *network-related
+(leaf *authenticate-store
   :config
   ;; currently requires explicit epa-file-enable
   ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-11/msg01159.html
@@ -1882,6 +1883,23 @@
         (if-let* ((key (auth-source-pick-first-password :host "api.openai.com")))
             key (user-error "Key not found")))))
 
+  (leaf epa :emacs>= "27"
+    :tag "builtin"
+    :doc "gpg pinentry mode"
+    :custom
+    (epa-pinentry-mode . 'loopback))
+
+  (leaf plstore
+    :tag "builtin"
+    :defvar plstore-encoded
+    :setq (plstore-encoded . nil)
+    ;; (plstore-encrypt-to . "")
+    )
+  )
+
+
+(leaf *network-related
+  :config
   (leaf nsm
     :tag "builtin"
     :doc "network security manager"
@@ -2389,12 +2407,6 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
 
     )
 
-  (leaf epa :emacs>= "27"
-    :tag "builtin"
-    :doc "gpg pinentry mode"
-    :custom
-    (epa-pinentry-mode . 'loopback))
-
   (leaf pdf-tools
     :doc "require to execute `pdf-tools-install'"
     :ensure t
@@ -2481,9 +2493,11 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
         (kbd "C-w f") 'macos-dict-lookup-word)))
   )
 
+
 (leaf *load-org-config
   :doc "Load org-mode related."
   :config (!el-load "elisp/conf-org"))
+
 
 (leaf *load-conf-ext-fronts
   :doc "frontend of external apps"
@@ -2989,6 +3003,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
 ;; emacs to load all pkgs for freezing versions
 (rdm/freeze-versions)
 
+
 (leaf *load-local-conf
   :config
   (let ((local-conf (!expand-file-name "elisp/local.el" user-emacs-directory))
@@ -3007,6 +3022,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
 ;;; local.el ends here
 " nil local-conf))
     (load (file-name-sans-extension local-conf))))
+
 
 ;; reconfigure gc after init
 (setq gc-cons-threshold (eval-when-compile (* 192 1024 1024)))
