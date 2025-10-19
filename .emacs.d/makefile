@@ -66,6 +66,7 @@ lockfile-gen: clean-elc lockfile-backup
 
 lockfile-gen-update: clean-elc lockfile-backup
 	@echo [Straight freeze versions] - `date +%Y/%m/%d-%H:%M:%S`
+	@FREEZE_EMACS=0 $(MAKE) compile-all
 	@FREEZE_EMACS=2 $(EMACS) --batch \
 	  --load init.el
 	@echo [Straight freeze versions] - freeze done, rebuild elcs

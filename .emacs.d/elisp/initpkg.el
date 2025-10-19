@@ -158,18 +158,24 @@ argument NAME could be directory or filename"
                             "customized at initpkg"))
 
   (prog1 '*leaf-with-straight-freeze
-    ;; emacs to load all pkgs for freezing versions
+    ;; NOTE: emacs to load all pkgs for freezing versions
+    ;; - detect environment variable `FREEZE_EMACS'
+    ;;   - when value is 0, compile *.el without any lazy load
+    ;;   - when value is 1, create lockfile with loaded pkgs
+    ;;   - when value is 2, pull all visible pkgs, then create lockfile
     (defun rdm/freeze-vers-p ()
       (and noninteractive (getenv "FREEZE_EMACS")))
 
     (defun rdm/freeze-versions ()
-      (when (rdm/freeze-vers-p)
+      (when-let* ((freeze-st (rdm/freeze-vers-p)))
         (message "*** Loading init.el done, freezing %s... ***"
                  straight-current-profile)
-        (straight-check-all)
-        (when (equal "2" (rdm/freeze-vers-p))
+
+        (when (equal freeze-st "2" )
           (message "*** Updating pkgs. ***")
           (straight-pull-all))
+
+        (straight-check-all)
         (straight-freeze-versions t)
         (message "*** Freezing %s done! ***" straight-current-profile)))
 
@@ -185,7 +191,8 @@ argument NAME could be directory or filename"
            leaf-alias-keyword-alist         '((:ensure . :straight)
                                               (:after  . :doc) ;; disable after keyword
                                               (:config . :init))))
-      (when (and (null after-init-time) (not "0" (rdm/freeze-vers-p)))
+      (when (and (null after-init-time)
+                 (not (string-equal "0" (rdm/freeze-vers-p))))
         (message "*** straight.el thaw versions. ***")
         (straight-thaw-versions)))))
 
