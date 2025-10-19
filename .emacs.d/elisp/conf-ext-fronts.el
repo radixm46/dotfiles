@@ -88,7 +88,11 @@
   )
 
 (leaf mpv :when (!executable-find "mpv")
-  :ensure t
+  ;; :ensure t
+  :straight
+  (mpv.el
+   :type git :host github :branch "fix/loadfile-append-args"
+   :repo "radixm46/mpv.el")
   :commands mpv-play mpv-play-url mpv-live-p ; used to detect mpv running
   :custom
   `((mpv-default-options   . `(,(if-let* ((mpvconf (!expand-file-name "mpv" "~/.config")))
