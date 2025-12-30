@@ -56,7 +56,7 @@ function batstat() {
         Darwin)
             function _prbatt () {
                 local -a pstat
-                IFS=';' read -r -a pstat <<< "${1//%/}"
+                read -r -a pstat <<< "$1"
 
                 case "${pstat[2]}" in
                     'AC')
@@ -76,7 +76,11 @@ function batstat() {
                         ;;
                 esac
             }
-            _prbatt "$(pmset -g batt | awk 'NR==2{print($3 $4)}')"
+            _prbatt "$(pmset -g batt \
+                        | awk 'NR==2{
+                            sub(/%;/,"",$3); sub(/;/,"",$4);
+                            printf "x %s %s", $3, $4
+                       }')"
             ;;
         Linux*)
             function _prbatt () {
