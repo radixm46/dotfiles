@@ -64,7 +64,6 @@ check: check-env \
 
 #backup-all: # backup
 
-# vim config ------------------------------------------------------------------
 check-vim:
 	@printf '+ vim:\n'
 	@$(CHK_TARGET) "${HOME}/.vimrc"
@@ -74,7 +73,6 @@ link-vim:
 	@ln -sv "${PWD}/config/${NVIM}/init.vim" "${HOME}/.vimrc"
 	@ln -nsv "${PWD}/config/${NVIM}" "${HOME}/.vim"
 
-# neovim config ----------------------------------------------------------------
 check-neovim:
 	@printf '+ neovim:\n'
 	@for cfgfile in $(NVIM); \
@@ -84,7 +82,6 @@ check-neovim:
 link-neovim: $(addprefix $(CFG_TARGET)/,$(NVIM))
 	@# launch nvim backgound and setup nvim -es -v init.vim?
 
-# swayenv config ---------------------------------------------------------------
 check-swayenv: check-pamenv
 	@printf '+ swayenv:\n'
 	@for cfgfile in $(SWAYENV); \
@@ -101,7 +98,6 @@ check-pamenv:
 
 link-pamenv: $(addprefix $(HOME)/,$(PAMENV))
 
-# emacs config ----------------------------------------------------------------
 check-emacs:
 	@printf '+ emacs:\n'
 	@for cfgfile in $(EMACS); \
@@ -110,7 +106,6 @@ check-emacs:
 
 link-emacs: $(addprefix $(HOME)/,$(EMACS))
 
-# shellenv config --------------------------------------------------------------
 check-shellenv:
 	@printf '+ shellenv:\n'
 	@for cfgfile in $(SHELLENV); \
@@ -118,8 +113,6 @@ check-shellenv:
 	done
 
 link-shellenv: $(addprefix $(HOME)/,$(SHELLENV))
-
-# shelltools config ------------------------------------------------------------
 
 check-shelltools:
 	@printf '+ shelltools:\n'
@@ -129,7 +122,6 @@ check-shelltools:
 
 link-shelltools: $(addprefix $(CFG_TARGET)/,$(SHELLTOOLS))
 
-# terminals config -------------------------------------------------------------
 check-terminals:
 	@printf '+ terminals:\n'
 	@for cfgfile in $(TERMINALS); \
@@ -138,7 +130,6 @@ check-terminals:
 
 link-terminals: $(addprefix $(CFG_TARGET)/,$(TERMINALS))
 
-# misc config -----------------------------------------------------------------
 check-misc:
 	@printf '+ misc:\n'
 	@for cfgfile in $(MISC); \
