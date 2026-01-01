@@ -21,28 +21,28 @@ function memstat() {
 }
 
 # print charging battery sign from nerd fonts and remaining capacity
-# (arg1: int(battery capacity), arg2: bool(charging status))
+# (arg1: bool(charging status), arg2: int(battery capacity))
 function pr_batt_cap() {
+    local -a batt_signs
     case "$1" in
         'true')
-            local batt_signs=(
+            batt_signs=(
                 $'\UF089F'
                 $'\UF089C' $'\UF0086' $'\UF0087' $'\UF0088' $'\UF089D'
                 $'\UF0089' $'\UF089E' $'\UF008A' $'\UF008B' $'\UF0085'
             )
             ;;
         'false')
-            local batt_signs=(
+            batt_signs=(
                 $'\UF008E'
                 $'\UF007A' $'\UF007B' $'\UF007C' $'\UF007D' $'\UF007E'
                 $'\UF007F' $'\UF0080' $'\UF0081' $'\UF0082' $'\UF0079'
             )
             ;;
     esac
-    local batt_idx=$(($2 / 10 + 1))
-
+    local batt_idx=$(($2 / 10))
     if ((1 <= batt_idx)) && ((batt_idx <= 11)); then
-        printf '%s %d%%' "${batt_signs[batt_idx]}" "${2}"
+        printf '%s %d%%' "${batt_signs[$batt_idx]}" "$2"
     else
         printf $'\UF0083'
     fi
@@ -54,33 +54,34 @@ function batstat() {
     local pwr_discn=$'\UF06A6'
     case $(uname) in
         Darwin)
+            # NOTE: idx 0 = batt percentage, idx 1 = charge stat with bash
             function _prbatt () {
                 local -a pstat
                 read -r -a pstat <<< "$1"
 
-                case "${pstat[2]}" in
+                case "${pstat[1]}" in
                     'AC')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false ${pstat[1]})"
+                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                     'charging')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap true ${pstat[1]})"
+                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap true "${pstat[0]}")"
                         ;;
                     'discharging')
-                        printf '%s %s' "${pwr_discn}" "$(pr_batt_cap false ${pstat[1]})"
+                        printf '%s %s' "${pwr_discn}" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                     'charged')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false ${pstat[1]})"
+                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                     *)
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false ${pstat[1]})"
+                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                 esac
             }
             _prbatt "$(pmset -g batt \
                         | awk 'NR==2{
                             sub(/%;/,"",$3); sub(/;/,"",$4);
-                            printf "x %s %s", $3, $4
-                       }')"
+                            printf "%s %s", $3, $4
+                       }')" # e.g. charged 100
             ;;
         Linux*)
             function _prbatt () {
@@ -108,7 +109,7 @@ function batstat() {
                     [[ -L ${bpath} && -d ${bpath} ]] &&
                         _prbatt "$(< ${bpath}/capacity)" "$(< ${bpath}/status)"
                 done
-            } || printf "${pwr_conn} "$'\UF0091'
+            } || printf "${pwr_conn} %s" $'\UF0091'
             ;;
         *)
             printf $'\UF00D'
