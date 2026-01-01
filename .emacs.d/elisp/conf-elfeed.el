@@ -223,7 +223,7 @@ based on elfeed-search-browse-url"
                (title-esc (replace-regexp-in-string " " "\\s-" title t t))
                (filter-str (concat "=" title-esc)))
           (when filter-str
-            (elfeed-search-set-filter (concat filter-str " @3-months-ago +unread -later"))))))
+            (elfeed-search-set-filter (concat filter-str " @3-months-ago +unread"))))))
 
     :defun
     elfeed-entry-feed elfeed-entry-link elfeed-entry-p elfeed-entry-title
@@ -490,7 +490,7 @@ based on elfeed-search-browse-url"
                               ("N" (elfeed-search-set-filter "@4-weeks-ago +news -junk")  "news(all)")
                               ("l" (elfeed-search-set-filter "+later +unread")  "later")
                               ("L" (elfeed-search-set-filter "+later -unread")  "later(read)")
-                              ("c" (elfeed-search-set-filter "@6-weeks-ago +comic +unread")  "comic")
+                              ("c" (elfeed-search-set-filter "@6-weeks-ago +comic +unread -later")  "comic")
                               ("C" (elfeed-search-set-filter "@6-weeks-ago +comic -unread")  "comic(all)")
                               ("v" (elfeed-search-set-filter "@4-weeks-ago +YouTube +unread -later") "YouTube")
                               ("V" (elfeed-search-set-filter "@4-weeks-ago +YouTube") "YouTube(all)")
