@@ -100,7 +100,7 @@
                                "--save-position-on-quit"
                                "--volume=80"))
     (mpv-start-timeout     . 5.0)
-    (mpv-current-indicator . ,(format "  -- (now playing)" (nerd-icons-faicon "nf-fa-play")))))
+    (mpv-current-indicator . ,(format "  %s" (nerd-icons-faicon "nf-fa-play")))))
 
 (leaf tldr :if (!executable-find "tldr")
   :doc "elegant tldr frontend"

@@ -1557,7 +1557,8 @@
 
     (leaf lsp-treemacs :after treemacs
       :ensure t
-      :hook (lsp . lsp-treemacs)
+      ;; :hook (lsp . lsp-treemacs)
+      :custom (lsp-treemacs-error-list-expand-depth . 3)
       :bind (:global-map ("C-x t e" . lsp-treemacs-errors-list)
                          ("C-x t s" . lsp-treemacs-symbols))
       :defun lsp-treemacs-sync-mode
@@ -2087,7 +2088,7 @@
         (defsubst patch-which-key-posframe-faces ()
           (custom-set-faces
            `(which-key-posframe        ((nil (:background ,(doom-color 'bg-alt)))))
-           `(which-key-posframe-border ((nil (:background ,(doom-color 'fg-alt)))))))
+           `(which-key-posframe-border ((nil (:background ,(doom-color 'green)))))))
         :hook
         (after-load-theme-hook . patch-which-key-posframe-faces)))
     :global-minor-mode which-key-mode)
