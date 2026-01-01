@@ -3022,7 +3022,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; local.el ends here
 " nil local-conf))
-    (load (file-name-sans-extension local-conf))))
+    (load local-conf)))
 
 
 ;; reconfigure gc after init
