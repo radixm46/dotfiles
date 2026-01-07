@@ -5,6 +5,7 @@
  ("annalist.el" . "e1ef5dad75fa502d761f70d9ddf1aeb1c423f41d")
  ("avy" . "933d1f36cca0f71e4acb5fac707e9ae26c536264")
  ("biblio.el" . "bb9d6b4b962fb2a4e965d27888268b66d868766b")
+ ("breadcrumb" . "f1f8e3f227044cdb5138e3d9c0a17a237704e2cc")
  ("bui.el" . "f3a137628e112a91910fd33c0cff0948fa58d470")
  ("cape" . "c675d8c142fc3265e3123e5e492b48e748846577")
  ("cargo.el" . "7f8466063381eed05d4e222ce822b1dd44e3bf17")

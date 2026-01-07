@@ -632,6 +632,10 @@
       )
     )
 
+  (leaf breadcrumb
+    :ensure t
+    :global-minor-mode breadcrumb-mode)
+
   (leaf hl-todo
     :ensure t
     :commands hl-todo-mode
