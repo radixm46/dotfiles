@@ -2110,7 +2110,11 @@
     :config
     (leaf undo-fu
       :ensure t
-      :custom (evil-undo-system . 'undo-fu))
+      :custom
+      (undo-limit        . 67108864) ; 64mb
+      (undo-strong-limit . 100663296) ; 96mb
+      (undo-outer-limit  . 1006632960) ; 960mb
+      (evil-undo-system . 'undo-fu))
 
     (leaf undo-fu-session
       :ensure t
