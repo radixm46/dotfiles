@@ -2393,6 +2393,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
      ("C-u"     . (lambda () (interactive) (vterm-send-key (kbd "C-u"))))
      ("C-t"     . (lambda () (interactive) (vterm-send-key (kbd "C-t"))))
      ("C-c C-c" . (lambda () (interactive) (vterm-send-key (kbd "C-c"))))
+     ("C-c i"   . vterm-ddskk-input)
      ("<Esc>"   . vterm-send-escape)
      ("C-c C-[" . vterm-send-escape)
      ("M-2"     . vterm-toggle)
