@@ -134,7 +134,20 @@ argument NAME could be directory or filename"
         (advice-add 'straight--build-autoloads :around
                     #'(lambda (oldfun &rest r)
                         (let ((find-file-visit-truename nil))
-                          (apply oldfun r)))))))
+                          (apply oldfun r))))))
+
+    (prog1 '*straight-patch-require-with-check
+      ;; workaround for emacs30 require-with-check
+      ;; https://github.com/radian-software/straight.el/issues/1146
+      (when (>= emacs-major-version 30)
+        (advice-add 'require :around
+                    #'(lambda (oldfun feature &optional filename noerror)
+                        (condition-case err
+                            (funcall oldfun feature filename noerror)
+                          (error
+                           (if (string-prefix-p "Feature" (error-message-string err))
+                               (funcall oldfun feature filename t)
+                             (signal (car err) (cdr err))))))))))
 
 
   (prog1 '*patch-straight-use-repos
@@ -166,14 +179,24 @@ argument NAME could be directory or filename"
     (defun rdm/freeze-vers-p ()
       (and noninteractive (getenv "FREEZE_EMACS")))
 
+    (defun rdm/straight-pull-all-safe ()
+      "Pull all packages individually, skipping failures."
+      (dolist (pkg (hash-table-keys straight--recipe-cache))
+        (unless (memq (intern pkg) straight-recipe-repositories)
+          (condition-case err
+              (progn (message "Pulling %s..." pkg)
+                     (straight-pull-package pkg))
+            (error (message "WARN: pull failed for %s: %s" pkg err))))))
+
     (defun rdm/freeze-versions ()
+      (setq garbage-collection-messages nil)
       (when-let* ((freeze-st (rdm/freeze-vers-p)))
         (message "*** Loading init.el done, freezing %s... ***"
                  straight-current-profile)
 
         (when (equal freeze-st "2" )
           (message "*** Updating pkgs. ***")
-          (straight-pull-all))
+          (rdm/straight-pull-all-safe))
 
         (straight-check-all)
         (straight-freeze-versions t)
@@ -182,6 +205,10 @@ argument NAME could be directory or filename"
     (if (rdm/freeze-vers-p)
         (progn
           (message "*** Loading init in freeze versions mode. ***")
+
+          ;; suppress interactive prompts that hang in batch mode
+          (fset 'y-or-n-p #'always)
+          (fset 'yes-or-no-p #'always)
 
           (setq
            straight-disable-native-compile  t

@@ -45,6 +45,7 @@ pkgs-backup:
 pkgs-setup: init.elc
 	@echo [Setup init.el] - `date +%Y/%m/%d-%H:%M:%S`;\
 	$(EMACS) --batch --load 'init.elc' \
+	  --eval '(setq garbage-collection-messages nil)' \
 	  --eval '(straight-pull-recipe-repositories)' \
 	  --eval '(unless (string-match-p "NFM.ttf" (shell-command-to-string "fc-list | grep NFM")) (nerd-icons-install-fonts t))' \
 	  --eval '(treesit-auto-install-all)' \
