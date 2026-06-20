@@ -3073,11 +3073,15 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
   )
 
 
-(leaf *load-conf-elfeed
+(leaf *load-conf-elfeed :disabled t
   :doc "load elfeed plugins if elfeed dir available"
   :config
   (!el-load "elisp/conf-elfeed"))
 
+(leaf *load-conf-picofeedr :when (!executable-find "picofeedr")
+  :doc "load picofeedr plugins if exec found"
+  :config
+  (!el-load "elisp/conf-picofeedr"))
 
 (leaf *load-major-modes
   :doc "load some major modes"
