@@ -8,11 +8,16 @@
 
 ;; disable magick filename while init
 (when (not noninteractive)
-  (defconst rdm/saved-file-name-handler-alist file-name-handler-alist
-    "stored `file-name-handler-alist' value while init")
+  (defvar rdm/saved-file-name-handler-alist file-name-handler-alist
+    "Stored `file-name-handler-alist' value while init.")
   (setq file-name-handler-alist nil)
-  (add-hook 'after-init-hook #'(lambda () (setq file-name-handler-alist
-                                                rdm/saved-file-name-handler-alist))))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq file-name-handler-alist
+                    (delete-dups
+                     (append file-name-handler-alist
+                             rdm/saved-file-name-handler-alist))))
+            100))
 
 ;; define macros for pkg manage
 (prog1 '*pkg-manage-macros
