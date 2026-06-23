@@ -13,23 +13,23 @@
 
 (leaf evil
   :ensure t
-  :defvar evil-want-keybinding
   :pre-setq (evil-want-keybinding . nil)
+  :defvar evil-want-keybinding evil-normal-state-map evil-insert-state-map
   :defun
   evil-window-increase-height evil-window-decrease-height
   evil-window-increase-width evil-window-decrease-width
   evil-define-minor-mode-key
   evil-global-set-key
   :commands evil-define-key
-  :defvar evil-normal-state-map evil-insert-state-map
   :custom
   (evil-want-C-u-delete . nil)
   (evil-want-C-u-scroll . t)
   (evil-want-C-h-delete . t)
   :bind
   (:global-map
-   ("<f4>" . hydra-manage-windows/body)
-   ("M-4"  . hydra-manage-windows/body))
+   ("<f4>". hydra-manage-windows/body)
+   ("M-4" . hydra-manage-windows/body)
+   ("M-u" . universal-argument))
   :global-minor-mode evil-mode
   :config
   (leaf evil-surround
@@ -94,12 +94,7 @@
     (evil-global-set-key
      'normal (kbd "C-c +") 'evil-numbers/inc-at-pt)
     (evil-global-set-key
-     'normal (kbd "C-c -") 'evil-numbers/dec-at-pt)
-
-    ;; (evil-define-key '(motion global) ;; FIXME: どのみち読めてない, 外に出しても中に入れてもダメ
-    ;;   (kbd "C-c +") 'evil-numbers/inc-at-pt
-    ;;   (kbd "C-c -") 'evil-numbers/dec-at-pt))
-    )
+     'normal (kbd "C-c -") 'evil-numbers/dec-at-pt))
 
   :hydra
   (hydra-manage-windows
