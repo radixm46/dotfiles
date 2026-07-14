@@ -2295,7 +2295,7 @@
     `((eshell-directory-name    . ,(cache-sub-dir     "eshell"))
       (eshell-history-file-name . ,(!expand-file-name "history" (cache-sub-dir "eshell")))))
 
-  (leaf vterm
+  (leaf vterm :disabled t
     :ensure t
     :defun !rdm/ligature-font :defvar 0xProto-all
     :preface ;; release keys for binding
@@ -2330,12 +2330,11 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
         (with-current-buffer buf
           (erase-buffer)
           (text-mode)
-          (setq-local truncate-lines t)
-          ;; ヘッダに操作案内
+          (setq-local
+           truncate-lines nil
+           header-line-format "C-c C-c: 送信 / C-c C-k: キャンセル")
           (setq-local header-line-format "C-c C-c: 送信 / C-c C-k: キャンセル")
-          ;; 入力メソッド有効化（ddskk）
           (activate-input-method "japanese-skk")
-          ;; 現在のローカルキーマップを継承した上で C-c C-c / C-c C-k を足す
           (use-local-map
            (let ((map (make-sparse-keymap)))
              (set-keymap-parent map (current-local-map))
@@ -2399,6 +2398,80 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
      ("M-2"     . vterm-toggle)
      ("<f2>"    . vterm-toggle))
     :defun vterm-send-key)
+
+  (leaf ghostel
+    :ensure t
+    :doc "ghostty based terminal emulator"
+    :hook
+    ;; use ghostel with compile, comint
+    (after-init-hook . ghostel-compile-global-mode)
+    (after-init-hook . ghostel-comint-global-mode)
+    ;; (eshell-load-hook . ghostel-eshell-visual-command-mode)
+    ;; ime support
+    ;; (ghostel-mode-hook . ghostel-ime-mode)
+    :defun ghostel-send-string ghostel-send-key
+    :config
+    (leaf evil-ghostel
+      :ensure t
+      :doc "
+    - Ghostel starts in insert state (terminal input works normally).
+    - Pressing ESC enters normal state and snaps point to the terminal cursor.
+    - Normal-mode navigation (h, j, k, l, w, b, e, 0, $, …) works as expected.
+    - Insert/append (i, a, I, A) sync the terminal cursor to point before entering insert state.
+    - Delete (d, dw, dd, D, x, X) yanks text to the kill ring and deletes via the shell.
+    - Change (c, cw, cc, C, s, S) deletes then enters insert state.
+    - Replace (r) replaces the character under the cursor.
+    - Paste (p, P) pastes from the kill ring via bracketed paste.
+    - Undo (u) sends readline undo (Ctrl+_).
+    - Cursor shape follows evil state (block for normal, bar for insert).
+    - Alt-screen programs (vim, less, htop) are unaffected.
+"
+      :hook (ghostel-mode-hook . evil-ghostel-mode))
+
+    (defun ghostel-ddskk-input (send-newline)
+      "一時バッファ *term-ddskk* で ddskk 入力し、C-c C-c で ghostel へ送信する。
+C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルして閉じる。"
+      (interactive "P")
+      (unless (or (derived-mode-p 'ghostel-mode))
+        (user-error "ghostel バッファ外です"))
+      (let* ((term-buf (current-buffer))
+             (buf (get-buffer-create "*term-ddskk*"))
+             (winconf (current-window-configuration)))
+        (with-current-buffer buf
+          (erase-buffer)
+          (text-mode)
+          (setq-local
+           truncate-lines nil
+           header-line-format "C-c C-c: 送信 / C-c C-k: キャンセル")
+          (activate-input-method "japanese-skk")
+          (use-local-map
+           (let ((map (make-sparse-keymap)))
+             (set-keymap-parent map (current-local-map))
+             (define-key map (kbd "C-c C-c")
+                         (lambda ()
+                           (interactive)
+                           (let* ((raw (buffer-substring-no-properties (point-min) (point-max)))
+                                  ;; 行末や末尾の空白は落として送る
+                                  (str (replace-regexp-in-string "\\s-+\\'" "" raw)))
+                             (when (> (length str) 0)
+                               (with-current-buffer term-buf
+                                 (ghostel-send-string str)
+                                 (when send-newline (ghostel-send-key "RET")))))
+                           (kill-buffer buf)
+                           (when (window-configuration-p winconf)
+                             (set-window-configuration winconf))))
+             (define-key map (kbd "C-c C-k")
+                         (lambda ()
+                           (interactive)
+                           (kill-buffer buf)
+                           (when (window-configuration-p winconf)
+                             (set-window-configuration winconf))))
+             map)))
+        (pop-to-buffer buf)))
+
+    :bind
+    (:ghostel-mode-map
+     ("C-c i"   . ghostel-ddskk-input)))
 
   (leaf tramp
     :tag "builtin"
