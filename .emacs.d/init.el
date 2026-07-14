@@ -2475,6 +2475,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
 
   (leaf tramp
     :tag "builtin"
+    :require t ;; NOTE: force load tramp
     :custom
     `(
       (tramp-default-method        . "ssh")
