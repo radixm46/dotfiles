@@ -30,7 +30,7 @@
   :custom
   (picofeedr-cli-args                           . '("--output" "json"))
   (picofeedr-list-limit                         . 500)
-  (picofeedr-search-default-query               . "after:1m tag:unread -tag:news|later|junk|YouTube|github")
+  (picofeedr-search-default-query               . "after:1m -tag:news|later|junk|YouTube|github tag:unread")
   (picofeedr-search-open-restore-strategy       . 'immediate)
   (picofeedr-search-column-specs                . '((date :min-width 24
                                                           :format "%Y-%m-%d (%a) %k:%M")
@@ -92,18 +92,13 @@
                 "picofeedr tag error" updated error)))
 
   ;; Show / navigation helpers
-
-  ;; FIXME: 挙動として期待したいのは、head of buffer + unread = remove unread and not move
-  ;; middle of buffer and unread at cursor, next item is unread = remove unread and not move
-  ;; middle of buffer and not has unread at cursor, next item is unread = move forward and make next item as read
   (defun rdm/picofeedr-search-show-read-entry ()
-    "Show with preview-first behavior at first unread row.
+    "Show with preview-first behavior on an unread row.
 
-When point is on the first entry row and it is unread, preview in place.
+When the current entry is unread, preview it in place.
 Otherwise move forward and preview there."
     (interactive)
-    (if (and (picofeedr-search-cursor-at-first-entry-p)
-             (rdm/picofeedr-search-unread-p))
+    (if (rdm/picofeedr-search-unread-p)
         (picofeedr-search-entry-show)
       (rdm/picofeedr-search--show-after-move 1)))
 
