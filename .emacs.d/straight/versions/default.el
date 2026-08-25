@@ -163,7 +163,7 @@
  ("peg" . "a913f2e152958505c85c8658fa69b64d3aa04130")
  ("persist" . "a4c6e759e340d7af9b3f2aad21d279f336cfde68")
  ("pfuture" . "19b53aebbc0f2da31de6326c495038901bffb73c")
- ("picofeedr-emacs" . "ecc590c5ea8020c5a6e1095aae40831b9c00555a")
+ ("picofeedr-emacs" . "0d2180034f2102d3d3d30729a21d146a000bd95b")
  ("pipenv.el" . "3af159749824c03f59176aff7f66ddd6a5785a10")
  ("plz" . "8f5e5ffbde6da93920035be1489a1f1a9986b879")
  ("poetry.el" . "1dff0d4a51ea8aff5f6ce97b154ea799902639ad")
