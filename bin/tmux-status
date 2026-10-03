@@ -11,7 +11,7 @@ function memstat() {
             ;;
         Linux*)
             # display current memory in GB
-            mem_val=$(free -m | awk 'NR==2{printf("%.1d%% (%.1fG)", $3/$2*100, $3/1024)}')
+            mem_val=$(free -m | awk 'NR==2{printf("%.0f%% (%.1fG)", $3/$2*100, $3/1024)}')
             ;;
         *)
             mem_val=$'\UF00D'
@@ -41,7 +41,7 @@ function pr_batt_cap() {
             ;;
     esac
     local batt_idx=$(($2 / 10))
-    if ((1 <= batt_idx)) && ((batt_idx <= 11)); then
+    if ((0 <= batt_idx)) && ((batt_idx <= 10)); then
         printf '%s %d%%' "${batt_signs[$batt_idx]}" "$2"
     else
         printf $'\UF0083'
@@ -61,19 +61,19 @@ function batstat() {
 
                 case "${pstat[1]}" in
                     'AC')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false "${pstat[0]}")"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                     'charging')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap true "${pstat[0]}")"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap true "${pstat[0]}")"
                         ;;
                     'discharging')
-                        printf '%s %s' "${pwr_discn}" "$(pr_batt_cap false "${pstat[0]}")"
+                        printf '%s %s' "$pwr_discn" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                     'charged')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false "${pstat[0]}")"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                     *)
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false "${pstat[0]}")"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap false "${pstat[0]}")"
                         ;;
                 esac
             }
@@ -87,29 +87,32 @@ function batstat() {
             function _prbatt () {
                 case "$2" in
                     'Charging')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap true $1)"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap true $1)"
                         ;;
                     'Discharging')
-                        printf '%s %s' "${pwr_discn}" "$(pr_batt_cap false $1)"
+                        printf '%s %s' "$pwr_discn" "$(pr_batt_cap false $1)"
                         ;;
                     'Full')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false $1)"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap false $1)"
                         ;;
                     'Not charging')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false $1)"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap false $1)"
                         ;;
                     'Unknown')
-                        printf '%s %s' "${pwr_conn}" "$(pr_batt_cap false $1)"
+                        printf '%s %s' "$pwr_conn" "$(pr_batt_cap false $1)"
                         ;;
                 esac
             }
             # check if battery is available
             {
-                for bpath in '/sys/class/power_supply/'BAT*; do
-                    [[ -L ${bpath} && -d ${bpath} ]] &&
-                        _prbatt "$(< ${bpath}/capacity)" "$(< ${bpath}/status)"
+                for bpath in /sys/class/power_supply/*; do
+                    [[ -r "$bpath/type" && "$(<"$bpath/type")" == Battery ]] || continue
+                    [[ -r "$bpath/capacity" && -r "$bpath/status" ]] || continue
+
+                    _prbatt "$(<"$bpath/capacity")" "$(<"$bpath/status")"
+                    break
                 done
-            } || printf "${pwr_conn} %s" $'\UF0091'
+            } || printf "$pwr_conn %s" $'\UF0091'
             ;;
         *)
             printf $'\UF00D'
