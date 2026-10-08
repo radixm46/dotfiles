@@ -255,10 +255,21 @@
 (leaf *javascript-conig
   :doc "config javascript environment"
   :config
+  (leaf json-mode :emacs< "29"
+    :ensure t
+    :commands json-mode
+    :mode ("\\.json\\'" . json-mode))
+
+  (leaf json-ts-mode :emacs>= "29"
+    :tag "builtin"
+    :mode-hook
+    (json-ts-mode-hook . ((add-hook 'flymake-diagnostic-functions
+                                    #'flymake-collection-jsonlint nil t)
+                          (flymake-mode +1))))
+
   (leaf js-mode :emacs>= "27"
     :tag "builtin"
     :doc "use js-mode with lsp"
-    :mode ("\\.json\\'" . js-mode)
     :commands js-mode
     :custom (js-indent-level . 2)
     :hook (js-mode-hook . lsp)
@@ -268,10 +279,7 @@
     (leaf js2-mode
       :ensure t
       :doc "use js2-mode as minor mode with js-mode on .js file"
-      ;; :hook (js-mode-hook . js2-minor-mode)
-      :mode ("\\.js\\'" . (lambda ()
-                            (js-mode)
-                            (js2-minor-mode)))
+      :mode-hook (js2-minor-mode)
       :custom (js2-basic-offset . 2))
 
     (leaf flycheck-use-eslint :if (!executable-find "eslint") :disabled t
@@ -339,11 +347,6 @@
   :ensure t
   :commands csv-mode
   :mode-hook (csv-align-mode +1))
-
-(leaf json-mode :emacs< "29"
-  :ensure t
-  :commands json-mode
-  :mode ("\\.json\\'" . json-mode))
 
 (leaf yaml-mode
   :ensure t
