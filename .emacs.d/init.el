@@ -1385,7 +1385,12 @@
   (leaf *corfu-ui-config :after corfu
     :doc "corfu ui related configuration"
     :config
-    (leaf kind-icon
+    (leaf nerd-icons-corfu :after nerd-icons
+      :ensure t
+      :config
+      (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+    ;; Retain legacy custom icon definitions for easy rollback.
+    (leaf kind-icon :disabled t
       :doc "adds configurable icon or text-based completion prefixes based on the :company-kind property"
       :ensure t
       :custom (kind-icon-default-face . 'corfu-default)
@@ -1438,9 +1443,8 @@
 
     (leaf *corfu-fussy-integration :after fussy
       :url "https://github.com/jojojames/fussy#corfu-integration"
-      :advice ;; For cache functionality.
-      (:before corfu--capf-wrapper
-               fussy-wipe-cache)
+      :config
+      (fussy-corfu-setup)
       :mode-hook
       (corfu-mode-hook . ((setq-local fussy-max-candidate-limit 5000
                                       fussy-default-regex-fn 'fussy-pattern-first-letter
@@ -1753,80 +1757,44 @@
       )
 
     (leaf *cape-capf-config
-      :doc "configure completion-at-point-functions"
+      :doc "Extend CAPFs while preserving major-mode and LSP completions."
       :preface
-      ;; define cape-super-*
       (defalias 'cape-super-text
-        (cape-capf-super
-         #'cape-dabbrev #'cape-file
-         #'cape-dict))
+        (cape-capf-super #'cape-dabbrev #'cape-dict))
       (defalias 'cape-super-prog
-        (cape-capf-super
-         #'cape-elisp-symbol #'cape-keyword))
+        (cape-capf-super #'cape-elisp-symbol #'cape-keyword))
+
+      (defun rdm/add-cape-capfs (&rest capfs)
+        "Add CAPFs buffer-locally, preserving other registered providers."
+        (dolist (capf (reverse capfs))
+          (add-hook 'completion-at-point-functions capf nil t)))
 
       (defun rdm/set-capf-prog-conf ()
-        (setq-local completion-at-point-functions
-                    (list #'cape-company-yasnippet
-                          #'cape-keyword
-                          #'cape-super-text))
-        )
+        (rdm/add-cape-capfs #'cape-file #'cape-company-yasnippet
+                            #'cape-keyword #'cape-super-text))
       (defun rdm/set-capf-text-conf ()
-        (setq-local completion-at-point-functions
-                    (list #'cape-company-yasnippet
-                          #'cape-super-text))
-        )
+        (rdm/add-cape-capfs #'cape-file #'cape-company-yasnippet
+                            #'cape-super-text))
       (defun rdm/set-capf-elisp-conf ()
-        (setq-local completion-at-point-functions
-                    (list #'cape-company-yasnippet
-                          #'cape-super-prog
-                          #'cape-super-text))
-        )
-      ;; lsp related packages
+        (rdm/add-cape-capfs #'cape-file #'cape-company-yasnippet
+                            #'cape-super-prog #'cape-super-text))
+
       (leaf *eglot-with-corfu :after eglot fussy
-        :doc "corfu with eglot config"
-        :url "https://github.com/minad/corfu/wiki"
-        :defun cape-capf-buster eglot-completion-at-point cape-super-eglot
+        :doc "Keep Eglot's original CAPF and add independent file completion."
         :preface
-        (defalias 'cape-super-eglot
-          (cape-capf-buster
-           (cape-capf-super
-            #'eglot-completion-at-point
-            #'cape-company-yasnippet
-            #'cape-keyword)))
-
-        ;; Option 1: Specify explicitly to use fussy for Eglot
         (add-to-list 'completion-category-overrides '(eglot (styles fussy)) t)
-        ;; Option 2: Undo the Eglot modification of completion-category-defaults
-        ;; (with-eval-after-load 'eglot
-        ;;   (setq completion-category-defaults nil))
-
         (defun rdm/set-capf-eglot-prog ()
-          (setq-local completion-at-point-functions
-                      (list #'cape-super-eglot
-                            #'cape-super-text)))
-
-        :hook ;(eglot--pre-command-hook . ())
-        (eglot-managed-mode-hook . rdm/set-capf-eglot-prog)
-        )
+          (rdm/add-cape-capfs #'cape-file))
+        :hook
+        (eglot-managed-mode-hook . rdm/set-capf-eglot-prog))
 
       (leaf *lsp-mode-with-corfu :after lsp-mode
-        :doc "corfu with lsp-mode config"
-        :defun lsp-completion-at-point cape-super-lsp
+        :doc "Keep lsp-mode's CAPF without wrapping its edit/exit metadata."
         :preface
-        (defalias 'cape-super-lsp
-          (cape-capf-buster
-           (cape-capf-super
-            #'cape-company-yasnippet
-            #'lsp-completion-at-point
-            #'cape-keyword)))
-
         (defun rdm/set-capf-lsp-prog-conf ()
-          (setq-local completion-at-point-functions
-                      (list #'cape-super-lsp
-                            #'cape-super-text)))
+          (rdm/add-cape-capfs #'cape-file))
         :hook
-        (lsp-completion-mode-hook . rdm/set-capf-lsp-prog-conf)
-        )
+        (lsp-completion-mode-hook . rdm/set-capf-lsp-prog-conf))
 
       :hook
       ((prog-mode-hook
