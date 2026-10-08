@@ -1250,7 +1250,9 @@
                        ("C-M-p" . flymake-goto-prev-error)
                        ("C-M-l" . consult-flymake))
     :config
-    (leaf flymake-collection :ensure t)
+    (leaf flymake-collection
+      :ensure t
+      :hook (after-init-hook . flymake-collection-hook-setup))
     (leaf flymake-diagnostic-at-point
       :ensure t
       :commands flymake-diagnostic-at-point-display-popup

@@ -262,10 +262,7 @@
 
   (leaf json-ts-mode :emacs>= "29"
     :tag "builtin"
-    :mode-hook
-    (json-ts-mode-hook . ((add-hook 'flymake-diagnostic-functions
-                                    #'flymake-collection-jsonlint nil t)
-                          (flymake-mode +1))))
+    :hook ((json-mode json-ts-mode) . flymake-mode))
 
   (leaf js-mode :emacs>= "27"
     :tag "builtin"
@@ -317,31 +314,35 @@
     (tide-hl-identifier-mode +1))
   )
 
-(leaf sh-mode
-  :tag "builtin"
-  :commands sh-mode
-  :hook
-  ;; (sh-mode-hook . lsp)
-  ;; (sh-mode-hook . flycheck-mode)
+(leaf *shell-edit
   :defvar bash-ts-mode-hook sh-mode-hook
   :setq (bash-ts-mode-hook . sh-mode-hook)
-  ;; :config (setq flycheck-checker 'sh-shellcheck)
-  :init
-  (leaf shfmt :when (!executable-find "shfmt")
-    :doc "format code on save"
-    :ensure t
-    :commands shfmt-on-save-mode
-    :custom (shfmt-arguments . '("--indent" "4"
-                                 "--binary-next-line"
-                                 "--case-indent"
-                                 "--keep-padding"
-                                 "--space-redirects"))
-    :mode-hook (sh-mode-hook . ((shfmt-on-save-mode +1))))
-  (leaf *flycheck-by-shellcheck :if (!executable-find "shellcheck")
-    :disabled t
-    :doc "use shellcheck for flychecker with lsp"
-    :hook (lsp-after-initialize-hook . (lambda () (flycheck-add-next-checker 'lsp 'sh-shellcheck))))
-  )
+  :config
+  (!rdm/ligature-set '(bash-ts-mode sh-mode) compare arrow arithmetic shell)
+
+  (leaf bash-ts-mode :when (!sys-featurep "TREE_SITTER")
+    :tag "builtin"
+    :commands bash-ts-mode
+    :mode-hook
+    (flymake-mode +1) (treesit-fold-mode +1))
+
+  (leaf sh-mode
+    :tag "builtin"
+    :commands sh-mode
+    :init
+    (leaf shfmt :when (!executable-find "shfmt") :disabled t
+      :doc "format code on save"
+      :ensure t
+      :commands shfmt-on-save-mode
+      :custom (shfmt-arguments . '("--indent" "4"
+                                   "--binary-next-line"
+                                   "--case-indent"
+                                   "--keep-padding"
+                                   "--space-redirects"))
+      :mode-hook (sh-mode-hook . ((shfmt-on-save-mode +1))))
+    (leaf *flycheck-by-shellcheck :if (!executable-find "shellcheck")
+      :disabled t
+      :doc "use shellcheck for flychecker with lsp")))
 
 (leaf csv-mode
   :ensure t
@@ -351,9 +352,10 @@
 (leaf yaml-mode
   :ensure t
   :commands yaml-mode
-  :hook (yaml-mode-hook . hl-todo-mode)
-  :defvar yaml-ts-mode-hook yaml-mode-hook
-  :setq (yaml-ts-mode-hook . yaml-mode-hook))
+  :hook
+  ((yaml-mode-hook
+    yaml-ts-mode-hook) . hl-todo-mode)
+  (yaml-ts-mode-hook   . treesit-fold-mode))
 
 (leaf systemd
   :ensure t
