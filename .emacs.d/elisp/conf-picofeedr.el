@@ -107,6 +107,28 @@ Otherwise move forward and preview there."
     (interactive)
     (rdm/picofeedr-search--show-after-move -1))
 
+  (defun rdm/picofeedr-search--mark-move (delta)
+    "Mark current entry read by removing unread/later, then move cursor by DELTA rows.
+
+Strips `picofeedr-unread-tag' and \"later\" from the current row only when
+at least one is present (avoids a no-op API call), then moves the cursor.
+Does not open the show buffer."
+    (interactive)
+    (let* ((item (picofeedr-search-current-entry-item))
+           (tags (picofeedr-entry-item-tags item)))
+      (when (or (member picofeedr-unread-tag tags)
+                (member "later" tags))
+        (picofeedr-search-apply-tags-to-entry-ids
+         (picofeedr-entry-item-id item)
+         nil
+         (list picofeedr-unread-tag "later")
+         (lambda (_ _)
+           ;; The async local row refresh re-renders the just-read row but
+           ;; does not re-sync hl-line when the cursor has already moved on;
+           ;; force it back to the current row so only that one stays lit.
+           (hl-line-highlight)))))
+    (picofeedr-search-forward-cursor delta))
+
 ;;; Share / clipboard
 
   (defun rdm/picofeedr-search-entry-share ()
@@ -175,13 +197,13 @@ Otherwise move forward and preview there."
     ;; "os"          'rdm/elfeed-search-entry-sum
     (kbd "RET")   'rdm/picofeedr-search-show-read-entry
     (kbd "SPC")   'rdm/picofeedr-search-show-read-entry
-    (kbd "C-j")   'rdm/picofeedr-search-show-read-entry
+    (kbd "C-j")   (lambda () (interactive) (rdm/picofeedr-search--mark-move 1))
     (kbd "M-j")   'rdm/picofeedr-search-show-read-entry
     "]]"          'rdm/picofeedr-search-show-read-entry
     "gj"          'rdm/picofeedr-search-show-read-entry
     (kbd "S-RET") 'rdm/picofeedr-search-show-read-prev-entry
     (kbd "S-SPC") 'rdm/picofeedr-search-show-read-prev-entry
-    (kbd "C-k")   'rdm/picofeedr-search-show-read-prev-entry
+    (kbd "C-k")   (lambda () (interactive) (rdm/picofeedr-search--mark-move -1))
     (kbd "M-k")   'rdm/picofeedr-search-show-read-prev-entry
     "[["          'rdm/picofeedr-search-show-read-prev-entry
     "gk"          'rdm/picofeedr-search-show-read-prev-entry
