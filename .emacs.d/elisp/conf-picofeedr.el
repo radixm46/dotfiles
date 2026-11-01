@@ -114,6 +114,7 @@ Strips `picofeedr-unread-tag' and \"later\" from the current row only when
 at least one is present (avoids a no-op API call), then moves the cursor.
 Does not open the show buffer."
     (interactive)
+    (picofeedr-search-forward-cursor delta)
     (let* ((item (picofeedr-search-current-entry-item))
            (tags (picofeedr-entry-item-tags item)))
       (when (or (member picofeedr-unread-tag tags)
@@ -127,7 +128,7 @@ Does not open the show buffer."
            ;; does not re-sync hl-line when the cursor has already moved on;
            ;; force it back to the current row so only that one stays lit.
            (hl-line-highlight)))))
-    (picofeedr-search-forward-cursor delta))
+    )
 
 ;;; Share / clipboard
 
