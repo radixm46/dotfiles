@@ -1,10 +1,15 @@
 ;;; init.el --- emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;
-;; Emacs configuration by radixM491VA
-;;
+;; Emacs configuration by radixm46
 
 ;;; Code:
+
+;; Requires Emacs 29.4 or later (the oldest version tested in CI).
+(let ((min-v "29.4"))
+  (when (version< emacs-version min-v)
+    (error "This init.el requires Emacs %s or later (running %s)"
+           min-v emacs-version)))
 
 ;; setup load performance profiling
 (when (and (not noninteractive)
