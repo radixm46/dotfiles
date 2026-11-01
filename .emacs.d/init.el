@@ -2380,6 +2380,10 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
     ;; ime support
     ;; (ghostel-mode-hook . ghostel-ime-mode)
     :defun ghostel-send-string ghostel-send-key
+    ghostel-buffer-name-by-directory
+    :custom
+    (ghostel-set-title-function . #'ghostel-buffer-name-by-directory)
+    (ghostel-enable-osc52       . t)
     :config
     (leaf evil-ghostel
       :ensure t
@@ -2396,6 +2400,7 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
     - Cursor shape follows evil state (block for normal, bar for insert).
     - Alt-screen programs (vim, less, htop) are unaffected.
 "
+      :custom (evil-ghostel-escape . 'evil)
       :hook (ghostel-mode-hook . evil-ghostel-mode))
 
     (defun ghostel-ddskk-input (send-newline)
