@@ -247,6 +247,13 @@
     (pixel-scroll-precision-interpolate-page . t)
     :global-minor-mode pixel-scroll-precision-mode)
 
+  (leaf hideshow-mode
+    :tag "builtin"
+    :custom
+    (hs-show-indicators      . t)
+    (hs-indicator-type       . 'fringe)
+    (hs-display-lines-hidden . t))
+
   (leaf ctrlf
     :doc "an intuitive and efficient solution for single-buffer text search in Emacs"
     :ensure t
@@ -287,116 +294,124 @@
     :commands editorconfig-mode
     :global-minor-mode editorconfig-mode)
 
-  (leaf treesit-auto :emacs>= "29.1" :when (!sys-featurep "TREE_SITTER")
-    :ensure t
-    :doc "automatically install and enables treesit major modes"
-    :custom (treesit-auto-install . t)
-    :defvar treesit-auto-opt-out-list
-    :global-minor-mode global-treesit-auto-mode
+  (leaf *tree-sitter-things
     :config
-    (leaf treesit-fold
+    (leaf treesit :emacs>= "31.1"
+      :tag "builtin"
+      :require t
+      :custom
+      (treesit-enabled-modes        . t)
+      (treesit-auto-install-grammar . 'ask))
+
+    (leaf treesit-auto :emacs>= "29.1" :emacs< "31.1"
+      :when (!sys-featurep "TREE_SITTER")
+      :ensure t
+      :doc "automatically install and enables treesit major modes"
+      :custom (treesit-auto-install . t)
+      :defvar treesit-auto-opt-out-list
+      :config
+      (global-treesit-auto-mode))
+
+    (leaf tree-sitter
+      :emacs< "29.1" :emacs>= "25.1"
+      :doc "provides tree-sitter highlighting"
+      :ensure t
+      :commands (tree-sitter-hl-mode)
+      :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode))
+      :init (leaf tree-sitter-langs :ensure t)
+      :global-minor-mode global-tree-sitter-mode
+      :config
+      (leaf ts-fold
+        :doc "Code-folding using tree-sitter"
+        :straight
+        (ts-fold
+         :type git :host github
+         :repo "emacs-tree-sitter/ts-fold")
+        :custom
+        (ts-fold-summary-show            . t)
+        (ts-fold-summary-max-length      . 70)
+        (ts-fold-summary-exceeded-string . "...")
+        (ts-fold-summary-format          . "<Sum>: %s ")
+        :config
+        (leaf ts-fold-indicators
+          :straight
+          (ts-fold-indicators
+           :type git :host github
+           :repo "emacs-tree-sitter/ts-fold"))
+
+        (leaf *patch-ts-fold-with-treesit-modes :emacs>= "29"
+          :after tree-sitter
+          :doc "bind *-mode fold range to *-ts-mode until emacs29 support has come"
+          :url "https://github.com/emacs-tree-sitter/ts-fold/issues/48"
+          :defvar ts-fold-range-alist
+          :config
+          (mapcar (lambda (a)
+                    (when-let* ((matched (assoc (car a) ts-fold-range-alist)))
+                      (add-to-list 'ts-fold-range-alist (cons (cdr a) (cdr matched)))))
+                  '((sh-mode         . bash-ts-mode)
+                    (c++-mode        . c++-ts-mode)
+                    (c++-mode        . c-or-c++-ts-mode)
+                    (c-mode          . c-ts-mode)
+                    (csharp-mode     . csharp-ts-mode)
+                    (css-mode        . css-ts-mode)
+                    (go-mode         . go-ts-mode)
+                    (java-mode       . java-ts-mode)
+                    (js-mode         . js-ts-mode)
+                    (json-mode       . json-ts-mode)
+                    (python-mode     . python-ts-mode)
+                    (ruby-mode       . ruby-ts-mode)
+                    (rust-mode       . rust-ts-mode)
+                    (conf-toml-mode  . toml-ts-mode)
+                    (typescript-mode . typescript-ts-mode)
+                    (yaml-mode       . yaml-ts-mode))))
+        :hook
+        (prog-mode-hook . ts-fold-mode)
+        (prog-mode-hook . ts-fold-indicators-mode))
+
+      (leaf *patch-major-ts-modes :emacs>= "29"
+        :doc "bind major-ts-mode for tree-sitter syntax highlighting"
+        :defvar tree-sitter-major-mode-language-alist
+        :config
+        (dolist (mode-tsl '((bash-ts-mode       . bash)
+                            (c++-ts-mode        . cpp)
+                            (c-or-c++-ts-mode   . cpp)
+                            (c-ts-mode          . c)
+                            (csharp-ts-mode     . c-sharp)
+                            (css-ts-mode        . css)
+                            (go-ts-mode         . go)
+                            (java-ts-mode       . java)
+                            (js-ts-mode         . javascript)
+                            (json-ts-mode       . json)
+                            (python-ts-mode     . python)
+                            (ruby-ts-mode       . ruby)
+                            (rust-ts-mode       . rust)
+                            (toml-ts-mode       . toml)
+                            (tsx-ts-mode        . typescript)
+                            (typescript-ts-mode . typescript)
+                            (yaml-ts-mode       . yaml)))
+          (add-to-list 'tree-sitter-major-mode-language-alist mode-tsl)))
+      ))
+
+
+  (leaf *code-folding
+    :config
+    (leaf origami :emacs< "31.1"
+      :doc "folding blocks"
+      :commands origami-mode
+      :ensure t)
+
+    (leaf treesit-fold :when (!sys-featurep "TREE_SITTER")
       :doc "`ts-fold' port works for built-in `treesit' feature"
-      :straight
-      (treesit-fold
-       :type git :host github
-       :repo "abougouffa/treesit-fold")
+      :ensure t
       :custom
       (treesit-fold-indicators-fringe       . 'left-fringe)
       (treesit-fold-indicators-priority     . 30)
-      (treesit-fold-summary-show            . nil)
+      (treesit-fold-summary-show            . t)
       (treesit-fold-summary-max-length      . 60)
-      (treesit-fold-summary-exceeded-string . "...")
       (treesit-fold-summary-format          . " <S> %s ")
       :global-minor-mode
       global-treesit-fold-mode
-      global-treesit-fold-indicators-mode
-      )
-    )
-
-  (leaf tree-sitter
-    :emacs< "29.1" :emacs>= "25.1"
-    :doc "provides tree-sitter highlighting"
-    :ensure t
-    :commands (tree-sitter-hl-mode)
-    :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode))
-    :init (leaf tree-sitter-langs :ensure t)
-    :global-minor-mode global-tree-sitter-mode
-    :config
-    (leaf ts-fold
-      :doc "Code-folding using tree-sitter"
-      :straight
-      (ts-fold
-       :type git :host github
-       :repo "emacs-tree-sitter/ts-fold")
-      :custom
-      (ts-fold-summary-show            . t)
-      (ts-fold-summary-max-length      . 70)
-      (ts-fold-summary-exceeded-string . "...")
-      (ts-fold-summary-format          . "<Sum>: %s ")
-      :config
-      (leaf ts-fold-indicators
-        :straight
-        (ts-fold-indicators
-         :type git :host github
-         :repo "emacs-tree-sitter/ts-fold"))
-
-      (leaf *patch-ts-fold-with-treesit-modes :emacs>= "29"
-        :after tree-sitter
-        :doc "bind *-mode fold range to *-ts-mode until emacs29 support has come"
-        :url "https://github.com/emacs-tree-sitter/ts-fold/issues/48"
-        :defvar ts-fold-range-alist
-        :config
-        (mapcar (lambda (a)
-                  (when-let ((matched (assoc (car a) ts-fold-range-alist)))
-                    (add-to-list 'ts-fold-range-alist (cons (cdr a) (cdr matched)))))
-                '((sh-mode         . bash-ts-mode)
-                  (c++-mode        . c++-ts-mode)
-                  (c++-mode        . c-or-c++-ts-mode)
-                  (c-mode          . c-ts-mode)
-                  (csharp-mode     . csharp-ts-mode)
-                  (css-mode        . css-ts-mode)
-                  (go-mode         . go-ts-mode)
-                  (java-mode       . java-ts-mode)
-                  (js-mode         . js-ts-mode)
-                  (json-mode       . json-ts-mode)
-                  (python-mode     . python-ts-mode)
-                  (ruby-mode       . ruby-ts-mode)
-                  (rust-mode       . rust-ts-mode)
-                  (conf-toml-mode  . toml-ts-mode)
-                  (typescript-mode . typescript-ts-mode)
-                  (yaml-mode       . yaml-ts-mode))))
-      :hook
-      (prog-mode-hook . ts-fold-mode)
-      (prog-mode-hook . ts-fold-indicators-mode))
-
-    (leaf *patch-major-ts-modes :emacs>= "29"
-      :doc "bind major-ts-mode for tree-sitter syntax highlighting"
-      :defvar tree-sitter-major-mode-language-alist
-      :config
-      (dolist (mode-tsl '((bash-ts-mode       . bash)
-                          (c++-ts-mode        . cpp)
-                          (c-or-c++-ts-mode   . cpp)
-                          (c-ts-mode          . c)
-                          (csharp-ts-mode     . c-sharp)
-                          (css-ts-mode        . css)
-                          (go-ts-mode         . go)
-                          (java-ts-mode       . java)
-                          (js-ts-mode         . javascript)
-                          (json-ts-mode       . json)
-                          (python-ts-mode     . python)
-                          (ruby-ts-mode       . ruby)
-                          (rust-ts-mode       . rust)
-                          (toml-ts-mode       . toml)
-                          (tsx-ts-mode        . typescript)
-                          (typescript-ts-mode . typescript)
-                          (yaml-ts-mode       . yaml)))
-        (add-to-list 'tree-sitter-major-mode-language-alist mode-tsl)))
-    )
-
-  (leaf origami
-    :doc "folding blocks"
-    :commands origami-mode
-    :ensure t)
+      global-treesit-fold-indicators-mode))
 
   (leaf yasnippet
     :ensure t
@@ -709,7 +724,7 @@
      (evil-normal-state-exit-hook . nyan-xit))
     :global-minor-mode nyan-mode)
 
-  (leaf highlight-indent-guides
+  (leaf highlight-indent-guides :disabled t
     :ensure t
     :commands highlight-indent-guides-mode
     :hook
@@ -742,6 +757,19 @@
       ((after-load-theme-hook
         highlight-indent-guides-mode-on-hook) . patch-highlight-indent-guides-color))
     )
+
+  (leaf indent-bars
+    :ensure t
+    :commands indent-bars-mode
+    :hook
+    ((conf-mode-hook
+      outline-mode-hook
+      prog-mode-hook
+      text-mode-hook
+      git-timemachine-mode-hook) . indent-bars-mode)
+    :custom
+    (indent-bars-treesit-support        . t)
+    (indent-bars-display-on-blank-lines . nil))
 
   (leaf rainbow-delimiters
     :ensure t
