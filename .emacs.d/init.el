@@ -1989,7 +1989,60 @@
         (set-face-attribute 'shr-h3 nil :height 1.1)
         (set-face-attribute 'shr-h4 nil :height 1.0))
       :hook
-      (eww-mode-hook . patch-eww-heading-size)))
+      (eww-mode-hook . patch-eww-heading-size))
+
+    (leaf *eww-pixel-scrolling :emacs>= "29"
+      :doc "pixel scrolling on eww"
+      :config
+      (defun rdm/eww-scroll-up (&optional _arg)
+        "try scrolling up by pixel if possible"
+        (interactive "P")
+        (if (or pixel-scroll-precision-mode
+                pixel-scroll-mode)
+            (pixel-scroll-interpolate-up)
+          (scroll-up-command)))
+
+      (defun rdm/eww-scroll-down (&optional _arg)
+        "try scrolling down by pixel if possible"
+        (interactive "P")
+        (if (or pixel-scroll-precision-mode
+                pixel-scroll-mode)
+            (pixel-scroll-interpolate-down)
+          (scroll-down-command)))
+
+      (evil-define-key 'normal eww-mode-map
+        (kbd "SPC")   'rdm/eww-scroll-down
+        (kbd "S-SPC") 'rdm/eww-scroll-up
+        (kbd "C-d")   'rdm/eww-scroll-down
+        (kbd "C-u")   'rdm/eww-scroll-up))
+
+    (leaf *eww-pixel-scrolling-lines :emacs>= "29"
+      :doc "pixel scroll lines"
+      :defun evil-scroll-line-up evil-scroll-line-down pixel-scroll-precision
+      :config
+      (defun rdm/eww-scroll-line-up (&optional _arg)
+        "scrolling up (if possible, use pixel-scroll-precision)"
+        (interactive "P")
+        (if pixel-scroll-precision-mode
+            (pixel-scroll-precision
+             `(,mouse-wheel-up-event
+               (,(selected-window) ,(point) (0 . 0) 0)
+               1 1 (0.0 . 100.0)))
+          (evil-scroll-line-up)))
+
+      (defun rdm/eww-scroll-line-down (&optional _arg)
+        "scrolling down (if possible, use pixel-scroll-precision)"
+        (interactive "P")
+        (if pixel-scroll-precision-mode
+            (pixel-scroll-precision
+             `(,mouse-wheel-down-event ;; button
+               (,(selected-window) ,(point) (0 . 0) 0)
+               1 1 (0.0 . -100.0)))
+          (evil-scroll-line-down)))
+
+      (evil-define-key 'normal eww-mode-map
+        (kbd "C-y")   'rdm/eww-scroll-line-up
+        (kbd "C-e")   'rdm/eww-scroll-line-down)))
 
   (leaf xwidget-webkit :when (!sys-featurep "XWIDGETS")
     :tag "builtin"
