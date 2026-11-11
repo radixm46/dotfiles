@@ -3121,6 +3121,10 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
 ;;
 ;;; Code:
 
+(leaf *local-trusted-content :emacs>= \"30.1\"
+  :doc \"trusted files\"
+  :custom
+  (trusted-content . '()))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; local.el ends here
