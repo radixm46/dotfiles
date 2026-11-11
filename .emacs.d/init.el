@@ -247,13 +247,6 @@
     (pixel-scroll-precision-interpolate-page . t)
     :global-minor-mode pixel-scroll-precision-mode)
 
-  (leaf hideshow-mode
-    :tag "builtin"
-    :custom
-    (hs-show-indicators      . t)
-    (hs-indicator-type       . 'fringe)
-    (hs-display-lines-hidden . t))
-
   (leaf ctrlf
     :doc "an intuitive and efficient solution for single-buffer text search in Emacs"
     :ensure t
@@ -395,6 +388,13 @@
 
   (leaf *code-folding
     :config
+    (leaf hideshow-mode
+      :tag "builtin"
+      :custom
+      (hs-show-indicators      . t)
+      (hs-indicator-type       . 'fringe)
+      (hs-display-lines-hidden . t))
+
     (leaf origami :emacs< "31.1"
       :doc "folding blocks"
       :commands origami-mode
@@ -3094,10 +3094,12 @@ C-u 付きで呼ぶと末尾に改行も送る。C-c C-k でキャンセルし�
   :config
   (!el-load "elisp/conf-elfeed"))
 
+
 (leaf *load-conf-picofeedr :when (!executable-find "picofeedr")
   :doc "load picofeedr plugins if exec found"
   :config
   (!el-load "elisp/conf-picofeedr"))
+
 
 (leaf *load-major-modes
   :doc "load some major modes"
