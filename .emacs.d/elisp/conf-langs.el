@@ -396,7 +396,19 @@
 (leaf *lml-modes
   :doc "lightweight markup languages"
   :config
-  (leaf markdown-mode
+  (leaf markdown-ts-mode :emacs>= "31.1"
+    :tag "builtin"
+    :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
+    :require markdown-ts-mode-x
+    :config
+    (leaf markdown-ts-appear
+      :ensure t
+      :hook
+      (markdown-ts-mode-hook . markdown-ts-appear-mode)
+      :custom
+      (markdown-ts-appear-table-style . 'wrapped)))
+
+  (leaf markdown-mode :emacs< "31.1"
     :ensure t
     ;; :hook (markdown-mode . visual-line-mode)
     :commands (markdown-mode gfm-mode)
