@@ -404,11 +404,17 @@
       :doc "`ts-fold' port works for built-in `treesit' feature"
       :ensure t
       :custom
-      (treesit-fold-indicators-fringe       . 'left-fringe)
-      (treesit-fold-indicators-priority     . 30)
-      (treesit-fold-summary-show            . t)
-      (treesit-fold-summary-max-length      . 60)
-      (treesit-fold-summary-format          . " <S> %s ")
+      `(
+        (treesit-fold-indicators-fringe   . 'left-fringe)
+        (treesit-fold-indicators-priority . 30)
+        (treesit-fold-summary-show        . t)
+        (treesit-fold-line-count-show     . t)
+        (treesit-fold-summary-max-length  . 60)
+        (treesit-fold-summary-format      . " <S> %s ")
+        (treesit-fold-line-count-format   . ,(concat (truncate-string-ellipsis)
+                                                     " %d lines "
+                                                     (truncate-string-ellipsis)))
+        )
       :global-minor-mode
       global-treesit-fold-mode
       global-treesit-fold-indicators-mode))
@@ -769,6 +775,7 @@
       git-timemachine-mode-hook) . indent-bars-mode)
     :custom
     (indent-bars-treesit-support        . t)
+    (indent-bars-no-descend-lists       . 'skip)
     (indent-bars-display-on-blank-lines . nil))
 
   (leaf rainbow-delimiters
@@ -1142,6 +1149,7 @@
     :ensure t
     :doc "Rich annotations in the minibuffer"
     :defun marginalia-mode
+    :custom (marginalia-field-width . 100)
     :config (marginalia-mode))
 
   (leaf embark
