@@ -7,7 +7,15 @@ function memstat() {
     case $(uname) in
         Darwin)
             # display memory pressure value
-            mem_val=$(memory_pressure | awk 'NR==28{ print 100-$5 "% (prs)" }')
+            local available icon=""
+            case "$(sysctl -n kern.memorystatus_vm_pressure_level)" in
+                1) icon=$'\UF05d' ;; # OK
+                2) icon=$'\UF071' ;; # warn
+                4) icon=$'\UF057' ;; # critical
+                *) icon='?' ;;
+            esac
+            available=$(sysctl -n kern.memorystatus_level)
+            mem_val="$((100 - $available))% prs lv:$icon "
             ;;
         Linux*)
             # display current memory in GB
